@@ -1,4 +1,4 @@
-/* Filename lie.mac
+/* Filename <name>.mac
 
    ***************************************************************
    *							         *
@@ -13,7 +13,7 @@
    *            						 *
    ***************************************************************
 */ 
-/* PROGRAM NUMBER 9: LIE(), LIE TRANSFORMATIONS FOR HAMILTONIAN SYSTEMS.
+/* PROGRAM NUMBER 9: LIE(), LIE TRANSFORMATIONS FOR HAMILTONIAN SYSTEMS.
    SEE PAGE 144 IN "PERTURBATION METHODS, BIFURCATION THEORY AND
    COMPUTER ALGEBRA". */
 
@@ -161,3 +161,4 @@ SETIFY(LIST):=(
    FOR I:2 THRU LENGTH(LIST) DO(
       IF NOT MEMBER(LIST[I],SET) THEN SET:CONS(LIST[I],SET)),
    SET)$
+
