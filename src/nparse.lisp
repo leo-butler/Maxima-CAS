@@ -133,8 +133,8 @@
 (defun firstcharn (x)
   (aref (string x) 0))
 
-(defvar *parse-stream*		()	  "input stream for Macsyma parser")
-(defvar macsyma-operators	()	  "Macsyma operators structure")
+(defvar *parse-stream*		()	  "input stream for Maxima parser")
+(defvar macsyma-operators	()	  "Maxima operators structure")
 (defvar *mread-prompt*		nil	  "prompt used by `mread'")
 (defvar *mread-eof-obj* () "Bound by `mread' for use by `mread-raw'")
 
@@ -360,7 +360,7 @@
 (defun scan-macsyma-token ()
   ;; note that only $-ed tokens are GETALIASed.
   (let ((tem (cons '#\$ (scan-token t))))
-    (setq tem (if $bothcases (bothcase-implode tem) (implode1 tem nil)))
+    (setq tem (bothcase-implode tem))
   (getalias tem)))
 
 (defun scan-lisp-token ()
@@ -404,15 +404,13 @@
 (defun lisp-token-fixup-case (list)
   list)
 
-(defvar $bothcases t)
 (defun scan-token (flag)
   (do ((c (parse-tyipeek) (parse-tyipeek))
        (l () (cons c l)))
       ((and flag (not (or (ascii-numberp c) (alphabetp c) (char= c #.back-slash-char)))) ;;#/\
        (nreverse (or l (ncons (parse-tyi))))) ; Read at least one char ...
     (if (char= (parse-tyi) #. back-slash-char);; #/\
-	(setq c (parse-tyi))
-	(or $bothcases  (setq c (fixnum-char-upcase c))))
+	(setq c (parse-tyi)))
     (setq flag t)))
 
 (defun scan-lisp-string ()
@@ -1227,7 +1225,7 @@ entire input string to be printed out when an MAXIMA-ERROR occurs."
 
 (defun parse-bug-err (op)
   (mread-synerr
-    "Parser bug in ~A. Please report this to the Macsyma maintainers,~
+    "Parser bug in ~A. Please report this to the Maxima maintainers,~
    ~%including the characters you just typed which caused the error. Thanks."
     (mopstrip op)))
 

@@ -230,7 +230,7 @@
 			  #-nil *debug-io*)
 	(*standard-output* *debug-io*))
     (catch 'break-exit
-      (format t "~%Entering a Macsyma break point. Type exit; to resume")
+      (format t "~%Entering a Maxima break point. Type exit; to resume")
       (do ((r)) (nil)
 	(fresh-line)
 	(setq r (caddr (let ((*mread-prompt* (break-prompt)))
@@ -443,7 +443,7 @@
     (throw 'macsyma-quit t))
 
 
-  (defmfun $writefile (x) (dribble (subseq (string x) 1)))
+  (defmfun $writefile (x) (dribble (maxima-string x)))
 
   (defvar $appendfile nil )
 
@@ -452,7 +452,7 @@
   (defmfun $appendfile (name)
     (if (and (symbolp name)
 	     (member (getcharn name 1) '(#\& #\$)))
-	(setq name (subseq (symbol-name name) 1)))
+	(setq name (maxima-string name)))
     (if $appendfile (merror "already in appendfile, use closefile first"))
     (let ((stream  (open name :direction :output
 			 :if-exists :append
@@ -487,7 +487,7 @@
 	  (t (dribble))))
  
 
-  (defmfun $ed (x) (ed (subseq (string x) 1))) 
+  (defmfun $ed (x) (ed (maxima-string x))) 
  
   (defmfun $cli () (merror "Not implemented!") )
  
