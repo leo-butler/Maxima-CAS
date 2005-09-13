@@ -1,6 +1,6 @@
 
 
-\input texinfo
+\input texinfo_pt
 @c -*-texinfo-*-
 
 @c 2000-04-17 Jim Van Zandt <jrv@vanzandt.mv.com> Added header,
@@ -17,11 +17,14 @@
 @c %**start of header
 @setfilename  maxima_pt.info
 @documentencoding ISO-8859-15
+@c @documentencoding ISO-8859-1
 @set cedilha @,{c}
 @set i_agu @'i
 @set I_agu @'I
 @set a_til @~a
 @set a_agu @'a
+@set o_til @~o
+@set mail <maxima at math dot utexas dot edu>
 @synindex vr fn
 @settitle Manual do Maxima
 @c %**end of header
@@ -69,7 +72,7 @@ e desenvolver o Macsyma DOE, agora chamado Maxima.
 
 O c@'odigo fonte deste documento encontra-se no formato texinfo.
 Para contribuir com a equipe do Maxima na tarefa de manter a tradu@,{c}@~ao
-para o portugu@^es sempre atualizada envie um e-mail para maxima@math.utexas.edu.
+para o portugu@^es sempre atualizada envie um e-mail para @value{mail}.
 
 @c includes
 
@@ -97,8 +100,8 @@ Suporte a @'areas espec@'ificas da matem@'atica
 * Logarithms::                  Manipula@value{cedilha}@~ao de express@~oes envolvendo
                                 logar@'itmos.
 * Trigonometria::               Manipulando express@~oes com trigonometria e
-                                fun@value{cedilha}@~oes trigonom@'etricas inversas.
-* Special Functions::           Fun@value{cedilha}@~oes especiais
+                                Fun@value{cedilha}@~oes trigonom@'etricas inversas.
+* Fun@value{cedilha}@value{o_til}es Especiais::           Fun@value{cedilha}@~oes especiais
 * Orthogonal Polynomials::      Polin@^omios Ortogonais e Fun@value{cedilha}@~oes Especiais
 
 * Fun@value{cedilha}@~oes El@'ipticas::           Fun@value{cedilha}@~oes El@'ipticas e Integrais
@@ -107,7 +110,7 @@ Suporte a @'areas espec@'ificas da matem@'atica
 * Integra@value{cedilha}@~ao::  		C@'alculo integral.
 * Equa@value{cedilha}@~oes::    		Definindo e resolvendo equa@value{cedilha}@~oes.
 * Equa@value{cedilha}@~oes Diferenciais::       Definindo e resolvendo equa@value{cedilha}@~oes diferenciais.
-* Numerical::                   Integra@value{cedilha}@~ao num@'erica, transforma@value{cedilha}@~oes
+* Num@'erico::                    Integra@value{cedilha}@~ao num@'erica, transforma@value{cedilha}@~oes
                                 de Fourier, etc.
 * Estat@'istica::                 Fun@value{cedilha}@~oes estat@'isticas.
 * Arrays e Tabelas::            Criando e trabalhando com arrays.
@@ -117,7 +120,7 @@ Suporte a @'areas espec@'ificas da matem@'atica
 * ctensor::                     Manipula@value{cedilha}@~ao de componentes de Tensores.
 * Pacote atensor::              Manipula@value{cedilha}@~ao de Tensores Alg@'ebricos.
 * S@'eries::                      Taylor e s@'eries de pot@^encia.
-* Number Theory::               Teoria dos n@'umeros.
+* Teoria dos N@'umeros::          Teoria dos n@'umeros.
 * Symmetries::                  Reflex@~oes, rota@value{cedilha}@~oes, transla@value{cedilha}@~oes, etc
 * Grupos::                      @'Algebra Abstrata.
 
@@ -133,9 +136,10 @@ Facilidades avan@value{cedilha}adas e programa@value{cedilha}@~ao
 * Fluxo de Programa::           Definindo programas do Maxima.
 * Debugging::                   Depurando programas do Maxima.
 
-@value{I_agu}ndice
+@'Indice
 
-* @value{I_agu}ndice de Fun@value{cedilha}@value{a_til}o e Vari@value{a_agu}vel:: @value{I_agu}ndice. 
+* @'Indice de Fun@value{cedilha}@~ao e Vari@'avel:: @'Indice.
+
 @comment @detailmenu
  --- Listagem de Nodos Detalhada ---
 
@@ -214,11 +218,11 @@ Trigonometria
 * Introdu@value{cedilha}@~ao ao Pacote Trigonom@'etrico::  
 * Defini@value{cedilha}@~oes para Trigonometria::  
 
-Special Functions
+Fun@value{cedilha}@value{o_til}es Especiais
 
-* Introduction to Special Functions::  
+* Introdu@value{cedilha}@~ao a Fun@value{cedilha}@value{o_til}es Especiais::   
 * specint::                     
-* Definitions for Special Functions::  
+* Defini@value{cedilha}@value{o_til}es para Fun@value{cedilha}@value{o_til}es Especiais::  
 
 Orthogonal Polynomials
 
@@ -252,12 +256,12 @@ Equa@value{cedilha}@~oes Diferenciais
 
 * Defini@value{cedilha}@~oes para Equa@value{cedilha}@~oes Diferenciais::  
 
-Numerical
+Num@'erico
 
-* Introduction to Numerical::   
-* Fourier packages::                     
-* Definitions for Numerical::   
-* Definitions for Fourier Series::
+* Introdu@value{cedilha}@value{a_til}o a Num@'erico::   
+* Pacotes de Fourier::                     
+* Defini@value{cedilha}@value{o_til}es para Num@'erico::   
+* Defini@value{cedilha}@value{o_til}es para S@'eries de Fourier::
 
 Estatistica
 
@@ -299,9 +303,9 @@ S@'eries
 * Introdu@value{cedilha}@~ao a S@'eries::      
 * Defini@value{cedilha}@~oes para S@'eries::      
 
-Number Theory
+Teoria dos N@'umeros
 
-* Definitions for Number Theory::  
+* Defini@value{cedilha}@~oes para Teoria dos N@'umeros::  
 
 Symmetries
 
@@ -418,15 +422,15 @@ Debugging
 @chapter Logarithms
 @include Logarithms.texi
 
-@node Trigonometria, Special Functions, Logarithms, Top
+@node Trigonometria, Fun@value{cedilha}@value{o_til}es Especiais, Logarithms, Top
 @chapter Trigonometria
 @include Trigonometric_pt.texi
 
-@node Special Functions, Orthogonal Polynomials, Trigonometria, Top
-@chapter Special Functions
-@include Special.texi
+@node Fun@value{cedilha}@value{o_til}es Especiais, Orthogonal Polynomials, Trigonometria, Top
+@chapter Fun@value{cedilha}@value{o_til}es Especiais
+@include Special_pt.texi
 
-@node Orthogonal Polynomials, Fun@value{cedilha}@~oes El@'ipticas, Special Functions, Top
+@node Orthogonal Polynomials, Fun@value{cedilha}@~oes El@'ipticas, Fun@value{cedilha}@value{o_til}es Especiais, Top
 @chapter Orthogonal Polynomials
 @include SpecfunII.texi
 
@@ -450,17 +454,17 @@ Debugging
 @chapter Equa@value{cedilha}@~oes
 @include Equations_pt.texi
 
-@node Equa@value{cedilha}@~oes Diferenciais, Numerical, Equa@value{cedilha}@~oes, Top
+@node Equa@value{cedilha}@~oes Diferenciais, Num@'erico, Equa@value{cedilha}@~oes, Top
 @chapter Equa@value{cedilha}@~oes Diferenciais
 @include Differential_pt.texi
 
 @c @include NonCommutative.texi
 
-@node Numerical, Estat@'istica, Equa@value{cedilha}@~oes Diferenciais, Top
-@chapter Numerical
-@include Numerical.texi
+@node Num@'erico, Estat@'istica, Equa@value{cedilha}@~oes Diferenciais, Top
+@chapter Num@'erico
+@include Numerical_pt.texi
 
-@node Estat@'istica, Arrays e Tabelas, Numerical, Top
+@node Estat@'istica, Arrays e Tabelas, Num@'erico, Top
 @chapter Estat@'istica
 @include Statistics_pt.texi
 
@@ -488,16 +492,16 @@ Debugging
 @chapter Pacote atensor
 @include Atensor_pt.texi
 
-@node S@'eries, Number Theory, Pacote atensor, Top
+@node S@'eries, Teoria dos N@'umeros, Pacote atensor, Top
 @chapter S@'eries
 @include Series_pt.texi
 
 
-@node Number Theory, Symmetries, S@'eries, Top
-@chapter Number Theory
-@include Number.texi
+@node Teoria dos N@'umeros, Symmetries, S@'eries, Top
+@chapter Teoria dos N@'umeros
+@include Number_pt.texi
 
-@node Symmetries, Grupos, Number Theory, Top
+@node Symmetries, Grupos, Teoria dos N@'umeros, Top
 @chapter Symmetries
 @include Symmetries.texi
 
@@ -534,12 +538,12 @@ Debugging
 @chapter Fluxo de Programa
 @include Program_pt.texi
 
-@node Debugging, @value{I_agu}ndice de Fun@value{cedilha}@value{a_til}o e Vari@value{a_agu}vel, Fluxo de Programa, Top
+@node Debugging, @'Indice de Fun@value{cedilha}@~ao e Vari@'avel, Fluxo de Programa, Top
 @chapter Debugging
 @include Debugging.texi
 
-@node @value{I_agu}ndice de Fun@value{cedilha}@value{a_til}o e Vari@value{a_agu}vel,  , Debugging, Top
-@chapter @value{I_agu}ndice de Fun@value{cedilha}@value{a_til}o e Vari@value{a_agu}vel
+@node @'Indice de Fun@value{cedilha}@~ao e Vari@'avel,  , Debugging, Top
+@chapter @'Indice de Fun@value{cedilha}@~ao e Vari@'avel
 @include Indices_pt.texi
 
 @c end includes
