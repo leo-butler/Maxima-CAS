@@ -19,7 +19,7 @@
 Summary: Maxima Symbolic Computation Program
 Name: maxima
 Version: @VERSION@
-Release: 1
+Release: 2
 License: GPL
 Group: Development/Languages
 URL: http://maxima.sourceforge.net
