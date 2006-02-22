@@ -295,15 +295,7 @@ To use this function write first @code{load("plsquares")}.
 
 @deffn {Function} plotdf (@var{expr},...options...)
 @deffnx {Function} plotdf (@code{[}@var{expr1},@var{expr1}@code{]},...options...)
-Plots the direction field of a first-order ordinary equation (ODE) or a system of two autonomous ODE's.
-
-In  Maxima 5.9.0, plotdf will only work from xmaxima and you cannot use
-the option "trajectory_at". In Maxima 5.9.1, in addition to those two
-limitations there will also be two options missing from the plot menu:
-"Integrate" and "Plot vs t". To solve those problems see
-http://fisica.fe.up.pt/maxima/plotdf/download.html
-
-In recent CVS versions plotdf should work fine both from xmaxima and maxima.
+Plots the direction field of a first-order Ordinary Differential equation (ODE) or a system of two autonomous ODE's.
 
 For one ODE use @code{plotdf (expr,...,options,..)}, where @var{expr} is an expression depending on @var{x} and @var{y}, which represents the right-hand side of the ODE:
 @example
@@ -325,6 +317,17 @@ For a system of two autonomous, first-order ODE's, use @code{plotdf ([expr1,expr
 @end example
 as in the first case, options "parameters" and "sliders" can be used.
 
+Several options can be given to the plotdf command, or entered into
+the menu that will appear when you click on the upper-left corner of
+the plot window. Integral curves can be obtained by clicking on the
+plot, or with the option "trajectory_at". The direction of the
+integration can be controlled with the "direction" option. The number of
+integration steps is given by "nsteps" and the time interval between
+them is "tstep". The Adams Moulton method is used for the integration;
+it is also possible to switch to an adaptive Runge-Kutta 4th order
+method.
+
+Plot window menu:
 
 The menu in the plot window has the following options: "Zoom", will
 change the behavior of the mouse so that it will allow you to zoom in
@@ -462,12 +465,14 @@ To obtain the direction field for the equation @math{diff(y,x) = x - y^2} and th
                    [direction,forward],
                    [yradius,5],[xcenter,6])$
 @end example
+The graph also shows the function @math{y = sqrt(x)}.
 
 @item
 The following example shows the direction field of a harmonic oscillator,
+defined by the two equations @math{dx/dt = y} and @math{dy/dt = -k*x/m},
 and the integral curve through @math{(x,y) = (6,0)}, with a slider that
-will allow you to change the value of m interactively (@math{k} is fixed at
-2):
+will allow you to change the value of @math{m} interactively (@math{k} is
+fixed at 2):
 @example
 (%i4) plotdf([y,-k*x/m],[parameters,"m=2,k=2"],
                         [sliders,"m=1:5"],
@@ -475,10 +480,10 @@ will allow you to change the value of m interactively (@math{k} is fixed at
 @end example
 
 @item
-The direction field of a Duffing equation:
+To plot the direction field of the Duffing equation, @math{m*x''+c*x'+k*x+b*x^3 = 0}, we introduce the variable @math{y=x'} and use:
 @example
-(%i5) plotdf([y,-(k*x + c*y + l*x^3)/m],
-                 [parameters,"k=-1,m=1.0,c=0,l=1"],
+(%i5) plotdf([y,-(k*x + c*y + b*x^3)/m],
+                 [parameters,"k=-1,m=1.0,c=0,b=1"],
                  [sliders,"k=-2:2,m=-1:1"],
                  [bbox,-3,-3,3,3],[tstep,0.1])$
 @end example
@@ -486,7 +491,7 @@ The direction field of a Duffing equation:
 @item
 The direction field for a damped pendulum, including the
 solution for the given initial conditions, and with a slider that
-can be used to change the value of the mass m:
+can be used to change the value of the mass @math{m}:
 
 @example
 (%i6) plotdf([y,-g*sin(x)/l - b*y/m/l],
