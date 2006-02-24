@@ -6,6 +6,7 @@
 ;;  Written for Maxima 5.9.2 .
 
 ;;  Test file: rteststringproc.mac
+;;  Info file: stringproc.texi
 
 ;;  This program is free software; you can redistribute it and/or
 ;;  modify it under the terms of the GNU General Public License,
@@ -24,10 +25,6 @@
 ;;        05-11-20  fixed: $cunlisp (Variable naming error) 
 ;;                  $sremove (unnecessary line deleted)
 ;;        05-11-27  fixed: $ascii (src/commac.lisp/ascii doesn't work with clisp) 
-;;        06-01-10  fixed: m-string (make-symbol replaced by intern)
-;;        06-02-22  fixed: strip&$ (problems with empty string)
-;;                  fixed: $simplode (empty string: "&")
-;;                  fixed: $ssubst (case inversion problem)
 
 (in-package "MAXIMA")
 
@@ -119,17 +116,6 @@
                       ($sconcat obj)))))))  
    (clt (cdr mtree) nil)))  
 
-;;  function from 5.9.1, modified for 5.9.2
-(defun $sprint(&rest args )
-  (sloop for v in args do
-         (cond ((symbolp v)
-                (setq v (strip&$ (maybe-invert-string-case (symbol-name v))))) ;; modified
-               ((numberp v) v)
-               (t (setq v (implode (strgrind v)))))
-         (princ v)
-         (princ " "))
-  (car args))
-  
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  2. characters 
 
@@ -141,7 +127,7 @@
     (if (= (length smch) 1)
       (character smch)
       (merror 
-        "stringproc.lisp: ~:M cannot be converted into a character." 
+        "stringproc2.lisp: ~:M cannot be converted into a character." 
           mch))))
 
 ;;  converts a lisp-character into a maxima-string of length 1
@@ -197,13 +183,13 @@
       (intern (subseq (string obj) 1))
       obj))
 |#
-
 (defmfun strip&$ (str) ;; 5.9.2
-   (let ((c1 ;(if (not (or (equal "" str) (equal "$" str) (equal "&" str))) 
-                (string (getcharn str 1))));)
+   (let ((c1 (if (not (or (equal "" str) (equal "$" str) (equal "&" str))) 
+                (string (getcharn str 1)))))
       (if (or (equal c1 "&") (equal c1 "$"))
          (subseq str 1)
          str)))
+
 
 ;;  converts maxima-string into lisp-string
 (defun $lstring (mstr) (l-string mstr)) ;; for testing only (avoid lisp string in maxima)
@@ -322,7 +308,7 @@
 
 ;;  $sconcat for lists, allows an optional user defined separator string
 ;;  returns maxima-string
-(defun $simplode (lis &optional (ds "&")) 
+(defun $simplode (lis &optional (ds "")) 
    (setq lis (cdr lis))
    (let ((res ""))
       (setq ds (l-string ds))
@@ -372,7 +358,7 @@
 ;;  functions for string manipulation
 (defun $ssubstfirst (news olds mstr &optional (test '$sequal) (s 1) (e)) ;; 1-indexed!
    (let* ((str (l-string mstr))
-          (new (l-string news));)(if (stringp news) news 
+          (new (l-string news))
           (old (l-string olds))
           (len (length old))
           (pos (search old str 
@@ -403,13 +389,8 @@
                   :end2 (if e (1- e)))))
       (if (null pos) 
          (m-string str)
-         ($ssubst  
-            (maybe-invert-string-case new) 
-            (maybe-invert-string-case old) 
-            ($ssubstfirst  
-               (maybe-invert-string-case new) 
-               (maybe-invert-string-case old) 
-               mstr test (1+ pos) (if e (1+ e)))
+         ($ssubst new old 
+            ($ssubstfirst new old mstr test (1+ pos) (if e (1+ e)))
             test
             (1+ pos)
             (if e (1+ e)) ))))
