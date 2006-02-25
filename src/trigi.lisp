@@ -105,6 +105,33 @@
   function to evaluate the maxima function numerically with
   big-float precision.")
   
+;; Some Lisp implementations goof up branch cuts for ASIN, ACOS, and/or ATANH.
+;; Here are definitions which have the right branch cuts
+;; (assuming LOG, PHASE, and SQRT have the right branch cuts).
+
+#|
+(defun my-phase (x) (atan (imagpart x) (realpart x)))
+
+(defun my-abs (x)
+  (sqrt
+    (+
+      (* (realpart x) (realpart x))
+      (* (imagpart x) (imagpart x)))))
+
+(defun my-log (x) (complex (log (my-abs x)) (my-phase x)))
+
+(defun my-sqrt (x) (exp (/ (my-log x) #C(2.0 0.0))))
+|#
+
+(defun asin-hack (x) (* #C(0.0 -1.0) 
+                      (cl:log (+ (* #C(0.0 1.0) x) (cl:sqrt (- #C(1.0 0.0) (* x x)))))))
+
+(defun acos-hack (x) (- (/ pi #C(2.0 0.0)) (asin-hack x)))
+
+(defun atanh-hack (x) (/ (- (cl:log (+ #C(1.0 0.0) x)) (cl:log (- #C(1.0 0.0) x))) #C(2.0 0.0)))
+
+;; End of hackery. ASIN-HACK, etc are used in table below for select Lisp implementations.
+
 ;; Fill the hash table.
 (macrolet ((frob (mfun dfun)
 	     `(setf (gethash ',mfun *double-float-op*) ,dfun)))
@@ -129,16 +156,19 @@
 		 (let ((y (ignore-errors (/ 1 (cl:tan x)))))
 		   (if y y (domain-error x 'cot)))))
 
-  (frob %acos #'cl:acos)
-  (frob %asin #'cl:asin)
+  #-sbcl (frob %acos #'cl:acos)
+  #+sbcl (frob %acos #'acos-hack)
+  #-sbcl (frob %asin #'cl:asin)
+  #+sbcl (frob %asin #'asin-hack)
+
   (frob %atan #'cl:atan)
 
   (frob %asec #'(lambda (x)
-		  (let ((y (ignore-errors (cl:acos (/ 1 x))))) 
+		  (let ((y (ignore-errors #-sbcl (cl:acos (/ 1 x)) #+sbcl (acos-hack (/ 1 x))))) 
 		    (if y y (domain-error x 'asec)))))
 
   (frob %acsc #'(lambda (x)
-		  (let ((y (ignore-errors (cl:asin (/ 1 x)))))
+		  (let ((y (ignore-errors #-sbcl (cl:asin (/ 1 x)) #+sbcl (asin-hack (/ 1 x)))))
 		    (if y y (domain-error x 'acsc)))))
 
   (frob %acot #'(lambda (x)
@@ -163,7 +193,9 @@
 
   (frob %acosh #'cl:acosh)
   (frob %asinh #'cl:asinh)
-  (frob %atanh #'cl:atanh)
+  
+  #-(or sbcl clisp cmucl) (frob %atanh #'cl:atanh)
+  #+(or sbcl clisp cmucl) (frob %atanh #'atanh-hack)
 
   (frob %asech #'(lambda (x)
 		   (let ((y (ignore-errors (cl:acosh (/ 1 x)))))
@@ -174,7 +206,7 @@
 		     (if y y (domain-error x 'acsch)))))
 
   (frob %acoth #'(lambda (x)
-		   (let ((y (ignore-errors (cl:atanh (/ 1 x))))) 
+		   (let ((y (ignore-errors #-(or sbcl clisp cmucl) (cl:atanh (/ 1 x)) #+(or sbcl clisp cmucl) (atanh-hack (/ 1 x))))) 
 		     (if y y (domain-error x 'acoth)))))
 
   (frob %mabs #'cl:abs)
