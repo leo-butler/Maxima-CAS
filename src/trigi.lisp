@@ -109,26 +109,29 @@
 ;; Here are definitions which have the right branch cuts
 ;; (assuming LOG, PHASE, and SQRT have the right branch cuts).
 
-#|
-(defun my-phase (x) (atan (imagpart x) (realpart x)))
+;; Apply formula from CLHS if X falls on a branch cut.
+;; Otherwise punt to CL:ASIN.
+(defun asin-hack (x)
+  ; Test for (IMAGPART X) is EQUAL because signed zero is EQUAL to zero.
+  (if (and (> (abs (realpart x)) 1d0) (equal (imagpart x) 0d0))
+    (* #C(0d0 -1d0) (cl:log (+ (* #C(0d0 1d0) x) (cl:sqrt (- #C(1d0 0d0) (* x x))))))
+    (cl:asin x)))
 
-(defun my-abs (x)
-  (sqrt
-    (+
-      (* (realpart x) (realpart x))
-      (* (imagpart x) (imagpart x)))))
+;; Apply formula from CLHS if X falls on a branch cut.
+;; Otherwise punt to CL:ACOS.
+(defun acos-hack (x)
+  ; Test for (IMAGPART X) is EQUAL because signed zero is EQUAL to zero.
+  (if (and (> (abs (realpart x)) 1d0) (equal (imagpart x) 0d0))
+    (- (/ pi #C(2d0 0d0)) (asin-hack x))
+    (cl:acos x)))
 
-(defun my-log (x) (complex (log (my-abs x)) (my-phase x)))
-
-(defun my-sqrt (x) (exp (/ (my-log x) #C(2.0 0.0))))
-|#
-
-(defun asin-hack (x) (* #C(0.0 -1.0) 
-                      (cl:log (+ (* #C(0.0 1.0) x) (cl:sqrt (- #C(1.0 0.0) (* x x)))))))
-
-(defun acos-hack (x) (- (/ pi #C(2.0 0.0)) (asin-hack x)))
-
-(defun atanh-hack (x) (/ (- (cl:log (+ #C(1.0 0.0) x)) (cl:log (- #C(1.0 0.0) x))) #C(2.0 0.0)))
+;; Apply formula from CLHS if X falls on a branch cut.
+;; Otherwise punt to CL:ATANH.
+(defun atanh-hack (x)
+  ; Test for (IMAGPART X) is EQUAL because signed zero is EQUAL to zero.
+  (if (and (> (abs (realpart x)) 1d0) (equal (imagpart x) 0d0))
+    (/ (- (cl:log (+ #C(1d0 0d0) x)) (cl:log (- #C(1d0 0d0) x))) #C(2d0 0d0))
+    (cl:atanh x)))
 
 ;; End of hackery. ASIN-HACK, etc are used in table below for select Lisp implementations.
 
