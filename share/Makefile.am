@@ -241,6 +241,7 @@ contrib/ggf.mac\
 contrib/ifactor.lisp\
 contrib/impdiff.mac\
 contrib/lindstedt.mac\
+contrib/log10.mac\
 contrib/lsquares.mac\
 contrib/lurkmathml/README\
 contrib/lurkmathml/mathml.lisp\
