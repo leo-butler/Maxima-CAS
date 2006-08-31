@@ -371,42 +371,69 @@ the Bessel function is expanded.
 @end example
 @end defvr
 
+@c THESE ARE DEPRECATED, so remove them, because we've removed the
+@c corresponding code.
+@c Remove these someday.
 
-@deffn {Function} j0 (@var{x})
-The Bessel function of the first kind of order 0.
+@c @deffn {Function} j0 (@var{x})
+@c The Bessel function of the first kind of order 0.
+@c 
+@c This function is deprecated.  Write @code{bessel_j (0, @var{x})} instead.
+@c 
+@c @end deffn
+@c 
+@c 
+@c @deffn {Function} j1 (@var{x})
+@c The Bessel function of the first kind of order 1.
+@c 
+@c This function is deprecated.  Write @code{bessel_j (1, @var{x})} instead.
+@c 
+@c @end deffn
+@c 
+@c 
+@c @deffn {Function} jn (@var{x}, @var{n})
+@c The Bessel function of the first kind of order @var{n}.
+@c 
+@c This function is deprecated.  Write @code{bessel_j (@var{n}, @var{x})} instead.
+@c 
+@c @end deffn
+@c 
+@c @deffn {Function} i0 (@var{x})
+@c The modified Bessel function of the first kind of order 0.
+@c 
+@c This function is deprecated.  Write @code{bessel_i (0, @var{x})} instead.
+@c 
+@c @end deffn
+@c 
+@c 
+@c @deffn {Function} i1 (@var{x})
+@c The modified Bessel function of the first kind of order 1.
+@c 
+@c This function is deprecated.  Write @code{bessel_i (1, @code{x})} instead.
+@c 
+@c @end deffn
 
-This function is deprecated.  Write @code{bessel_j (0, @var{x})} instead.
+@deffn {Function} scaled_bessel_i (@var{v}, @var{z}) 
+
+The scaled modified Bessel function of the first kind of order
+@math{v} and argument @math{z}.  That is, @math{scaled_bessel_i(v,z) =
+exp(-abs(z))*bessel_i(v, z)}.  This function is particularly useful
+for calculating @math{bessel_i} for large @math{z}, which is large.
+However, maxima does not otherwise know much about this function.  For
+symbolic work, it is probably preferable to work with the expression
+@code{exp(-abs(z))*bessel_i(v, z)}.
 
 @end deffn
 
+@deffn {Function} scaled_bessel_i0 (@var{z}) 
 
-@deffn {Function} j1 (@var{x})
-The Bessel function of the first kind of order 1.
-
-This function is deprecated.  Write @code{bessel_j (1, @var{x})} instead.
+Identical to @code{scaled_bessel_i(0,z)}.
 
 @end deffn
 
+@deffn {Function} scaled_bessel_i1 (@var{z}) 
 
-@deffn {Function} jn (@var{x}, @var{n})
-The Bessel function of the first kind of order @var{n}.
-
-This function is deprecated.  Write @code{bessel_j (@var{n}, @var{x})} instead.
-
-@end deffn
-
-@deffn {Function} i0 (@var{x})
-The modified Bessel function of the first kind of order 0.
-
-This function is deprecated.  Write @code{bessel_i (0, @var{x})} instead.
-
-@end deffn
-
-
-@deffn {Function} i1 (@var{x})
-The modified Bessel function of the first kind of order 1.
-
-This function is deprecated.  Write @code{bessel_i (1, @code{x})} instead.
+Identical to @code{scaled_bessel_i(1,z)}.
 
 @end deffn
 
