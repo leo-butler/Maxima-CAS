@@ -1,6 +1,6 @@
 # -*-mode: tcl; fill-column: 75; tab-width: 8; coding: iso-latin-1-unix -*-
 #
-#       $Id: RunMaxima.tcl,v 1.23.2.1 2006/08/03 13:06:00 villate Exp $
+#       $Id: RunMaxima.tcl,v 1.23.2.2 2006/09/04 13:05:53 villate Exp $
 #
 proc textWindowWidth { w } {
     set font [$w cget -font]
@@ -52,7 +52,7 @@ proc CMeval { w } {
 	if { [catch {set atprompt [oget $w atMaximaPrompt]}] } {
 	    puts {atMaximaPrompt not defined}
 	} elseif { $atprompt } {
-	    puts "atMaximaPrompt=atprompt"
+	    # puts "atMaximaPrompt=$atprompt"
 	    return
 	}
     }
@@ -267,7 +267,7 @@ proc maximaFilter { win sock } {
 	$win insert end $it2 output
 	$win mark set lastStart "end -1char"
     }
-    if { [regexp {\((?:C|%i)[0-9]+\) $|\(dbm:[0-9]+\) $|([A-Z]+>[>]*)$} $it junk lisp]  } {
+    if { [regexp {\((?:C|%i)[0-9]+\) $|\(dbm:[0-9]+\) $|([A-Z]+>[>]* *)$} $it junk lisp]  } {
 	# puts "junk=$junk, lisp=$lisp,[expr { 0 == [string compare $lisp {}] }]"
 	# puts "it=<$it>,pdata={[array get pdata *]},[$win index end],[$win index insert]"
 
