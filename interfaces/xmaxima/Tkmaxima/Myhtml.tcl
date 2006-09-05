@@ -1,6 +1,6 @@
 # -*-mode: tcl; fill-column: 75; tab-width: 8; coding: iso-latin-1-unix -*-
 #
-#       $Id: Myhtml.tcl,v 1.12.2.2 2006/09/05 12:10:46 villate Exp $
+#       $Id: Myhtml.tcl,v 1.12.2.3 2006/09/05 12:39:48 villate Exp $
 #
 ###### Myhtml.tcl ######
 ############################################################
@@ -379,7 +379,7 @@ defTag ul -alter {Aindent 1} -body { xHMlistEnter
 
 #defTag p -before "\n\n" -sbody {}
 #defTag p -before "\n\n" -sbody {}
-defTag p -body { xHMassureNewlines 1 } -sbody {}
+defTag p -before "\n" -body { xHMassureNewlines 1 } -sbody { xHMassureNewlines 1 }
 defTag blockquote -before "\n\n" -after "\n"
 defTag pre -alter {family fixed Cnowrap nowrap} -before "\n" /pre "\n"
 defTag samp -alter {family fixed}
@@ -1395,6 +1395,7 @@ proc xHMparse_html {html {cmd HMtest_parse} {firstTag hmstart}} {
     #dputs "beginning parse"
 
      global meee ; set meee $html;
+     regsub -all {(['\"])\./\.\.} $html {\1..} html 
      regsub -- "^.*<!DOCTYPE\[^>\]*>" $html {} html
      regsub -all -- "--(\[ \t\n\]*)>" $html "\001\\1\002" html
      regsub -all -- "<--(\[^\001\]*)\001(\[^\002\]*)\002" $html \
