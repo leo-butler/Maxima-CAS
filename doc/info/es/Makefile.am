@@ -25,6 +25,10 @@ simplex.texi        simplifications.texi           solve_rec.texi      stats.tex
 stringproc.texi     unit.texi                      zeilberger.texi     dynamics.texi
 
 
+all-local: describe-index.lisp
+
+describe-index.lisp: maxima.info
+	perl ../build_index.pl maxima.info 'Índice de Funciones y Variables' > describe-index.lisp
 
 maximahtml.es.mk:
 	perl ../texi2html -split_chapter --lang=es --output=. --css-include=../manual.css --init-file ../texi2html.init maxima.texi 

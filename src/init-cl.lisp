@@ -398,18 +398,10 @@
 		(combine-path (list *maxima-symdir* lisp-patterns))
 		(combine-path (list *maxima-symdir* maxima-patterns))))
     (setq cl-info::*info-paths* (list (concatenate 'string *maxima-infodir* "/")))
-    ;; Share subdirs are not required here since all .info files are installed
-    ;; in one directory *maxima-infodir* -- there is no info files in share.
-    ;; vvzhy Jan 2, 2006
-    ;(setq L (mapcar #'(lambda (x) (concatenate 'string *maxima-sharedir* "/" x "/")) share-subdirs-list))
-    ;(setq cl-info::*info-paths* (append cl-info::*info-paths* L))
-
-    ; Look for "foo.info" in share directory "foo".
-    (loop for d in share-subdirs-list do
-      (let ((name (if (find #\/ d) (unix-like-basename d) d)))
-        (when (cl-info::file-search name cl-info::*info-paths* '("info") nil)
-          #+debug (format t "SET-PATHNAMES: found an info file for share directory ~S~%" name)
-          (nconc cl-info::*default-info-files* `(,(concatenate 'string name ".info"))))))))
+    (let 
+      ((subdir-bit (if (null *maxima-lang-subdir*) "" (concatenate 'string "/" *maxima-lang-subdir*))))
+      (autof 'cl-info::cause-describe-index-to-load
+             (concatenate 'string *maxima-infodir* subdir-bit "/describe-index.lisp")))))
 
 (defun get-dirs (path)
   #+(or :clisp :sbcl)
@@ -587,8 +579,8 @@
       (setf *read-default-float-format* 'lisp::double-float))
     
     (catch 'to-lisp
-      (set-pathnames)
       (set-locale)
+      (set-pathnames)
       (setf (values input-stream batch-flag) 
 	    (process-maxima-args input-stream batch-flag))
       (progn
