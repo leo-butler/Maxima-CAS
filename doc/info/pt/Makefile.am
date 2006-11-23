@@ -102,15 +102,16 @@ clean-local: clean-info clean-html
 
 clean-info:
 	rm -f maxima.info*
+	rm -f describe-index.lisp
 
 clean-html:
 	rm -f maxima.html maxima_*.html
 	rm -f contents.hhc
 	rm -f index.hhk
 
-EXTRA_DIST = maximahtml_pt.mk header.hhp maxima.hhp
+EXTRA_DIST = maximahtml_pt.mk header.hhp maxima.hhp describe-index.lisp
 
-install-info-am: $(INFO_DEPS)
+install-info-am: $(INFO_DEPS) describe-index.lisp
 	test -z "$(infodir)$(langsdir)" || mkdir -p -- "$(DESTDIR)$(infodir)$(langsdir)"
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	list='$(INFO_DEPS)'; \
@@ -129,6 +130,7 @@ install-info-am: $(INFO_DEPS)
 	    else : ; fi; \
 	  done; \
 	done
+	$(INSTALL_DATA) describe-index.lisp "$(DESTDIR)$(infodir)$(langsdir)/describe-index.lisp"
 
 uninstall-info-am:
 	@list='$(INFO_DEPS)'; \
@@ -140,4 +142,5 @@ uninstall-info-am:
 	     rm -f $$relfile $$relfile-[0-9] $$relfile-[0-9][0-9] $$relfile_i[0-9] $$relfile_i[0-9][0-9]; \
 	   else :; fi); \
 	done
+	rm -f "$(DESTDIR)$(infodir)$(langsdir)/describe-index.lisp"
 
