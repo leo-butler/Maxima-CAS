@@ -11,7 +11,7 @@ endif
 fcharset = "ISO-8859-1"
 tcharset = "UTF-8"
 
-all-loacl: describe-index.lisp
+all-local: describe-index.lisp
 
 describe-index.lisp: maxima.info
 	perl ../build_index.pl maxima.info 'Índice de Funciones y Variables' > describe-index.lisp
