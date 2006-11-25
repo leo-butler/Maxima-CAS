@@ -1,5 +1,6 @@
 $main_info = $ARGV[0];
 $index_node_name = $ARGV[1];
+$infofile_encoding = $ARGV[2];
 
 $unit_separator = "";
 
@@ -20,14 +21,14 @@ $unit_separator = "";
 #        rather than attempting to fix up the character offsets.
 #        (Which are strange anyway.)
 
-open (FH, $main_info);
+open (FH, $infofile_encoding, $main_info);
 read (FH, $stuff, -s FH);
 
 while ($stuff =~ m/^($main_info-\d+): (\d+)/cgsm) {
     $filename = $1;
     push @info_filenames, $filename;
 
-    open FH2, $filename;
+    open FH2, $infofile_encoding, $filename;
     read FH2, $stuff2, -s FH2;
 
     while ($stuff2 =~ m/\G.*?(?=\n$unit_separator)/cgsm) {
@@ -54,7 +55,7 @@ close FH;
 ($index_filename, $index_node_offset) = @{$node_offset{$index_node_name}};
 # print "HEY index_filename = $index_filename, index_node_offset = $index_node_offset\n";
 
-open (FH, $index_filename);
+open (FH, $infofile_encoding, $index_filename);
 read (FH, $stuff, -s FH);
 
 if ($stuff =~ m/^File:.*?Node: $index_node_name.*^\* Menu:/icgsm) {
@@ -78,7 +79,7 @@ foreach $key (sort keys %topic_locator) {
     ($filename, $byte_offset0) = @{$node_offset{$node_name}};
     $byte_offset = seek_lines($filename, $byte_offset0, $lines_offset);
 
-    open FH, "<:utf8", $filename;
+    open FH, $infofile_encoding, $filename;
     seek FH, $byte_offset, 0;
     read FH, $stuff, -s FH;
     if ($stuff =~ m/(.*?)(?:\n\n(?= -- )|\n(?=[0-9])|(?=$unit_separator))/cgsm) {
@@ -126,30 +127,30 @@ print "))\n";
 for $filename (@info_filenames) {
 
 # print "HEY IN LOOP filename = $filename\n";
-    open (FH, $filename);
+    open (FH, $infofile_encoding, $filename);
     read (FH, $stuff, -s FH);
 
-    while ($stuff =~ m/\G.*?((^\d+\.\d+) (.*?)\n)/cgsm) {
+    while ($stuff =~ m/\G(.*?)(?=^\d+\.\d+ .*?\n)/cgsm) {
 
-        $begin_node_offset = pos($stuff) - length($1);
-        $node_title = $3;
+        $begin_node_offset = pos($stuff);
 
-        # ?? $pos1 = pos($stuff);
+        if ($stuff =~ m/((^\d+\.\d+) (.*?)\n)/cgsm) {
+            $node_title = $3;
+            $node_length = length $1;
+        }
 
         # Node text ends at a unit separator character,
         # or at the end of the file.
 
-        if ($stuff =~ m/\G.*?($unit_separator)/cgsm) {
-            $end_node_offset = pos($stuff) - length($1);
+        if ($stuff =~ m/\G(.*?)($unit_separator)/cgsm) {
+            $node_length += length $1;
         }
         else {
-            $stuff =~ m/\G.*/csgm;
-            $end_node_offset = pos($stuff);
+            $stuff =~ m/\G(.*)/csgm;
+            $node_length += length $1;
         }
 
-        # ?? pos($stuff) = $pos1;
-
-        $node_locator{$node_title} = [($filename, $begin_node_offset, $end_node_offset - $begin_node_offset)];
+        $node_locator{$node_title} = [($filename, $begin_node_offset, $node_length)];
     }
 
     close FH;
@@ -178,7 +179,7 @@ print "(load-info-hashtables)\n";
 
 sub seek_lines {
     my ($filename, $byte_offset, $lines_offset) = @_;
-    open FH, $filename;
+    open FH, $infofile_encoding, $filename;
     seek FH, $byte_offset, 0;
 
     # MAKEINFO BUG: LINE OFFSET IS LINE NUMBER OF LAST LINE IN FUNCTION DEFINITION
