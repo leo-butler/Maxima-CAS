@@ -38,6 +38,7 @@ while ($stuff =~ m/^($main_info-\d+): (\d+)/cgsm) {
 
         if ($stuff2 =~ m/^File:.*?Node: (.*?),/csgm) {
             $node_name = $1;
+            $last_node_name = $node_name;
         }
 
 print "; HEY $node_name => $filename, $offset\n";
@@ -49,13 +50,30 @@ print "; HEY $node_name => $filename, $offset\n";
 
 close FH;
 
+## # Translate character offsets to byte offsets.
+## 
+## foreach $node_name (sort keys %node_offset) {
+##     ($filename, $character_offset) = @{$node_offset{$node_name}};
+##     open FH, "<" . $infofile_encoding, $filename;
+##     read FH, $stuff, $character_offset;
+##     my $byte_offset = tell FH;
+##     close FH;
+## 
+## print "; HEY REVISED NODE $node_name OFFSET FROM $character_offset TO $byte_offset\n";
+##     $node_offset{$node_name} = [($filename, $byte_offset)];
+## }
+
 # print "HEY info_filenames = @info_filenames\n";
 
 # (1.1b) Read the info index, which gives the node name and number of lines offset
 #        for each indexed item. 
 
+# ASSUME THAT THE INFO INDEX IS THE LAST NODE.
+# (GETTING THE NODE NAME FROM THE COMMAND LINE IS PROBLEMATIC.)
+$index_node_name = $last_node_name;
+
 ($index_filename, $index_node_offset) = @{$node_offset{$index_node_name}};
-# print "HEY index_filename = $index_filename, index_node_offset = $index_node_offset\n";
+print "; HEY index_filename = $index_filename, index_node_offset = $index_node_offset\n";
 
 open (FH, "<" . $infofile_encoding, $index_filename);
 read (FH, $stuff, -s FH);
@@ -78,8 +96,8 @@ close FH;
 
 foreach $key (sort keys %topic_locator) {
     ($node_name, $lines_offset) = @{$topic_locator{$key}};
-    ($filename, $byte_offset0) = @{$node_offset{$node_name}};
-    $byte_offset = seek_lines($filename, $byte_offset0, $lines_offset);
+    ($filename, $character_offset) = @{$node_offset{$node_name}};
+    $byte_offset = seek_lines($filename, $character_offset, $lines_offset);
 
     open FH, "<" . $infofile_encoding, $filename;
     seek FH, $byte_offset, 0;
@@ -96,6 +114,19 @@ foreach $key (sort keys %topic_locator) {
 
     $topic_locator{$key} = [($node_name, $filename, $byte_offset, $text_length)];
 }
+
+## # Translate character offsets to byte offsets.
+## 
+## foreach $key (sort keys %topic_locator) {
+##     ($node_name, $filename, $character_offset, $text_length) = @{$topic_locator{$key}};
+##     open FH, "<" . $infofile_encoding, $filename;
+##     read FH, $stuff, $character_offset;
+##     my $byte_offset = tell FH;
+##     close FH;
+## 
+## print "; HEY REVISED TOPIC $key OFFSET FROM $character_offset TO $byte_offset\n";
+##     $topic_locator{$key} = [($node_name, $filename, $byte_offset, $text_length)];
+## }
 
 # (1.3)  Generate Lisp code. The functions in info.lisp expect this stuff.
 
@@ -120,20 +151,27 @@ print "))\n";
 #        and take each one of those to be the start of a node.
 #
 #        We could use the node table ($node_offset here), but we don't.
+
 #        (a) The node table indexes nodes which contain only menus.
 #            We don't want those because they have no useful text.
-#        (b) The byte offset stated in the node table tells the location
+#
+#        (b) The offset stated in the node table tells the location
 #            of the "File: ..." header. We would have to cut off that stuff.
-#        (c) The following regex-only code works OK as it stands.
+#
+#        (c) Offsets computed by makeinfo are character offsets,
+#            so we would have to convert those to byte offsets.
+#            (But we have to do that anyway, so I guess there's no
+#            advantage either way on that point.)
 
 for $filename (@info_filenames) {
 
-# print "HEY IN LOOP filename = $filename\n";
     open (FH, "<" . $infofile_encoding, $filename);
     read (FH, $stuff, -s FH);
 
     while ($stuff =~ m/\G(.*?)(?=^\d+\.\d+ .*?\n)/cgsm) {
 
+        # Since FH was opened with $infofile_encoding,
+        # pos returns a CHARACTER offset.
         $begin_node_offset = pos($stuff);
 
         if ($stuff =~ m/((^\d+\.\d+) (.*?)\n)/cgsm) {
@@ -158,6 +196,19 @@ for $filename (@info_filenames) {
     close FH;
 }
 
+# Translate character offsets to byte offsets.
+
+foreach $node_title (sort keys %node_locator) {
+    ($filename, $begin_node_offset, $node_length) = @{$node_locator{$node_title}};
+    open FH, "<" . $infofile_encoding, $filename;
+    read FH, $stuff, $begin_node_offset;
+    my $begin_node_offset_bytes = tell FH;
+    close FH;
+
+print "; HEY REVISED NODE $node_title OFFSET FROM $begin_node_offset TO $begin_node_offset_bytes\n";
+    $node_locator{$node_title} = [($filename, $begin_node_offset_bytes, $node_length)];
+}
+
 # (2.2)  Generate Lisp code.
 #
 #        Pairs of the form (<node name> . (<filename> <byte offset> <length>))
@@ -180,9 +231,9 @@ print "(load-info-hashtables)\n";
 # ------------------------------------------------------------------
 
 sub seek_lines {
-    my ($filename, $byte_offset, $lines_offset) = @_;
+    my ($filename, $character_offset, $lines_offset) = @_;
     open FH, "<" . $infofile_encoding, $filename;
-    seek FH, $byte_offset, 0;
+    read FH, $stuff, $character_offset;
 
     # MAKEINFO BUG: LINE OFFSET IS LINE NUMBER OF LAST LINE IN FUNCTION DEFINITION
     # (BUT WE NEED THE FIRST LINE OF THE FUNCTION DEFINITION)
