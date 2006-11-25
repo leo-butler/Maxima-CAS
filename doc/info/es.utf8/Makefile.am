@@ -14,7 +14,7 @@ tcharset = "UTF-8"
 all-local: describe-index.lisp
 
 describe-index.lisp: maxima.info
-	perl ../build_index.pl maxima.info 'Índice de Funciones y Variables' > describe-index.lisp
+	perl ../build_index.pl maxima.info 'Índice de Funciones y Variables' '<:utf8' > describe-index.lisp
 
 maximahtml.es.mk:
 	perl ../texi2html -split_chapter --lang=es --output=. --css-include=../manual.css --init-file ../texi2html.init maxima.texi 
