@@ -78,16 +78,16 @@ foreach $key (sort keys %topic_locator) {
     ($filename, $byte_offset0) = @{$node_offset{$node_name}};
     $byte_offset = seek_lines($filename, $byte_offset0, $lines_offset);
 
-    open FH, $filename;
+    open FH, "<:utf8", $filename;
     seek FH, $byte_offset, 0;
     read FH, $stuff, -s FH;
-    if ($stuff =~ m/(?:\n\n(?= -- )|\n(?=[0-9])|(?=$unit_separator))/cgsm) {
-        $text_length = pos $stuff;
+    if ($stuff =~ m/(.*?)(?:\n\n(?= -- )|\n(?=[0-9])|(?=$unit_separator))/cgsm) {
+        $text_length = length $1;
     }
     else {
         # Eat everything up til end of file.
-        $stuff =~ m/.*/cgsm;
-        $text_length = pos $stuff;
+        $stuff =~ m/(.*)/cgsm;
+        $text_length = length $1;
     }
     close FH;
 
