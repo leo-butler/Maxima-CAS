@@ -1,6 +1,5 @@
 $main_info = $ARGV[0];
-$index_node_name = $ARGV[1];
-$infofile_encoding = $ARGV[2];
+$infofile_encoding = $ARGV[1];
 
 binmode STDOUT, $infofile_encoding;
 
