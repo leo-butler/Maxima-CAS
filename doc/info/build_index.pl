@@ -40,7 +40,7 @@ while ($stuff =~ m/^($main_info-\d+): (\d+)/cgsm) {
             $last_node_name = $node_name;
         }
 
-print "; HEY $node_name => $filename, $offset\n";
+# print "; HEY $node_name => $filename, $offset\n";
         $node_offset{$node_name} = [($filename, int($offset))];
     }
 
@@ -48,19 +48,6 @@ print "; HEY $node_name => $filename, $offset\n";
 }
 
 close FH;
-
-## # Translate character offsets to byte offsets.
-## 
-## foreach $node_name (sort keys %node_offset) {
-##     ($filename, $character_offset) = @{$node_offset{$node_name}};
-##     open FH, "<" . $infofile_encoding, $filename;
-##     read FH, $stuff, $character_offset;
-##     my $byte_offset = tell FH;
-##     close FH;
-## 
-## print "; HEY REVISED NODE $node_name OFFSET FROM $character_offset TO $byte_offset\n";
-##     $node_offset{$node_name} = [($filename, $byte_offset)];
-## }
 
 # print "HEY info_filenames = @info_filenames\n";
 
@@ -72,7 +59,7 @@ close FH;
 $index_node_name = $last_node_name;
 
 ($index_filename, $index_node_offset) = @{$node_offset{$index_node_name}};
-print "; HEY index_filename = $index_filename, index_node_offset = $index_node_offset\n";
+# print "; HEY index_filename = $index_filename, index_node_offset = $index_node_offset\n";
 
 open (FH, "<" . $infofile_encoding, $index_filename);
 read (FH, $stuff, -s FH);
@@ -82,7 +69,7 @@ if ($stuff =~ m/^File:.*?Node: $index_node_name.*^\* Menu:/icgsm) {
         $topic_name = $1;
         $node_name = $2;
         $lines_offset = $3;
-print "; HEY $topic_name => $node_name, $lines_offset\n";
+# print "; HEY $topic_name => $node_name, $lines_offset\n";
         $topic_locator{$topic_name} = [($node_name, $lines_offset)];
     }
 }
@@ -113,19 +100,6 @@ foreach $key (sort keys %topic_locator) {
 
     $topic_locator{$key} = [($node_name, $filename, $byte_offset, $text_length)];
 }
-
-## # Translate character offsets to byte offsets.
-## 
-## foreach $key (sort keys %topic_locator) {
-##     ($node_name, $filename, $character_offset, $text_length) = @{$topic_locator{$key}};
-##     open FH, "<" . $infofile_encoding, $filename;
-##     read FH, $stuff, $character_offset;
-##     my $byte_offset = tell FH;
-##     close FH;
-## 
-## print "; HEY REVISED TOPIC $key OFFSET FROM $character_offset TO $byte_offset\n";
-##     $topic_locator{$key} = [($node_name, $filename, $byte_offset, $text_length)];
-## }
 
 # (1.3)  Generate Lisp code. The functions in info.lisp expect this stuff.
 
@@ -204,7 +178,7 @@ foreach $node_title (sort keys %node_locator) {
     my $begin_node_offset_bytes = tell FH;
     close FH;
 
-print "; HEY REVISED NODE $node_title OFFSET FROM $begin_node_offset TO $begin_node_offset_bytes\n";
+# print "; HEY REVISED NODE $node_title OFFSET FROM $begin_node_offset TO $begin_node_offset_bytes\n";
     $node_locator{$node_title} = [($filename, $begin_node_offset_bytes, $node_length)];
 }
 
