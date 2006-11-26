@@ -1,8 +1,5 @@
 (in-package :cl-info)
 
-(defvar *index-name* "index")
-(defvar *extra-chars* "")
-
 (defvar *match-data*)
 (defvar *case-fold-search* nil)
 

@@ -237,27 +237,11 @@
 		    ((equal language "en")
 			(setq *maxima-lang-subdir* nil))
 		    ;; Latin-1 aka iso-8859-1 languages 
-		    ((zl-member language '("es" "pt"))
+		    ((zl-member language '("es" "pt" "fr" "de" "it"))
 		      (if (zl-member codeset '("utf-8" "utf8"))
 		    	    (setq *maxima-lang-subdir* (concatenate 'string language ".utf8"))
 		    	    (setq *maxima-lang-subdir* language)))
 		    (t  (setq *maxima-lang-subdir* nil)))
-		;; Translation of the word "Index" to match node "Fuction and Variable Index"
-		(cond
-		    ((equal language "es")
-			(setq cl-info::*index-name* (format nil "~andice" (code-char #xCD))))
-		    ((equal language "pt")
-			(setq cl-info::*index-name* (format nil "~andice" (code-char #xCD)))) 
-		)
-		;; Additional language-dependent pattern to match nodes such as 
-		;;  -- Function: foo (x)
-		;; or
-		;;  -- Option variable: bar
-		(cond 
-		    ;; This pattern is suitable for all Latin-1 (aka ISO-8859-1) langages
-		    ((zl-member language '("es" "pt"))
-		        (setq cl-info::*extra-chars* (format nil "~a-~a" (code-char #xC0) (code-char #xFF))))
-		)
 	    )))
    (setq cl-info::*lang-subdir* *maxima-lang-subdir*)))    
 
