@@ -40,7 +40,6 @@ while ($stuff =~ m/^($main_info-\d+): (\d+)/cgsm) {
             $last_node_name = $node_name;
         }
 
-# print "; HEY $node_name => $filename, $offset\n";
         $node_offset{$node_name} = [($filename, int($offset))];
     }
 
@@ -48,8 +47,6 @@ while ($stuff =~ m/^($main_info-\d+): (\d+)/cgsm) {
 }
 
 close FH;
-
-# print "HEY info_filenames = @info_filenames\n";
 
 # (1.1b) Read the info index, which gives the node name and number of lines offset
 #        for each indexed item. 
@@ -59,7 +56,6 @@ close FH;
 $index_node_name = $last_node_name;
 
 ($index_filename, $index_node_offset) = @{$node_offset{$index_node_name}};
-# print "; HEY index_filename = $index_filename, index_node_offset = $index_node_offset\n";
 
 open (FH, "<" . $infofile_encoding, $index_filename);
 read (FH, $stuff, -s FH);
@@ -69,7 +65,6 @@ if ($stuff =~ m/^File:.*?Node: $index_node_name.*^\* Menu:/icgsm) {
         $topic_name = $1;
         $node_name = $2;
         $lines_offset = $3;
-# print "; HEY $topic_name => $node_name, $lines_offset\n";
         $topic_locator{$topic_name} = [($node_name, $lines_offset)];
     }
 }
@@ -109,6 +104,7 @@ print "(defun cause-describe-index-to-load () nil)\n";
 #        Pairs of the form (<index topic> . (<filename> <byte offset> <length> <node name>))
 
 print "(defvar *info-deffn-defvr-pairs* '(\n";
+print "; CONTENT: (<INDEX TOPIC> . (<FILENAME> <BYTE OFFSET> <LENGTH IN CHARACTERS> <NODE NAME>))\n";
 
 foreach $key (sort keys %topic_locator) {
     print "(\"$key\" . (\"$topic_locator{$key}[1]\" $topic_locator{$key}[2] $topic_locator{$key}[3] \"$topic_locator{$key}[0]\"))\n";
@@ -178,7 +174,6 @@ foreach $node_title (sort keys %node_locator) {
     my $begin_node_offset_bytes = tell FH;
     close FH;
 
-# print "; HEY REVISED NODE $node_title OFFSET FROM $begin_node_offset TO $begin_node_offset_bytes\n";
     $node_locator{$node_title} = [($filename, $begin_node_offset_bytes, $node_length)];
 }
 
@@ -187,6 +182,7 @@ foreach $node_title (sort keys %node_locator) {
 #        Pairs of the form (<node name> . (<filename> <byte offset> <length>))
 
 print "(defvar *info-section-pairs* '(\n";
+print "; CONTENT: (<NODE NAME> . (<FILENAME> <BYTE OFFSET> <LENGTH IN CHARACTERS>))\n";
 
 foreach $node_title (sort keys %node_locator) {
     ($filename, $begin_node_offset, $length) = @{$node_locator{$node_title}};
