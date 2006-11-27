@@ -350,7 +350,7 @@
 				'(#\space #\tab #\; #\$)
 				(subseq 
 				 (read-line stream eof-error-p eof-value) 1))))
-		    `((displayinput) nil ((cl-info::info-exact) ,line))))
+		    `((displayinput) nil (($describe) ,line $exact))))
 		 (t
 		  ;; Got "?<stuff>" This means a call to a Lisp
 		  ;; function.  Pass this on to mread which can handle
