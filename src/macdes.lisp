@@ -130,11 +130,15 @@
 ;; versions of maxima have a builtin info retrieval mechanism.
 
 (defmspec $describe (x)
-  (setq x ($sconcat (cadr x)))
-  (let ((cl-info::*prompt-prefix* *prompt-prefix*)
-	(cl-info::*prompt-suffix* *prompt-suffix*)
-	(cl-info::*lang-subdir* *maxima-lang-subdir*))
-    (cl-info:info x)))
+  (let
+    ((topic ($sconcat (cadr x)))
+     (exact-p (eq (caddr x) '$exact))
+     (cl-info::*prompt-prefix* *prompt-prefix*)
+     (cl-info::*prompt-suffix* *prompt-suffix*)
+     (cl-info::*lang-subdir* *maxima-lang-subdir*))
+    (if exact-p
+      (cl-info::info-exact topic)
+      (cl-info::info topic))))
 
 (defun $apropos ( s ) 
   (cons '(mlist) (apropos-list s :maxima)))
