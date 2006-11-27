@@ -181,7 +181,7 @@
 
 (defun load-info-hashtables ()
   (declare (special *info-section-pairs* *info-deffn-defvr-pairs*))
-  (format t "HEY, I'M LOADING THE INFO HASHTABLES NOW~%")
+  ; (format t "HEY, I'M LOADING THE INFO HASHTABLES NOW~%")
   (mapc
     #'(lambda (x) (setf (gethash (car x) *info-section-hashtable*) (cdr x)))
     *info-section-pairs*)
