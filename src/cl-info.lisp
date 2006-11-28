@@ -73,6 +73,7 @@
   (some #'(lambda (y) (not (equal y x))) (mapcar #'car inexact-matches)))
 
 (defun exact-topic-match (topic)
+  (setq topic (regex-sanitize topic))
   (setq topic (concatenate 'string "^" topic "$"))
   (append
     (find-regex-matches topic *info-section-hashtable*)
@@ -115,9 +116,24 @@
     (not (null tem))))
 
 (defun inexact-topic-match (topic)
+  (setq topic (regex-sanitize topic))
   (append
     (find-regex-matches topic *info-section-hashtable*)
     (find-regex-matches topic *info-deffn-defvr-hashtable*)))
+
+(defun regex-sanitize (s)
+  "Precede any regex special characters with a backslash."
+  (let
+    ((L (coerce maxima-nregex::*regex-special-chars* 'list)))
+
+    ; WORK AROUND NREGEX STRANGENESS: CARET (^) IS NOT ON LIST *REGEX-SPECIAL-CHARS*
+    ; INSTEAD OF CHANGING NREGEX (WITH POTENTIAL FOR INTRODUCING SUBTLE BUGS)
+    ; JUST APPEND CARET TO LIST HERE
+    (setq L (cons #\^ L))
+
+    (coerce (apply #'append
+                   (mapcar #'(lambda (c) (if (maxima::memq c L) `(#\\ ,c) `(,c))) (coerce s 'list)))
+            'string)))
 
 (defun find-regex-matches (regex-string hashtable)
   (let*
