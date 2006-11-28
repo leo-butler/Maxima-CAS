@@ -242,8 +242,7 @@
 		    	    (setq *maxima-lang-subdir* (concatenate 'string language ".utf8"))
 		    	    (setq *maxima-lang-subdir* language)))
 		    (t  (setq *maxima-lang-subdir* nil)))
-	    )))
-   (setq cl-info::*lang-subdir* *maxima-lang-subdir*)))    
+	    )))))    
 
 (defun set-pathnames ()
   (let ((maxima-prefix-env (maxima-getenv "MAXIMA_PREFIX"))
@@ -381,7 +380,6 @@
 	  (list '(mlist)
 		(combine-path (list *maxima-symdir* lisp-patterns))
 		(combine-path (list *maxima-symdir* maxima-patterns))))
-    (setq cl-info::*info-paths* (list (concatenate 'string *maxima-infodir* "/")))
     (let 
       ((subdir-bit (if (null *maxima-lang-subdir*) "" (concatenate 'string "/" *maxima-lang-subdir*))))
       (autof 'cl-info::cause-maxima-index-to-load
