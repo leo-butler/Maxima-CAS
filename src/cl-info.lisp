@@ -1,17 +1,5 @@
 (in-package :cl-info)
 
-(defvar *match-data*)
-(defvar *case-fold-search* nil)
-
-(defvar *info-data* nil)
-(defvar *current-info-data* nil)
-(defvar *info-paths*
-  '("" "/usr/info/" "/usr/local/lib/info/" "/usr/local/info/"
-    "/usr/local/gnu/info/" "/usr/share/info/" ))
-
-(defvar *default-info-files* '("maxima.info"))
-(defvar *lang-subdir*	     nil)
-
 (defvar *info-section-hashtable* (make-hash-table :test 'equal))
 (defvar *info-deffn-defvr-hashtable* (make-hash-table :test 'equal))
 
@@ -178,10 +166,5 @@
     *info-section-pairs*)
   (mapc
     #'(lambda (x) (setf (gethash (car x) *info-deffn-defvr-hashtable*) (cdr x)))
-    *info-deffn-defvr-pairs*)
-  #+FOO (mapc
-    #'(lambda (x)
-        (let ((y (gethash (car x) *info-deffn-defvr-hashtable*)))
-          (if y (setf (nth 3 y) (cdr x)))))
-    *info-deffn-defvr-sections*))
+    *info-deffn-defvr-pairs*))
 
