@@ -99,7 +99,7 @@ foreach $key (sort keys %topic_locator) {
 # (1.3)  Generate Lisp code. The functions in info.lisp expect this stuff.
 
 print "(in-package :cl-info)\n";
-print "(defun cause-describe-index-to-load () nil)\n";
+print "(defun cause-maxima-index-to-load () nil)\n";
 
 #        Pairs of the form (<index topic> . (<filename> <byte offset> <length> <node name>))
 

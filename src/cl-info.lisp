@@ -67,7 +67,7 @@
 ; ------------------ search help topics ------------------
 
 (defun info-exact (x)
-  (cause-describe-index-to-load)
+  (cause-maxima-index-to-load)
   (let ((exact-matches (exact-topic-match x)))
     (if (null exact-matches)
       (progn
@@ -91,7 +91,7 @@
     (find-regex-matches topic *info-deffn-defvr-hashtable*)))
 
 (defun info (x)
-  (cause-describe-index-to-load)
+  (cause-maxima-index-to-load)
   (let (wanted tem)
     (setf tem (inexact-topic-match x))
     (when tem

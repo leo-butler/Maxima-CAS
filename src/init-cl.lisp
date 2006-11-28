@@ -384,8 +384,8 @@
     (setq cl-info::*info-paths* (list (concatenate 'string *maxima-infodir* "/")))
     (let 
       ((subdir-bit (if (null *maxima-lang-subdir*) "" (concatenate 'string "/" *maxima-lang-subdir*))))
-      (autof 'cl-info::cause-describe-index-to-load
-             (concatenate 'string *maxima-infodir* subdir-bit "/describe-index.lisp")))))
+      (autof 'cl-info::cause-maxima-index-to-load
+             (concatenate 'string *maxima-infodir* subdir-bit "/maxima-index.lisp")))))
 
 (defun get-dirs (path)
   #+(or :clisp :sbcl)

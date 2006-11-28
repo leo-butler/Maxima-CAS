@@ -76,10 +76,10 @@ figures/plotting24.gif\
 figures/plotting25.gif\
 figures/orthopoly1.gif
 
-all-local: describe-index.lisp
+all-local: maxima-index.lisp
 
-describe-index.lisp: maxima.info
-	perl ./build_index.pl maxima.info ':crlf' > describe-index.lisp
+maxima-index.lisp: maxima.info
+	perl ./build_index.pl maxima.info ':crlf' > maxima-index.lisp
 
 maximahtml.mk:
 	perl ./texi2html -split_chapter --lang=en --output=. --css-include=./manual.css --init-file ./texi2html.init maxima.texi 
@@ -100,22 +100,22 @@ $(MAXIMAHTML)\
 $(figurefiles)\
 contents.hhc index.hhk header.hhp maxima.hhp
 
-install-data-local: install-describe-index
-uninstall-local: uninstall-describe-index
+install-data-local: install-maxima-index
+uninstall-local: uninstall-maxima-index
 
-install-describe-index: describe-index.lisp
+install-maxima-index: maxima-index.lisp
 	test -z "$(infodir)" || mkdir -p -- "$(DESTDIR)$(infodir)"
-	$(INSTALL_DATA) describe-index.lisp "$(DESTDIR)$(infodir)/describe-index.lisp"
+	$(INSTALL_DATA) maxima-index.lisp "$(DESTDIR)$(infodir)/maxima-index.lisp"
 
-uninstall-describe-index: describe-index.lisp
-	rm -f "$(DESTDIR)$(infodir)/describe-index.lisp"
+uninstall-maxima-index: maxima-index.lisp
+	rm -f "$(DESTDIR)$(infodir)/maxima-index.lisp"
 
 clean-local: clean-info
 clean-local: clean-html
 
 clean-info:
 	rm -f maxima.info*
-	rm -f describe-index.lisp
+	rm -f maxima-index.lisp
 
 clean-html:
 	rm -f maxima*.html
@@ -123,5 +123,5 @@ clean-html:
 	rm -f index.hhk
 
 EXTRA_DIST = texi2html maximahtml.mk manual.css texi2html.init $(genericdirDATA) \
-    create_index header.hhp maxima.hhp describe-index.lisp
+    create_index header.hhp maxima.hhp maxima-index.lisp
 

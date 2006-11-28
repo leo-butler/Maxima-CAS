@@ -25,10 +25,10 @@ simplex.texi        simplifications.texi           solve_rec.texi      stats.tex
 stringproc.texi     unit.texi                      zeilberger.texi     dynamics.texi
 
 
-all-local: describe-index.lisp
+all-local: maxima-index.lisp
 
-describe-index.lisp: maxima.info
-	perl ../build_index.pl maxima.info ':crlf' > describe-index.lisp
+maxima-index.lisp: maxima.info
+	perl ../build_index.pl maxima.info ':crlf' > maxima-index.lisp
 
 maximahtml.es.mk:
 	perl ../texi2html -split_chapter --lang=es --output=. --css-include=../manual.css --init-file ../texi2html.init maxima.texi 
@@ -51,16 +51,16 @@ clean-local: clean-info clean-html
 
 clean-info:
 	rm -f maxima.info*
-	rm -f describe-index.lisp
+	rm -f maxima-index.lisp
 
 clean-html:
 	rm -f maxima.html maxima_*.html
 	rm -f contents.hhc
 	rm -f index.hhk
 
-EXTRA_DIST = maximahtml.es.mk header.hhp maxima.hhp describe-index.lisp
+EXTRA_DIST = maximahtml.es.mk header.hhp maxima.hhp maxima-index.lisp
 
-install-info-am: $(INFO_DEPS) describe-index.lisp
+install-info-am: $(INFO_DEPS) maxima-index.lisp
 	test -z "$(infodir)$(langsdir)" || mkdir -p -- "$(DESTDIR)$(infodir)$(langsdir)"
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	list='$(INFO_DEPS)'; \
@@ -79,7 +79,7 @@ install-info-am: $(INFO_DEPS) describe-index.lisp
 	    else : ; fi; \
 	  done; \
 	done
-	$(INSTALL_DATA) describe-index.lisp "$(DESTDIR)$(infodir)$(langsdir)/describe-index.lisp"
+	$(INSTALL_DATA) maxima-index.lisp "$(DESTDIR)$(infodir)$(langsdir)/maxima-index.lisp"
 
 uninstall-info-am:
 	@list='$(INFO_DEPS)'; \
@@ -91,5 +91,5 @@ uninstall-info-am:
 	     rm -f $$relfile $$relfile-[0-9] $$relfile-[0-9][0-9] $$relfile_i[0-9] $$relfile_i[0-9][0-9]; \
 	   else :; fi); \
 	done
-	rm -f "$(DESTDIR)$(infodir)$(langsdir)/describe-index.lisp"
+	rm -f "$(DESTDIR)$(infodir)$(langsdir)/maxima-index.lisp"
 
