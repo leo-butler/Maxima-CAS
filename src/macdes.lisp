@@ -134,8 +134,7 @@
     ((topic ($sconcat (cadr x)))
      (exact-p (eq (caddr x) '$exact))
      (cl-info::*prompt-prefix* *prompt-prefix*)
-     (cl-info::*prompt-suffix* *prompt-suffix*)
-     (cl-info::*lang-subdir* *maxima-lang-subdir*))
+     (cl-info::*prompt-suffix* *prompt-suffix*))
     (if exact-p
       (cl-info::info-exact topic)
       (cl-info::info topic))))
