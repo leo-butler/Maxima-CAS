@@ -380,6 +380,15 @@
 	  (list '(mlist)
 		(combine-path (list *maxima-symdir* lisp-patterns))
 		(combine-path (list *maxima-symdir* maxima-patterns))))
+
+    (if *maxima-lang-subdir*
+      ; Verify existence of index file in *MAXIMA-LANG-SUBDIR*.
+      ; Revert to default language subdirectory if test fails.
+      (let
+        ((path+name (concatenate 'string *maxima-infodir* "/" *maxima-lang-subdir* "/maxima-index.lisp")))
+        (if (null (probe-file path+name))
+          (setq *maxima-lang-subdir* nil))))
+
     (let 
       ((subdir-bit (if (null *maxima-lang-subdir*) "" (concatenate 'string "/" *maxima-lang-subdir*))))
       (autof 'cl-info::cause-maxima-index-to-load
