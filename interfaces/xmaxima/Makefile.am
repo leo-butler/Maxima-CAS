@@ -1,6 +1,6 @@
 # -*-mode: makefile; fill-column: 75; tab-width: 8; coding: iso-latin-1-unix -*-
 #
-#       $Id: Makefile.am,v 1.44.2.1 2006/12/16 19:24:32 vvzhy Exp $
+#       $Id: Makefile.am,v 1.44.2.2 2006/12/19 11:17:46 vvzhy Exp $
 #
 
 include $(top_srcdir)/common.mk
@@ -82,6 +82,7 @@ WIN32_FILES = win32/ChangeLog win32/Makefile.in win32/tclwinkill.c win32/winkill
               win32/InfoBefore_fr.txt win32/readme_fr.txt \
               win32/InfoBefore_de.txt win32/readme_de.txt \
               win32/InfoBefore_pt.txt win32/readme_pt.txt \
+              win32/InfoBefore_pt_BR.txt win32/readme_pt_BR.txt \
               win32/InfoBefore_it.txt win32/readme_it.txt \
               win32/InfoBefore_es.txt win32/readme_es.txt
       
