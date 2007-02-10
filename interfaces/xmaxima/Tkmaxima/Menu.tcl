@@ -1,6 +1,6 @@
 # -*-mode: tcl; fill-column: 75; tab-width: 8; coding: iso-latin-1-unix -*-
 #
-#       $Id: Menu.tcl,v 1.25.2.1 2006/12/09 19:52:11 vvzhy Exp $
+#       $Id: Menu.tcl,v 1.25.2.2 2007/02/10 09:42:53 vvzhy Exp $
 #
 
 proc pMAXSaveTexToFile {text} {
@@ -220,7 +220,7 @@ proc vMAXAddSystemMenu {fr text} {
     if {$tcl_platform(platform) == "windows"} {
         $m add command -underline 1 -label [mc "Maxima Manual"] \
         	-state $state \
-	        -command [list exec hh.exe $file]
+	        -command [list exec hh.exe $file & ]
         $m add command -underline 4 -label [mc "Xmaxima Manual (xmaxima browser)"] \
         	-state $xstate \
 	        -command "OpenMathOpenUrl \"file:/$xfile\""
