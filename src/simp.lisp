@@ -956,6 +956,10 @@
      (setq check x)
      start(setq x (cdr x))
      (cond ((zerop1 res)
+	    #+nil
+	    (progn
+	      (format t "res = ~A~%" res)
+	      (format t "x = ~A~%" x))
 	    (cond ($mx0simp
 		   (cond ((and matrixflag (mxorlistp1 matrixflag))
 			  (return (constmx res matrixflag)))
@@ -976,7 +980,9 @@
 				       (setq res (list '(mequal simp)
 						       (mul2 res (cadr u))
 						       (mul2 res (caddr u))))))))))))
-	    (return res))
+	    (when (null x)
+	      (return res))
+	    (setf res `((mtimes) 0)))
 	   ((null x) (go end)))
      (setq w (if z (car x) (simplifya (car x) nil)))
      st1  (cond
@@ -1035,12 +1041,76 @@
 			     (mxtimesc res matrixflag))
 			    (t (testt (tms matrixflag 1 (tms res 1 nil))))))))
      (if res (setq res (eqtest res check)))
+     (when (listp res)
+       (setf res (simptimes-cleanup res)))
      (return (cond (eqnflag
 		    (if (null res) (setq res 1))
 		    (list (car eqnflag)
 			  (mul2 (cadr eqnflag) res)
 			  (mul2 (caddr eqnflag) res)))
 		   (t res)))))
+
+(defun cleanup-und (terms)
+  (if (and (listp terms) (find '$und terms))
+      '$und
+      terms))
+
+;; Try to clean up the product by looking for terms containing
+;; infinity terms or 0 terms.
+(defun simptimes-cleanup (product)
+  (let ((inf-term (find-if #'(lambda (x)
+			       (member x '($inf $minf)))
+			   product))
+	other-prod res)
+    (cond
+      (inf-term
+       ;; There's an infinity term in the product.  Basically try to
+       ;; multiply each term in the product by infinity and reduce the
+       ;; result to an infinity or und or ind as appropriate.
+       (labels ((my-mnum-p (x)
+		  (cond ((mnump x)
+			 t)
+			((mplusp x)
+			 (every #'my-mnum-p (cdr x)))
+			((mtimesp x)
+			 (every #'my-mnum-p (cdr x)))
+			((mexptp x)
+			 (every #'my-mnum-p (cdr x))))))
+	 (dolist (term (cdr product))
+	   (cond ((my-mnum-p term)
+		  (case ($sign term)
+		    ($NEG
+		     ;; Flip sign of infinity
+		     (setf inf-term
+			   (if (eq inf-term '$inf)
+			       '$minf
+			       '$inf)))
+		    ($POS
+		     ;; Nothing to do
+		     )
+		    ($ZERO
+		     ;; Infinity times 0.
+		     (setf inf-term '$und))))
+		 ((infinityp term)
+		  ;; infinity * infinity.  Take care of the sign of
+		  ;; the infinity.
+		  (if (or (and (eq inf-term '$inf)
+			       (eq term 'minf))
+			  (and (eq inf-term '$minf)
+			       (eq term 'minf)))
+		      '$minf
+		      '$inf))
+		 (t
+		  (push term other-prod))))
+	 (setf res (list* (car product) inf-term other-prod))))
+      (t
+       ;; No infinity terms.  Check for zero terms
+       (let ((z (find-if #'zerop1 product)))
+	 (setf res (if z
+		       0
+		       product)))))
+    (cleanup-und res)))
+    
 
 (defun spsimpcases (l e)
   (dolist (u l)
@@ -1091,11 +1161,15 @@
 (defun tms (factor power product &aux tem)
   ((lambda (rulesw z)
      (cond ((mplusp product) (setq product (list '(mtimes simp) product))))
-     (cond ((zerop1 factor)
+     (cond ((and (zerop1 factor)
+		 (not (some #'(lambda (x)
+				(infinityp x))
+			    product)))
 	    (cond ((mnegp power)
 		   (cond (errorsw (throw 'errorsw t))
 			 (t (merror "Division by 0"))))
 		  (t factor)))
+	   
 	   ((and (null product)
 		 (or (and (mtimesp factor) (equal power 1))
 		     (and (setq product (list '(mtimes) 1)) nil)))
@@ -1146,6 +1220,40 @@
 	      (setq z (timesin (car factor-list) (cdr product) power))
 	      (cond (rulesw (setq rulesw nil)
 			    (setq product (tms-format-product z))))))
+	   #+nil
+	   ((member factor '($inf $minf))
+	    ;; Some kind of infinity.
+	    ;;
+	    ;; First, gather up all the numbers in PRODUCT.
+	    ;; Destructively remove them from PRODUCT too.
+	    ;; Multiply the products together
+	    (format t "factor  = ~A~%" factor)
+	    (format t "product = ~A~%" product)
+	    (let ((num-fact factor))
+	      (do ((p product (cdr p)))
+		  ((null p))
+		(format t "p = ~A~%" p)
+		(let ((f (cadr p)))
+		  (when (mnump f)
+		    (format t "prod term = ~A~%" f)
+		    (case ($sign f)
+		      ($NEG
+		       ;; Flip sign of infinity
+		       (setf num-fact 
+			     (if (eq num-fact '$inf)
+				 '$minf
+				 '$inf)))
+		      ($POS
+		       ;; Nothing to do
+		       )
+		      ($ZERO
+		       ;; Infinity times 0.
+		       (setf num-fact '$und)))
+		    (setf (cdr p) (cddr p)))))
+	      (format t "num-fact = ~A~%" num-fact)
+	      (format t "product = ~A~%" product)
+	      (setf product (nconc product (list 1 num-fact)))
+	      ))
 	   (t (setq z (timesin factor (cdr product) power))
 	      (cond (rulesw (tms-format-product z)) (t product)))))
    nil nil))
@@ -1333,6 +1441,7 @@
 	((mminusp y) (mul2 -1 (list '(%signum simp) (neg y)))) 
 	(t (eqtest (list '(%signum) y) x))))
 
+;; r1^r2
 (defmfun exptrl (r1 r2)
   (cond ((equal r2 1) r1)
 	((equal r2 1d0) (cond ((mnump r1) (addk 0d0 r1)) (t r1)))
@@ -1346,7 +1455,10 @@
 	((or (zerop1 r2) (onep1 r1))
 	 (cond ((or ($bfloatp r1) ($bfloatp r2)) bigfloatone)
 	       ((or (floatp r1) (floatp r2)) 1.0)
-	       (t 1)))
+	       (t
+		(if (infinityp r2)
+		    '$und
+		    1))))
 	((or ($bfloatp r1) ($bfloatp r2)) ($bfloat (list '(mexpt) r1 r2)))
 	((and (numberp r1) (integerp r2)) (exptb r1 r2))
 	((and (numberp r1) (floatp r2) (equal r2 (float (floor r2))))
@@ -1405,75 +1517,79 @@
      (twoargcheck x)
      (setq gr (simplifya (cadr x) nil))
      (setq pot (simplifya (if $ratsimpexpons ($ratsimp (caddr x)) (caddr x)) nil))
-     cont	(cond (($ratp pot) (setq pot (ratdisrep pot)) (go cont))
-		      (($ratp gr)
-		       (cond ((member 'trunc (car gr) :test #'eq) (return (srf (list '(mexpt) gr pot))))
-			     ((integerp pot)
-			      (let ((varlist (caddar gr)) (genvar (cadddr (car gr))))
-				(return (ratrep* (list '(mexpt) gr pot)))))
-			     (t (setq gr (ratdisrep gr)) (go cont))))
-		      ((or (setq mlpgr (mxorlistp gr)) (setq mlppot (mxorlistp pot)))
-		       (go matrix))
-		      ((onep1 pot) (go atgr))
-		      ((or (zerop1 pot) (onep1 gr)) (go retno))
-		      ((zerop1 gr)
-		       (cond ((or (mnegp pot) (and *zexptsimp? (eq ($asksign pot) '$neg)))
-			      (cond ((not errorsw) (merror "Division by 0"))
-				    (t (throw 'errorsw t))))
-			     ((not (free pot '$%i))
-			      (cond ((not errorsw)
-				     (merror "0 to a complex quantity has been generated."))
-				    (t (throw 'errorsw t))))
-			     (t (return (zerores gr pot)))))
-		      ((and (mnump gr) (mnump pot)
-			    (or (not (ratnump gr)) (not (ratnump pot))))
-		       (return (eqtest (exptrl gr pot) check)))
-		      ((eq gr '$%i) (return (%itopot pot)))
-		      ((and (numberp gr) (minusp gr) (mevenp pot)) (setq gr (minus gr)) (go cont))
-		      ((and (numberp gr) (minusp gr) (moddp pot))
-		       (return (mul2 -1 (power (minus gr) pot))))
-		      ((and (equal gr -1) (maxima-integerp pot) (mminusp pot))
-		       (setq pot (neg pot)) (go cont))
-		      ((and (equal gr -1) (maxima-integerp pot) (mtimesp pot)
-			    (= (length pot) 3) (fixnump (cadr pot))
-			    (oddp (cadr pot)) (maxima-integerp (caddr pot)))
-		       (setq pot (caddr pot)) (go cont))
-		      ((atom gr) (go atgr))
-		      ((and (eq (caar gr) 'mabs)
-			    (evnump pot)
-			    (or (and (eq $domain '$real) (not (decl-complexp (cadr gr))))
-				(and (eq $domain '$complex) (decl-realp (cadr gr)))))
-		       (return (power (cadr gr) pot)))
-		      ((eq (caar gr) 'mequal)
-		       (return (eqtest (list (ncons (caar gr))
-					     (power (cadr gr) pot)
-					     (power (caddr gr) pot))
-				       gr)))
-		      ((symbolp pot) (go opp))
-		      ((eq (caar gr) 'mexpt) (go e1))
-		      ((and (eq (caar gr) '%sum) $sumexpand (integerp pot)
-			    (signp g pot) (< pot $maxposex))
-		       (return (do ((i (1- pot) (1- i))
-				    (an gr (simptimes (list '(mtimes) an gr) 1 t)))
-				   ((signp e i) an))))
-		      ((equal pot -1) (return (eqtest (testt (tms gr pot nil)) check)))
-		      ((fixnump pot)
-		       (return (eqtest (cond ((and (mplusp gr)
-						   (not (or (> pot $expop)
-							    (> (minus pot) $expon))))
-					      (expandexpt gr pot))
-					     (t (simplifya (tms gr pot nil) t)))
-				       check))))
-     opp	(cond ((eq (caar gr) 'mexpt) (go e1))
-		      ((eq (caar gr) 'rat)
-		       (return (mul2 (power (cadr gr) pot) (power (caddr gr) (mul2 -1 pot)))))
-		      ((not (eq (caar gr) 'mtimes)) (go up))
-		      ((or (eq $radexpand '$all) (and $radexpand (simplexpon pot)))
-		       (setq res (list 1)) (go start))
-		      ((and (or (not (numberp (cadr gr))) (equal (cadr gr) -1))
-			    (setq w (member ($num gr) '(1 -1) :test #'equal)))
-		       (setq pot (mult -1 pot) gr (mul2 (car w) ($denom gr))) (go cont))
-		      ((not $radexpand) (go up)))
+     ;; At this point, pot is the power, gr is the base.
+    cont
+     (cond (($ratp pot) (setq pot (ratdisrep pot)) (go cont))
+	   (($ratp gr)
+	    (cond ((member 'trunc (car gr) :test #'eq) (return (srf (list '(mexpt) gr pot))))
+		  ((integerp pot)
+		   (let ((varlist (caddar gr)) (genvar (cadddr (car gr))))
+		     (return (ratrep* (list '(mexpt) gr pot)))))
+		  (t (setq gr (ratdisrep gr)) (go cont))))
+	   ((or (setq mlpgr (mxorlistp gr)) (setq mlppot (mxorlistp pot)))
+	    (go matrix))
+	   ((onep1 pot) (go atgr))
+	   ((or (zerop1 pot) (onep1 gr)) (go retno))
+	   ((zerop1 gr)
+	    (cond ((or (mnegp pot) (and *zexptsimp? (eq ($asksign pot) '$neg)))
+		   (cond ((not errorsw) (merror "Division by 0"))
+			 (t (throw 'errorsw t))))
+		  ((not (free pot '$%i))
+		   (cond ((not errorsw)
+			  (merror "0 to a complex quantity has been generated."))
+			 (t (throw 'errorsw t))))
+		  (t (return (zerores gr pot)))))
+	   ((and (mnump gr) (mnump pot)
+		 (or (not (ratnump gr)) (not (ratnump pot))))
+	    (return (eqtest (exptrl gr pot) check)))
+	   ((eq gr '$%i) (return (%itopot pot)))
+	   ((and (numberp gr) (minusp gr) (mevenp pot))
+	    (setq gr (minus gr)) (go cont))
+	   ((and (numberp gr) (minusp gr) (moddp pot))
+	    (return (mul2 -1 (power (minus gr) pot))))
+	   ((and (equal gr -1) (maxima-integerp pot) (mminusp pot))
+	    (setq pot (neg pot)) (go cont))
+	   ((and (equal gr -1) (maxima-integerp pot) (mtimesp pot)
+		 (= (length pot) 3) (fixnump (cadr pot))
+		 (oddp (cadr pot)) (maxima-integerp (caddr pot)))
+	    (setq pot (caddr pot)) (go cont))
+	   ((atom gr) (go atgr))
+	   ((and (eq (caar gr) 'mabs)
+		 (evnump pot)
+		 (or (and (eq $domain '$real) (not (decl-complexp (cadr gr))))
+		     (and (eq $domain '$complex) (decl-realp (cadr gr)))))
+	    (return (power (cadr gr) pot)))
+	   ((eq (caar gr) 'mequal)
+	    (return (eqtest (list (ncons (caar gr))
+				  (power (cadr gr) pot)
+				  (power (caddr gr) pot))
+			    gr)))
+	   ((symbolp pot) (go opp))
+	   ((eq (caar gr) 'mexpt) (go e1))
+	   ((and (eq (caar gr) '%sum) $sumexpand (integerp pot)
+		 (signp g pot) (< pot $maxposex))
+	    (return (do ((i (1- pot) (1- i))
+			 (an gr (simptimes (list '(mtimes) an gr) 1 t)))
+			((signp e i) an))))
+	   ((equal pot -1) (return (eqtest (testt (tms gr pot nil)) check)))
+	   ((fixnump pot)
+	    (return (eqtest (cond ((and (mplusp gr)
+					(not (or (> pot $expop)
+						 (> (minus pot) $expon))))
+				   (expandexpt gr pot))
+				  (t (simplifya (tms gr pot nil) t)))
+			    check))))
+    opp
+     (cond ((eq (caar gr) 'mexpt) (go e1))
+	   ((eq (caar gr) 'rat)
+	    (return (mul2 (power (cadr gr) pot) (power (caddr gr) (mul2 -1 pot)))))
+	   ((not (eq (caar gr) 'mtimes)) (go up))
+	   ((or (eq $radexpand '$all) (and $radexpand (simplexpon pot)))
+	    (setq res (list 1)) (go start))
+	   ((and (or (not (numberp (cadr gr))) (equal (cadr gr) -1))
+		 (setq w (member ($num gr) '(1 -1) :test #'equal)))
+	    (setq pot (mult -1 pot) gr (mul2 (car w) ($denom gr))) (go cont))
+	   ((not $radexpand) (go up)))
      (return (do ((l (cdr gr) (cdr l)) (res (ncons 1)) (rad))
 		 ((null l)
 		  (cond ((equal res '(1))
@@ -1501,7 +1617,8 @@
 		     (t (setq w (testt (tms (simplifya (list '(mexpt) w pot) t)
 					    1 (cons '(mtimes) res))))))
 	       (cond (rulesw (setq rulesw nil res (cdr w))))))
-     start(cond ((and (cdr res) (onep1 (car res)) (ratnump (cadr res)))
+     start
+     (cond ((and (cdr res) (onep1 (car res)) (ratnump (cadr res)))
 		 (setq res (cdr res))))
      (cond ((null (setq gr (cdr gr)))
 	    (return (eqtest (testt (cons '(mtimes) res)) check)))
@@ -1513,45 +1630,48 @@
      (setq w (testt (tms (simplifya y t) 1 (cons '(mtimes) res))))
      (cond (rulesw (setq rulesw nil res (cdr w))))
      (go start)
-     retno(return (exptrl gr pot))
-     atgr (cond ((zerop1 pot) (go retno))
-		((onep1 pot)
-		 ((lambda (y)
-		    (cond ((and y (floatp y) (or $numer (not (equal pot 1))))
-			   (return
-			     (cond ((and (eq gr '$%e) (equal pot bigfloatone))
-				    ($bfloat '$%e))
-				   (t y))))
-			  (t (go retno))))
-		  (mget gr '$numer)))
-		((eq gr '$%e)
-		 ;; Numerically evaluate if the power is a double-float.
-		 (let ((val (double-float-eval '$exp pot)))
-		   (when val
-		     (return val)))
-		 ;; Numerically evaluate if the power is a (complex)
-		 ;; big-float.  (This is basically the guts of
-		 ;; big-float-eval, but we can't use big-float-eval.)
-		 (when (and (not (member 'simp (car x)))
-			    (complex-number-p pot 'bigfloat-or-number-p))
-		   (let ((x ($realpart pot))
-			 (y ($imagpart pot)))
-		     (cond ((and ($bfloatp x) (like 0 y))
-			    (return ($bfloat `((mexpt simp) $%e ,pot))))
-			   ((or ($bfloatp x) ($bfloatp y))
-			    (let ((z (add ($bfloat x) (mul '$%i ($bfloat y)))))
-			      (setq z ($rectform `((mexpt simp) $%e ,z)))
-			      (return ($bfloat z)))))))
-		 (cond ;; (($bfloatp pot) (return ($bfloat (list '(mexpt) '$%e pot))))
-		       ;; ((or (floatp pot) (and $numer (integerp pot)))
-		       ;; 	(return (exp pot)))
-		       ((and $logsimp (among '%log pot)) (return (%etolog pot)))
-		       ((and $demoivre (setq z (demoivre pot))) (return z))
-		       ((and $%emode (setq z (%especial pot))) (return z))))
-		(t ((lambda (y) (and y (floatp y)
-				     (or (floatp pot) (and $numer (integerp pot)))
-				     (return (exptrl y pot)))) (mget gr '$numer))))
-     up	(return (eqtest (list '(mexpt) gr pot) check))
+     retno
+     (return (exptrl gr pot))
+     atgr
+     (cond ((zerop1 pot) (go retno))
+	   ((onep1 pot)
+	    ((lambda (y)
+	       (cond ((and y (floatp y) (or $numer (not (equal pot 1))))
+		      (return
+			(cond ((and (eq gr '$%e) (equal pot bigfloatone))
+			       ($bfloat '$%e))
+			      (t y))))
+		     (t (go retno))))
+	     (mget gr '$numer)))
+	   ((eq gr '$%e)
+	    ;; Numerically evaluate if the power is a double-float.
+	    (let ((val (double-float-eval '$exp pot)))
+	      (when val
+		(return val)))
+	    ;; Numerically evaluate if the power is a (complex)
+	    ;; big-float.  (This is basically the guts of
+	    ;; big-float-eval, but we can't use big-float-eval.)
+	    (when (and (not (member 'simp (car x)))
+		       (complex-number-p pot 'bigfloat-or-number-p))
+	      (let ((x ($realpart pot))
+		    (y ($imagpart pot)))
+		(cond ((and ($bfloatp x) (like 0 y))
+		       (return ($bfloat `((mexpt simp) $%e ,pot))))
+		      ((or ($bfloatp x) ($bfloatp y))
+		       (let ((z (add ($bfloat x) (mul '$%i ($bfloat y)))))
+			 (setq z ($rectform `((mexpt simp) $%e ,z)))
+			 (return ($bfloat z)))))))
+	    (cond ;; (($bfloatp pot) (return ($bfloat (list '(mexpt) '$%e pot))))
+	      ;; ((or (floatp pot) (and $numer (integerp pot)))
+	      ;; 	(return (exp pot)))
+	      ((and $logsimp (among '%log pot)) (return (%etolog pot)))
+	      ((and $demoivre (setq z (demoivre pot))) (return z))
+	      ((and $%emode (setq z (%especial pot))) (return z))))
+	   (t ((lambda (y) (and y (floatp y)
+				(or (floatp pot) (and $numer (integerp pot)))
+				(return (exptrl y pot)))) (mget gr '$numer))))
+     up
+     (return (eqtest (list '(mexpt) gr pot) check))
      matrix
      (cond ((zerop1 pot)
 	    (cond ((mxorlistp1 gr) (return (constmx (addk 1 pot) gr))) (t (go retno))))
@@ -1636,16 +1756,19 @@
 	   fm y)
      ;; At this point, x = '(base power)
      ;; w = power, and fm = (y)
-     ;; (progn
-     ;;   (format t "x = ~A~%" x)
-     ;;   (format t "w = ~A~%" w)
-     ;;   (format t "fm = ~A~%" fm))
+     #+debug-timesin
+     (progn
+       (format t "x = ~A~%" x)
+       (format t "w = ~A~%" w)
+       (format t "fm = ~A~%" fm))
     start
      (cond ((null (cdr fm))
-	    ;;(format t "start:  null (cdr fm).  Go to less~%")
+	    #+debug-timesin
+	    (format t "start:  null (cdr fm).  Go to less~%")
 	    (go less))
 	   ((mexptp (cadr fm))
-	    ;;(format t "start: mexptp fm  = T~%")
+	    #+debug-timesin
+	    (format t "start: mexptp fm  = T~%")
 	    (cond ((alike1 (car x) (cadadr fm))
 		   (cond ((zerop1 (setq w (plsk (caddr (cadr fm)) w)))
 			  (go del))
@@ -1679,22 +1802,27 @@
 		   (go gr)))
 	    (go less))
 	   ((alike1 (car x) (cadr fm))
-	    ;;(format t "start: alike1 go equ~%")
+	    #+debug-timesin
+	    (format t "start: alike1 go equ~%")
 	    (go equ))
 	   ((maxima-constantp (car x))
-	    ;; (progn
-	    ;;   (format t "start: maxima-constantp~%")
-	    ;;   (format t "       temp = ~A~%" temp))
+	    #+debug-timesin
+	    (progn
+	      (format t "start: maxima-constantp~%")
+	      (format t "       temp = ~A~%" temp))
 	    (when (great temp (cadr fm))
-	      ;;(format t "  go gr~%")
+	      #+debug-timesin
+	      (format t "  go gr~%")
 	      (go gr)))
 	   ((great (car x) (cadr fm))
-	    ;;(format t "greater, go gr~%")
+	    #+debug-timesin
+	    (format t "greater, go gr~%")
 	    (go gr)))
     less
-     ;; (progn
-     ;;   (format t "LESS: x = ~A~%" x)
-     ;;   (format t "     fm = ~A~%" fm))
+    #+debug-timesin
+    (progn
+      (format t "LESS: x = ~A~%" x)
+      (format t "     fm = ~A~%" fm))
      (cond ((and (eq (car x) '$%i)
 		 (fixnump w)) 
 	    (go %i))
@@ -1739,10 +1867,12 @@
 	    (go less1))
 	   ((ratnump (car fm))
 	    ;; Multiplying a^k * rational.
-	    ;;(format t "timesin a^k * rat~%")
+	    #+debug-timesin
+	    (format t "timesin a^k * rat~%")
 	    (let ((numerator (second (car fm)))
 		  (denom (third (car fm))))
-	      ;; (format t "numerator = ~A~%" numerator)
+	      #+debug-timesin
+	      (format t "numerator = ~A~%" numerator)
 	      (setf expo (exponent-of numerator (car x)))
 	      (when expo
 		;; We have a^m*a^k.
@@ -1773,16 +1903,49 @@
 	      ))
 	   ((setf expo (exponent-of (car fm) (car x)))
 	    ;; Got something like a*a^k, where a is a number.
-	    ;;(format t "go a*a^k~%")
+	    #+debug-timesin
+	    (format t "go a*a^k~%")
 	    (setq temp (list '(mexpt) (car x) (add w expo)))
 	    (setf fm (rplaca fm (div (car fm) (power (car x) expo))))
 	    (return (cdr (rplacd fm (cons temp (cdr fm))))))
 	   (t
-	    ;;(format t "default less cond~%")
-	    (setq temp (list '(mexpt) (car x) w))
-	    (setq temp (eqtest temp (or check '((foo)))))
-	    ;;(format t "temp = ~A~%" temp)
-	    ;;(format t "fm = ~A~%" fm)
+	    #+debug-timesin
+	    (format t "default less cond~%")
+	    (cond ((and (eq (car x) '$inf)
+			(mnump (second x)))
+		   (setf temp (case ($sign (second x))
+				($pos
+				 ;; inf^pos = inf;
+				 '$inf)
+				($neg
+				 ;; inf^neg = 0;
+				 0)
+				($zero
+				 ;; inf^0 = ind;
+				 '$und))))
+		  ((and (eq (car x) '$minf)
+			(mnump (second x))
+			(integerp (second x)))
+		   ;; minf^power
+		   (setf temp (case (signum (second x))
+				(-1
+				 ;; minf^neg = 0
+				 0)
+				(0
+				 ;; minf^0 = ?
+				 '$und)
+				(1
+				 ;; minf^pos = inf if power is even, else minf.
+				 (if (evenp (second x))
+				     '$inf
+				     '$minf)))))
+		  (t
+		   (setq temp (list '(mexpt) (car x) w))
+		   (setq temp (eqtest temp (or check '((foo)))))))
+	    #+debug-timesin
+	    (progn
+	      (format t "temp = ~A~%" temp)
+	      (format t "fm = ~A~%" fm))
 	    (return (cdr (rplacd fm (cons temp (cdr fm)))))))
     less1
      (return (cdr (rplacd fm (cons (car x) (cdr fm)))))
@@ -1790,16 +1953,32 @@
      (setq fm (cdr fm))
      (go start)
     equ
+     #+debug-timesin
+     (progn
+       (format t "equ~%")
+       (format t "x = ~A~%" x)
+       (format t "fm = ~A~%" fm))
      (cond ((and (eq (car x) '$%i) (equal w 1))
 	    (rplacd fm (cddr fm))
 	    (return (rplaca y (timesk -1 (car y)))))
 	   ((zerop1 (setq w (plsk 1 w)))
-	    (go del))
+	    (format t "w = ~A~%" w)
+	    (format t "y = ~A~%" y)
+	    (cond ((eq (car x) '$inf)
+		   (rplacd fm (cddr fm))
+		   (return (rplaca y '$und)))
+		  (t
+		   (go del))))
 	   ((and (mnump (car x)) (mnump w))
 	    (return (rplaca (cdr fm) (exptrl (car x) w))))
 	   ((maxima-constantp (car x))
 	    (go const)))
     spcheck
+     #+debug-timesin
+     (progn
+       (format t "spcheck~%")
+       (format t "x = ~A~%" x)
+       (format t "fm = ~A~%" fm))
      (setq z (list '(mexpt) (car x) w))
      (cond ((alike1 (setq x (simplifya z t)) z)
 	    (return (rplaca (cdr fm) x)))
@@ -1808,6 +1987,11 @@
 	    (setq rulesw t)
 	    (return (muln (cons x y) t))))
     const
+     #+debug-timesin
+     (progn
+       (format t "const~%")
+       (format t "x = ~A~%" x)
+       (format t "fm = ~A~%" fm))
      (rplacd fm (cddr fm))
      (setq x (car x) check nil)
      (go top)
@@ -1818,6 +2002,11 @@
 		   (t
 		    (setq rulesw t) z)))
     del
+     #+debug-timesin
+     (progn
+       (format t "del~%")
+       (format t "x = ~A~%" x)
+       (format t "fm = ~A~%" fm))
      (return (rplacd fm (cddr fm)))
     %i
      (if (minusp (setq w (remainder w 4)))
