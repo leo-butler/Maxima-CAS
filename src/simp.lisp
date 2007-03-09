@@ -1050,6 +1050,23 @@
 			  (mul2 (caddr eqnflag) res)))
 		   (t res)))))
 
+;; Returns non-NIL of X is composed of real numbers.  That is X is a
+;; real number if it is MNUMP or if it is a sum or product of such
+;; numbers.  It is also a real number if it is of the for a^b where a
+;; and b are real numbers.
+(defun real-number-p (x)
+  (cond ((mnump x)
+	 t)
+	((mplusp x)
+	 (every #'real-number-p (cdr x)))
+	((mtimesp x)
+	 (every #'real-number-p (cdr x)))
+	((mexptp x)
+	 ;; Only handle the case of a positive number to a real power.
+	 (if (eq ($sign (second x)) '$pos)
+	     (real-number-p (third x))
+	     nil))))
+
 (defun cleanup-und (terms)
   (if (and (listp terms) (find '$und terms))
       '$und
@@ -1067,42 +1084,33 @@
        ;; There's an infinity term in the product.  Basically try to
        ;; multiply each term in the product by infinity and reduce the
        ;; result to an infinity or und or ind as appropriate.
-       (labels ((my-mnum-p (x)
-		  (cond ((mnump x)
-			 t)
-			((mplusp x)
-			 (every #'my-mnum-p (cdr x)))
-			((mtimesp x)
-			 (every #'my-mnum-p (cdr x)))
-			((mexptp x)
-			 (every #'my-mnum-p (cdr x))))))
-	 (dolist (term (cdr product))
-	   (cond ((my-mnum-p term)
-		  (case ($sign term)
-		    ($NEG
-		     ;; Flip sign of infinity
-		     (setf inf-term
-			   (if (eq inf-term '$inf)
-			       '$minf
-			       '$inf)))
-		    ($POS
-		     ;; Nothing to do
-		     )
-		    ($ZERO
-		     ;; Infinity times 0.
-		     (setf inf-term '$und))))
-		 ((infinityp term)
-		  ;; infinity * infinity.  Take care of the sign of
-		  ;; the infinity.
-		  (if (or (and (eq inf-term '$inf)
-			       (eq term 'minf))
-			  (and (eq inf-term '$minf)
-			       (eq term 'minf)))
-		      '$minf
-		      '$inf))
-		 (t
-		  (push term other-prod))))
-	 (setf res (list* (car product) inf-term other-prod))))
+       (dolist (term (cdr product))
+	 (cond ((real-number-p term)
+		(case ($sign term)
+		  ($NEG
+		   ;; Flip sign of infinity
+		   (setf inf-term
+			 (if (eq inf-term '$inf)
+			     '$minf
+			     '$inf)))
+		  ($POS
+		   ;; Nothing to do
+		   )
+		  ($ZERO
+		   ;; Infinity times 0.
+		   (setf inf-term '$und))))
+	       ((infinityp term)
+		;; infinity * infinity.  Take care of the sign of
+		;; the infinity.
+		(if (or (and (eq inf-term '$inf)
+			     (eq term 'minf))
+			(and (eq inf-term '$minf)
+			     (eq term 'minf)))
+		    '$minf
+		    '$inf))
+	       (t
+		(push term other-prod))))
+	 (setf res (list* (car product) inf-term other-prod)))
       (t
        ;; No infinity terms.  Check for zero terms
        (let ((z (find-if #'zerop1 product)))
@@ -1453,10 +1461,15 @@
 		      (t (throw 'errorsw t))))
 	       (t (zerores r1 r2))))
 	((or (zerop1 r2) (onep1 r1))
-	 (cond ((or ($bfloatp r1) ($bfloatp r2)) bigfloatone)
-	       ((or (floatp r1) (floatp r2)) 1.0)
+	 ;; r1^0 or 1^r2
+	 (cond ((or ($bfloatp r1) ($bfloatp r2))
+		bigfloatone)
+	       ((or (floatp r1) (floatp r2))
+		1.0)
 	       (t
-		(if (infinityp r2)
+		;; inf^0 or 1^inf is undefined.  Otherwise, return 1.
+		(if (or (infinityp r2)
+			(infinityp r1))
 		    '$und
 		    1))))
 	((or ($bfloatp r1) ($bfloatp r2)) ($bfloat (list '(mexpt) r1 r2)))
@@ -1510,6 +1523,7 @@
 	       1 t))
 	    t))))
 
+
 (defmfun simpexpt (x y z)
   (prog (gr pot check res rulesw w mlpgr mlppot)
      (setq check x)
@@ -1518,6 +1532,9 @@
      (setq gr (simplifya (cadr x) nil))
      (setq pot (simplifya (if $ratsimpexpons ($ratsimp (caddr x)) (caddr x)) nil))
      ;; At this point, pot is the power, gr is the base.
+     (progn
+       (format t "gr = ~A~%" gr)
+       (format t "pot = ~A~%" pot))
     cont
      (cond (($ratp pot) (setq pot (ratdisrep pot)) (go cont))
 	   (($ratp gr)
@@ -1633,6 +1650,7 @@
      retno
      (return (exptrl gr pot))
      atgr
+     (format t "~&atgr case~%")
      (cond ((zerop1 pot) (go retno))
 	   ((onep1 pot)
 	    ((lambda (y)
@@ -1667,6 +1685,44 @@
 	      ((and $logsimp (among '%log pot)) (return (%etolog pot)))
 	      ((and $demoivre (setq z (demoivre pot))) (return z))
 	      ((and $%emode (setq z (%especial pot))) (return z))))
+	   ((eq gr '$inf)
+	    ;; inf^x
+	    (cond ((eql pot -1)
+		   (return 0))
+		  ((real-number-p pot)
+		   (return (case ($sign pot)
+			     ($pos
+			      gr)
+			     ($neg
+			      (pow gr -1))
+			     ($zero
+			      '$und)
+			     (otherwise
+			      (go up)))))
+		  (t
+		   (go up))))
+	   ((eq gr '$minf)
+	    ;; minf^x
+	    (cond ((eql pot -1)
+		   (return 0))
+		  ((real-number-p pot)
+		   (case ($sign pot)
+		     ($pos
+		      (if (and (integerp pot)
+			       (evenp pot))
+			  (return '$inf)
+			  (go up)))
+		     ($neg
+		      (if (and (integerp pot)
+			       (evenp pot))
+			  (return (pow '$inf -1))
+			  (go up)))
+		     ($zero
+		      (return '$und))
+		     (otherwise
+		      (go up))))
+		  (t
+		   (go up))))
 	   (t ((lambda (y) (and y (floatp y)
 				(or (floatp pot) (and $numer (integerp pot)))
 				(return (exptrl y pot)))) (mget gr '$numer))))
