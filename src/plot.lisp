@@ -1276,8 +1276,8 @@
           (st)
           (cond ($show_openplot (format st "plot2d -data {~%"))
                 (t (format st "{plot2d ")))
-          (when (and xmin xmax) (format st " {xrange ~g ~g}" xmin xmax))
-          (when (and ymin ymax) (format st " {yrange ~g ~g}" ymin ymax))
+          (when (and xmin xmax) (format st " {xrange ~,10g ~,10g}" xmin xmax))
+          (when (and ymin ymax) (format st " {yrange ~,10g ~,10g}" ymin ymax))
           (when xlabel (format st " {xaxislabel \"~a\"}" xlabel))
           (when ylabel (format st " {yaxislabel \"~a\"}" ylabel))
 	  (when (and legend (not (first legend)))
@@ -1344,10 +1344,10 @@
 	    (when (and box (not (first box)))
 	      (format st "unset border; unset xtics; unset ytics~%"))
             (format st "plot")
-            (when (and xmin xmax) (format st " [~g:~g]" xmin xmax))
+            (when (and xmin xmax) (format st " [~,10g:~,10g]" xmin xmax))
             (when (and ymin ymax)
               (unless (and xmin xmax) (format st " []")) 
-              (format st " [~g:~g]" ymin ymax)))
+              (format st " [~,10g:~,10g]" ymin ymax)))
            ($gnuplot_pipes
             (check-gnuplot-process)
             ($gnuplot_reset)
@@ -1364,14 +1364,14 @@
             (when (and xmin xmax)
               (setq *gnuplot-command*
                     ($sconcat *gnuplot-command* 
-                              (format nil " [~g:~g]"  xmin xmax))))
+                              (format nil " [~,10g:~,10g]"  xmin xmax))))
             (when (and ymin ymax) 
               (unless (and xmin xmax)
                 (setq *gnuplot-command* ($sconcat *gnuplot-command*
                                                   (format nil " []"))))
               (setq *gnuplot-command*
                     ($sconcat *gnuplot-command* 
-                              (format nil " [~g:~g]"  ymin ymax))))))
+                              (format nil " [~,10g:~,10g]"  ymin ymax))))))
          (dolist (v (cdr fun))
            (case plot-format
              ($gnuplot_pipes
@@ -1470,7 +1470,7 @@
                         (format st "~%"))
                        (t
                         (format st "move "))))
-                     (t  (format st "~g ~g ~%" v w)
+                     (t  (format st "~,10g ~,10g ~%" v w)
                          (setq in-discontinuity nil)))))))))
     
     (case plot-format
@@ -1485,6 +1485,14 @@
        ($system (format nil "xgraph -t 'Maxima Plot' < \"~a\" &" file)))
       )
     ""))
+
+(defun $openplot_curves (&rest options)
+  (format t "")
+  (format t "~% openplot_curves was not being maintained and it has been~%")
+  (format t " removed from Maxima. To get a similar functionality, use:~%")
+  (format t "    plot2d([discrete, ...], [plot_format,openmath])~%")
+  (format t " Please read the documentation for plot2d. We apologize for~%")
+  (format t " any inconvenience.~%~%"))
 
 ;;(defun maxima-bin-search (command)
 ;;  (or ($file_search command
@@ -1593,7 +1601,7 @@
                                    (($listp (car v))
                                     (setq w (cdar v))
                                     (setq v (cdr v))))
-                       (format st "~g ~g ~%" (car w) (second w)))))))
+                       (format st "~,10g ~,10g ~%" (car w) (second w)))))))
   ($system "xgraph -t 'Maxima Plot' < xgraph-out &"))
 
 
