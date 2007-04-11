@@ -1,6 +1,6 @@
 # -*-mode: tcl; fill-column: 75; tab-width: 8; coding: iso-latin-1-unix -*-
 #
-#       $Id: RunMaxima.tcl,v 1.29.4.1 2007/04/09 21:55:51 villate Exp $
+#       $Id: RunMaxima.tcl,v 1.29.4.2 2007/04/11 22:53:50 villate Exp $
 #
 proc textWindowWidth { w } {
     set font [$w cget -font]
@@ -241,7 +241,7 @@ proc maximaFilter { win sock } {
 	# puts "plotPending=<$plotPending>,it=<$it>"
 	append plotPending $it
 	set it ""
-	if { [regexp -indices "\n\\((D|%o)\[0-9\]+\\)" $plotPending  inds] } {
+	if { [regexp -indices "\n\\((C|%i)\[0-9\]+\\)" $plotPending  inds] } {
 	    set it [string range $plotPending [lindex $inds 0] end]
 	    set plotPending [string range $plotPending 0 [lindex $inds 0]]
 	    set data $plotPending
