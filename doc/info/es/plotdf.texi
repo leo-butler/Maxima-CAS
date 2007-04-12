@@ -1,4 +1,4 @@
-@c english version 1.6
+@c english version 1.7
 @menu
 * Introducci@'on a plotdf::
 * Definiciones para plotdf::
@@ -12,9 +12,10 @@ Ecuaci@'on Diferencial Ordinaria (EDO) de primer orden, o para un sistema de
 dos EDO's aut@'onomas, de primer orden.
 
 Como se trata de un paquete adicional, para poder usarlo debe cargarlo
-primero con el comando @code{load("plotdf")}. Tambi@'en es necesario que
-Xmaxima est@'e instalado, a pesar de que ejecute Maxima desde otra
-interface diferente.
+primero con el comando @code{load("plotdf")}. Plotdf necesita Openmath,
+que @'e suministrado por el paquete Xmaxima (Xmaxima adem@'as de poder
+ser usado como consola gr@'afica para Maxima es tambi@'en el programa
+que produce los gr@'aficos en el formato Openmath).
 
 Para dibujar el campo de direcciones de una @'unica EDO, esa ecuaci@'on
 deber@'a escribirse en la forma siguiente:
@@ -30,9 +31,10 @@ $${{dy}\over{dx}} = F(x,y)$$
 @end tex
 
 y la funci@'on @var{F} ser@'a dada como argumento para el comando
-@code{plotdf}. La variable independiente tiene que ser siempre @var{x} y la
-variable dependiente @var{y}. A esas dos variables no podr@'a estar asociado
-ning@'un valor num@'erico.
+@code{plotdf}. Si las variables independiente y dependiente no fueran
+@var{x} y @var{y}, como en la ecuaci@'on de arriba, entonces las dos
+variables deber@'an ser nombradas explicitamente en una lista que ser@'a
+dada como argumento al comando plotdf (ver los ejemplos).
 
 Para dibujar el campo de direcciones de un sistema aut@'onomo de dos EDO's,
 Las dos ecuaciones deben ser escritas en la forma siguiente
@@ -48,7 +50,14 @@ $${{dx}\over{dt}} = G(x,y) \qquad {{dy}\over{dt}} = F(x,y)$$
 @end tex
 
 y el argumento para el comando @code{plotdf} ser@'a una lista con dos
-expresiones para las funciones @var{F} y @var{G}.
+expresiones para las funciones @var{F} y @var{G}, en ese orden; o sea, la
+primera expresi@'on en la lista ser@'a interpretada como la derivada
+temporal de la variable representada en el eje horizontal, y la segunda
+expresi@'on ser@'a la derivada de la varibale representada en el eje
+vertical. Esas dos variables no tienen que ser @var{x} y @var{y}, pero
+si no fueran, entonces el segundo argumento para el comando plotdf
+deber@'a ser una lista que nombre las dos variables, primero la variable
+en el eje horizontal y despu@'es la variable en el eje vertical.
 
 Cuando se trabaja con una @'unica ecuaci@'on, @code{plotdf} asume
 impl@'{@dotless{i}}citamente que @code{x=t} y @code{G(x,y)=1}, transformando la
@@ -57,16 +66,20 @@ ecuaci@'on en un sistema aut@'onomo con dos ecuaciones.
 @node Definiciones para plotdf,  , Introducci@'on a plotdf, plotdf
 @section Definiciones para plotdf
 
-@deffn {Function} plotdf (@var{dydx},...opciones...)
-@deffnx {Function} plotdf (@code{[}@var{dxdt},@var{dydt}@code{]},...opciones...)
+@deffn {Function} plotdf (@var{dydx}, ...opciones...)
+@deffnx {Function} plotdf (@var{dvdu}, @code{[}@var{u},@var{v}@code{]}, ...opciones...)
+@deffnx {Function} plotdf (@code{[}@var{dxdt},@var{dydt}@code{]}, ...opciones...)
+@deffnx {Function} plotdf (@code{[}@var{dudt},@var{dvdt}@code{]}, @code{[}@var{u},@var{v}@code{]}, ...opciones...)
 
 Dibuja un campo de direcciones en dos dimensiones @var{x} y @var{y}.
 
-@var{dydx}, @var{dxdt} y @var{dydt} son expresiones que dependen de @var{x} y
-@var{y}. Adem@'as de esas dos variables, las dos expresiones pueden depender de
-un conjunto de par@'ametros, con valores num@'ericos que son dados por medio
-de la opci@'on @code{parameters} (la sintaxis de esa opci@'on se explica mas al
-frente), o con un rango de posibles valores definidos con la opci@'on
+@var{dydx}, @var{dxdt} y @var{dydt} son expresiones que dependen de
+@var{x} y de @var{y}. @var{dvdu}, @var{dudt} y @var{dvdt} son
+expresiones que dependen de @var{u} y de @var{v}. Adem@'as de esas dos
+variables, las dos expresiones pueden depender de un conjunto de
+par@'ametros, con valores num@'ericos que son dados por medio de la
+opci@'on @code{parameters} (la sintaxis de esa opci@'on se explica mas
+al frente), o con un rango de posibles valores definidos con la opci@'on
 @var{sliders}.
 
 Varias otras opciones se pueden incluir dentro del comando, o
@@ -109,13 +122,8 @@ Otros par@'ametros, como pueden ser el n@'umero de pasos, el valor
 inicial de @var{t}, las coordenadas del centro y el radio, pueden
 cambiarse en el submen@'u de la opci@'on @emph{Config}.
 
-Con la opci@'on @emph{Save}, se puede obtener una copia del gr@'afico en
-una impresora Postscript o guardarlo en un fichero Postscript. Para
-optar entre la impresi@'on o guardar en fichero, se debe seleccionar
-@emph{Print Options} en la ventana de di@'alogo de @emph{Config}. Una
-vez cubiertos los campos de la ventana de di@'alogo de @emph{Save},
-ser@'a necesario seleccionar la opci@'on @emph{Save} del primer men@'u
-para crear el fichero o imprimir el gr@'afico.
+Con la opci@'on @emph{Save}, se puede guardar el gr@'afico en un fichero
+Postscript.
 
 @b{Opciones gr@'aficas:}
 
@@ -196,44 +204,24 @@ encima del campo de direcciones. Estas funciones ser@'an interpretadas
 por Tcl, no por Maxima.
 
 @item
-@dfn{xradius} es la mitad de la longitud del rango de valores
-a representar en la direcci@'on x.
-El valor por defecto es 10.
+@dfn{x} deber@'a estar seguida por dos n@'umeros, que indican los
+valores m@'{@dotless{i}}nimo e m@'aximo que ser@'an representados en el
+eje horizontal. Si la variable en el eje horizontal no es @var{x},
+entonces esta opci@'on deber@'a tener el nombre de la variable en el eje
+horizontal.
+El intervalo por defecto es de -10 a 10.
 
 @item
-@dfn{yradius} es la mitad de la longitud del rango de valores
-a representar en la direcci@'on y.
-El valor por defecto es 10.
-
-@item
-@dfn{xcenter} es la coordenada x del punto situado en el centro
-del gr@'afico.
-El valor por defecto es 0.
-
-@item
-@dfn{ycenter} es la coordenada y del punto situado en el centro
-del gr@'afico.
-El valor por defecto es 0.
-
-@item
-@dfn{width} establece el ancho de la ventana gr@'afica en
-p@'{@dotless{i}}xeles.
-El valor por defecto es 500.
-
-@item
-@dfn{height} establece la altura de la ventana gr@'afica en
-p@'{@dotless{i}}xeles.
-El valor por defecto es 500.
+@dfn{y} deber@'a estar seguida por dos n@'umeros, que indican los
+valores m@'{@dotless{i}}nimo e m@'aximo que ser@'an representados en el
+eje vertical. Si la variable en el eje vertical no es @var{y},
+entonces esta opci@'on deber@'a tener el nombre de la variable en el eje
+vertical.
+El intervalo por defecto es de -10 a 10.
 
 @end itemize
 
 @b{Ejemplos:}
-
-NOTA: Dependiendo de la interface que se use para Maxima, las funciones
-que usan @code{openmath}, incluida @code{plotdf}, pueden desencadenar un
-fallo si terminan en punto y coma, en vez del s@'{@dotless{i}}mbolo de
-d@'olar. Para evitar problemas, se usar@'a el s@'{@dotless{i}}mbolo de
-d@'olar en todos ejemplos.
 
 @itemize @bullet
 @item
@@ -242,7 +230,7 @@ Para mostrar el campo de direcciones de la ecuaci@'on diferencial
 @example
 (%i1) load("plotdf")$
 
-(%i2) plotdf(exp(-x)+y,[trajectory_at,2,-0.1]);
+(%i2) plotdf(exp(-x)+y,[trajectory_at,2,-0.1])$
 @end example
 
 @ifnotinfo
@@ -256,7 +244,7 @@ inicial @math{y(-1) = 3}, se puede utilizar la sentencia:
 @example
 (%i3) plotdf(x-y^2,[xfun,"sqrt(x);-sqrt(x)"],
           [trajectory_at,-1,3], [direction,forward],
-          [yradius,5],[xcenter,6]);
+          [y,-5,5], [x,-4,16])$
 @end example
 El gr@'afico tambi@'en muestra la funci@'on @math{y = sqrt(x)}.
 
@@ -266,14 +254,14 @@ El gr@'afico tambi@'en muestra la funci@'on @math{y = sqrt(x)}.
 
 @item
 El siguiente ejemplo muestra el campo de direcciones de un oscilador
-arm@'onico, definido por las ecuaciones @math{dx/dt = y} y
-@math{dy/dt = -k*x/m}, y la curva integral que pasa por
-@math{(x,y) = (6,0)}, con una barra de deslizamiento que 
+arm@'onico, definido por las ecuaciones @math{dz/dt = v} y
+@math{dv/dt = -k*z/m}, y la curva integral que pasa por
+@math{(z,v) = (6,0)}, con una barra de deslizamiento que 
 permitir@'a cambiar el valor de @math{m} interactivamente
 (@math{k} permanece fijo a 2):
 @example
-(%i4) plotdf([y,-k*x/m],[parameters,"m=2,k=2"],
-            [sliders,"m=1:5"], [trajectory_at,6,0]);
+(%i4) plotdf([v,-k*z/m], [z,v], [parameters,"m=2,k=2"],
+            [sliders,"m=1:5"], [trajectory_at,6,0])$
 @end example
 
 @ifnotinfo
@@ -287,7 +275,7 @@ variable @math{y=x'} y se hace:
 @example
 (%i5) plotdf([y,-(k*x + c*y + b*x^3)/m],
               [parameters,"k=-1,m=1.0,c=0,b=1"],
-              [sliders,"k=-2:2,m=-1:1"],[tstep,0.1]);
+              [sliders,"k=-2:2,m=-1:1"],[tstep,0.1])$
 @end example
 
 @ifnotinfo
@@ -302,12 +290,11 @@ cambiar el valor de la masa, @math{m}, y con el gr@'afico
 de las dos variables de estado como funciones del tiempo:
 
 @example
-(%i6) plotdf([y,-g*sin(x)/l - b*y/m/l],
+(%i6) plotdf([w,-g*sin(a)/l - b*w/m/l], [a,w],
          [parameters,"g=9.8,l=0.5,m=0.3,b=0.05"],
          [trajectory_at,1.05,-9],[tstep,0.01],
-         [xradius,6],[yradius,14],
-         [xcenter,-4],[direction,forward],[nsteps,300],
-         [sliders,"m=0.1:1"], [versus_t,1]);
+         [a,-10,2], [w,-14,14], [direction,forward],
+         [nsteps,300], [sliders,"m=0.1:1"], [versus_t,1]);
 @end example
 
 @ifnotinfo

@@ -1,4 +1,4 @@
-@c english version 1.4
+@c english version 1.7
 @menu
 * Introdu@value{cedilha}@~ao a plotdf::
 * Defini@value{cedilha}@~oes para plotdf::
@@ -13,9 +13,10 @@ Ordin@'aria (EDO) de primeira ordem, ou para um sistema de duas EDO's
 aut@'onomas, de primeira ordem.
 
 Por tratar-se de um pacote adicional, para poder us@'a-lo dever@'a
-primeiro carreg@'a-lo com o comando @code{load("plotdf")}. Tamb@'em @'e
-necess@'ario que Xmaxima esteja instalado, inclusivamente se executar o
-Maxima desde outra interface diferente.
+primeiro carreg@'a-lo com o comando @code{load("plotdf")}. Plotdf
+precisa do Openmath, que @'e fornecido pelo pacote Xmaxima (Xmaxima,
+para al@'em de servir como consola gr@'afica para o Maxima, @'e tamb@'em
+o programa que produz os gr@'aficos no formato Openmath).
 
 Para desenhar o campo de direc@value{cedilha}@~oes de uma @'unica EDO,
 essa equa@value{cedilha}@~ao dever@'a escrever-se na forma seguinte:
@@ -31,9 +32,10 @@ $${{dy}\over{dx}} = F(x,y)$$
 @end tex
 
 e a fun@value{cedilha}@~ao @var{F} ser@'a dada como argumento para o
-comando @code{plotdf}. A vari@'avel independente tem que ser sempre
-@var{x} e a vari@'avel dependente @var{y}. A essas duas vari@'aveis
-n@~ao poder@'a estar associado nenhum valor num@'erico.
+comando @code{plotdf}. Se as vari@'aveis independente e dependente n@~ao
+forem @var{x} e @var{y}, como na equa@value{cedilha}@~ao acima, ent@~ao
+os nomes dessas duas vari@'aveis dever@'a indicar-se numa lista que
+ser@'a o segundo argumento para o comando plotdf (ver os exemplos).
 
 Para desenhar o campo de direc@value{cedilha}@~oes de um sistema
 aut@'onomo de duas EDO's, as duas equa@value{cedilha}@~oes devem ser
@@ -46,11 +48,19 @@ escritas na forma seguinte
 @end example
 @end ifnottex
 @tex
-$${{dx}\over{dt}} = G(x,y) \qquad {{dy}\over{dt}} = F(x,y)$$
+$${{dx}\over{dt}} = G(x,y) \qquad {{dy}\. A essas duas vari@'aveis
+n@~ao poder@'a estar associado nenhum valor num@'erico.over{dt}} = F(x,y)$$
 @end tex
 
 e o argumento para o comando @code{plotdf} ser@'a uma lista com duas
-express@~oes para as fun@value{cedilha}@~oes @var{F} e @var{G}.
+express@~oes para as fun@value{cedilha}@~oes @var{F} e @var{G}, nessa
+ordem; nomeadamente, a primeira express@~ao definir@'a a derivada no
+tempo da vari@'avel representada no eixo horizontal, e a segunda
+express@~ao ser@'a a derivada no tempo da vari@'avel representada no eixo
+vertical. Essas duas vari@'aveis n@~ao t@^em que ser @var{x} e @var{y},
+mas se n@~ao forem, ent@~ao o segundo argumento para o comando plotdf
+dever@'a ser uma lista com os nomes dessas vari@'aveis, primeiro a
+vari@'avel no eixo horizontal, seguida da vari@'avel no eixo vertical.
 
 Quando se trabalha com uma @'unica equa@value{cedilha}@~ao,
 @code{plotdf} assume implicitamente que @code{x=t} e @code{G(x,y)=1},
@@ -60,19 +70,23 @@ equa@value{cedilha}@~oes.
 @node Defini@value{cedilha}@~oes para plotdf,  , Introdu@value{cedilha}@~ao a plotdf, plotdf
 @section Defini@value{cedilha}@~oes para plotdf
 
-@deffn {Function} plotdf (@var{dydx},...op@value{cedilha}@~oes...)
-@deffnx {Function} plotdf (@code{[}@var{dxdt},@var{dydt}@code{]},...op@value{cedilha}@~oes...)
+@deffn {Function} plotdf (@var{dydx}, ...op@value{cedilha}@~oes...)
+@deffnx {Function} plotdf (@var{dvdu}, @code{[}@var{u},@var{v}@code{]}, ...op@value{cedilha}@~oes...)
+@deffnx {Function} plotdf (@code{[}@var{dxdt},@var{dydt}@code{]}, ...op@value{cedilha}@~oes...)
+@deffnx {Function} plotdf (@code{[}@var{dudt},@var{dvdt}@code{]}, @code{[}@var{u},@var{v}@code{]}, ...op@value{cedilha}@~oes...)
 
 Desenha um campo de direc@value{cedilha}@~oes em duas
 dimens@~oes @var{x} e @var{y}.
 
 @var{dydx}, @var{dxdt} e @var{dydt} s@~ao express@~oes que dependem de
-@var{x} e @var{y}. Para al@'em dessas duas vari@'aveis, as duas
-express@~oes podem depender de um conjunto de par@^ametros, com valores
-num@'ericos que s@~ao dados por meio da op@value{cedilha}@~ao
-@code{parameters} (a sintaxe dessa op@value{cedilha}@~ao explica-se mais
-para a frente), ou com um intervalo de poss@'{@dotless{i}}veis valores
-definidos com a op@value{cedilha}@~ao @var{sliders}.
+@var{x} e @var{y}. @var{dvdu}, @var{dudt} e @var{dvdt} s@~ao
+express@~oes que dependem de @var{u} e @var{v}. Para al@'em dessas duas
+vari@'aveis, as duas express@~oes podem depender de um conjunto de
+par@^ametros, com valores num@'ericos que s@~ao dados por meio da
+op@value{cedilha}@~ao @code{parameters} (a sintaxe dessa
+op@value{cedilha}@~ao explica-se mais para a frente), ou com um
+intervalo de poss@'{@dotless{i}}veis valores definidos com a
+op@value{cedilha}@~ao @var{sliders}.
 
 V@'arias outras op@value{cedilha}@~oes podem incluirem-se dentro do
 comando, ou serem seleccionadas no men@'u.  Clicando num ponto do
@@ -116,19 +130,13 @@ par@^ametros, por exemplo, o n@'umero de passos, o valor inicial de
 @var{t}, as coordenadas do centro e o raio, podem ser alterados no
 sub-men@'u da op@value{cedilha}@~ao @emph{Config}.
 
-Com a op@value{cedilha}@~ao @emph{Save}, pode imprimir-se o
-gr@'afico numa impressora Postscript ou gravar uma c@'opia num ficheiro
-Postscript. Para optar entre impress@~ao ou grava@value{cedilha}@~ao em
-ficheiro, selecciona-se @emph{Print Options} na janela de di@'alogo de
-@emph{Config}. Ap@'os ter preenchido os campos da janela de di@'alogo de
-@emph{Save}, ser@'a necess@'ario seleccionar a op@value{cedilha}@~ao
-@emph{Save} do primeiro men@'u para criar o ficheiro ou imprimir o
-gr@'afico.
+Com a op@value{cedilha}@~ao @emph{Save}, pode gravar-se o gr@'afico num
+ficheiro Postscript.
 
 @b{Op@value{cedilha}@~oes gr@'aficas:}
 
 A fun@value{cedilha}@~ao @code{plotdf} admite varias
-op@value{cedilha}@~oes, cada uma sendo uma lista de duas ou mais
+op@value{cedilha}@~oes, cada uma sendo uma lista de dois ou mais
 elementos. O primeiro elemento @'e o nome da op@value{cedilha}@~ao, e o
 resto estar@'a formado pelos argumentos para essa op@value{cedilha}@~ao.
 
@@ -152,12 +160,12 @@ O valor por omiss@~ao @'e 100.
 @item
 @dfn{direction} estabelece a
 direc@value{cedilha}@~ao da vari@'avel independente que ser@'a seguida
-para calcular uma curva integral.  Os valores poss@'{@dotless{i}} s@~ao:
+para calcular uma curva integral.  Os valores poss@'{@dotless{i}}veis s@~ao:
 @code{forward}, para fazer que a vari@'avel independente aumente
 @code{nsteps} vezes, com incrementos @code{tstep}; @code{backward}, para
 fazer que a vari@'avel independente diminua; @code{both}, para estender
 a curva integral @code{nsteps} passos para a frente e @code{nsteps}
-passos para atr@'as.  As palavras @code{right} e @code{left} podem serem
+passos para atr@'as.  As palavras @code{right} e @code{left} podem ser
 usadas como sin@'onimos de @code{forward} e @code{backward}.
 O valor por omiss@~ao @'e @code{both}.
 
@@ -205,48 +213,27 @@ v@'{@dotless{i}}rgulas.
 com fun@value{cedilha}@~oes de @var{x} separadas por ponto e
 v@'{@dotless{i}}rgula para ser representadas por cima do campo de
 direc@value{cedilha}@~oes. Essas fun@value{cedilha}@~oes ser@~ao
-interpretadas por Tcl, e n@~ao por Maxima.
+interpretadas pelo Tcl, e n@~ao pelo Maxima.
 
 @item
-@dfn{xradius} @'e metade do comprimento do
-intervalo de valores a representar na direc@value{cedilha}@~ao x.
-O valor por omiss@~ao @'e 10.
+@dfn{x} dever@'a estar seguida de dois n@'umeros que definem os valores
+m@'{@dotless{i}}nimo e m@'aximo a serem apresentados no eixo horizontal.
+Se a vari@'avel no eixo horizontal n@~ao for @var{x}, esta
+op@value{cedilha}@~ao dever@'a ter o nome da vari@'avel no eixo
+horizontal.
+O intervalo por omiss@~ao @'e de -10 a 10.
 
 @item
-@dfn{yradius} @'e metade do comprimento do
-intervalo de valores a representar na direc@value{cedilha}@~ao y.
-O valor por omiss@~ao @'e 10.
-
-@item
-@dfn{xcenter} @'e a coordenada x do ponto
-situado no centro do gr@'afico.
-O valor por omiss@~ao @'e 0.
-
-@item
-@dfn{ycenter} @'e a coordenada y do ponto
-situado no centro do gr@'afico.
-O valor por omiss@~ao @'e 0.
-
-@item
-@dfn{width} estabelece a largura da janela gr@'afica em
-pixels.
-O valor por omiss@~ao @'e 500.
-
-@item
-@dfn{height} estabelece a altura da janela gr@'afica em
-pixels.
-O valor por omiss@~ao @'e 500.
+@dfn{y} dever@'a estar seguida de dois n@'umeros que definem os valores
+m@'{@dotless{i}}nimo e m@'aximo a serem apresentados no eixo vertical.
+Se a vari@'avel no eixo vertical n@~ao for @var{y}, esta
+op@value{cedilha}@~ao dever@'a ter o nome da vari@'avel no eixo
+vertical.
+O intervalo por omiss@~ao @'e de -10 a 10.
 
 @end itemize
 
 @b{Exemplos:}
-
-NOTA: Em alguns casos, dependendo da interface usada para executar o
-Maxima, as fun@value{cedilha}@~oes que usam @code{openmath}, em
-particular @code{plotdf}, podem desencadear um bug se terminarem em
-ponto e v@'{@dotless{i}}rgula, e n@~ao com o s@'{@dotless{i}}mbolo de
-d@'olar. Para evitar problemas, usaremos o s@'{@dotless{i}}mbolo de
-d@'ola nos exemplos a seguir.
 
 @itemize @bullet
 @item
@@ -256,7 +243,7 @@ solu@value{cedilha}@~ao que passa por @math{(2, -0.1)}:
 @example
 (%i1) load("plotdf")$
 
-(%i2) plotdf(exp(-x)+y,[trajectory_at,2,-0.1]);
+(%i2) plotdf(exp(-x)+y,[trajectory_at,2,-0.1])$
 @end example
 
 @ifnotinfo
@@ -271,7 +258,7 @@ solu@value{cedilha}@~ao com condi@value{cedilha}@~ao inicial @math{y(-1)
 @example
 (%i3) plotdf(x-y^2,[xfun,"sqrt(x);-sqrt(x)"],
           [trajectory_at,-1,3], [direction,forward],
-          [yradius,5],[xcenter,6]);
+          [y,-5,5], [x,-4,16])$
 @end example
 O gr@'afico tamb@'em mostra a fun@value{cedilha}@~ao @math{y = sqrt(x)}.
 
@@ -282,12 +269,12 @@ O gr@'afico tamb@'em mostra a fun@value{cedilha}@~ao @math{y = sqrt(x)}.
 @item
 O exemplo seguinte mostra o campo de direc@value{cedilha}@~oes de um
 oscilador harm@'onico, definido pelas equa@value{cedilha}@~oes
-@math{dx/dt = y} e @math{dy/dt = -k*x/m}, e a curva integral que passa
-por @math{(x,y) = (6,0)}, com uma barra de slider que permitir@'a mudar
+@math{dz/dt = v} e @math{dv/dt = -k*z/m}, e a curva integral que passa
+por @math{(z,v) = (6,0)}, com uma barra de slider que permitir@'a mudar
 o valor de @math{m} interactivamente (@math{k} permanecer@'a fixo em 2):
 @example
-(%i4) plotdf([y,-k*x/m],[parameters,"m=2,k=2"],
-            [sliders,"m=1:5"], [trajectory_at,6,0]);
+(%i4) plotdf([v,-k*z/m], [z,v], [parameters,"m=2,k=2"],
+            [sliders,"m=1:5"], [trajectory_at,6,0])$
 @end example
 
 @ifnotinfo
@@ -301,7 +288,7 @@ introduz-se a vari@'avel @math{y=x'} e faz-se:
 @example
 (%i5) plotdf([y,-(k*x + c*y + b*x^3)/m],
               [parameters,"k=-1,m=1.0,c=0,b=1"],
-              [sliders,"k=-2:2,m=-1:1"],[tstep,0.1]);
+              [sliders,"k=-2:2,m=-1:1"], [tstep,0.1])$
 @end example
 
 @ifnotinfo
@@ -316,12 +303,11 @@ masa, @math{m}, e com o gr@'afico das duas vari@'aveis de estado em
 fun@value{cedilha}@~ao do tempo:
 
 @example
-(%i6) plotdf([y,-g*sin(x)/l - b*y/m/l],
+(%i6) plotdf([w,-g*sin(a)/l - b*w/m/l], [a,w],
          [parameters,"g=9.8,l=0.5,m=0.3,b=0.05"],
          [trajectory_at,1.05,-9],[tstep,0.01],
-         [xradius,6],[yradius,14],
-         [xcenter,-4],[direction,forward],[nsteps,300],
-         [sliders,"m=0.1:1"], [versus_t,1]);
+         [a,-10,2], [w,-14,14], [direction,forward],
+         [nsteps,300], [sliders,"m=0.1:1"], [versus_t,1])$
 @end example
 
 @ifnotinfo
