@@ -100,6 +100,7 @@
        $opena
        $openr
        $openw
+       $printf
        $readline
        $alphacharp
        $alphanumericp
@@ -151,17 +152,7 @@
        $substring
        $supcase
        $tokens ))
-  (autof f "stringproc"))
-
-;; $printf doesn't work with autol.lisp/autom when calling with streams true and false
-;; don't know if (funcall ... in autom can be replaced by (apply ... 
-;; so here is an intermediate workaround   VvN
-(let ((mf '$printf))
-  (unless (fboundp mf)
-    (setf (macro-function mf)
-          #'(lambda (&rest l)
-              (aload "stringproc")
-              (apply (macro-function mf) l)))))  
+  (setf (get f 'autoload) "stringproc"))
 
 (dolist (f       
      '($read_matrix
