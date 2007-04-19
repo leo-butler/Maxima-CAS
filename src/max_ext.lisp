@@ -154,6 +154,8 @@
        $tokens ))
   (setf (get f 'autoload) "stringproc"))
 
+(auto-mspec '$romberg "romberg")
+
 (dolist (f       
      '($read_matrix
        $read_lisp_array
