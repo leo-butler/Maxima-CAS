@@ -510,6 +510,11 @@
 (defun coerce-float-fun (expr &optional lvars)
   (cond ((and (consp expr) (functionp expr))
          expr)
+        ; expr is a string which names an operator
+        ; (e.g. "!" "+" or a user-defined operator)
+        ((and (stringp expr) (getopr0 expr))
+         (let ((a (if lvars lvars `((mlist) ,(gensym)))))
+           (coerce-float-fun `(($apply) ,(getopr0 expr) ,a) a)))
         ((and (symbolp expr) (not (member expr lvars)) (not ($constantp expr)))
          (cond
        ((fboundp expr)
@@ -527,9 +532,6 @@
           (get expr 'mfexpr*)
           ; expr is the name of a Maxima macro defined by ::=
           (mget expr 'mmacro)
-          ; expr is a string which names an operator
-          ; (e.g. "!" "+" or a user-defined operator)
-          (get expr 'opr)
           ; expr is the name of a simplifying function,
           ; and the simplification property is associated with the noun form
           (get ($nounify expr) 'operators)

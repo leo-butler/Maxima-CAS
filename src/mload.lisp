@@ -155,8 +155,8 @@
   convenience for writers of packages and users of the macsyma->lisp
   translator."
 
-  (cond ((and (symbolp filename) (not (mstringp filename)))
-	 (setq filename (string-downcase (symbol-name (stripdollar filename))))))
+  (if (symbolp filename)
+    (setq filename (string-downcase (symbol-name (stripdollar filename)))))
   (let ((searched-for
 	 ($file_search1 filename
 			'((mlist) $file_search_maxima $file_search_lisp  )))
@@ -432,8 +432,6 @@
 (defun new-file-search (name template)
   (cond ((probe-file name))
 	((atom template)
-     (if (mstringp template)
-       (setq template (subseq (maybe-invert-string-case (string template)) 1)))
 	 (let ((lis (loop for w in (split-string template "{}")
 			  when (null (position #\, w))
 			  collect w

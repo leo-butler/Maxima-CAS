@@ -4,11 +4,11 @@
 m : "text";
 "text"$
 [stringp(m), lstringp(m)];
-[true, false]$
+[true, true]$
 l : sconcat("text");
 ''(lstring("text"))$
 [stringp(l), lstringp(l)];
-[false, true]$
+[true, true]$
 stringp(sunlisp(l));
 true$
 c : "e";

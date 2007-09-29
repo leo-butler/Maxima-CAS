@@ -591,7 +591,7 @@ unknown; /* comparison of non-identical lambda expressions yields unknown */
 
 /* No automatic type conversion */
 is (equal (mstring1a, lstring1a));
-false;
+true;
 
 is (equal (mstring1a, larray1a));
 false;
@@ -609,7 +609,7 @@ false;
 
 /* No automatic type conversion */
 is (equal (lstring1a, mstring1a));
-false;
+true;
 
 is (equal (lstring1a, larray1a));
 false;
@@ -693,7 +693,7 @@ false;
 
 /* No automatic type conversion */
 is (mstring1a = lstring1a);
-false;
+true;
 
 is (mstring1a = larray1a);
 false;
@@ -711,7 +711,7 @@ false;
 
 /* No automatic type conversion */
 is (lstring1a = mstring1a);
-false;
+true;
 
 is (lstring1a = larray1a);
 false;

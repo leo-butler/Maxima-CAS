@@ -523,17 +523,9 @@ values")
      finally
      (return (make-symbol (maybe-invert-string-case (coerce tem 'string))))))
 
-(defmacro make-mstring (string)
-  "Make a Maxima string.  The case is inverted for standard CL, and is not
-  changed for lower-case case-sensitive CL variants."
-  #-(or scl allegro)
-  `',(intern (print-invert-case (make-symbol (concatenate 'string "&" string))))
-  #+(or scl allegro)
-  `',(cond (#+scl (eq ext:*case-mode* :lower)
-	    #+allegro (eq excl:*current-case-mode* :case-sensitive-lower)
-	    (intern (concatenate 'string "&" string)))
-	   (t
-	    (intern (print-invert-case (make-symbol (concatenate 'string "&" string)))))))
+;; A do-nothing function. We can get rid of this,
+;; now that Maxima strings are Lisp strings.
+(defun make-mstring (s) s)
 
 ;;for those window labels etc. that are wrong type.
 ;; is not only called for symbols, but also on numbers

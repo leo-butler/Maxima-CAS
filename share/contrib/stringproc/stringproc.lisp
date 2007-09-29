@@ -38,7 +38,7 @@
 (defun $openr (file) (open (l-string file)))
 
 (defun $make_string_input_stream (s &optional (start 0) (end nil))
-  (if (not (or (stringp s) (mstringp s)))
+  (unless (stringp s)
     (merror "make_string_input_stream: argument must be a string."))
   (make-string-input-stream (l-string s) start end))
 
@@ -84,7 +84,7 @@
 	 (setq arg (meval arg))
 	 (setq arg
 	   (cond ((numberp arg) arg)
-		 ((mstringp arg) (l-string arg))
+		 ((stringp arg) (l-string arg))
 		 ((and (symbolp arg) (not (boundp arg)))
 		    `(quote ,(maybe-invert-string-case (subseq (string arg) 1))))
 		 ((and (listp arg) (listp (car arg)) (eq (caar arg) 'mlist))
@@ -116,7 +116,7 @@
        (progn
 	  (setq obj (meval obj))
 	  (cond ((numberp obj) obj)
-		((mstringp obj) (maxima-string obj))
+		((stringp obj) obj)
 		(t (if (and (symbolp obj) (not (boundp obj)))
 		      (maybe-invert-string-case (subseq (string obj) 1))
 		      ($sconcat obj)))))))
@@ -149,7 +149,7 @@
 
 ;;  tests, if object is maxima-character
 (defun $charp (obj)
-   (and (mstringp obj) (= 1 (length (l-string obj)))))
+   (and (stringp obj) (= 1 (length (l-string obj)))))
 
 ;;  tests for different maxima-characters
 (defun $constituent (mch)   (constituent (l-char mch)))
@@ -190,32 +190,20 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  3. strings
 
-(defmfun strip& (str)
-   (let ((c1 (string (getcharn str 1))))
-      (if (equal c1 "&")
-	 (subseq str 1)
-	 str)))
-
 ;;  converts maxima-string into lisp-string
 (defun $lstring (mstr) (l-string mstr)) ;; for testing only (avoid lisp string in maxima)
-(defun l-string (mstr)
-  (if (stringp mstr)
-    mstr
-    (strip& (maybe-invert-string-case (string mstr)))))
+(defun l-string (mstr) mstr)
 
 ;;  converts lisp-string back into maxima-string
 (defun $sunlisp (lstr) (m-string lstr))
-(defun m-string (lstr)
-  (if (mstringp lstr)
-    lstr
-    (intern (maybe-invert-string-case (concatenate 'string "&" lstr)))))
+(defun m-string (lstr) lstr)
 
 
 ;;  tests, if object is lisp-string
 (defun $lstringp (obj) (stringp obj))
 
 ;;  tests, if object is maxima-string
-(defun $stringp (obj) (mstringp obj))
+(defun $stringp (obj) (stringp obj))
 
 
 ;;  copy
@@ -250,10 +238,7 @@
 
 ;;  $tokens implements Paul Grahams function tokens in Maxima
 (defun $tokens (mstr &optional (test '$constituent))
-  (cons '(mlist)
-	(tokens (l-string mstr)
-		(intern (string (stripdollar test)))
-		0)))
+  (cons '(mlist) (tokens (l-string mstr) (stripdollar test) 0)))
 
 (defun tokens (str test start) ;; Author: Paul Graham - ANSI Common Lisp, 1996, page 67
   (let ((p1 (position-if test str :start start)))
@@ -286,7 +271,7 @@
 (defun $split (mstr &optional (dc " ") (m t))
   (cons '(mlist)
 	(split (l-string mstr)
-	       (character (stripdollar dc))
+	       (character dc)
 	       m)))
 
 (defun split (str dc &optional (m t))

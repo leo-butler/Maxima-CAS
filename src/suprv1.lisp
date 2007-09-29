@@ -372,6 +372,7 @@
       (if z (kill1 z)))))
 
 (defmfun kill1 (x)
+  (if (and (stringp x) (not (getopr0 x))) (return-from kill1 nil))
   (funcall
    #'(lambda (z)
        (cond ((and allbutl (member x allbutl :test #'equal)))
@@ -771,7 +772,8 @@
 ;;; been disabled for now.
 ;;;
 (defmfun $nounify (x)
-  (nonsymchk x '$nounify)
+  (if (not (or (symbolp x) (stringp x)))
+    (merror "nounify: argument must be a symbol or a string."))
   (setq x (amperchk x))
   (cond ((get x 'verb))
 	((get x 'noun) x)
@@ -785,7 +787,8 @@
 		 (t x))))))
 
 (defmfun $verbify (x)
-  (nonsymchk x '$verbify)
+  (if (not (or (symbolp x) (stringp x)))
+    (merror "verbify: argument must be a symbol or a string."))
   (setq x (amperchk x))
   (cond ((get x 'noun))
 	((and (char= (char (symbol-name x) 0) #\%)
@@ -798,12 +801,12 @@
 (defmfun dollarify-name (name)
   (let ((n (char (symbol-name name) 0)))
     (cond ((char= n #\&)
-	   (or (get name 'opr)
+	   (or (getopr0 name)
 	       (let ((namel (casify-exploden name)) ampname dolname)
-		 (cond ((get (setq ampname (implode (cons #\& namel))) 'opr))
+		 (cond ((getopr0 (setq ampname (implode (cons #\& namel)))))
 		       (t (setq dolname (implode (cons #\$ namel)))
 			  (putprop dolname ampname 'op)
-			  (putprop ampname dolname 'opr)
+			  (putopr ampname dolname)
 			  (add2lnc ampname $props)
 			  dolname)))))
 	  ((char= n #\%) ($verbify name))
@@ -813,7 +816,7 @@
   (setq form (strmeval (fexprcheck form)))
   (setq form (if $grind (strgrind form) (mstring form)))
   (setq st (reverse form) rephrase t)
-  (implode (cons #\& form)))
+  (coerce form 'string))
 
 (defmfun makstring (x)
   (setq x (mstring x))
@@ -851,10 +854,14 @@
    &AB ==> $AB,
    &aB ==> $aB,
    |aB| ==> |aB| "
-  (if (char= (char (symbol-name name) 0) #\&)
-      (getalias (or (get name 'opr)
-		    (implode (cons #\$ (casify-exploden name)))))
-      name))
+  (cond
+    ((symbolp name)
+     (if (char= (char (symbol-name name) 0) #\&)
+       ;; THIS NEXT CASE SHOULD NEVER BE EXECUTED WHEN MAXIMA STRINGS ARE LISP STRINGS
+       (getalias (or (getopr0 name) (implode (cons #\$ (casify-exploden name)))))
+       name))
+    ((stringp name)
+     (getalias (or (getopr0 name) (implode (cons #\$ (coerce name 'list))))))))
 
 
 #+(and cl (not scl) (not allegro))
@@ -1047,11 +1054,12 @@
   (let* ((keyword (car form))
 	 (feature (cadr form)))
     (assert (symbolp keyword))
-    (assert (symbolp feature))
+    (assert (or (stringp feature) (symbolp feature)))
     (case keyword
       ($feature (cond ((null feature) (dollarify *features*))
-		      ((member (intern (symbol-name
-				      (fullstrip1 feature)) 'keyword)
+		      ((member (intern
+                         (if (stringp feature) feature (symbol-name (fullstrip1 feature)))
+                         'keyword)
 			     *features* :test #'equal) t)))
       ($status '((mlist simp) $feature $status))
       (t (merror "Unknown argument - `status':~%~M" keyword)))))
