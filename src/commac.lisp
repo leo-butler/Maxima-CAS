@@ -523,10 +523,6 @@ values")
      finally
      (return (make-symbol (maybe-invert-string-case (coerce tem 'string))))))
 
-;; A do-nothing function. We can get rid of this,
-;; now that Maxima strings are Lisp strings.
-(defun make-mstring (s) s)
-
 ;;for those window labels etc. that are wrong type.
 ;; is not only called for symbols, but also on numbers
 (defun flatc (sym)

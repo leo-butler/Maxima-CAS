@@ -488,10 +488,6 @@
 (defmacro pop-c   () '(scan-one-token))
 
 
-(defun mstringp (x)
-  (format t "MSTRINGP: ALL CALLS TO ME SHOULD GO AWAY AND THEN I SHOULD GO AWAY TOO.~%")
-  (and (symbolp x) (char= (char (symbol-name x) 0) #\&)))
-
 (defun inherit-propl (op-to op-from getl)
   (let ((propl (getl op-from getl)))
     (if propl

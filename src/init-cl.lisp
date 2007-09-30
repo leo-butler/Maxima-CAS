@@ -39,9 +39,6 @@
 
 (defun shadow-string-assignment (var value)
   (cond
-    ((mstringp value)
-     (set (get var 'lisp-shadow) (maybe-invert-string-case (symbol-name (stripdollar value))))
-     value)
     ((stringp value)
      (set (get var 'lisp-shadow) value)
      value)

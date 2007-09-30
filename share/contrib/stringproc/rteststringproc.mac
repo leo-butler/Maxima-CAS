@@ -3,14 +3,12 @@
 
 m : "text";
 "text"$
-[stringp(m), lstringp(m)];
-[true, true]$
+stringp(m);
+true;
 l : sconcat("text");
-''(lstring("text"))$
-[stringp(l), lstringp(l)];
-[true, true]$
-stringp(sunlisp(l));
-true$
+''(string("text"))$
+stringp(l);
+true;
 c : "e";
 "e"$
 [charp(c), lcharp(c)];

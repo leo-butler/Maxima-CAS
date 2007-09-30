@@ -160,8 +160,8 @@
       (merror "Gnuplot is not running."))
   (cond ((null s)
          (send-gnuplot-command "replot"))
-        ((mstringp s)
-         (send-gnuplot-command ($sconcat s))
+        ((stringp s)
+         (send-gnuplot-command s)
          (send-gnuplot-command "replot"))
         (t
          (merror "Input to 'gnuplot_replot' is not a string!")))
@@ -1531,7 +1531,7 @@
          (cond
            ((stringp v)
             v)
-           ((or (mstringp v) (msymbolp v))
+           ((msymbolp v)
             (setq v (maybe-invert-string-case (symbol-name (stripdollar v)))))
            (t
              (setq v (maybe-invert-string-case (string (implode (strgrind v)))))))

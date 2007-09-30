@@ -252,7 +252,5 @@
   (cond
     ((stringp s)
      s)
-    ((mstringp s)
-     (print-invert-case (stripdollar s)))
     (t
       (merror "numericalio: expected a string, instead found a ~:M" (type-of s)))))

@@ -124,8 +124,6 @@
        $lcharp
        $lowercasep
        $uppercasep
-       $sunlisp
-       $lstringp
        $stringp
        $charat
        $charlist

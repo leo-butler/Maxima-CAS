@@ -839,9 +839,6 @@
     ((stringp name)
      (getalias (or (getopr0 name) (implode (cons #\$ (coerce name 'list))))))))
 
-;; LOOKS LIKE ANY CALLS TO CASIFY-EXPLODEN CAN BE REPLACED BY CALLS TO EXPLODEN
-(defun casify-exploden (x) (exploden x))
-
 (defmspec $stringout (x)
   (setq x (cdr x))
   (let*
