@@ -593,8 +593,7 @@ wrapper for this."
      (cond ((atom x)
 	    (when (or (not (symbolp x))
 		      (member x '(t nil) :test #'eq)
-		      (mget x '$numer)
-		      (char= (char (symbol-name x) 0) #\&))
+		      (mget x '$numer))
 	      (if munbindp (return nil))
 	      (if (mget x '$numer)
 		  (merror "~:M improper value assignment to a numerical quantity" x)
@@ -804,7 +803,7 @@ wrapper for this."
 (putopr "@" '$@) 
 ;; !! FOLLOWING LINE MOVED TO NPARSE.LISP TO AVOID COMPILER ERROR
 ;; !! (MOVING SUPRV1.LISP HIGHER IN MAXIMA.SYSTEM CAUSES MYSTERIOUS ERROR)
-;; !! (define-symbol '&@) 
+;; !! (define-symbol "@") 
 (defprop $@ dimension-infix dimension) 
 (defprop $@ (#\@) dissym) 
 (defprop $@ msize-infix grind) 
@@ -1983,7 +1982,7 @@ wrapper for this."
 	 (error "~a is already a hash table.  Make it a function first" fun)))
   (cond ((and (null args) (not mqdef)) (mputprop fun (mdefine1 subs body) 'aexpr))
 	((null (dolist (u subs)
-		 (if (not (or (consp u) ($constantp u) (char= (char (symbol-name u) 0) #\&)))
+		 (if (not (or (consp u) ($constantp u) (stringp u)))
 		     (return t))))
 	 (arrstore (cons (ncons fun) subs) (mdefine1 args body)))
 	(t (mdefchk fun subs t nil)
@@ -2020,7 +2019,7 @@ wrapper for this."
 	(merror "Improper parameter in function definition for ~:M:~%~M" fun (car l)))))
 
 (defun mdefparam (x)
-  (and (atom x) (not (maxima-constantp x)) (not (char= (char (symbol-name x) 0) #\&))))
+  (and (atom x) (not (maxima-constantp x)) (not (stringp x))))
 
 (defun mdeflistp (l)
   (and (null (cdr l)) ($listp (car l)) (cdar l) (null (cddar l))))

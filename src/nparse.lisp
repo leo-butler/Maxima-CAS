@@ -489,6 +489,7 @@
 
 
 (defun mstringp (x)
+  (format t "MSTRINGP: ALL CALLS TO ME SHOULD GO AWAY AND THEN I SHOULD GO AWAY TOO.~%")
   (and (symbolp x) (char= (char (symbol-name x) 0) #\&)))
 
 (defun inherit-propl (op-to op-from getl)
@@ -1428,7 +1429,7 @@ entire input string to be printed out when an MAXIMA-ERROR occurs."
 	((symbolp x)
 	 (or (get x 'reversealias)
 	     (let ((name (symbol-name x)))
-	       (if (member (char name 0) '(#\$ #\% #\&) :test #'char=)
+	       (if (member (char name 0) '(#\$ #\%) :test #'char=)
 		   (subseq name 1)
 		   name))))
 	(t x)))

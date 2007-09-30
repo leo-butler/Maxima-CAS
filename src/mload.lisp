@@ -98,8 +98,6 @@
       (let* ((system-object
 	      (cond ((and (atom user-object) (not (symbolp user-object)))
 		     user-object)
-		    ;; The following clause takes care of |&Foo|,
-		    ;; which comes from the Maxima string "Foo".
 		    ((atom user-object)	;hence a symbol in view of the
 		     (print-invert-case (fullstrip1 user-object))) ; first clause
 		    (($listp user-object)
@@ -420,7 +418,7 @@
 ;; multiple possiblities.  eg foo.l{i,}sp or foo.{dem,dm1,dm2}
 (defun $file_search (name &optional paths)
   (if (and (symbolp name)
-	   (member (char (symbol-name name) 0) '(#\& #\$)))
+	   (member (char (symbol-name name) 0) '(#\$)))
       (setq name (subseq (print-invert-case name) 1)))
   (if (symbolp name)  (setf name (string name)))
   (if (probe-file name) (return-from $file_search name))

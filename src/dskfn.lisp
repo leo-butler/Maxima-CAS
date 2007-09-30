@@ -108,10 +108,12 @@
 	  *macsyma-extend-types-saved* nil)
     (if (null (errset (dskstore x storefl file list)))
 	(setq maxima-error t))
+    ;; FOLLOWING CODE IS NEVER EXECUTED DUE TO PRECEDING (SETQ *MACSYMA-EXTEND-TYPES-SAVED* NIL)
+    ;; CUT (DEFVAR *MACSYMA-EXTEND-TYPES-SAVED*) AND FOLLOWING CODE AT SOME FUTURE DATE
     (if (not (null *macsyma-extend-types-saved*))
 	(block nil
 	  (if (null (errset
-		     (dskstore (cons '&{ *macsyma-extend-types-saved*) storefl file list)))
+		     (dskstore (cons "{" *macsyma-extend-types-saved*) storefl file list)))
 	      (setq maxima-error t))
 	  (setq *macsyma-extend-types-saved* nil)))
     (close savefile)

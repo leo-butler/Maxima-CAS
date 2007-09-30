@@ -513,7 +513,7 @@
 (defun box-label (x)
   (if (atom x)
       x
-      (implode (cons #\& (mstring x)))))
+      (coerce (mstring x))) 'string)
 
 (declare-top (special label))
 

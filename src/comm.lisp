@@ -63,7 +63,6 @@
       atp nil
       islinp nil
       lnorecurse nil
-      &** '&^
       $derivsubst nil
       timesp nil
       $opsubst t

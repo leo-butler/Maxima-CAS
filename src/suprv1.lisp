@@ -244,7 +244,7 @@
   (let ((file ($file_search filename)))
     (dolist (func functions)
       (nonsymchk func '$setup_autoload)
-      (putprop (setq func (dollarify-name func)) file 'autoload)
+      (putprop (setq func ($verbify func)) file 'autoload)
       (add2lnc func $props)))
   '$done)
 
@@ -734,7 +734,7 @@
 	((numberp x) x)
 	((null x) 'false)
 	((eq x t) 'true)
-	((member (getchar x 1) '($ % &) :test #'equal)
+	((member (getchar x 1) '($ %) :test #'equal)
 	 (intern (subseq (string x) 1)))
 	(t x)))
 
@@ -797,21 +797,6 @@
 		  (get x 'noun))))
 	(t x)))
 
-
-(defmfun dollarify-name (name)
-  (let ((n (char (symbol-name name) 0)))
-    (cond ((char= n #\&)
-	   (or (getopr0 name)
-	       (let ((namel (casify-exploden name)) ampname dolname)
-		 (cond ((getopr0 (setq ampname (implode (cons #\& namel)))))
-		       (t (setq dolname (implode (cons #\$ namel)))
-			  (putprop dolname ampname 'op)
-			  (putopr ampname dolname)
-			  (add2lnc ampname $props)
-			  dolname)))))
-	  ((char= n #\%) ($verbify name))
-	  (t name))))
-
 (defmspec $string (form)
   (setq form (strmeval (fexprcheck form)))
   (setq form (if $grind (strgrind form) (mstring form)))
@@ -849,36 +834,13 @@
 	($bothcoeff $bothcoef)))
 
 (defmfun amperchk (name)
-  " $AB ==> $AB,
-   $aB ==> $aB,
-   &AB ==> $AB,
-   &aB ==> $aB,
-   |aB| ==> |aB| "
   (cond
-    ((symbolp name)
-     (if (char= (char (symbol-name name) 0) #\&)
-       ;; THIS NEXT CASE SHOULD NEVER BE EXECUTED WHEN MAXIMA STRINGS ARE LISP STRINGS
-       (getalias (or (getopr0 name) (implode (cons #\$ (casify-exploden name)))))
-       name))
+    ((symbolp name) name)
     ((stringp name)
      (getalias (or (getopr0 name) (implode (cons #\$ (coerce name 'list))))))))
 
-
-#+(and cl (not scl) (not allegro))
-(defun casify-exploden (x)
-  (cond ((char= (char (symbol-name x) 0) #\&)
-	 (cdr (exploden (maybe-invert-string-case (string x)))))
-	(t (exploden x))))
-
-#+(or scl allegro)
-(defun casify-exploden (x)
-  (cond ((char= (char (symbol-name x) 0) #\&)
-	 (let ((string (string x)))
-	   (unless #+scl (eq ext:*case-mode* :lower)
-		   #+allegro (eq excl:*current-case-mode* :case-sensitive-lower)
-	     (setf string (maybe-invert-string-case string)))
-	   (cdr (exploden string))))
-	(t (exploden x))))
+;; LOOKS LIKE ANY CALLS TO CASIFY-EXPLODEN CAN BE REPLACED BY CALLS TO EXPLODEN
+(defun casify-exploden (x) (exploden x))
 
 (defmspec $stringout (x)
   (setq x (cdr x))

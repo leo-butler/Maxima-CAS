@@ -667,7 +667,7 @@
   (do-symbols (s maxima-package)
     (when (and (eql (symbol-package s) maxima-package)
 	       (not (eq s '||))
-	       (member (char (symbol-name s) 0) '(#\$ #\% #\&) :test #'char=))
+	       (member (char (symbol-name s) 0) '(#\$ #\%) :test #'char=))
       (push s *builtin-symbols*)
       (unless (member s problematic-symbols :test #'eq)
 	(setf (gethash s *builtin-symbol-props*)
