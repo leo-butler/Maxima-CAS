@@ -46,7 +46,6 @@ algebra/gcdex.mac\
 algebra/grob1.lisp\
 algebra/nusum.mac\
 algebra/recur.dem\
-algebra/recur.lisp\
 algebra/recur.mac\
 algebra/recur.transcript\
 algebra/solver/linsolve.mac\
