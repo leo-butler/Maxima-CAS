@@ -201,7 +201,7 @@
 	  (list (cond ((numberp x) (texnumformat x))
 		      ((and (symbolp x) (get x 'texword)))
                       ((stringp x)
-                       (tex-string (quote-% (if $stringdisp (concatenate 'string "``" s "''") s))))
+                       (tex-string (quote-% (if $stringdisp (concatenate 'string "``" x "''") x))))
                       ((characterp x) (tex-char x))
 		      (t (tex-stripdollar x))))
 	  r))
@@ -986,8 +986,6 @@
 (defun $texput (e s &optional tx)
   (setq s (if ($listp s) (margs s) (list s)))
   
-  (setq s (mapcar #'(lambda (x) (maybe-invert-string-case (symbol-name (stripdollar x)))) s))
-
   (cond ((null tx)
 	 (putprop e (nth 0 s) 'texword))
 	((eq tx '$matchfix)

@@ -1170,7 +1170,7 @@ wrapper for this."
        (nreverse ans))))
 
 (defun mapatom (x)
-  (or (symbolp x) (mnump x) ($subvarp x)))
+  (or (symbolp x) (mnump x) ($subvarp x) (stringp x)))
 
 (defmfun $mapatom (x)
   (if (mapatom (specrepcheck x)) t))

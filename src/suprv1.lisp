@@ -153,7 +153,7 @@
   (when (and $dskuse (not $nolabels) (> (incf dcount) $filesize))
     (setq dcount 0)
     (dsksave))
-  (setq linelable (intern (format nil "~a~d" x $linenum)))
+  (setq linelable ($concat '|| x $linenum))
   (unless $nolabels
     (when (or (null (cdr $labels))
 	      (when (member linelable (cddr $labels) :test #'equal)
@@ -1017,7 +1017,9 @@
     (case keyword
       ($feature (cond ((null feature) (dollarify *features*))
 		      ((member (intern
-                         (if (stringp feature) feature (symbol-name (fullstrip1 feature)))
+                         (if (stringp feature)
+                           (maybe-invert-string-case feature)
+                           (symbol-name (fullstrip1 feature)))
                          'keyword)
 			     *features* :test #'equal) t)))
       ($status '((mlist simp) $feature $status))

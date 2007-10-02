@@ -1452,7 +1452,7 @@
 ;; Options:
 ;;     colorbox
 ;;     palette
-(simplify ($load '&picture.lisp))  ; loads picture package
+(simplify ($load "picture.lisp"))  ; loads picture package
 (defun image (mat x0 y0 width height)
   (let ( (fx0 (convert-to-float x0))
          (fy0 (convert-to-float y0))
@@ -1915,7 +1915,7 @@
       (ini-gr-options)
       ; update option values and detect objects to be plotted
       (dolist (x args)
-         (cond ((equal ($op x) '&=)
+         (cond ((equal ($op x) "=")
                    (update-gr-option ($lhs x) ($rhs x)))
                (t  (setf objects
                          (append
@@ -2018,7 +2018,7 @@
       (ini-gr-options)
       ; update option values and detect objects to be plotted
       (dolist (x args)
-         (cond ((equal ($op x) '&=)
+         (cond ((equal ($op x) "=")
                   (update-gr-option ($lhs x) ($rhs x)))
                (t  (setf objects
                          (append
@@ -2164,7 +2164,7 @@
         ncols nrows width height ; multiplot parameters
         isanimatedgif is1stobj biglist grouplist)
     (dolist (x args)
-      (cond ((equal ($op x) '&=)
+      (cond ((equal ($op x) "=")
               (case ($lhs x)
                 ($terminal   (update-gr-option '$terminal ($rhs x)))
                 ($columns    (update-gr-option '$columns ($rhs x)))
