@@ -41,28 +41,21 @@
 
 
 
-;; This variable stores actual global options
+;; This variable stores actual graphics options
 (defvar *gr-options* (make-hash-table))
 
 
 ;; Sets default values of graphics options
 (defun ini-gr-options ()
-  (setf ; graphics options
-      ; header options
+  (setf
+      ; global options to control general aspects of graphics
       (gethash '$xrange *gr-options*) nil      ; nil => automatic computation
       (gethash '$yrange *gr-options*) nil      ; nil => automatic computation
       (gethash '$zrange *gr-options*) nil      ; nil => automatic computation
       (gethash '$logx *gr-options*)   nil
       (gethash '$logy *gr-options*)   nil
       (gethash '$logz *gr-options*)   nil
-      (gethash '$grid *gr-options*)   nil
       (gethash '$title *gr-options*)  ""
-      (gethash '$xlabel *gr-options*) ""
-      (gethash '$ylabel *gr-options*) ""
-      (gethash '$zlabel *gr-options*) ""
-      (gethash '$xtics *gr-options*)  t
-      (gethash '$ytics *gr-options*)  t
-      (gethash '$ztics *gr-options*)  t
       (gethash '$rot_vertical *gr-options*)   60   ; range: [0,180] (vertical rotation)
       (gethash '$rot_horizontal *gr-options*) 30   ; range: [0,360] (horizontal rotation)
       (gethash '$xy_file *gr-options*)        ""
@@ -75,6 +68,18 @@
       ; implicit plot options
       (gethash '$ip_grid *gr-options*) '((mlist simp) 50 50)
       (gethash '$ip_grid_in *gr-options*) '((mlist simp) 5 5)
+
+      ; tics
+      (gethash '$grid *gr-options*)         nil
+      (gethash '$xtics *gr-options*)        "autofreq"
+      (gethash '$ytics *gr-options*)        "autofreq"
+      (gethash '$ztics *gr-options*)        "autofreq"
+      (gethash '$xtics_rotate *gr-options*) nil
+      (gethash '$ytics_rotate *gr-options*) nil
+      (gethash '$ztics_rotate *gr-options*) nil
+      (gethash '$xtics_axis *gr-options*)   nil
+      (gethash '$ytics_axis *gr-options*)   nil
+      (gethash '$ztics_axis *gr-options*)   nil
 
       ; axis
       (gethash '$axis_bottom *gr-options*) t
@@ -94,6 +99,9 @@
       (gethash '$zaxis_width *gr-options*) 1
       (gethash '$zaxis_type *gr-options*)  0    ; two options: 1 (solid) and 0 (dots)
       (gethash '$zaxis_color *gr-options*) "black"
+      (gethash '$xlabel *gr-options*) ""
+      (gethash '$ylabel *gr-options*) ""
+      (gethash '$zlabel *gr-options*) ""
 
       ; point options
       (gethash '$point_size *gr-options*)    1
@@ -109,6 +117,7 @@
       (gethash '$head_length *gr-options*) 2        ; in x-axis units
       (gethash '$head_angle *gr-options*)  45       ; with respect to the segment
       (gethash '$head_type *gr-options*)   '$filled ; other options are: $empty and $nofilled
+      (gethash '$unit_vectors *gr-options*) nil
 
       ; label options
       (gethash '$label_alignment *gr-options*)   '$center     ; other options are: $left and $right
@@ -130,7 +139,7 @@
       (gethash '$surface_hide *gr-options*)   nil
       (gethash '$enhanced3d *gr-options*)     nil
       (gethash '$contour *gr-options*)        '$none  ; other options are: $base, $surface, $both and $map
-      (gethash '$contour_levels *gr-options*) 5       ; maximum: 50
+      (gethash '$contour_levels *gr-options*) 5       ; 1-50, [lowest_level,step,highest_level] or {z1,z2,...}
       (gethash '$colorbox *gr-options*)       t       ; in pm3d mode, always show colorbox
       (gethash '$palette  *gr-options*)       '$color ; '$color is a short cut for [7,5,15]
                                                       ; and '$gray is a short cut for [3,3,3].
@@ -209,18 +218,89 @@
                         (setf (gethash opt *gr-options*) (- (position val shapes) 1))
                         (merror "Illegal point type: ~M " val))))) )
       (($columns $nticks $adapt_depth $pic_width $pic_height     ; defined as positive integers
-        $xu_grid $yv_grid $contour_levels $delay)
+        $xu_grid $yv_grid  $delay)
             (if (and (integerp val)
                      (> val 0 ))
                 (setf (gethash opt *gr-options*) val)
                 (merror "Non positive integer: ~M " val)))
-      (($points_joined $transparent $border $logx $logy $logz $head_both $grid $xtics $ytics $ztics
+      ($contour_levels    ; positive integer, increment or set of points
+            (cond ((and (integerp val) (> val 0 ))
+                    (setf (gethash opt *gr-options*) val))
+                  ((and ($listp val) (= ($length val) 3) )
+                     (let ((ini  (convert-to-float (nth 1 val)))
+                           (step (convert-to-float (nth 2 val)))
+                           (end  (convert-to-float (nth 3 val))))
+                        (cond ((and (< ini end)
+                                    (< step (- end ini)))
+                                (setf (gethash opt *gr-options*) (format nil "incremental ~a,~a,~a" ini step end)))
+                              (t
+                                (merror "Illegal contour level incremental description: ~M " val))) ))
+                  ((and ($setp val) (not ($emptyp val)))
+                     (let ((pts (map 'list #'convert-to-float (rest val)))
+                           (str "discrete ") )
+                       (dolist (num pts 'done)
+                         (setf str (concatenate 'string str " " (format nil "~a," num))))
+                       (setf (gethash opt *gr-options*) (string-trim '(#\,) str) ) ))
+                  (t
+                    (merror "Unknown contour level description: ~M " val))))
+      (($points_joined $transparent $border $logx $logy $logz $head_both $grid
         $axis_bottom $axis_left $axis_top $axis_right $axis_3d $surface_hide $colorbox $filled_func
-        $enhanced3d $xaxis $yaxis $zaxis ) ; true or false
+        $enhanced3d $xaxis $yaxis $zaxis $unit_vectors $xtics_rotate $ytics_rotate $ztics_rotate
+        $xtics_axis $ytics_axis $ztics_axis) ; true or false
             (if (or (equal val t)
                     (equal val nil))
                 (setf (gethash opt *gr-options*) val)
                 (merror "Non boolean value: ~M " val)))
+      (($xtics $ytics $ztics)  ; $auto or t, $none or nil, number, increment, set, set of pairs
+            (cond ((member val '($none nil))   ; nil is maintained for back-portability
+                     (setf (gethash opt *gr-options*) nil))
+                  ((member val '($auto t))     ; t is maintained for back-portability
+                     (setf (gethash opt *gr-options*) "autofreq"))
+                  ((and (numberp (setf val (convert-to-float val)))  ; increment
+                        (> val 0 ))
+                     (setf (gethash opt *gr-options*) val))
+                  ((and ($listp val)                          ; [ini,incr,end]
+                        (= ($length val) 3)
+                        (< (cadr val) (cadddr val))
+                        (> (caddr val) 0)
+                        (< (caddr val) (- (cadddr val) (cadr val))) )
+                     (setf (gethash opt *gr-options*) 
+                           (format nil "~a,~a,~a" (cadr val) (caddr val) (cadddr val))))
+                  ((and ($setp val)
+                        (every #'(lambda (z) (numberp z))
+                               (cdr val)) )                   ; {n1,n2,n3,...}
+                     (setf 
+                        (gethash opt *gr-options*)
+                        (do ((k (cdr val) (cdr k))
+                             (str "" (concatenate 'string str (format nil "~a," (car k)))) )
+                            ((null k) (concatenate 
+                                         'string
+                                         "("
+                                         (string-right-trim "," str)
+                                         ")")))))
+                  ((and ($setp val)
+                        (every #'(lambda (z) (and ($listp z)
+                                                  (= ($length z) 2)
+                                                  (numberp (caddr z)) ))
+                               (cdr val)) )                     ; {[lab1,n1],[lab2,n2],...}
+                     (setf 
+                        (gethash opt *gr-options*)
+                        (do ((k (cdr val) (cdr k))
+                             (str "" (concatenate
+                                        'string
+                                         str
+                                        (format 
+                                           nil 
+                                           "\"~a\" ~a,"
+                                           (string-trim "\"" (coerce (mstring (cadar k)) 'string))
+                                           (caddar k)))) )
+                            ((null k) (concatenate
+                                         'string
+                                         "("
+                                         (string-right-trim "," str)
+                                         ")")))))
+                  (t
+                     (merror "Illegal tics allocation: ~M" val)) ))
       ($terminal ; defined as screen, png, jpg, gif, eps, eps_color or wxt
             (if (member val '($screen $png $jpg $gif $eps $eps_color $wxt $animated_gif))
                 (setf (gethash opt *gr-options*) val)
@@ -292,7 +372,8 @@
                     (merror "Illegal palette description: ~M" val)))  )
       (($color $fill_color $xaxis_color $yaxis_color
         $zaxis_color)  ; defined as a color name or hexadecimal #rrggbb
-         (let ((str (string-downcase (string-trim "\"" (coerce (mstring val) 'string)))))
+         (let ((str val ))
+;        (let ((str (string-downcase (string-trim "\"" (coerce (mstring val) 'string)))))
             (cond
               ((some #'(lambda (z) (string= z str))
                      '("white" "black" "gray0" "grey0" "gray10" "grey10" "gray20" "grey20"
@@ -847,6 +928,7 @@
 ;;     line_type
 ;;     key
 ;;     color
+;;     unit_vectors
 (defun vect (arg1 arg2)
    (if (or (not ($listp arg1))
            (not (= ($length arg1) 2))
@@ -857,8 +939,14 @@
           (y (convert-to-float (caddr arg1)))
           (dx (convert-to-float (cadr arg2)))
           (dy (convert-to-float (caddr arg2)))
-          (xdx (convert-to-float (+ x dx)))
-          (ydy (convert-to-float (+ y dy))))
+          xdx ydy)
+      (when (and (get-option '$unit_vectors)
+                 (or (/= dx 0) (/= dy 0)))
+         (let ((module (sqrt (+ (* dx dx) (* dy dy)))))
+            (setf dx (/ dx module)
+                  dy (/ dy module)  )))
+      (setf xdx (convert-to-float (+ x dx))
+            ydy (convert-to-float (+ y dy)))
       (update-ranges (min x xdx) (max x xdx) (min y ydy) (max y ydy))
       (make-gr-object
          :name 'vector
@@ -896,6 +984,7 @@
 ;;     line_type
 ;;     key
 ;;     color
+;;     unit_vectors
 (defun vect3d (arg1 arg2)
    (if (or (not ($listp arg1))
            (not (= ($length arg1) 3))
@@ -908,9 +997,16 @@
           (dx (convert-to-float (cadr arg2)))
           (dy (convert-to-float (caddr arg2)))
           (dz (convert-to-float (cadddr arg2)))
-          (xdx (convert-to-float (+ x dx)))
-          (ydy (convert-to-float (+ y dy)))
-          (zdz (convert-to-float (+ z dz))))
+          xdx ydy zdz )
+      (when (and (get-option '$unit_vectors)
+                 (or (/= dx 0) (/= dy 0) (/= dz 0)))
+         (let ((module (sqrt (+ (* dx dx) (* dy dy) (* dz dz)))))
+            (setf dx (/ dx module)
+                  dy (/ dy module)
+                  dz (/ dz module)  )))
+      (setf xdx (convert-to-float (+ x dx))
+            ydy (convert-to-float (+ y dy))
+            zdz (convert-to-float (+ z dz)) )
       (update-ranges (min x xdx) (max x xdx) (min y ydy) (max y ydy) (min z zdz) (max z zdz))
       (make-gr-object
          :name 'vector
@@ -1300,6 +1396,64 @@
                             ang minang maxang)))
     (setf (gr-object-name grobj) 'polar)
     grobj ))
+
+
+
+
+
+
+
+;; Object: 'spherical'
+;; Usage:
+;;     spherical(radius,azi,minazi,maxazi,zen,minzen,maxzen)
+;; Options:
+;;     xu_grid
+;;     yv_grid
+;;     line_type
+;;     color
+;;     key
+;; This object is constructed as a parametric surface in 3d.
+;; Functions are defined in format r=r(azimuth,zenith),
+;; where, normally, azimuth is an angle in [0,2*%pi] and zenith in [0,%pi]
+(defun spherical (radius azi minazi maxazi zen minzen maxzen)
+  (let ((grobj (parametric_surface
+                     `((mtimes simp) ,radius ((%sin simp) ,zen) ((%cos simp) ,azi))
+                     `((mtimes simp) ,radius ((%sin simp) ,zen) ((%sin simp) ,azi))
+                     `((mtimes simp) ,radius ((%cos simp) ,zen))
+                     azi minazi maxazi
+                     zen minzen maxzen)))
+    (setf (gr-object-name grobj) 'spherical)
+    grobj ))
+
+
+
+
+
+
+
+
+;; Object: 'cylindrical'
+;; Usage:
+;;     cylindrical(r,z,minz,maxz,azi,minazi,maxazi)
+;; Options:
+;;     xu_grid
+;;     yv_grid
+;;     line_type
+;;     color
+;;     key
+;; This object is constructed as a parametric surface in 3d.
+;; Functions are defined in format z=z(radius,azimuth), where,
+;; normally, azimuth is an angle in [0,2*%pi] and r any real
+(defun cylindrical (r z minz maxz azi minazi maxazi)
+  (let ((grobj (parametric_surface
+                     `((mtimes simp) ,r ((%cos simp) ,azi))
+                     `((mtimes simp) ,r ((%sin simp) ,azi))
+                     z 
+                     z minz maxz
+                     azi minazi maxazi)))
+    (setf (gr-object-name grobj) 'cylindrical)
+    grobj ))
+
 
 
 
@@ -1934,7 +2088,7 @@
                                      ($image       (apply #'image (rest x)))
                                      ($geomap      (apply #'geomap (rest x)))
                                      (otherwise (merror "Graphical 2d object ~M is not recognized" x)))))))))
-      ; save in plotcmd the plot command to be sent to gnuplot
+      ; save in plotcmd the gnuplot preamble
       (setf plotcmd
          (concatenate 'string
             ; this let statement is to prevent error messages from gnuplot when
@@ -1980,12 +2134,18 @@
                            (get-option '$yaxis_type)
                            (get-option '$yaxis_color) )
                (format nil "unset yzeroaxis~%"))
-            (if (get-option '$xtics)
-               (format nil "set xtics~%")
-               (format nil "unset xtics~%"))
-            (if (get-option '$ytics)
-               (format nil "set ytics~%")
-               (format nil "unset ytics~%"))
+            (if (null (get-option '$xtics))
+               (format nil "unset xtics~%")
+               (format nil "set xtics ~a ~a ~a~%" 
+                       (if (get-option '$xtics_rotate) "rotate" "norotate")
+                       (if (get-option '$xtics_axis) "axis" "border")
+                       (get-option '$xtics)))
+            (if (null (get-option '$ytics))
+               (format nil "unset ytics~%")
+               (format nil "set ytics ~a ~a ~a~%"
+                       (if (get-option '$ytics_rotate) "rotate" "norotate")
+                       (if (get-option '$ytics_axis) "axis" "border")
+                       (get-option '$ytics)))
             (if (get-option '$colorbox)
                (format nil "set colorbox~%")
                (format nil "unset colorbox~%"))
@@ -2029,10 +2189,12 @@
                                      ($vector             (apply #'vect3d (rest x)))
                                      ($parametric         (apply #'parametric3d (rest x)))
                                      ($parametric_surface (apply #'parametric_surface (rest x)))
+                                     ($spherical          (apply #'spherical (rest x)))
+                                     ($cylindrical        (apply #'cylindrical (rest x)))
                                      ($geomap             (apply #'geomap3d (rest x)))
                                      ($label              (apply #'label (rest x)))
                                      (otherwise (merror "Graphical 3d object ~M is not recognized" x)))))))))
-      ; save in plotcmd the plot command to be sent to gnuplot
+      ; save in plotcmd the gnuplot preamble
       (setf plotcmd
          (concatenate 'string
             ; this let statement is to prevent error messages in gnuplot when
@@ -2097,15 +2259,24 @@
                            (get-option '$zaxis_type)
                            (get-option '$zaxis_color) )
                (format nil "unset zzeroaxis~%"))
-            (if (get-option '$xtics)
-               (format nil "set xtics~%")
-               (format nil "unset xtics~%"))
-            (if (get-option '$ytics)
-               (format nil "set ytics~%")
-               (format nil "unset ytics~%"))
-            (if (get-option '$ztics)
-               (format nil "set ztics~%")
-               (format nil "unset ztics~%"))
+            (if (null (get-option '$xtics))
+               (format nil "unset xtics~%")
+               (format nil "set xtics ~a ~a ~a~%" 
+                       (if (get-option '$xtics_rotate) "rotate" "norotate")
+                       (if (get-option '$xtics_axis) "axis" "border")
+                       (get-option '$xtics)))
+            (if (null (get-option '$ytics))
+               (format nil "unset ytics~%")
+               (format nil "set ytics ~a ~a ~a~%"
+                       (if (get-option '$ytics_rotate) "rotate" "norotate")
+                       (if (get-option '$ytics_axis) "axis" "border")
+                       (get-option '$ytics)))
+            (if (null (get-option '$ztics))
+               (format nil "unset ztics~%")
+               (format nil "set ztics ~a ~a ~a~%"
+                       (if (get-option '$ztics_rotate) "rotate" "norotate")
+                       (if (get-option '$ztics_axis) "axis" "border")
+                       (get-option '$ztics)))
             (if (eql (get-option '$contour) '$map)  ; if contour = map
                (format nil "set view map~%")
                (format nil "set view ~a, ~a, 1, 1~%"
@@ -2141,6 +2312,15 @@
 
 
 
+(defmacro write-subarray (arr str)
+  `(format ,str
+           "~a~%"
+           (apply 
+             #'concatenate 'string 
+             (map 
+                'list 
+                #'(lambda (z) (format nil "~a " z))
+                ,arr))))
 
 
 ;; This is the function to be called at Maxima level.
@@ -2154,10 +2334,10 @@
 ;; See bellow for $draw2d and $draw3d
 (defun $draw (&rest args)
   (ini-global-options)
-  (let ((scenes nil)
-        (counter 0)
+  (let ((counter 0)
         (scenes-list '((mlist simp)))  ; these two variables will be used
         scene-short-description        ; to build the text output
+        scenes
         cmdstorage  ; file maxout.gnuplot
         datastorage ; file data.gnuplot
         datapath    ; path to data.gnuplot
@@ -2199,28 +2379,28 @@
       ($png (format cmdstorage "set terminal png size ~a, ~a~%set out '~a.png'~%"
                            (get-option '$pic_width)
                            (get-option '$pic_height)
-                           (get-option '$file_name)) )
+                           (plot-temp-file (get-option '$file_name)) ) )
       ($eps (format cmdstorage "set terminal postscript eps size ~acm, ~acm~%set out '~a.eps'~%"
                            (get-option '$eps_width)
                            (get-option '$eps_height)
-                           (get-option '$file_name)))
+                           (plot-temp-file (get-option '$file_name))))
       ($eps_color (format cmdstorage "set terminal postscript eps color size ~acm, ~acm~%set out '~a.eps'~%"
                            (get-option '$eps_width)
                            (get-option '$eps_height)
-                           (get-option '$file_name)))
+                           (plot-temp-file (get-option '$file_name))))
       ($jpg (format cmdstorage "set terminal jpeg size ~a, ~a~%set out '~a.jpg'~%"
                            (get-option '$pic_width)
                            (get-option '$pic_height)
-                           (get-option '$file_name)))
+                           (plot-temp-file (get-option '$file_name))))
       ($gif (format cmdstorage "set terminal gif size ~a, ~a~%set out '~a.gif'~%"
                            (get-option '$pic_width)
                            (get-option '$pic_height)
-                           (get-option '$file_name)))
+                           (plot-temp-file (get-option '$file_name))))
       ($animated_gif (format cmdstorage "set terminal gif animate size ~a, ~a delay ~a~%set out '~a.gif'~%"
                            (get-option '$pic_width)
                            (get-option '$pic_height)
                            (get-option '$delay)
-                           (get-option '$file_name)))
+                           (plot-temp-file (get-option '$file_name))))
       ($wxt (format cmdstorage "set terminal wxt~%" ))  )
 
     ; compute some parameters for multiplot
@@ -2283,14 +2463,9 @@
               (glis grouplist (cdr glis) ))
             ((null blis) 'done)
           (let* ((vect (car blis))
-                 (k (length vect)))
-            (case (caar glis)
-              (2  ; 2d points and geomap coordinates
-                 (do ((cont 0 (+ cont 2)))
-                   ((= cont k) 'done)
-                   (if (and (numberp (aref vect cont)) (numberp (aref vect (1+ cont))))
-                       (format datastorage "~a ~a ~%" (aref vect cont) (aref vect (1+ cont)))
-                       (format datastorage "~%")))   )
+                 (k (length vect))
+                 (ncol (caar glis)))
+            (case ncol
               (3  ; 3d points, gray image and palette image
                 (let ((l 0)
                       (m (cadar glis)))
@@ -2298,48 +2473,19 @@
                      ((= m 0)     ; 3d points without blank lines
                         (do ((cont 0 (+ cont 3)))
                             ((= cont k) 'done)
-                          (format datastorage "~a ~a ~a ~%"
-                                              (aref vect cont)
-                                              (aref vect (1+ cont))
-                                              (aref vect (+ 2 cont)))  )  )
+                          (write-subarray (subseq vect cont (+ cont 3)) datastorage))  )
                      (t           ; 3d points with blank lines every m lines
                         (do ((cont 0 (+ cont 3)))
                             ((= cont k) 'done)
                           (when (eql l m)
                                 (format datastorage "~%")
                                 (setf l 0) )
-                          (format datastorage "~a ~a ~a ~%"
-                                              (aref vect cont)
-                                              (aref vect (1+ cont))
-                                              (aref vect (+ 2 cont)))
+                          (write-subarray (subseq vect cont (+ cont 3)) datastorage)
                           (incf l)  ))))  )
-              (4  ; for 2d vectors (x,y,dx,dy)
-                 (do ((cont 0 (+ cont 4)))
+              (otherwise
+                 (do ((cont 0 (+ cont ncol)))
                      ((= cont k) 'done)
-                   (format datastorage "~a ~a ~a ~a~%"
-                                       (aref vect cont)
-                                       (aref vect (1+ cont))
-                                       (aref vect (+ 2 cont))
-                                       (aref vect (+ 3 cont))) ) )
-              (5  ; for rgb images
-                 (do ((cont 0 (+ cont 5)))
-                     ((= cont k) 'done)
-                   (format datastorage "~a ~a ~a ~a ~a~%"
-                                       (aref vect cont)
-                                       (aref vect (1+ cont))
-                                       (aref vect (+ 2 cont))
-                                       (aref vect (+ 3 cont))
-                                       (aref vect (+ 4 cont)))) )
-              (6  ; for 3d vectors (x,y,z,dx,dy,dz)
-                 (do ((cont 0 (+ cont 6)))
-                     ((= cont k) 'done)
-                   (format datastorage "~a ~a ~a ~a ~a ~a~%"
-                                       (aref vect cont)
-                                       (aref vect (1+ cont))
-                                       (aref vect (+ 2 cont))
-                                       (aref vect (+ 3 cont)) 
-                                       (aref vect (+ 4 cont))
-                                       (aref vect (+ 5 cont)) )))   ))
+                   (write-subarray (subseq vect cont (+ cont ncol)) datastorage) ))  ))
           (format datastorage "~%~%") )
         (incf counter)
         (setf scenes-list (cons (reverse scene-short-description) scenes-list)) ))  ; end let-dolist scenes
@@ -2361,7 +2507,7 @@
                    ; print them when hitting the x key after clicking the mouse button
                    ((not (string= (gethash '$xy_file *gr-options*) ""))
                       (format cmdstorage "set print \"~a\" append~%bind x \"print MOUSE_X,MOUSE_Y\"~%"
-                                   (gethash '$xy_file *gr-options*))) )
+                                   (plot-temp-file (gethash '$xy_file *gr-options*)))) )
              (close cmdstorage)
 
              ; get the plot
