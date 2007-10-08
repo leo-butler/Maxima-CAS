@@ -1336,13 +1336,20 @@ Example:
 @defvr {Graphic option} filled_func
 Default value: @code{false}
 
-@code{filled_func} indicates whether a function is filled (@code{true})
-or not (@code{false}).
+Option @code{filled_func} controls how regions limited by functions
+should be filled. When @code{filled_func} is @code{true}, the region
+bounded by the function defined with object @code{explicit} and the
+bottom of the graphic window is filled with @code{fill_color}. When 
+@code{filled_func} contains a function expression, then the region bounded
+by this function and the function defined with object @code{explicit} 
+will be filled. By default, explicit functions are not filled. 
 
 This option affects only the 2d graphic object @code{explicit}.
 
 Example:
 
+Region bounded by an @code{explicit} object and the bottom of the
+graphic window.
 @example
 (%i1) load(draw)$
 (%i2) draw2d(fill_color  = red,
@@ -1350,7 +1357,17 @@ Example:
              explicit(sin(x),x,0,10) )$
 @end example
 
-See also @code{fill_color}.
+Region bounded by an @code{explicit} object and the function
+defined by option @code{filled_func}. Note that the variable in
+@code{filled_func} must be the same as that used in @code{explicit}.
+@example
+(%i1) load(draw)$
+(%i2) draw2d(fill_color  = grey,
+             filled_func = sin(x),
+             explicit(-sin(x),x,0,%pi));
+@end example
+
+See also @code{fill_color} and @code{explicit}.
 @end defvr
 
 
@@ -2414,6 +2431,8 @@ Example:
              explicit(x+y,x,-5,5,y,-5,5),
              surface_hide = true)$
 @end example
+
+See also @code{filled_func} for filled functions.
 @end deffn
 
 

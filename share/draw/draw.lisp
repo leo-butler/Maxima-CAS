@@ -131,7 +131,7 @@
       (gethash '$nticks *gr-options*)      30
       (gethash '$adapt_depth *gr-options*) 10
       (gethash '$key *gr-options*)         ""    ; by default, no keys
-      (gethash '$filled_func *gr-options*) nil   ; true or false
+      (gethash '$filled_func *gr-options*) nil   ; false, true (y axis) or an expression
 
       ; 3d options
       (gethash '$xu_grid *gr-options*)        30
@@ -244,13 +244,15 @@
                   (t
                     (merror "Unknown contour level description: ~M " val))))
       (($points_joined $transparent $border $logx $logy $logz $head_both $grid
-        $axis_bottom $axis_left $axis_top $axis_right $axis_3d $surface_hide $colorbox $filled_func
+        $axis_bottom $axis_left $axis_top $axis_right $axis_3d $surface_hide $colorbox
         $enhanced3d $xaxis $yaxis $zaxis $unit_vectors $xtics_rotate $ytics_rotate $ztics_rotate
         $xtics_axis $ytics_axis $ztics_axis) ; true or false
             (if (or (equal val t)
                     (equal val nil))
                 (setf (gethash opt *gr-options*) val)
                 (merror "Non boolean value: ~M " val)))
+      ($filled_func ; true, false or an expression
+         (setf (gethash opt *gr-options*) val))
       (($xtics $ytics $ztics)  ; $auto or t, $none or nil, number, increment, set, set of pairs
             (cond ((member val '($none nil))   ; nil is maintained for back-portability
                      (setf (gethash opt *gr-options*) nil))
@@ -289,11 +291,7 @@
                              (str "" (concatenate
                                         'string
                                          str
-                                        (format 
-                                           nil 
-                                           "\"~a\" ~a,"
-                                           (string-trim "\"" (coerce (mstring (cadar k)) 'string))
-                                           (caddar k)))) )
+                                        (format nil "\"~a\" ~a," (cadar k) (caddar k)))))
                             ((null k) (concatenate
                                          'string
                                          "("
@@ -322,20 +320,19 @@
                 (setf (gethash opt *gr-options*) val)
                 (merror "Illegal label orientation: ~M" val)))
       (($key $file_name $xy_file $title $xlabel $ylabel $zlabel)  ; defined as strings
-            (setf (gethash opt *gr-options*) (string-trim "\"" (coerce (mstring val) 'string))))
+            (setf (gethash opt *gr-options*) val))
       ($user_preamble ; defined as a string or a Maxima list of strings
             (let ((str ""))
               (cond
                 (($atom val)
-                  (setf str (string-trim "\"" (coerce (mstring val) 'string))))
+                  (setf str val))
                 (($listp val)
                   (dolist (st (rest val))
                     (if (not ($atom st))
                         (merror "User preamble ~M should be a string" st))
                     (setf str (concatenate 'string
                                             str
-                                            (format nil (if (string= str "") "~a" "~%~a")
-                                                    (string-trim "\"" (coerce (mstring st) 'string)) )))))
+                                            (format nil (if (string= str "") "~a" "~%~a") val)))))
                 (t (merror "Illegal user preamble especification")))
               (setf (gethash opt *gr-options*) str))  )
       (($xrange $yrange $zrange) ; defined as a Maxima list with two numbers in increasing order
@@ -372,8 +369,7 @@
                     (merror "Illegal palette description: ~M" val)))  )
       (($color $fill_color $xaxis_color $yaxis_color
         $zaxis_color)  ; defined as a color name or hexadecimal #rrggbb
-         (let ((str val ))
-;        (let ((str (string-downcase (string-trim "\"" (coerce (mstring val) 'string)))))
+        (let ((str (string-downcase (string-trim "\"" (coerce (mstring val) 'string)))))
             (cond
               ((some #'(lambda (z) (string= z str))
                      '("white" "black" "gray0" "grey0" "gray10" "grey10" "gray20" "grey20"
@@ -875,7 +871,7 @@
                       (dolist (k lab)
                         (setf fx   (convert-to-float ($second k))
                               fy   (convert-to-float ($third k))
-                              text (coerce (mstring ($first k)) 'string))
+                              text ($first k)  )
                         (if (or (not (floatp fx)) 
                                 (not (floatp fy)))
                             (merror "draw (label): non real 2d coordinates"))
@@ -887,7 +883,7 @@
                         (setf fx   (convert-to-float ($second k))
                               fy   (convert-to-float ($third k))
                               fz   (convert-to-float ($fourth k))
-                              text (coerce (mstring ($first k)) 'string))
+                              text ($first k) )
                         (if (or (not (floatp fx)) 
                                 (not (floatp fy))
                                 (not (floatp fz)))
@@ -1045,73 +1041,109 @@
 ;;     filled_func
 ;;     fill_color
 ;;     key
-;; Note: implements a clon of draw2d (plot.lisp) with some
-;;       mutations to fit the draw environment.
-;;       Read source in plot.lisp for more information
 (defun explicit (fcn var minval maxval)
   (let* ((nticks (gethash '$nticks  *gr-options*))
          (depth (gethash '$adapt_depth  *gr-options*))
-         ($numer t))
+         ($numer t)
+         (xstart (convert-to-float minval))
+         (xend (convert-to-float maxval))
+         (x-step (/ (- xend xstart) (convert-to-float nticks) 2))
+         (ymin 1.75555970201398d+305)
+         (ymax -1.75555970201398d+305)
+         x-samples y-samples result yy pltcmd result-array)
     (setq fcn (coerce-float-fun fcn `((mlist), var)))
-    (let* ((xstart (convert-to-float minval))
-           (xend (convert-to-float maxval))
-           (x-step (/ (- xend xstart) (convert-to-float nticks) 2))
-           (ymin 1.75555970201398d+305)
-           (ymax -1.75555970201398d+305)
-           x-samples y-samples result yy pltcmd)
-      (if (< xend xstart)
-         (merror "draw2d (explicit): illegal range"))
-      (flet ((fun (x) (funcall fcn x)))
-        (dotimes (k (1+ (* 2 nticks)))
-          (let* ((x (+ xstart (* k x-step)))
-                 (y (fun x)))
-            (when (numberp y)    ; check for non numeric y, as in 1/0
-               (push x x-samples)
-               (push y y-samples)  ) ))
-        (setf x-samples (nreverse x-samples))
-        (setf y-samples (nreverse y-samples))
-        ;; For each region, adaptively plot it.
-        (do ((x-start x-samples (cddr x-start))
-             (x-mid (cdr x-samples) (cddr x-mid))
-             (x-end (cddr x-samples) (cddr x-end))
-             (y-start y-samples (cddr y-start))
-             (y-mid (cdr y-samples) (cddr y-mid))
-             (y-end (cddr y-samples) (cddr y-end)))
-            ((null x-end))
-          ;; The region is x-start to x-end, with mid-point x-mid.
-          (setf result
-                (if result
-                    (append result
-                            (cddr
-                             (adaptive-plot #'fun (car x-start) (car x-mid) (car x-end)
-                                            (car y-start) (car y-mid) (car y-end)
-                                            depth 1d-5)))
-                    (adaptive-plot #'fun (car x-start) (car x-mid) (car x-end)
-                                   (car y-start) (car y-mid) (car y-end)
-                                   depth 1d-5)))  ))
-        ;; update x-y ranges if necessary
-        (do ((y (cdr result) (cddr y)))
-           ((null y))
-          (setf yy (car y))
-          (if (> yy ymax) (setf ymax yy))
-          (if (< yy ymin) (setf ymin yy)) )
-        (update-ranges xstart xend ymin ymax)
-        (setf pltcmd
-              (if (get-option '$filled_func)
-                  (format nil " ~a w filledcurves x1 lc rgb '~a'"
-                              (make-obj-title (get-option '$key))
-                              (get-option '$fill_color))
-                  (format nil " ~a w l lw ~a lt ~a lc rgb '~a'"
-                              (make-obj-title (get-option '$key))
-                              (get-option '$line_width)
-                              (get-option '$line_type)
-                              (get-option '$color)))  )
-        (make-gr-object
-           :name   'explicit
-           :command pltcmd
-           :groups '((2))  ; numbers are sent to gnuplot in groups of 2
-           :points  `(,(make-array (length result) :element-type 'double-float
-                                                   :initial-contents result))    ) )))
+    (if (< xend xstart)
+       (merror "draw2d (explicit): illegal range"))
+    (flet ((fun (x) (funcall fcn x)))
+      (dotimes (k (1+ (* 2 nticks)))
+        (let* ((x (+ xstart (* k x-step)))
+               (y (fun x)))
+          (when (numberp y)    ; check for non numeric y, as in 1/0
+             (push x x-samples)
+             (push y y-samples)  ) ))
+      (setf x-samples (nreverse x-samples))
+      (setf y-samples (nreverse y-samples))
+      ;; For each region, adaptively plot it.
+      (do ((x-start x-samples (cddr x-start))
+           (x-mid (cdr x-samples) (cddr x-mid))
+           (x-end (cddr x-samples) (cddr x-end))
+           (y-start y-samples (cddr y-start))
+           (y-mid (cdr y-samples) (cddr y-mid))
+           (y-end (cddr y-samples) (cddr y-end)))
+          ((null x-end))
+        ;; The region is x-start to x-end, with mid-point x-mid.
+        (setf result
+              (if result
+                  (append result
+                          (cddr
+                           (adaptive-plot #'fun (car x-start) (car x-mid) (car x-end)
+                                          (car y-start) (car y-mid) (car y-end)
+                                          depth 1d-5)))
+                  (adaptive-plot #'fun (car x-start) (car x-mid) (car x-end)
+                                 (car y-start) (car y-mid) (car y-end)
+                                 depth 1d-5)))  ))
+      (cond ((null (get-option '$filled_func))
+               (do ((y (cdr result) (cddr y)))
+                   ((null y))
+                  (setf yy (car y))
+                  (if (> yy ymax) (setf ymax yy))
+                  (if (< yy ymin) (setf ymin yy)))
+               (update-ranges xstart xend ymin ymax)
+               (setf result-array (make-array (length result)
+                                              :element-type 'double-float 
+                                              :initial-contents result))
+               (setf pltcmd (format nil " ~a w l lw ~a lt ~a lc rgb '~a'"
+                                        (make-obj-title (get-option '$key))
+                                        (get-option '$line_width)
+                                        (get-option '$line_type)
+                                        (get-option '$color)))
+               (make-gr-object
+                  :name   'explicit
+                  :command pltcmd
+                  :groups '((2))  ; numbers are sent to gnuplot in groups of 2
+                  :points  (list result-array )) )
+            ((equal (get-option '$filled_func) t)
+               (do ((y (cdr result) (cddr y)))
+                   ((null y))
+                  (setf yy (car y))
+                  (if (> yy ymax) (setf ymax yy))
+                  (if (< yy ymin) (setf ymin yy)))
+               (update-ranges xstart xend ymin ymax)
+               (setf result-array (make-array (length result)
+                                              :element-type 'double-float 
+                                              :initial-contents result))
+               (setf pltcmd (format nil " ~a w filledcurves x1 lc rgb '~a'"
+                                        (make-obj-title (get-option '$key))
+                                        (get-option '$fill_color)))
+               (make-gr-object
+                  :name   'explicit
+                  :command pltcmd
+                  :groups '((2))  ; numbers are sent to gnuplot in groups of 2
+                  :points  (list result-array )))
+            (t
+               (let (fcn2 yy2 (count -1))
+                  (setf result-array (make-array (* (/ (length result) 2) 3) :element-type 'double-float))
+                  (setq fcn2 (coerce-float-fun (get-option '$filled_func) `((mlist), var)))
+                  (flet ((fun (x) (funcall fcn2 x)))
+                    (do ((xx result (cddr xx)))
+                      ((null xx))
+                      (setf yy  (second xx)
+                            yy2 (fun (first xx)))
+                      (setf ymax (max ymax yy yy2)
+                            ymin (min ymin yy yy2))
+                      (setf (aref result-array (incf count)) (first xx)
+                            (aref result-array (incf count)) yy
+                            (aref result-array (incf count)) yy2) )  ))
+               (update-ranges xstart xend ymin ymax)
+               (setf pltcmd (format nil " ~a w filledcurves lc rgb '~a'"
+                                        (make-obj-title (get-option '$key))
+                                        (get-option '$fill_color)))
+               (make-gr-object
+                  :name   'explicit
+                  :command pltcmd
+                  :groups '((3 0))  ; numbers are sent to gnuplot in groups of 3
+                  :points  (list result-array ))))  ))
+
 
 
 

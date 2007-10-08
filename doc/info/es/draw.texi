@@ -1361,13 +1361,21 @@ Ejemplo:
 @defvr {Opci@'on gr@'afica} filled_func
 Valor por defecto: @code{false}
 
-@code{filled_func} indica si la funci@'on se debe rellenar (@code{true})
-o no (@code{false}).
+La opci@'on @code{filled_func} establece c@'omo se van a rellenar las regiones
+limitadas por funciones. Si @code{filled_func} vale @code{true}, la
+regi@'on limitada por la funci@'on definida en el objeto @code{explicit}
+y el borde inferior del la ventana gr@'afica se rellena con @code{fill_color}.
+Si @code{filled_func} guarda la expresi@'on de una funci@'on, entonces la
+regi@'on limitada por esta funci@'on y la definida en el objeto @code{explicit}
+ser@'a la que se rellene. Por defecto, las funciones expl@'{@dotless{i}}citas
+no se rellenan.
 
 Esta opci@'on s@'olo afecta al objeto gr@'afico bidimensional @code{explicit}.
 
 Ejemplo:
 
+Regi@'on limitada por un objeto @code{explicit} y el borde inferior
+de la ventana gr@'afica.
 @example
 (%i1) load(draw)$
 (%i2) draw2d(fill_color  = red,
@@ -1375,7 +1383,18 @@ Ejemplo:
              explicit(sin(x),x,0,10) )$
 @end example
 
-V@'ease tambi@'en @code{fill_color}.
+Regi@'on limitada por un objeto @code{explicit} y la funci@'on
+definida en la opci@'on @code{filled_func}. N@'otese que la 
+variable en @code{filled_func} debe ser la misma que la utilizada en 
+@code{explicit}.
+@example
+(%i1) load(draw)$
+(%i2) draw2d(fill_color  = grey,
+             filled_func = sin(x),
+             explicit(-sin(x),x,0,%pi));
+@end example
+
+V@'eanse tambi@'en @code{fill_color} y @code{explicit}.
 @end defvr
 
 
@@ -2461,6 +2480,8 @@ Ejemplo:
              explicit(x+y,x,-5,5,y,-5,5),
              surface_hide = true)$
 @end example
+
+V@'ease tambi@'en @code{filled_func} para el relleno de curvas.
 @end deffn
 
 
