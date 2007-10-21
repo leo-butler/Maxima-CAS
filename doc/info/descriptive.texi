@@ -195,6 +195,11 @@ The argument of @code{continuous_freq} must be a list of numbers, which will be 
 @end example
 
 The first list contains the interval limits and the second the corresponding counts: there are 16 digits inside the interval @code{[0, 1.8]}, that is 0's and 1's, 24 digits in @code{(1.8, 3.6]}, that is 2's and 3's, and so on.
+
+@opencatbox
+@category{Descriptive statistics}
+@closecatbox
+
 @end deffn
 
 
@@ -223,6 +228,11 @@ Counts absolute frequencies in discrete samples, both numeric and categorical. I
 @end example
 
 The first list gives the sample values and the second their absolute frequencies. Commands @code{? col} and @code{? transpose} should help you to understand the last input.
+
+@opencatbox
+@category{Descriptive statistics}
+@closecatbox
+
 @end deffn
 
 
@@ -373,6 +383,11 @@ Here, the first component is meaningless, since @code{A} and @code{B} are catego
                                                             ----]
                                                              13
 @end example
+
+@opencatbox
+@category{Descriptive statistics}
+@closecatbox
+
 @end deffn
 
 
@@ -435,6 +450,11 @@ Example:
 (%i7) mean (s2);
 (%o7)     [9.9485, 10.1607, 10.8685, 15.7166, 14.8441]
 @end example
+
+@opencatbox
+@category{Descriptive statistics}
+@closecatbox
+
 @end deffn
 
 
@@ -485,6 +505,11 @@ Example:
 @end example
 
 See also function @code{var1}.
+
+@opencatbox
+@category{Descriptive statistics}
+@closecatbox
+
 @end deffn
 
 
@@ -541,6 +566,11 @@ Example:
 @end example
 
 See also function @code{var}.
+
+@opencatbox
+@category{Descriptive statistics}
+@closecatbox
+
 @end deffn
 
 
@@ -572,6 +602,11 @@ Example:
 @end example
 
 See also functions @code{var} and @code{std1}.
+
+@opencatbox
+@category{Descriptive statistics}
+@closecatbox
+
 @end deffn
 
 
@@ -603,6 +638,11 @@ Example:
 @end example
 
 See also functions @code{var1} and @code{std}.
+
+@opencatbox
+@category{Descriptive statistics}
+@closecatbox
+
 @end deffn
 
 
@@ -659,6 +699,11 @@ Example:
 @end example
 
 See also function @code{central_moment}.
+
+@opencatbox
+@category{Descriptive statistics}
+@closecatbox
+
 @end deffn
 
 
@@ -715,6 +760,11 @@ Example:
 @end example
 
 See also functions @code{central_moment} and @code{mean}.
+
+@opencatbox
+@category{Descriptive statistics}
+@closecatbox
+
 @end deffn
 
 
@@ -744,6 +794,11 @@ The variation coefficient is the quotient between the sample standard deviation 
 @end example
 
 See also functions @code{std} and @code{mean}.
+
+@opencatbox
+@category{Descriptive statistics}
+@closecatbox
+
 @end deffn
 
 
@@ -772,6 +827,11 @@ This is the minimum value of the sample @var{list},
 @end example
 
 See also function @code{maxi}.
+
+@opencatbox
+@category{Descriptive statistics}
+@closecatbox
+
 @end deffn
 
 
@@ -800,6 +860,11 @@ This is the maximum value of the sample @var{list},
 @end example
 
 See also function @code{mini}.
+
+@opencatbox
+@category{Descriptive statistics}
+@closecatbox
+
 @end deffn
 
 
@@ -828,6 +893,11 @@ Example:
 (%i6) range (s2);
 (%o6)          [19.67, 20.96, 17.37, 24.38, 22.46]
 @end example
+
+@opencatbox
+@category{Descriptive statistics}
+@closecatbox
+
 @end deffn
 
 
@@ -859,6 +929,11 @@ Example:
 (%i6) quantile (s2, 1/4);
 (%o6)    [7.2575, 7.477500000000001, 7.82, 11.28, 11.48]
 @end example
+
+@opencatbox
+@category{Descriptive statistics}
+@closecatbox
+
 @end deffn
 
 
@@ -893,6 +968,11 @@ Example:
 The median is the 1/2-quantile.
 
 See also function @code{quantile}.
+
+@opencatbox
+@category{Descriptive statistics}
+@closecatbox
+
 @end deffn
 
 
@@ -924,6 +1004,11 @@ The interquartilic range is the difference between the third and first quartiles
 @end example
 
 See also function @code{quantile}.
+
+@opencatbox
+@category{Descriptive statistics}
+@closecatbox
+
 @end deffn
 
 
@@ -982,6 +1067,11 @@ Example:
 @end example
 
 See also function @code{mean}.
+
+@opencatbox
+@category{Descriptive statistics}
+@closecatbox
+
 @end deffn
 
 
@@ -1040,6 +1130,11 @@ Example:
 @end example
 
 See also function @code{mean}.
+
+@opencatbox
+@category{Descriptive statistics}
+@closecatbox
+
 @end deffn
 
 
@@ -1100,6 +1195,11 @@ Example:
 @end example
 
 See also functions @code{mean} and @code{geometric_mean}.
+
+@opencatbox
+@category{Descriptive statistics}
+@closecatbox
+
 @end deffn
 
 
@@ -1156,6 +1256,11 @@ Example:
 @end example
 
 See also functions @code{mean} and @code{harmonic_mean}.
+
+@opencatbox
+@category{Descriptive statistics}
+@closecatbox
+
 @end deffn
 
 
@@ -1212,6 +1317,11 @@ Example:
 @end example
 
 See also functions @code{mean}, @code{var} and @code{skewness}.
+
+@opencatbox
+@category{Descriptive statistics}
+@closecatbox
+
 @end deffn
 
 
@@ -1268,6 +1378,11 @@ Example:
 @end example
 
 See also functions @code{mean}, @code{var} and @code{kurtosis}.
+
+@opencatbox
+@category{Descriptive statistics}
+@closecatbox
+
 @end deffn
 
 
@@ -1319,6 +1434,11 @@ Example:
 @end example
 
 See also functions @code{mean}, @code{var} and @code{median}.
+
+@opencatbox
+@category{Descriptive statistics}
+@closecatbox
+
 @end deffn
 
 
@@ -1373,6 +1493,11 @@ Example:
 @end example
 
 See also function @code{quantile}.
+
+@opencatbox
+@category{Descriptive statistics}
+@closecatbox
+
 @end deffn
 
 
@@ -1438,6 +1563,11 @@ Example:
 @end example
 
 See also function @code{cov1}.
+
+@opencatbox
+@category{Descriptive statistics}
+@closecatbox
+
 @end deffn
 
 
@@ -1498,6 +1628,11 @@ Example:
 @end example
 
 See also function @code{cov}.
+
+@opencatbox
+@category{Descriptive statistics}
+@closecatbox
+
 @end deffn
 
 
@@ -1559,6 +1694,11 @@ Function @code{global_variances} has an optional logical argument: @code{global_
 @end example
 
 See also @code{cov} and @code{cov1}.
+
+@opencatbox
+@category{Descriptive statistics}
+@closecatbox
+
 @end deffn
 
 
@@ -1622,6 +1762,11 @@ Function @code{cor} has an optional logical argument: @code{cor(x,true)} tells M
 @end example
 
 See also @code{cov} and @code{cov1}.
+
+@opencatbox
+@category{Descriptive statistics}
+@closecatbox
+
 @end deffn
 
 
@@ -1750,6 +1895,11 @@ Example:
 Function @code{list_correlations} also has an optional logical argument: @code{list_correlations(x,true)} tells Maxima that @code{x} is the data matrix, making the same as @code{list_correlations(x)}. On the other hand, @code{list_correlations(x,false)} means that @code{x} is not the data matrix, but the covariance matrix, avoiding its recalculation.
 
 See also @code{cov} and @code{cov1}.
+
+@opencatbox
+@category{Descriptive statistics}
+@closecatbox
+
 @end deffn
 
 
@@ -1905,6 +2055,11 @@ For more than three dimensions only multivariate scatterplots are possible, as i
 (%i3) s2 : read_matrix (file_search ("wind.data"))$
 (%i4) dataplot (s2)$
 @end example
+
+@opencatbox
+@category{Descriptive statistics} @category{Plotting}
+@closecatbox
+
 @end deffn
 
 
@@ -1968,6 +2123,11 @@ In the next two examples, histograms are requested for the first 100 digits of n
 Note that in the first case, @code{s1} is a list and in the second example, @code{col(s2,3)} is a matrix.
 
 See also function @code{barsplot}.
+
+@opencatbox
+@category{Descriptive statistics} @category{Plotting}
+@closecatbox
+
 @end deffn
 
 
@@ -2040,6 +2200,11 @@ The first column in sample @code{s3} stores the categorical values @code{A} and 
 
 
 See also function @code{histogram}.
+
+@opencatbox
+@category{Descriptive statistics} @category{Plotting}
+@closecatbox
+
 @end deffn
 
 
@@ -2090,4 +2255,9 @@ Examples:
   [16, 13, 17, 12, 11, 18, 13, 18, 14, 12]]$
 (%i6) boxplot (A)$
 @end example
+
+@opencatbox
+@category{Descriptive statistics} @category{Plotting}
+@closecatbox
+
 @end deffn

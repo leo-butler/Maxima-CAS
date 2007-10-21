@@ -277,5 +277,9 @@ the two state variables as a function of time:
 
 @end itemize
 
+@opencatbox
+@category{Plotting}
+@closecatbox
+
 @end deffn
 

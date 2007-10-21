@@ -553,6 +553,11 @@ a Legendre polynomial.
 The @i{entire} expression @code{legendre_p (5, x)} is quoted; this is 
 different than just quoting the function name using @code{'legendre_p (5, @var{x})}.
 
+@opencatbox
+@category{Plotting}
+@closecatbox
+
+
 @subsection Miscellaneous Functions
 
 The @code{orthopoly} package defines the

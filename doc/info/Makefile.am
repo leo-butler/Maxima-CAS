@@ -42,7 +42,7 @@ maxima_TEXINFOS = Introduction.texi Help.texi Command.texi Operators.texi \
   ggf.texi f90.texi diag.texi dynamics.texi\
   bode.texi augmented_lagrangian.texi opsubst.texi stats.texi stirling.texi\
   implicit_plot.texi interpol.texi lbfgs.texi romberg.texi grobner.texi\
-  contrib_ode.texi
+  contrib_ode.texi category-macros.texi
 
 figurefiles = \
 figures/dynamics1.gif\
