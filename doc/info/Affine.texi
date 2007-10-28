@@ -181,6 +181,10 @@ before calling @code{dotsimp}.
 
 By default, denominators are not collected by @code{dotsimp}.
 
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 

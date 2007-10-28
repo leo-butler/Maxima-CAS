@@ -32,7 +32,7 @@ Example:
 @end ifnotinfo
 
 @opencatbox
-@category{Plotting}
+@category{Plotting} @category{Share packages} @category{Package implicit_plot}
 @closecatbox
 
 @end deffn

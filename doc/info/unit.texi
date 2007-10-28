@@ -481,6 +481,10 @@ control over their working environment.
 @c symbols for normal work and have units labeled in some other fasion. 
 @c @code{setunitprefix} is provided for this case.  Here is an example of its use:
 
+@opencatbox
+@category{Global variables}
+@closecatbox
+
 @end defvr
 
 
@@ -510,6 +514,10 @@ Default value: @code{2}
 
 This is the value supplied to @code{metricexpandall} during the initial loading
 of @emph{unit}.
+
+@opencatbox
+@category{Global variables}
+@closecatbox
 
 @end defvr
 

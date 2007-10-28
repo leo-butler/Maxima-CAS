@@ -284,6 +284,10 @@ Examples:
 (%o5)                     [aa, bb, cc]
 @end example
 
+@opencatbox
+@category{Global variables}
+@closecatbox
+
 @end defvr
 
 @deffn {Function} bashindices (@var{expr})
@@ -666,5 +670,9 @@ well.  The Hash_table type also uses less consing and is more efficient
 than the old type of Maxima hashar.  To obtain consistent behaviour in
 translated and compiled code set @code{translate_fast_arrays} to be
 @code{true}.
- 
+
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr

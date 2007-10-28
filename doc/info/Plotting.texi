@@ -48,7 +48,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Plotting} @category{File output}
 @closecatbox
 
 @end deffn
@@ -332,7 +332,7 @@ See also @code{plot_options}, which describes plotting options and has
 more examples.
 
 @opencatbox
-@category{Plotting}
+@category{Plotting} @category{File output}
 @closecatbox
 
 @end deffn
@@ -1087,7 +1087,7 @@ difficult, and it is just easier to make a function.
 See @code{plot_options} for more examples.
 
 @opencatbox
-@category{Plotting}
+@category{Plotting} @category{File output}
 @closecatbox
 
 @end deffn

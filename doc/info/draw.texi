@@ -24,7 +24,9 @@ Follow this link for more elaborated examples of this package:
 
 You need Gnuplot 4.2 to run this program.
 
-
+@opencatbox
+@category{Plotting} @category{Share packages} @category{Package draw}
+@closecatbox
 
 
 @node Functions and Variables for draw, Functions and Variables for pictures, Introduction to draw, draw
@@ -56,7 +58,7 @@ Example:
 See also @code{yrange} and @code{zrange}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -87,7 +89,7 @@ Example:
 See also @code{xrange} and @code{zrange}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -119,7 +121,7 @@ Example:
 See also @code{yrange} and @code{zrange}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -146,7 +148,7 @@ Example:
 See also @code{logy} and @code{logz}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -173,7 +175,7 @@ Example:
 See also @code{logx} and @code{logz}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -200,7 +202,7 @@ Example:
 See also @code{logx} and @code{logy}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -261,7 +263,7 @@ any other case.
 See also @code{file_name}, @code{pic_width}, @code{pic_height} and @code{delay}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -285,7 +287,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -310,7 +312,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -338,7 +340,7 @@ Example:
 See also @code{ylabel}, and @code{zlabel}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -366,7 +368,7 @@ Example:
 See also @code{xlabel}, and @code{zlabel}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -395,7 +397,7 @@ Example:
 See also @code{xlabel}, and @code{ylabel}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -478,7 +480,7 @@ Labeled tics.
 See also @code{ytics}, and @code{ztics}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -493,7 +495,7 @@ This graphic option controls the way tic marks are drawn on the @var{y} axis.
 See @code{xtics} for a complete description.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -508,7 +510,7 @@ This graphic option controls the way tic marks are drawn on the @var{z} axis.
 See @code{xtics} for a complete description.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -524,7 +526,7 @@ Since this is a global graphics option, its position in the scene description
 does not matter.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -540,7 +542,7 @@ Since this is a global graphics option, its position in the scene description
 does not matter.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -556,7 +558,7 @@ Since this is a global graphics option, its position in the scene description
 does not matter.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -572,7 +574,7 @@ Since this is a global graphics option, its position in the scene description
 does not matter.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -587,7 +589,7 @@ Since this is a global graphics option, its position in the scene description
 does not matter.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -602,7 +604,7 @@ Since this is a global graphics option, its position in the scene description
 does not matter.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -628,7 +630,7 @@ Example:
 See also @code{xaxis_width}, @code{xaxis_type} and @code{xaxis_color}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -656,7 +658,7 @@ Example:
 See also @code{xaxis}, @code{xaxis_type} and @code{xaxis_color}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -684,7 +686,7 @@ Example:
 See also @code{xaxis}, @code{xaxis_width} and @code{xaxis_color}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -712,7 +714,7 @@ Example:
 See also @code{xaxis}, @code{xaxis_width} and @code{xaxis_type}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -739,7 +741,7 @@ Example:
 See also @code{yaxis_width}, @code{yaxis_type} and @code{yaxis_color}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -767,7 +769,7 @@ Example:
 See also @code{yaxis}, @code{yaxis_type} and @code{yaxis_color}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -795,7 +797,7 @@ Example:
 See also @code{yaxis}, @code{yaxis_width} and @code{yaxis_color}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -823,7 +825,7 @@ Example:
 See also @code{yaxis}, @code{yaxis_width} and @code{yaxis_type}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -852,7 +854,7 @@ Example:
 See also @code{zaxis_width}, @code{zaxis_type} and @code{zaxis_color}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -881,7 +883,7 @@ Example:
 See also @code{zaxis}, @code{zaxis_type} and @code{zaxis_color}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -910,7 +912,7 @@ Example:
 See also @code{zaxis}, @code{zaxis_width} and @code{zaxis_color}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -940,7 +942,7 @@ Example:
 See also @code{zaxis}, @code{zaxis_width} and @code{zaxis_type}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -969,7 +971,7 @@ Example:
 See also @code{rot_horizontal}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -999,7 +1001,7 @@ Example:
 See also @code{rot_vertical}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -1017,7 +1019,7 @@ Since this is a global graphics option, its position in the scene description
 does not matter.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -1048,7 +1050,7 @@ but it is possible to set it by making use of option @code{user_preamble},
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -1076,7 +1078,7 @@ Example:
 See also @code{terminal}, @code{pic_width}, and @code{pic_height}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -1110,7 +1112,7 @@ any other case.
 See also @code{terminal}, @code{pic_width}, and @code{pic_height}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -1136,7 +1138,7 @@ Example:
 See also @code{terminal}, @code{file_name}, and @code{pic_height}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -1164,7 +1166,7 @@ Example:
 See also @code{terminal}, @code{file_name}, and @code{pic_width}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -1193,7 +1195,7 @@ Example:
 See also @code{terminal}, @code{file_name}, and @code{eps_height}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -1222,7 +1224,7 @@ Example:
 See also @code{terminal}, @code{file_name}, and @code{eps_width}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -1248,7 +1250,7 @@ Example:
 See also @code{axis_left},  @code{axis_top}, @code{axis_right}, and @code{axis_3d}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -1274,7 +1276,7 @@ Example:
 See also @code{axis_bottom},  @code{axis_top}, @code{axis_right}, and @code{axis_3d}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -1300,7 +1302,7 @@ Example:
 See also @code{axis_bottom},  @code{axis_left}, @code{axis_right}, and @code{axis_3d}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -1326,7 +1328,7 @@ Example:
 See also @code{axis_bottom},  @code{axis_left}, @code{axis_top}, and @code{axis_3d}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -1352,7 +1354,7 @@ Example:
 See also @code{axis_bottom},  @code{axis_left}, @code{axis_top}, and @code{axis_right} for axis in 2d.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -1411,7 +1413,7 @@ Examples:
 See also @code{colorbox}. 
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -1441,7 +1443,7 @@ Example:
 See also @code{palette}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -1467,7 +1469,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -1499,7 +1501,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -1554,7 +1556,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -1596,7 +1598,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -1640,7 +1642,7 @@ defined by option @code{filled_func}. Note that the variable in
 See also @code{fill_color} and @code{explicit}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -1670,7 +1672,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -1702,7 +1704,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -1732,7 +1734,7 @@ Example:
 See also @code{head_length}, @code{head_angle}, and @code{head_type}. 
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -1764,7 +1766,7 @@ Example:
 See also @code{head_both}, @code{head_angle}, and @code{head_type}. 
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -1809,7 +1811,7 @@ Example:
 See also @code{head_both}, @code{head_length}, and @code{head_type}. 
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -1842,7 +1844,7 @@ Example:
 See also @code{head_both}, @code{head_angle}, and @code{head_length}. 
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -1871,7 +1873,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -1905,7 +1907,7 @@ Example:
 See also @code{label_orientation}, and @code{color}. 
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -1940,7 +1942,7 @@ Package @code{draw} needs always data to draw an scene.
 See also @code{label_alignment} and @code{color}. 
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -1996,7 +1998,7 @@ Example:
 See also @code{fill_color}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -2012,7 +2014,7 @@ Default value: @code{"red"}
 See @code{color} to learn how colors are specified.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -2061,7 +2063,7 @@ Example:
 See also @code{line_type}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -2098,7 +2100,7 @@ Example:
 See also @code{line_width}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -2130,7 +2132,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -2145,7 +2147,7 @@ Default value: 10
 This option is relevant only for 2d @code{explicit} functions.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -2182,7 +2184,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -2214,7 +2216,7 @@ Example:
 See also @code{yv_grid}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -2246,7 +2248,7 @@ Example:
 See also @code{xu_grid}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -2272,7 +2274,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -2324,7 +2326,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -2395,7 +2397,7 @@ Isolines at levels -7, -6, 0.8 and 5.
 See also @code{contour}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -2423,7 +2425,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -2438,7 +2440,7 @@ Default value: @code{[50, 50]}
 This option is relevant only for @code{implicit} objects.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -2453,7 +2455,7 @@ Default value: @code{[5, 5]}
 This option is relevant only for @code{implicit} objects.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end defvr
@@ -2494,7 +2496,7 @@ and @code{axis_right}.
 To make use of this function, write first @code{load(draw)}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn
@@ -2531,7 +2533,7 @@ and @code{enhanced3d}.
 To make use of this function, write first @code{load(draw)}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn
@@ -2619,7 +2621,7 @@ Two tridimensional samples,
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn
@@ -2652,7 +2654,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn
@@ -2689,7 +2691,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn
@@ -2763,7 +2765,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn
@@ -2812,7 +2814,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn
@@ -2865,7 +2867,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn
@@ -2923,7 +2925,7 @@ Example:
 See also @code{filled_func} for filled functions.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn
@@ -2958,7 +2960,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn
@@ -2992,7 +2994,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn
@@ -3019,7 +3021,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn
@@ -3046,7 +3048,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn
@@ -3096,7 +3098,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn
@@ -3199,7 +3201,7 @@ URL @url{http://www.telefonica.net/web2/biomates/maxima/gpdraw/image}
 contains more elaborated examples.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn
@@ -3217,7 +3219,7 @@ point quantities, the coordinates of a polygonal segment or map boundary.
 See also @code{geomap}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw} @category{Global variables}
 @closecatbox
 
 @end defvr
@@ -3366,7 +3368,7 @@ See also @url{http://www.telefonica.net/web2/biomates/maxima/gpdraw/geomap}
 for more elaborated examples.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn
@@ -3408,7 +3410,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn
@@ -3475,7 +3477,7 @@ End of animation sequence
 See also @code{draw2d} and @code{draw3d}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw} @category{File output}
 @closecatbox
 
 @end deffn
@@ -3490,7 +3492,7 @@ It can be used to plot a unique scene in 2d.
 To make use of this function, write first @code{load(draw)}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw} @category{File output}
 @closecatbox
 
 @end deffn
@@ -3506,7 +3508,7 @@ It can be used to plot a unique scene in 3d.
 To make use of this function, write first @code{load(draw)}.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw} @category{File output}
 @closecatbox
 
 @end deffn
@@ -3557,7 +3559,7 @@ Level picture from numeric list.
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn
@@ -3568,7 +3570,7 @@ Returns @code{true} if the argument is a well formed image,
 and @code{false} otherwise.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn
@@ -3578,7 +3580,7 @@ and @code{false} otherwise.
 Returns @code{true} in case of equal pictures, and @code{false} otherwise.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn
@@ -3616,7 +3618,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn
@@ -3644,7 +3646,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn
@@ -3654,7 +3656,7 @@ Example:
 Returns the negative of a (@code{level} or @code{rgb}) picture.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn
@@ -3665,7 +3667,7 @@ Transforms an @code{rgb} picture into a @code{level} one by
 averaging the red, green and blue channels.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn
@@ -3676,7 +3678,7 @@ Returns pixel from picture. Coordinates @var{x} and @var{y} range from 0 to
 @code{width-1} and @code{height-1}, respectively.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn
@@ -3686,7 +3688,7 @@ Returns pixel from picture. Coordinates @var{x} and @var{y} range from 0 to
 Reads a file in xpm and returns a picture object.
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn
@@ -3719,7 +3721,7 @@ Returns segment numbers for plotting southern Italy.
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn
@@ -3743,7 +3745,7 @@ Map of Europe labeling borders with their component number in
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn
@@ -3808,7 +3810,7 @@ polygon can be drawn.
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn
@@ -3829,7 +3831,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn
@@ -3854,7 +3856,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Plotting}
+@category{Package draw}
 @closecatbox
 
 @end deffn

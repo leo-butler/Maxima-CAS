@@ -32,6 +32,10 @@ Default value: 10^8
 @c WHAT IS algepsilon, EXACTLY ??? describe ("algsys") IS NOT VERY INFORMATIVE !!!
 @code{algepsilon} is used by @code{algsys}.
 
+@opencatbox
+@category{Algebraic equations} @category{Global variables}
+@closecatbox
+
 @end defvr
 
 @deffn {Function} bfloat (@var{expr})
@@ -79,6 +83,10 @@ When @code{bftorat} is @code{true},
 the rational number generated will
 accurately represent the bfloat.
 
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} bftrunc
@@ -88,6 +96,10 @@ Default value: @code{true}
 numbers not to be displayed.  Thus, if @code{bftrunc} is @code{false}, @code{bfloat (1)}
 displays as @code{1.000000000000000B0}. Otherwise, this is displayed as
 @code{1.0B0}.
+
+@opencatbox
+@category{Global flags}
+@closecatbox
 
 @end defvr
 
@@ -113,6 +125,10 @@ When @code{float2bf} is @code{false}, a warning message is printed when
 a floating point number is converted into a bigfloat number (since
 this may lead to loss of precision).
 
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @deffn {Function} floatnump (@var{expr})
@@ -127,6 +143,10 @@ Default value: 16
 @code{fpprec} does not affect computations on ordinary floating point numbers.
 
 See also @code{bfloat} and @code{fpprintprec}.
+
+@opencatbox
+@category{Global variables}
+@closecatbox
 
 @end defvr
 
@@ -148,5 +168,9 @@ Otherwise, @code{fpprintprec} is 0, or greater than @code{fpprec},
 and the number of digits printed is equal to @code{fpprec}.
 
 @code{fpprintprec} cannot be 1.
+
+@opencatbox
+@category{Global variables}
+@closecatbox
 
 @end defvr

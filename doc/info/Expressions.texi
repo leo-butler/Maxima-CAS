@@ -589,6 +589,10 @@ and in the @code{dpart} and @code{lpart} functions.
 All boxes in an expression are drawn with the current value of @code{boxchar};
 the drawing character is not stored with the box expression.
 
+@opencatbox
+@category{Display variables}
+@closecatbox
+
 @end defvr
 
 @deffn {Function} carg (@var{z})
@@ -1220,6 +1224,10 @@ When @code{%emode} is @code{false}, no
 special simplification of @code{%e^(%pi %i x)} is carried out.
 
 @c NEED EXAMPLES HERE
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} %enumer
@@ -1235,6 +1243,10 @@ only if the exponent in @code{%e^x} evaluates to a number.
 See also @code{ev} and @code{numer}.
 
 @c NEED EXAMPLES HERE
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} exptisolate
@@ -1245,6 +1257,10 @@ Default value: @code{false}
 examine exponents of atoms (such as @code{%e}) which contain @code{var}.
 
 @c NEED EXAMPLES HERE
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} exptsubst
@@ -1254,6 +1270,10 @@ Default value: @code{false}
 for @code{%e^x} in @code{%e^(a x)}.
 
 @c NEED EXAMPLES HERE
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @deffn {Function} freeof (@var{x_1}, ..., @var{x_n}, @var{expr})
@@ -1529,6 +1549,10 @@ the @code{for} ... @code{in} construct,
 @code{map}, @code{fullmap}, @code{maplist}, @code{reveal} and @code{pickapart}.
 
 @c NEED EXAMPLES HERE
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @c NEEDS WORK
@@ -1612,6 +1636,10 @@ switch on
 (%o5)               c  + 2 b c + 2 a c + %t4
 @end example
 
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @c NEEDS EXAMPLES
@@ -1622,6 +1650,10 @@ When @code{listconstvars} is @code{true}, it will cause @code{listofvars} to
 include @code{%e}, @code{%pi}, @code{%i}, and any variables declared constant in the list
 it returns if they appear in the expression @code{listofvars} is called on.
 The default is to omit these.
+
+@opencatbox
+@category{Global flags}
+@closecatbox
 
 @end defvr
 
@@ -1643,6 +1675,10 @@ Example:
 (%i4) listofvars ('sum(f(i), i, 0, n));
 (%o4)                          [n]
 @end example
+
+@opencatbox
+@category{Global flags}
+@closecatbox
 
 @end defvr
 
@@ -1855,6 +1891,10 @@ Default value: @code{%}
 @code{optimprefix} is the prefix used for generated symbols by
 the @code{optimize} command.
 
+@opencatbox
+@category{Global variables}
+@closecatbox
+
 @end defvr
 
 @c NEEDS WORK
@@ -1962,6 +2002,10 @@ When @code{partswitch} is @code{true}, @code{end} is returned
 when a selected part of an expression doesn't exist, otherwise an
 error message is given.
 
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @deffn {Function} pickapart (@var{expr}, @var{n})
@@ -2064,6 +2108,10 @@ It is set during the execution of the function and thus
 may be referred to in the function itself.
 
 @c NEED "SEE ALSO" TO POINT TO LIST OF ALL RELEVANT FUNCTIONS
+
+@opencatbox
+@category{Global variables}
+@closecatbox
 
 @end defvr
 

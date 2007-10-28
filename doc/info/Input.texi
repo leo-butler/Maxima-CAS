@@ -1375,7 +1375,7 @@ Setting the flag to @code{true} is also useful for creating Maxima
 init files.
 
 @opencatbox
-@category{Translation and compilation} @category{Global flags}
+@category{Translation flags}
 @closecatbox
 
 @end defvr
@@ -1717,7 +1717,7 @@ When @code{savedef} is @code{false}, the names of translated functions are
 removed from the @code{functions} list.
 
 @opencatbox
-@category{Translation and compilation} @category{Global flags}
+@category{Translation flags}
 @closecatbox
 
 @end defvr

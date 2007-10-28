@@ -61,6 +61,10 @@ Default value: @code{false}
 @code{algebraic} must be set to @code{true} in order for the
 simplification of algebraic integers to take effect.
 
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} berlefact
@@ -69,6 +73,10 @@ Default value: @code{true}
 When @code{berlefact} is @code{false} then the Kronecker factoring
 algorithm will be used otherwise the Berlekamp algorithm, which is the
 default, will be used.
+
+@opencatbox
+@category{Global flags}
+@closecatbox
 
 @end defvr
 
@@ -232,6 +240,10 @@ Default value: @code{true}
 @code{facexpand} controls whether the irreducible factors
 returned by @code{factor} are in expanded (the default) or recursive (normal
 CRE) form.
+
+@opencatbox
+@category{Global flags}
+@closecatbox
 
 @end defvr
 
@@ -407,6 +419,10 @@ Default value: @code{false}
 @c WHAT IS THIS ABOUT EXACTLY ??
 When @code{factorflag} is @code{false}, suppresses the factoring of
 integer factors of rational expressions.
+
+@opencatbox
+@category{Global flags}
+@closecatbox
 
 @end defvr
 
@@ -747,6 +763,10 @@ Internal calls to @code{factor} respect the user-specified value of
 the time spent factoring large integers.
 @c NEED EXAMPLES HERE
 
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} keepfloat
@@ -756,6 +776,10 @@ When @code{keepfloat} is @code{true}, prevents floating
 point numbers from being rationalized when expressions which contain
 them are converted to canonical rational expression (CRE) form.
 @c NEED EXAMPLES HERE
+
+@opencatbox
+@category{Global flags}
+@closecatbox
 
 @end defvr
 
@@ -833,6 +857,10 @@ Maxima will allow zero or a negative integer to be assigned to @code{modulus},
 although it is not clear if that has any useful consequences.
 
 @c NEED EXAMPLES HERE
+@opencatbox
+@category{Global variables}
+@closecatbox
+
 @end defvr
 
 @c APPARENTLY OBSOLETE: ONLY EFFECT OF $newfac COULD BE TO CAUSE NONEXISTENT FUNCTION NMULTFACT
@@ -1017,6 +1045,10 @@ When @code{ratalgdenom} is @code{true}, allows rationalization of
 denominators with respect to radicals to take effect.
 @code{ratalgdenom} has an effect only when canonical rational expressions (CRE) are used in algebraic mode.
 
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @c THIS ITEM NEEDS MORE WORK
@@ -1127,6 +1159,10 @@ Examples:
                              b  + 3
 @end example
 
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @deffn {Function} ratdiff (@var{expr}, @var{x})
@@ -1210,6 +1246,10 @@ Default value: 2.0e-8
 of floating point numbers to rational numbers.
 
 @c NEED EXAMPLES HERE
+@opencatbox
+@category{Global variables}
+@closecatbox
+
 @end defvr
 
 @deffn {Function} ratexpand (@var{expr})

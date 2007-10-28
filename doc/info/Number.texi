@@ -258,6 +258,10 @@ period.  Thus the default is to give one period.
 (%o6)           [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2]
 @end example
 
+@opencatbox
+@category{Global variables}
+@closecatbox
+
 @end defvr
 
 @deffn {Function} divsum (@var{n}, @var{k})
@@ -299,6 +303,10 @@ For the Euler-Mascheroni constant, see @code{%gamma}.
 @end ifinfo
 The Euler-Mascheroni constant, 0.5772156649015329 ....
 @c DOUBTLESS THERE IS MORE TO SAY HERE.
+
+@opencatbox
+@category{Constants}
+@closecatbox
 
 @end defvr
 
@@ -525,6 +533,11 @@ composite is much smaller that 10^-15.
 Default value: 25
 
 Number of Miller-Rabin's tests used in @code{primep}.
+
+@opencatbox
+@category{Global variables}
+@closecatbox
+
 @end defvr
 
 @deffn {Function} prev_prime (@var{n})
@@ -563,6 +576,10 @@ Default value: @code{true}
 When @code{zerobern} is @code{false},
 @code{bern} excludes the Bernoulli numbers which are equal to zero. 
 See @code{bern}.
+
+@opencatbox
+@category{Global flags}
+@closecatbox
 
 @end defvr
 
@@ -603,5 +620,9 @@ for even integer @code{n}.
 (%i4) zeta (4);
 (%o4)                        zeta(4)
 @end example
+
+@opencatbox
+@category{Global flags}
+@closecatbox
 
 @end defvr

@@ -184,6 +184,10 @@ Default value: 0
 The dimensionality of the algebra. @code{atensor} uses the value of @code{adim}
 to determine if an indexed object is a valid base vector.  See @code{abasep}.
 
+@opencatbox
+@category{Global variables}
+@closecatbox
+
 @end defvr
 
 @defvr {Variable} aform
@@ -192,12 +196,20 @@ Default value: @code{ident(3)}
 Default values for the bilinear forms @code{sf}, @code{af}, and
 @code{av}. The default is the identity matrix @code{ident(3)}.
 
+@opencatbox
+@category{Global variables}
+@closecatbox
+
 @end defvr
 
 @defvr {Variable} asymbol
 Default value: @code{v}
 
-The symbol for base vectors..
+The symbol for base vectors.
+
+@opencatbox
+@category{Global variables}
+@closecatbox
 
 @end defvr
 

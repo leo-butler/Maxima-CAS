@@ -104,6 +104,10 @@ Some identities are applied when @math{%pi} and @math{%pi/2} are multiplied by a
 (%o2)                  [0, 1, 0, (- 1)   ]
 @end example
 
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} %iargs
@@ -160,6 +164,10 @@ Even when the argument is demonstrably real, the simplification is applied.
 (%i3) sin (%i * x);
 (%o3)                      %i sinh(x)
 @end example
+
+@opencatbox
+@category{Global flags}
+@closecatbox
 
 @end defvr
 
@@ -301,6 +309,10 @@ Examples:
                             sqrt(2)
 @end example
 
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @c IS THIS DESCRIPTION ACCURATE ??
@@ -398,6 +410,10 @@ Default value: @code{true}
 (e.g. @code{sin(x+y))} will take place only if @code{trigexpandplus} is 
 @code{true}.
 
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} trigexpandtimes
@@ -407,6 +423,10 @@ Default value: @code{true}
 @code{trigexpand}.  Thus, when the @code{trigexpand} command is used or the
 @code{trigexpand} switch set to @code{true}, expansion of products (e.g. @code{sin(2*x)})
 will take place only if @code{trigexpandtimes} is @code{true}.
+
+@opencatbox
+@category{Global flags}
+@closecatbox
 
 @end defvr
 
@@ -427,6 +447,10 @@ If @code{false}, both the
 @code{@var{arcfun}(@var{fun}(@var{x}))} and 
 @code{@var{fun}(@var{arcfun}(@var{x}))}
 simplifications are turned off.
+
+@opencatbox
+@category{Global flags}
+@closecatbox
 
 @end defvr
 
@@ -476,6 +500,10 @@ Default value: @code{true}
 When @code{trigsign} is @code{true}, it permits simplification of negative
 arguments to trigonometric functions. E.g., @code{sin(-x)} will become
 @code{-sin(x)} only if @code{trigsign} is @code{true}.
+
+@opencatbox
+@category{Global flags}
+@closecatbox
 
 @end defvr
 

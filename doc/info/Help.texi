@@ -275,6 +275,10 @@ _
 (%i13) 
 @end example
 
+@opencatbox
+@category{File input}
+@closecatbox
+
 @end deffn
 
 @deffn {Function} describe (@var{string})

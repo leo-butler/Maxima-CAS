@@ -475,6 +475,10 @@ not all the same type of object.
 If @code{maperror} is @code{true} then an error message
 is displayed in the above two instances.
 
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} mapprint
@@ -486,6 +490,11 @@ situations.  These include situations where @code{map} would use
 @code{apply}, or @code{map} is truncating on the shortest list.
 
 If @code{mapprint} is @code{false}, these messages are suppressed.
+
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @c NEEDS CLARIFICATION
@@ -514,6 +523,10 @@ translated code;
 however, @code{maybe} is supported in translated code.
 
 See also @code{is} and @code{maybe}.
+
+@opencatbox
+@category{Global flags}
+@closecatbox
 
 @end defvr
 

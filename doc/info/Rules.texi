@@ -90,6 +90,10 @@ If a call such as @code{letsimp (expr, rule_pkg_name)} is made,
 the rule package @code{rule_pkg_name} is used for that function call only,
 and the value of @code{current_let_rule_package} is not changed.
 
+@opencatbox
+@category{Global variables}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} default_let_rule_package
@@ -100,6 +104,10 @@ Default value: @code{default_let_rule_package}
 @code{default_let_rule_package} is the name of the rule package used when one
 is not explicitly set by the user with @code{let} or by changing the value of
 @code{current_let_rule_package}.
+
+@opencatbox
+@category{Global variables}
+@closecatbox
 
 @end defvr
 
@@ -414,6 +422,10 @@ the numerator, denominator, and their quotient are simplified in that order.
 (%o6)                       (a - 1)!
 @end example
 
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @c NEEDS EXAMPLES
@@ -455,6 +467,10 @@ Default value: @code{[default_let_rule_package]}
 
 @code{let_rule_packages} is a list of all user-defined let rule packages
 plus the default package @code{default_let_rule_package}.
+
+@opencatbox
+@category{Global variables}
+@closecatbox
 
 @end defvr
 

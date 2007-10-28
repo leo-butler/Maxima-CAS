@@ -15,6 +15,10 @@ should be noted that the @code{radcan} command also does this transformation,
 and more complicated transformations of this ilk as well.
 The @code{logcontract} command "contracts" expressions containing @code{log}.
 
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @deffn {Function} li [@var{s}] (@var{z})
@@ -135,6 +139,10 @@ terms of @code{log(abs(...))} if @code{logabs} is @code{true}, but in terms of @
 used, because here "evaluation" of the indefinite integral at the
 endpoints is often needed.
 
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @c NEEDS EXAMPLES
@@ -150,6 +158,10 @@ The function @code{logarc(@var{expr})} carries out that replacement for
 an expression @var{expr}
 without setting the global variable @code{logarc}.
 
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} logconcoeffp
@@ -161,6 +173,10 @@ predicate function of one argument.  E.g. if you like to generate
 SQRTs, you can do @code{logconcoeffp:'logconfun$
 logconfun(m):=featurep(m,integer) or ratnump(m)$} .  Then
 @code{logcontract(1/2*log(x));} will give @code{log(sqrt(x))}.
+
+@opencatbox
+@category{Global flags}
+@closecatbox
 
 @end defvr
 
@@ -203,6 +219,10 @@ rational numbers @code{a/b}, @code{a#1}.  (@code{log(1/b)}, for integer @code{b}
 simplifies.)  If it is set to @code{false}, all of these simplifications will
 be turned off.
 
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} lognegint
@@ -210,6 +230,10 @@ Default value: @code{false}
 
 If @code{true} implements the rule
 @code{log(-n)} -> @code{log(n)+%i*%pi} for @code{n} a positive integer.
+
+@opencatbox
+@category{Global flags}
+@closecatbox
 
 @end defvr
 
@@ -221,6 +245,10 @@ arguments to @code{log} will always be converted to their absolute value
 before the @code{log} is taken.  If @code{numer} is also @code{true}, then negative integer
 arguments to @code{log} will also be converted to their absolute value.
 
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} logsimp
@@ -228,6 +256,10 @@ Default value: @code{true}
 
 If @code{false} then no simplification of @code{%e} to a
 power containing @code{log}'s is done.
+
+@opencatbox
+@category{Global flags}
+@closecatbox
 
 @end defvr
 

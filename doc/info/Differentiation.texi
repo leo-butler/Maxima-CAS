@@ -292,6 +292,10 @@ each call to @code{depends} or @code{gradef} appends additional items.
 
 See @code{depends} and @code{gradef}.
 
+@opencatbox
+@category{Global variables}
+@closecatbox
+
 @end defvr
 
 @deffn {Function} depends (@var{f_1}, @var{x_1}, ..., @var{f_n}, @var{x_n})
@@ -376,6 +380,10 @@ symbolic derivatives (that is, @code{diff} nouns) are displayed as subscripts.
 Otherwise, derivatives are displayed in the Leibniz notation @code{dy/dx}.
 
 @c NEED EXAMPLES HERE
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @c SEEMS LIKE THIS STATEMENT COULD BE LESS CLUMSY
@@ -413,6 +421,10 @@ Default value: @code{false}
 
 When @code{derivsubst} is @code{true}, a non-syntactic substitution such as
 @code{subst (x, 'diff (y, t), 'diff (y, t, 2))} yields @code{'diff (x, t)}.
+
+@opencatbox
+@category{Global flags}
+@closecatbox
 
 @end defvr
 
@@ -697,6 +709,10 @@ Default value: @code{[]}
 for which partial derivatives have been defined by @code{gradef}.
 @code{gradefs} does not include any variables
 for which partial derivatives have been defined by @code{gradef}.
+
+@opencatbox
+@category{Global variables}
+@closecatbox
 
 @end defvr
 

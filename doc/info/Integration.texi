@@ -164,6 +164,10 @@ When @code{erfflag} is @code{false}, prevents @code{risch} from introducing the
 @code{erf} function in the answer if there were none in the integrand to
 begin with.
 
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @c NEEDS WORK
@@ -434,6 +438,10 @@ Examples:
                            3
 @end example
 
+@opencatbox
+@category{Global variables}
+@closecatbox
+
 @end defvr
 
 @defvr {System variable} integration_constant_counter
@@ -478,6 +486,10 @@ Examples:
 (%o5)                     -- = x + %c1
                           3
 @end example
+
+@opencatbox
+@category{Global variables}
+@closecatbox
 
 @end defvr
 
@@ -531,6 +543,10 @@ and then express the integrand in terms of these roots,
 e.g., @code{1/((x - a)*(x - b)*(x - c))} or @code{1/((x^2 - (a+b)*x + a*b)*(x - c))}
 if the denominator is a cubic polynomial.
 Sometimes this will help Maxima obtain a more useful result.
+
+@opencatbox
+@category{Global flags}
+@closecatbox
 
 @end defvr
 
@@ -704,6 +720,10 @@ Clenshaw-Curtis integration is used on the subranges
 which contain the point @math{x = c}.
 @end table
 
+@opencatbox
+@category{Numerical methods} @category{Share packages} @category{Package quadpack}
+@closecatbox
+
 @node Functions and Variables for QUADPACK, , Introduction to QUADPACK, Integration
 @section Functions and Variables for QUADPACK
 
@@ -789,6 +809,11 @@ Examples:
 (%o2)                           -
                                 9
 @end example
+
+@opencatbox
+@category{Numerical methods} @category{Package quadpack}
+@closecatbox
+
 @end deffn
 
 @c THERE ARE OPTIONAL ARGUMENTS WHICH MAKES LISTING THE VARIANTS A LITTLE TEDIOUS
@@ -865,6 +890,10 @@ Examples:
 @end example
 
 Note that @code{quad_qags} is more accurate and efficient than @code{quad_qag} for this integrand.
+
+@opencatbox
+@category{Numerical methods} @category{Package quadpack}
+@closecatbox
 
 @end deffn
 
@@ -977,6 +1006,10 @@ Examples:
                                32
 @end example
 
+@opencatbox
+@category{Numerical methods} @category{Package quadpack}
+@closecatbox
+
 @end deffn
 
 @c THERE ARE OPTIONAL ARGUMENTS WHICH MAKES LISTING THE VARIANTS A LITTLE TEDIOUS
@@ -1068,6 +1101,10 @@ Principal Value
 (%i3) ev (%, alpha=5, numer);
 (%o3)                    - 3.130120337415917
 @end example
+
+@opencatbox
+@category{Numerical methods} @category{Package quadpack}
+@closecatbox
 
 @end deffn
 
@@ -1169,6 +1206,10 @@ Examples:
 (%i3) ev (%, numer);
 (%o3)                   .6901942235215714
 @end example
+
+@opencatbox
+@category{Numerical methods} @category{Package quadpack}
+@closecatbox
 
 @end deffn
 
@@ -1272,6 +1313,10 @@ Examples:
 (%i3) ev (%, alpha=2, numer);
 (%o3)                     1.376043390090716
 @end example
+
+@opencatbox
+@category{Numerical methods} @category{Package quadpack}
+@closecatbox
 
 @end deffn
 
@@ -1377,6 +1422,10 @@ pos;
 (%i3) ev (%, alpha=4, numer);
 (%o3)                     8.750097361672829
 @end example
+
+@opencatbox
+@category{Numerical methods} @category{Package quadpack}
+@closecatbox
 
 @end deffn
 

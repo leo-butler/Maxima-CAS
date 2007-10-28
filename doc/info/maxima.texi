@@ -476,6 +476,7 @@ linearalgebra
 
 lsquares
 
+* Introduction to lsquares
 * Functions and Variables for lsquares::
 
 makeOrders
@@ -484,6 +485,7 @@ makeOrders
 
 mnewton
 
+* Introduction to mnewton::
 * Functions and Variables for mnewton::
 
 numericalio

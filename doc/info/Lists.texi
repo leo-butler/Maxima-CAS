@@ -304,6 +304,10 @@ contagious causing lists to be converted to matrices yielding a result
 which is always a matrix.  However, list-list operations should return
 lists.
 
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @deffn {Function} listp (@var{expr})

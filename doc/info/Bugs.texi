@@ -49,6 +49,11 @@ For example, this is a part of the default set of tests:
 This specifies the testsuite consists of the files "rtest13s" and
 "rtest14", but "rtest14" contains two tests that are known to fail: 57
 and 63.
+
+@opencatbox
+@category{Global variables}
+@closecatbox
+
 @end defvr
 
 @deffn {Function} bug_report ()

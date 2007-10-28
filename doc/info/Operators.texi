@@ -1839,6 +1839,10 @@ Examples:
 (%o13)                  32.28666704056853
 @end example
 
+@opencatbox
+@category{Numerical methods}
+@closecatbox
+
 @end deffn
 
 @deffn {Function} rationalize (@var{expr})
@@ -2052,6 +2056,10 @@ When @code{sqrtdispflag} is @code{false},
 causes @code{sqrt} to display with exponent 1/2.
 @c AND OTHERWISE ... ??
 
+@opencatbox
+@category{Display flags}
+@closecatbox
+
 @end defvr
 
 @c NEEDS EXPANSION, CLARIFICATION, MORE EXAMPLES
@@ -2098,6 +2106,10 @@ Default value: @code{true} - controls whether @code{lambda}'s
 substituted are applied in simplification after @code{sublis} is used or
 whether you have to do an @code{ev} to get things to apply. @code{true} means do the
 application.
+
+@opencatbox
+@category{Global flags}
+@closecatbox
 
 @end defvr
 

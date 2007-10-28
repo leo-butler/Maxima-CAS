@@ -198,6 +198,10 @@ When @code{refcheck} is @code{true}, Maxima prints a message
 each time a bound variable is used for the first time in a
 computation.
 
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} setcheck
@@ -233,6 +237,10 @@ to put them on the list of variables to check.
 No printout is generated when a
 variable on the @code{setcheck} list is assigned to itself, e.g., @code{X: 'X}.
 
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} setcheckbreak
@@ -248,6 +256,10 @@ Hence, one may assign a different value by assigning to @code{setval}.
 
 See also @code{setcheck} and @code{setval}.
 
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @defvr {System variable} setval
@@ -256,6 +268,10 @@ a @code{setcheckbreak} occurs.
 Hence, one may assign a different value by assigning to @code{setval}.
 
 See also @code{setcheck} and @code{setcheckbreak}.
+
+@opencatbox
+@category{Global variables}
+@closecatbox
 
 @end defvr
 
@@ -315,6 +331,10 @@ Note that time spent in untimed functions is not subtracted from the
 total time.
 
 See also @code{timer} and @code{timer_info}.
+
+@opencatbox
+@category{Global flags}
+@closecatbox
 
 @end defvr
 

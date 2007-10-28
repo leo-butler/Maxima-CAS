@@ -401,6 +401,10 @@ index in the list is renamed to @code{%1}, the next to @code{%2}, etc.
 Then sorting occurs after the @code{rename}-ing (see the example
 under @code{rename}).
 
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @deffn {Function} defcon (@var{tensor_1})
@@ -621,6 +625,10 @@ Default value: @code{%}
 
 Is the prefix for dummy indices (see the example under @code{indices}).
 
+@opencatbox
+@category{Global variables}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} icounter
@@ -629,6 +637,11 @@ Default value: @code{1}
 Determines the numerical suffix to be used in
 generating the next dummy index in the tensor package.  The prefix is
 determined by the option @code{idummy} (default: @code{%}).
+
+@opencatbox
+@category{Global variables}
+@closecatbox
+
 @end defvr
 
 @deffn {Function} kdelta (@var{L1}, @var{L2})
@@ -825,6 +838,10 @@ are assumed symmetric in all of their covariant and contravariant
 indices. If @code{false} then no symmetries of any kind are assumed
 in these indices. Derivative indices are always taken to be symmetric
 unless @code{iframe_flag} is set to @code{true}.
+
+@opencatbox
+@category{Global flags}
+@closecatbox
 
 @end defvr
 
@@ -1494,6 +1511,9 @@ ifb    = (ifr    ifr    - ifr    ifr   ) ifri
 
 @end example
 
+@opencatbox
+@category{Global variables}
+@closecatbox
 
 @end defvr
 
@@ -1517,6 +1537,9 @@ torsion is already calculated as part of the frame bracket.
 Lastly, of @code{inonmet_flag} is @code{false},
 @code{inmc1} will not be present.
 
+@opencatbox
+@category{Global variables}
+@closecatbox
 
 @end defvr
 
@@ -1540,6 +1563,10 @@ torsion is already calculated as part of the frame bracket.
 Lastly, of @code{inonmet_flag} is @code{false},
 @code{inmc2} will not be present.
 
+@opencatbox
+@category{Global variables}
+@closecatbox
+
 @end defvr
 
 @defvr {Variable} ifc1
@@ -1559,6 +1586,10 @@ ifc1    = --------------------------------
 
 @end example
 
+@opencatbox
+@category{Global variables}
+@closecatbox
+
 @end defvr
 
 @defvr {Variable} ifc2
@@ -1576,12 +1607,20 @@ ifc2   = ifg   ifc1
 
 @end example
 
+@opencatbox
+@category{Global variables}
+@closecatbox
+
 @end defvr
 
 @defvr {Variable} ifr
 
 The frame field. Contracts with the inverse frame field (@code{ifri}) to
 form the frame metric (@code{ifg}).
+
+@opencatbox
+@category{Global variables}
+@closecatbox
 
 @end defvr
 
@@ -1591,12 +1630,20 @@ The inverse frame field. Specifies the frame base (dual basis vectors). Along
 with the frame metric, it forms the basis of all calculations based on
 frames.
 
+@opencatbox
+@category{Global variables}
+@closecatbox
+
 @end defvr
 
 @defvr {Variable} ifg
 
 The frame metric. Defaults to @code{kdelta}, but can be changed using
 @code{components}.
+
+@opencatbox
+@category{Global variables}
+@closecatbox
 
 @end defvr
 
@@ -1605,12 +1652,20 @@ The frame metric. Defaults to @code{kdelta}, but can be changed using
 The inverse frame metric. Contracts with the frame metric (@code{ifg})
 to @code{kdelta}.
 
+@opencatbox
+@category{Global variables}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} iframe_bracket_form
 Default value: @code{true}
 
 Specifies how the frame bracket (@code{ifb}) is computed.
+
+@opencatbox
+@category{Global flags}
+@closecatbox
 
 @end defvr
 
@@ -1635,6 +1690,10 @@ g     =- g  inm
 
 @end example
 
+@opencatbox
+@category{Global variables}
+@closecatbox
+
 @end defvr
 
 
@@ -1652,6 +1711,10 @@ inmc1    = ------------------------------
 @end example
 
 (Substitute @code{ifg} in place of @code{g} if a frame metric is used.)
+
+@opencatbox
+@category{Global variables}
+@closecatbox
 
 @end defvr
 
@@ -1673,6 +1736,10 @@ inmc2   = -------------------------------------------
 
 (Substitute @code{ifg} in place of @code{g} if a frame metric is used.)
 
+@opencatbox
+@category{Global variables}
+@closecatbox
+
 @end defvr
 
 @defvr {Variable} ikt1
@@ -1692,6 +1759,10 @@ ikt1    = ----------------------------------
 
 (Substitute @code{ifg} in place of @code{g} if a frame metric is used.)
 
+@opencatbox
+@category{Global variables}
+@closecatbox
+
 @end defvr
 
 @defvr {Variable} ikt2
@@ -1708,6 +1779,10 @@ ikt2   = g   ikt1
 @end example
 
 (Substitute @code{ifg} in place of @code{g} if a frame metric is used.)
+
+@opencatbox
+@category{Global variables}
+@closecatbox
 
 @end defvr
 
@@ -1768,6 +1843,10 @@ by the following example:
                                     ,%1    i j
 
 @end example
+
+@opencatbox
+@category{Global variables}
+@closecatbox
 
 @end defvr
 
@@ -1987,6 +2066,10 @@ set to @code{false} (the default), the notion of differential forms will
 correspond with that of a totally antisymmetric covariant tensor field.
 When set to @code{true}, differential forms will agree with the notion
 of the volume element.
+
+@opencatbox
+@category{Global flags}
+@closecatbox
 
 @end defvr
 

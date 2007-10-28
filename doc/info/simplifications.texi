@@ -147,6 +147,11 @@ Inclusion   of   the  atom
 @code{nextlayerfactor: true}, but for the next level of the expression @i{only}.
 Since @code{nextlayerfactor} is  always bound to  either @code{true} or  @code{false}, it
 must be presented single-quoted whenever it appears in the argument list of @code{facsum}.
+
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @defvr {Global variable} facsum_combine
@@ -163,6 +168,11 @@ The @code{true} setting of this switch is useful when one
 wants to  @code{facsum} both  the numerator and  denominator of  a rational
 expression,  but  does not  want  the denominator  to  be multiplied
 through the terms of the numerator.
+
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @deffn {Function} factorfacsum (@var{expr}, @var{arg_1}, ... @var{arg_n})

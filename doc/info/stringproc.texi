@@ -415,15 +415,27 @@ Returns @code{true} if @var{char} is a lowercase character.
 @defvr {Variable} newline 
 The newline character. 
 
+@opencatbox
+@category{Global variables}
+@closecatbox
+
 @end defvr
 
 @defvr {Variable} space   
 The space character.
 
+@opencatbox
+@category{Global variables}
+@closecatbox
+
 @end defvr
 
 @defvr {Variable} tab     
 The tab character.
+
+@opencatbox
+@category{Global variables}
+@closecatbox
 
 @end defvr
 

@@ -110,6 +110,10 @@ if Maxima can locate it; otherwise Maxima makes a guess about a suitable directo
 
 @code{maxima_tempdir} may be assigned a string which names a directory.
 
+@opencatbox
+@category{Global variables}
+@closecatbox
+
 @end defvr
 
 @defvr {System variable} maxima_userdir
@@ -125,6 +129,10 @@ if Maxima can locate it; otherwise Maxima makes a guess about a suitable directo
 However, assigning to @code{maxima_userdir} does not automatically change
 @code{file_search_maxima} and @code{file_search_lisp};
 those variables must be changed separately.
+
+@opencatbox
+@category{Global variables}
+@closecatbox
 
 @end defvr
 

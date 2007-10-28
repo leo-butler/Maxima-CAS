@@ -304,6 +304,10 @@ Example:
 @c THERE'S MORE TO THIS STORY: detout: false$ invert (m); RETURNS THE SAME THING.
 @c IT APPEARS THAT doallmxops IS CRUCIAL HERE.
 
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @deffn {Function} diagmatrix (@var{n}, @var{x})
@@ -329,6 +333,10 @@ When it is @code{false} then the setting of the
 individual @code{dot} switches govern which operations are performed.
 
 @c NEED EXAMPLES HERE
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} domxexpt
@@ -366,6 +374,10 @@ Example:
                   [ (1 - c)       (1 - c)    ]
 @end example
 
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} domxmxops
@@ -377,6 +389,10 @@ operations); if this switch is @code{false} such operations are not carried out.
 @c IS THIS AN EVALUATION OR A SIMPLIFICATION FLAG ??
 
 @c NEED EXAMPLE HERE
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} domxnctimes
@@ -387,6 +403,10 @@ matrices are carried out.
 @c IS THIS AN EVALUATION OR A SIMPLIFICATION FLAG ??
 
 @c NEED EXAMPLE HERE
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} dontfactor
@@ -398,6 +418,10 @@ Factoring also will not take place with respect to any variables which
 are less important, according the variable ordering assumed for canonical rational expression (CRE) form,
 than those on the @code{dontfactor} list.
 
+@opencatbox
+@category{Global variables}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} doscmxops
@@ -408,6 +432,10 @@ carried out.
 @c IS THIS AN EVALUATION OR A SIMPLIFICATION FLAG ??
 
 @c NEED EXAMPLE HERE
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} doscmxplus
@@ -418,6 +446,10 @@ a matrix result.  This switch is not subsumed under @code{doallmxops}.
 @c IS THIS AN EVALUATION OR A SIMPLIFICATION FLAG ??
 
 @c NEED EXAMPLE HERE
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} dot0nscsimp
@@ -428,6 +460,10 @@ When @code{dot0nscsimp} is @code{true}, a non-commutative product of zero
 and a nonscalar term is simplified to a commutative product.
 
 @c NEED EXAMPLE HERE
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} dot0simp
@@ -439,6 +475,10 @@ a non-commutative product of zero and
 a scalar term is simplified to a commutative product.
 
 @c NEED EXAMPLE HERE
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} dot1simp
@@ -450,6 +490,10 @@ a non-commutative product of one and
 another term is simplified to a commutative product.
 
 @c NEED EXAMPLE HERE
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} dotassoc
@@ -460,6 +504,10 @@ When @code{dotassoc} is @code{true}, an expression @code{(A.B).C} simplifies to
 @c "." MEANS NONCOMMUTATIVE MULTIPLICATION RIGHT ??
 
 @c NEED EXAMPLE HERE
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} dotconstrules
@@ -472,6 +520,10 @@ Turning on this flag effectively turns on @code{dot0simp}, @code{dot0nscsimp}, a
 @code{dot1simp} as well.
 
 @c NEED EXAMPLE HERE
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} dotdistrib
@@ -480,6 +532,10 @@ Default value: @code{false}
 When @code{dotdistrib} is @code{true}, an expression @code{A.(B + C)} simplifies to @code{A.B + A.C}.
 
 @c NEED EXAMPLE HERE
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} dotexptsimp
@@ -488,6 +544,10 @@ Default value: @code{true}
 When @code{dotexptsimp} is @code{true}, an expression @code{A.A} simplifies to @code{A^^2}.
 
 @c NEED EXAMPLE HERE
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} dotident
@@ -497,6 +557,10 @@ Default value: 1
 @c "RETURNED" ?? IS THIS A SIMPLIFICATION OR AN EVALUATION ??
 
 @c NEED EXAMPLE HERE
+@opencatbox
+@category{Global variables}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} dotscrules
@@ -507,6 +571,10 @@ to @code{SC*A} and @code{A.(SC*B)} simplifies to @code{SC*(A.B)}.
 @c HMM, DOES "SC" MEAN "SCALAR" HERE ?? CLARIFY
 
 @c NEED EXAMPLE HERE
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @deffn {Function} echelon (@var{M})
@@ -871,6 +939,10 @@ Example:
                            | g  h  i ]
 @end example
 
+@opencatbox
+@category{Display variables}
+@closecatbox
+
 @end defvr
 
 @deffn {Function} matrix (@var{row_1}, ..., @var{row_n})
@@ -1113,6 +1185,10 @@ Example:
                      [ d  e  f   d  e  f  ]
 @end example
 
+@opencatbox
+@category{Global variables}
+@closecatbox
+
 @end defvr
 
 @defvr {Option variable} matrix_element_mult
@@ -1158,6 +1234,10 @@ Example:
                          [             2          2          2  ]
                          [ sqrt((f - z)  + (e - y)  + (d - x) ) ]
 @end example
+
+@opencatbox
+@category{Global variables}
+@closecatbox
 
 @end defvr
 
@@ -1212,6 +1292,10 @@ Examples:
 (%o9)                 [                  ]
                       [ 2 %i + 3    11   ]
 @end example
+
+@opencatbox
+@category{Global variables}
+@closecatbox
 
 @end defvr
 
@@ -1313,6 +1397,10 @@ result of matrix inverse is in CRE form.  Note that this may
 cause the elements to be expanded (depending on the setting of @code{ratfac})
 which might not always be desired.
 
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 @deffn {Function} row (@var{M}, @var{i})
@@ -1332,6 +1420,10 @@ When @code{scalarmatrixp} is @code{all},
 then all 1 x 1 matrices are simplified to scalars.
 
 When @code{scalarmatrixp} is @code{false}, 1 x 1 matrices are not simplified to scalars.
+
+@opencatbox
+@category{Global flags}
+@closecatbox
 
 @end defvr
 
@@ -1396,6 +1488,10 @@ Default value: @code{false}
 
 When @code{sparse} is @code{true}, and if @code{ratmx} is @code{true}, then @code{determinant}
 will use special routines for computing sparse determinants.
+
+@opencatbox
+@category{Global flags}
+@closecatbox
 
 @end defvr
 
@@ -1540,6 +1636,10 @@ Default value: @code{false}
 @c WHAT DOES THIS MEAN EXACTLY ??
 When @code{vect_cross} is @code{true}, it allows DIFF(X~Y,T) to work where
 ~ is defined in SHARE;VECT (where VECT_CROSS is set to @code{true}, anyway.)
+
+@opencatbox
+@category{Global flags}
+@closecatbox
 
 @end defvr
 

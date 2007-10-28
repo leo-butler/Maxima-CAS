@@ -24,6 +24,10 @@ Default value: @code{[]}
 by way of the @code{activate} function, as opposed to being active because
 they are subcontexts of the current context.
 
+@opencatbox
+@category{Global variables}
+@closecatbox
+
 @end defvr
 
 
@@ -123,6 +127,10 @@ When @code{assumescalar} is @code{all},
 such expressions will behave like scalars for all the operators listed
 above.
 
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 
@@ -155,6 +163,10 @@ even when @code{assume_pos} is @code{true} and @code{assume_pos_pred} is
 a function which returns @code{true} for all arguments.
 
 @c NEED EXAMPLES HERE
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 
@@ -241,6 +253,10 @@ p;
 (%o11)                         neg
 @end example
 
+@opencatbox
+@category{Global flags}
+@closecatbox
+
 @end defvr
 
 
@@ -258,6 +274,10 @@ it is created automatically by a call to @code{newcontext}.
 The specified context is activated automatically.
 
 See @code{contexts} for a general description of the context mechanism.
+
+@opencatbox
+@category{Global variables}
+@closecatbox
 
 @end defvr
 
@@ -291,6 +311,10 @@ context called @code{initial}, which has @code{global} as a subcontext.
 
 See also @code{facts}, @code{newcontext},
 @code{supcontext}, @code{killcontext}, @code{activate}, @code{deactivate}, @code{assume}, and @code{forget}.
+
+@opencatbox
+@category{Global variables}
+@closecatbox
 
 @end defvr
 
@@ -340,6 +364,10 @@ plus any user-defined features.
 
 @code{features} is a list of mathematical features.
 There is also a list of non-mathematical, system-dependent features. See @code{status}.
+
+@opencatbox
+@category{Global variables}
+@closecatbox
 
 @end defvr
 
