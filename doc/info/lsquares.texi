@@ -3,7 +3,7 @@
 * Functions and Variables for lsquares::
 @end menu
 
-@node Introduction to lsquares, , lsquares, lsquares
+@node Introduction to lsquares, Functions and Variables for lsquares, lsquares, lsquares
 @section Introduction to lsquares
 
 @code{lsquares} is a collection of functions to implement the method of least squares
@@ -14,7 +14,7 @@ to estimate parameters for a model from numerical data.
 @closecatbox
 
 
-@node Functions and Variables for lsquares, Introduction to lsquares, lsquares, lsquares
+@node Functions and Variables for lsquares,  , Introduction to lsquares, lsquares
 @section Functions and Variables for lsquares
 
 @deffn {Function} lsquares_estimates (@var{D}, @var{x}, @var{e}, @var{a})

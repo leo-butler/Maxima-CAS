@@ -3,7 +3,7 @@
 * Functions and Variables for mnewton::
 @end menu
 
-@node Introduction to mnewton,  , mnewton, mnewton
+@node Introduction to mnewton, Functions and Variables for mnewton, mnewton, mnewton
 @section Introduction to mnewton
 
 @code{mnewton} is an implementation of Newton's method for solving nonlinear equations
@@ -14,7 +14,7 @@ in one or more variables.
 @closecatbox
 
 
-@node Functions and Variables for mnewton, Introduction to mnewton, mnewton, mnewton
+@node Functions and Variables for mnewton,  , Introduction to mnewton, mnewton
 @section Functions and Variables for mnewton
 
 @defvr {Option variable} newtonepsilon

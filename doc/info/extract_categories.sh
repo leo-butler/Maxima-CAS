@@ -41,7 +41,7 @@ do
     grep -q '<a href=".*">Category: .*</a>' $f
     if [ $? = 0 ]; then
         echo FIX UP CATEGORY BOXES IN $f
-        sed 's/^&sdot;$//; s/<p>\(<a href=".*">Category: .*<\/a>\)/<p>Categories:\&nbsp;\&nbsp;\1/' $f > tmp.html
+        sed 's/^&middot;$//; s/<p>\(<a href=".*">Category: .*<\/a>\)/<p>Categories:\&nbsp;\&nbsp;\1/' $f > tmp.html
         mv tmp.html $f
     fi
 done

@@ -12,7 +12,7 @@ END {
     print " if len (items) == 0: continue"
     print " f.write (\"@ref{Item: \" + items[0] + \"}\\n\")"
     print " for item in items [1:]:"
-    print "  f.write (\"@html\\n&sdot;\\n@end html\\n\")"
+    print "  f.write (\"@html\\n&middot;\\n@end html\\n\")"
     print "  f.write (\"@ref{Item: \" + item + \"}\\n\")"
     print " f.write (\"@closecatbox\")"
     print }

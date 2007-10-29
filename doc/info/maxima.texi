@@ -519,7 +519,13 @@ simplex
 simplification
 
 * Introduction to simplification::
-* Functions and Variables for simplification::
+* Package absimp::
+* Package facexp::
+* Package functs::
+* Package ineq::
+* Package rducon::
+* Package scifac::
+* Package sqdnst::
 
 solve_rec
 
