@@ -1611,29 +1611,29 @@ Defined as @code{ug.np}. The product @code{np.transpose(npi)} is constant:
 @defvr {Variable} tr
 
 User-supplied rank-3 tensor representing torsion. Used by @code{contortion}.
-@end defvr
 
 @opencatbox
 @category{Global variables}
 @closecatbox
+@end defvr
 
 @defvr {Variable} kt
 
 The contortion tensor, computed from @code{tr} by @code{contortion}.
-@end defvr
 
 @opencatbox
 @category{Global variables}
 @closecatbox
+@end defvr
 
 @defvr {Variable} nm
 
 User-supplied nonmetricity vector. Used by @code{nonmetricity}.
-@end defvr
 
 @opencatbox
 @category{Global variables}
 @closecatbox
+@end defvr
 
 @defvr {Variable} nmc
 

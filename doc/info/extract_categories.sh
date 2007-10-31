@@ -11,13 +11,14 @@ d=`pwd`
 pushd $WORKING_DIRECTORY
 
 for f in *.texi; do
-  sed 's/^@def\(fn\|vr\) {[^}]*} \([^[:blank:]]*\).*/@anchor{Item: \2}\
+  sed 's/^@def\(fn\|vr\)  *{[^}]*}  *\([^[:blank:]]*\).*/@anchor{Item: \2}\
+\0/; s/^@node  *\([^,]*\).*/@anchor{Item: \1}\
 \0/' "$f" > tmp.texi
   mv tmp.texi "$f"
 done
 
 cat *.texi\
-  | awk '!/^@def(fn|vr)x/ && (/^@deffn/||/^@defvr/||/^@end deffn/||/^@end defvr/ || /@category/)'\
+  | awk '!/^@def(fn|vr)x/ && !/^@c / && !/^@c$/ && (/^@deffn/||/^@defvr/||/^@end deffn/||/^@end defvr/ || /@category/ || /@node/)'\
   | sed -f $d/extract_categories1.sed \
   | awk -F '$' -f $d/extract_categories1.awk \
   > tmp-make-categories.py
