@@ -8,6 +8,8 @@
 * General operators::   
 @end menu
 
+@c FOLLOWING @NODES SHOULD BE CHANGED TO @DEFFN
+@c SINCE NARY, NOFIX, POSTFIX, AND PREFIX ARE ALL MAXIMA FUNCTIONS
 
 @node nary, nofix, Operators, Operators
 @section nary
@@ -21,6 +23,10 @@ simplify, e.g. @code{j(j(a,b),j(c,d))} to @code{j(a, b, c, d)}.
 
 See also @code{syntax}.
 
+@opencatbox
+@category{Operators}
+@closecatbox
+
 @node nofix, postfix, nary, Operators
 @section nofix
 @code{nofix} operators are used to denote functions of no arguments.
@@ -32,6 +38,10 @@ function which declares x to be a @code{nofix} operator.
 
 See also @code{syntax}.
 
+@opencatbox
+@category{Operators}
+@closecatbox
+
 @node postfix, prefix, nofix, Operators
 @section postfix
 @code{postfix} operators like the @code{prefix} variety denote functions
@@ -42,6 +52,10 @@ to be a @code{postfix} operator.
 
 See also @code{syntax}.
 
+@opencatbox
+@category{Operators}
+@closecatbox
+
 @node prefix, Arithmetic operators, postfix, Operators
 @section prefix
 A @code{prefix} operator is one which signifies a function of one
@@ -50,6 +64,10 @@ operator.  @code{prefix("x")} is a syntax extension function to declare x to
 be a @code{prefix} operator.
 
 See also @code{syntax}.
+
+@opencatbox
+@category{Operators}
+@closecatbox
 
 @node Arithmetic operators, Relational operators, prefix, Operators
 @section Arithmetic operators
@@ -268,6 +286,10 @@ Arithmetic is carried out element-by-element for lists (depending on @code{lista
 (%o8)                   [a , c , m , t ]
 @end example
 
+@opencatbox
+@category{Operators}
+@closecatbox
+
 @end deffn
 
 @deffn {Operator} **
@@ -301,6 +323,10 @@ Examples:
 (%o4)                         done
 @end example
 
+@opencatbox
+@category{Operators}
+@closecatbox
+
 @end deffn
 
 @node Relational operators, General operators, Arithmetic operators, Operators
@@ -322,6 +348,10 @@ Examples:
 @ifinfo
 @fnindex Greater than
 @end ifinfo
+
+@opencatbox
+@category{Operators}
+@closecatbox
 
 @end deffn
 
@@ -353,6 +383,10 @@ Examples:
 (%i2) string (a . a . b . b . b + a * a * a * b * b);
 (%o2)                  a^3*b^2+a^^2 . b^^3
 @end example
+
+@opencatbox
+@category{Operators}
+@closecatbox
 
 @end deffn
 
@@ -441,6 +475,10 @@ Thus @code{x!} may be replaced even in a quoted expression.
                                              2432902008176640000]
 @end example
 
+@opencatbox
+@category{Operators}
+@closecatbox
+
 @end deffn
 
 @deffn {Operator} !!
@@ -463,6 +501,10 @@ all the consecutive even (or odd) integers from 2 (or 1) through @code{n} inclus
 For an argument @code{n} which is not an integer, float, or rational,
 @code{n!!} yields a noun form @code{genfact (n, n/2, 2)}.
 @c n!! IS NEITHER SIMPLIFIED NOR EVALUATED IN THIS CASE -- MENTION THAT? OR TOO MUCH DETAIL ???
+
+@opencatbox
+@category{Operators}
+@closecatbox
 
 @end deffn
 
@@ -502,6 +544,10 @@ Examples:
 (%o6)                         true
 @end example
 
+@opencatbox
+@category{Operators}
+@closecatbox
+
 @end deffn
 
 @deffn {Operator} .
@@ -526,6 +572,10 @@ See also
 and
 @code{dotscrules}.
 
+@opencatbox
+@category{Operators}
+@closecatbox
+
 @end deffn
 
 @deffn {Operator} :
@@ -533,6 +583,10 @@ and
 @fnindex Assignment operator
 @end ifinfo
 The assignment operator.  E.g. A:3 sets the variable A to 3.
+
+@opencatbox
+@category{Operators}
+@closecatbox
 
 @end deffn
 
@@ -543,6 +597,10 @@ The assignment operator.  E.g. A:3 sets the variable A to 3.
 Assignment operator.  :: assigns the value of the expression
 on its right to the value of the quantity on its left, which must
 evaluate to an atomic variable or subscripted variable.
+
+@opencatbox
+@category{Operators}
+@closecatbox
 
 @end deffn
 
@@ -669,6 +727,10 @@ x is equal to 1234 - 1729 w
 (%o7)                     1234 - 1729 w
 @end example
 
+@opencatbox
+@category{Operators}
+@closecatbox
+
 @end deffn
 
 @deffn {Operator} :=
@@ -749,6 +811,10 @@ the function defined by @code{:=} accepts a variable number of arguments.
 (%i2) H (a, b, c);
 (%o2)                       c + b + a
 @end example
+
+@opencatbox
+@category{Operators}
+@closecatbox
 
 @end deffn
 
@@ -883,6 +949,10 @@ Because @code{not @var{expr}} causes evaluation of @var{expr},
 (%o2)                         true
 @end example
 
+@opencatbox
+@category{Operators}
+@closecatbox
+
 @end deffn
 
 @c NEEDS EXAMPLES
@@ -910,6 +980,10 @@ and the result is a Boolean expression.
 
 @code{and} is not commutative:
 @code{a and b} might not be equal to @code{b and a} due to the treatment of indeterminate operands.
+
+@opencatbox
+@category{Operators}
+@closecatbox
 
 @end deffn
 
@@ -939,6 +1013,10 @@ and the result is a Boolean expression.
 @code{or} is not commutative:
 @code{a or b} might not be equal to @code{b or a} due to the treatment of indeterminate operands.
 
+@opencatbox
+@category{Operators}
+@closecatbox
+
 @end deffn
 
 @c NEEDS EXAMPLES
@@ -957,6 +1035,10 @@ when its operand cannot be determined to be @code{true} or @code{false}.
 @code{not} prints an error message when @code{prederror} is @code{true}.
 Otherwise, operands which do not evaluate to @code{true} or @code{false} are accepted,
 and the result is a Boolean expression.
+
+@opencatbox
+@category{Operators}
+@closecatbox
 
 @end deffn
 
@@ -1351,6 +1433,10 @@ Because @code{not @var{expr}} causes evaluation of @var{expr},
 (%o2)                         true
 @end example
 
+@opencatbox
+@category{Operators}
+@closecatbox
+
 @end deffn
 
 @deffn {Function} floor (@var{x})
@@ -1458,6 +1544,10 @@ Examples:
 (%o10)                        true
 @end example
 
+@opencatbox
+@category{Operators}
+@closecatbox
+
 @end deffn
 
 @c NEEDS EXPANSION, CLARIFICATION, AND EXAMPLES
@@ -1475,6 +1565,9 @@ Returns @code{true} if @var{expr} is an even integer.
 @c THIS IS STRANGE -- SHOULD RETURN NOUN FORM IF INDETERMINATE
 @code{false} is returned in all other cases.
 
+@opencatbox
+@category{Predicate functions}
+@closecatbox
 @end deffn
 
 @deffn {Function} fix (@var{x})
@@ -1735,6 +1828,9 @@ is @code{true} if @var{expr} is an odd integer.
 @c THIS IS STRANGE -- SHOULD RETURN NOUN FORM IF INDETERMINATE
 @code{false} is returned in all other cases.
 
+@opencatbox
+@category{Predicate functions}
+@closecatbox
 @end deffn
 
 @c NEEDS EXPANSION, CLARIFICATION, AND EXAMPLES
@@ -2284,6 +2380,9 @@ the same as calling @code{inpart} or @code{substinpart}.
 Returns @code{true} if @var{expr} is a subscripted variable, for example
 @code{a[i]}.
 
+@opencatbox
+@category{Predicate functions}
+@closecatbox
 @end deffn
 
 @deffn {Function} symbolp (@var{expr})
@@ -2294,6 +2393,9 @@ In effect, @code{symbolp(x)} is equivalent to the predicate @code{atom(x) and no
 @c LEAVES THE UNPLEASANT RESIDUE *Note ...:: IN THE OUTPUT OF describe
 See also @ref{Identifiers}.
 
+@opencatbox
+@category{Predicate functions}
+@closecatbox
 @end deffn
 
 @deffn {Function} unorder ()

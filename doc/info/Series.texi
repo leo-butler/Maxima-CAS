@@ -654,6 +654,9 @@ Example:
 Returns @code{true} if @var{expr} is a Taylor series,
 and @code{false} otherwise.
 
+@opencatbox
+@category{Predicate functions}
+@closecatbox
 @end deffn
 
 @c WHAT IS THIS ABOUT EXACTLY ??

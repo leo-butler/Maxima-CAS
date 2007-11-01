@@ -1149,6 +1149,9 @@ See also @code{map}, @code{fullmap}, @code{fullmapl}, and @code{apply}.
 @deffn {Function} matrixp (@var{expr})
 Returns @code{true} if @var{expr} is a matrix, otherwise @code{false}.
 
+@opencatbox
+@category{Predicate functions}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} matrix_element_add
@@ -1364,6 +1367,9 @@ the dot operator.
 Returns @code{true} if @var{expr} is a non-scalar, i.e., it contains
 atoms declared as non-scalars, lists, or matrices.
 
+@opencatbox
+@category{Predicate functions}
+@closecatbox
 @end deffn
 
 @deffn {Function} permanent (@var{M}, @var{n})

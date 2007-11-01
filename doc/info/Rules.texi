@@ -818,6 +818,10 @@ Matchfix operators are ordinary user-defined functions.
                                 15
 @end example
 
+@opencatbox
+@category{Operators}
+@closecatbox
+
 @end deffn
 
 @c NEEDS CLARIFICATION AND EXAMPLES

@@ -527,6 +527,9 @@ pass one Miller-Rabin test is less than 1/4. Using the default value 25 for
 @code{primep_number_of_tests}, the probability of @var{n} beeing
 composite is much smaller that 10^-15.
 
+@opencatbox
+@category{Predicate functions}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} primep_number_of_tests

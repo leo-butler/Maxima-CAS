@@ -342,6 +342,9 @@ Examples:
 
 @end example
 
+@opencatbox
+@category{Predicate functions}
+@closecatbox
 @end deffn
 
 @deffn {Function} member (@var{expr_1}, @var{expr_2})
@@ -392,6 +395,9 @@ Examples:
 (%o8)                         true
 @end example
 
+@opencatbox
+@category{Predicate functions}
+@closecatbox
 @end deffn
 
 @deffn {Function} ninth (@var{expr})

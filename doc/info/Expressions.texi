@@ -457,6 +457,10 @@ Incorrect syntax: # is not a prefix operator
 (%o9)                       ##(5, 3)
 @end example
 
+@opencatbox
+@category{Operators}
+@closecatbox
+
 @node Functions and Variables for Expressions,  , Syntax, Expressions
 @section Functions and Variables for Expressions
 
@@ -696,6 +700,10 @@ Examples:
 (%o7)                                false
 (%i8) 
 @end example
+
+@opencatbox
+@category{Predicate functions}
+@closecatbox
 
 @end deffn
 
@@ -1527,6 +1535,10 @@ if x ## y then
 (%o3)                if x ## y then 1 else 0
 @end example
 
+@opencatbox
+@category{Operators}
+@closecatbox
+
 @end deffn
 
 @defvr {Option variable} inflag
@@ -1860,6 +1872,10 @@ Examples:
 (%o13)                          G
 @end example
 
+@opencatbox
+@category{Operators}
+@closecatbox
+
 @end deffn
 
 @c NEEDS WORK
@@ -1871,6 +1887,10 @@ if @var{op} is equal to the operator of @var{expr}.
 
 @code{operatorp (@var{expr}, [@var{op_1}, ..., @var{op_n}])} returns @code{true}
 if some element @var{op_1}, ..., @var{op_n} is equal to the operator of @var{expr}.
+
+@opencatbox
+@category{Predicate functions}
+@closecatbox
 
 @end deffn
 
@@ -1915,6 +1935,10 @@ See also @code{orderless}.
 Returns @code{true} if @var{expr_2} precedes @var{expr_1} in the
 ordering set up with the @code{ordergreat} function.
 
+@opencatbox
+@category{Predicate functions}
+@closecatbox
+
 @end deffn
 
 @c NEEDS WORK
@@ -1941,6 +1965,10 @@ See also @code{ordergreat} and @code{mainvar}.
 @deffn {Function} orderlessp (@var{expr_1}, @var{expr_2})
 Returns @code{true} if @var{expr_1} precedes @var{expr_2} in the
 ordering set up by the @code{orderless} command.
+
+@opencatbox
+@category{Predicate functions}
+@closecatbox
 
 @end deffn
 

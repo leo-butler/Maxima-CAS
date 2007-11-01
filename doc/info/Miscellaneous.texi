@@ -240,7 +240,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Declarations and inferences}
+@category{Predicate functions}
 @closecatbox
 
 @end deffn
@@ -302,7 +302,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Declarations and inferences}
+@category{Predicate functions}
 @closecatbox
 
 @end deffn
@@ -513,7 +513,7 @@ declared @code{scalar} with @code{declare}, or composed entirely of numbers, con
 variables, but not containing matrices or lists.
 
 @opencatbox
-@category{Declarations and inferences}
+@category{Predicate functions}
 @closecatbox
 
 @end deffn

@@ -1361,6 +1361,9 @@ are not considered ratios by @code{num}.
 Returns @code{true} if @var{expr} is a literal integer or ratio of literal integers,
 otherwise @code{false}.
 
+@opencatbox
+@category{Predicate functions}
+@closecatbox
 @end deffn
 
 @deffn {Function} ratp (@var{expr})
@@ -1370,6 +1373,9 @@ otherwise @code{false}.
 CRE are created by @code{rat} and related functions.
 Extended CRE are created by @code{taylor} and related functions.
 
+@opencatbox
+@category{Predicate functions}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} ratprint

@@ -316,7 +316,7 @@ zero if @var{soln} is a solution of @var{eqn}.
 
 @end deffn
 
-@defvr {System variable} @code{method}
+@defvr {System variable} method
 
 The variable @code{method} is set to the successful solution
 method. 
@@ -327,7 +327,7 @@ method.
 
 @end defvr
 
-@defvr {Variable} @code{%c}
+@defvr {Variable} %c
 
 @code{%c} is the integration constant for first order ODEs.
 
@@ -337,7 +337,7 @@ method.
 
 @end defvr
 
-@defvr {Variable} @code{%k1}
+@defvr {Variable} %k1
 
 @code{%k1} is the first integration constant for second order ODEs.
 
@@ -347,7 +347,7 @@ method.
 
 @end defvr
 
-@defvr {Variable} @code{%k2}
+@defvr {Variable} %k2
 
 @code{%k2} is the second integration constant for second order ODEs.
 

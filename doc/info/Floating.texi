@@ -51,6 +51,10 @@ this may lead to loss of precision).
 @deffn {Function} bfloatp (@var{expr})
 Returns @code{true} if @var{expr} is a bigfloat number, otherwise @code{false}.
 
+@opencatbox
+@category{Predicate functions}
+@closecatbox
+
 @end deffn
 
 @deffn {Function} bfpsi (@var{n}, @var{z}, @var{fpprec})
@@ -133,6 +137,10 @@ this may lead to loss of precision).
 
 @deffn {Function} floatnump (@var{expr})
 Returns @code{true} if @var{expr} is a floating point number, otherwise @code{false}.
+
+@opencatbox
+@category{Predicate functions}
+@closecatbox
 
 @end deffn
 

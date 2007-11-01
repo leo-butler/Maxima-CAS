@@ -3570,7 +3570,7 @@ Returns @code{true} if the argument is a well formed image,
 and @code{false} otherwise.
 
 @opencatbox
-@category{Package draw}
+@category{Package draw} @category{Predicate functions}
 @closecatbox
 
 @end deffn
@@ -3580,7 +3580,7 @@ and @code{false} otherwise.
 Returns @code{true} in case of equal pictures, and @code{false} otherwise.
 
 @opencatbox
-@category{Package draw}
+@category{Package draw} @category{Predicate functions}
 @closecatbox
 
 @end deffn

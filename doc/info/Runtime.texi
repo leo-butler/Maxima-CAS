@@ -98,6 +98,9 @@ See also @code{declare} and @code{features}.
 (%o2)                           true
 @end example
 
+@opencatbox
+@category{Predicate functions}
+@closecatbox
 @end deffn
 
 @defvr {System variable} maxima_tempdir

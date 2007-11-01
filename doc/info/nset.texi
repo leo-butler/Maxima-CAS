@@ -619,7 +619,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Set functions}
+@category{Set functions} @category{Predicate functions}
 @closecatbox
 
 @end deffn

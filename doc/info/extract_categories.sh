@@ -11,14 +11,18 @@ d=`pwd`
 pushd $WORKING_DIRECTORY
 
 for f in *.texi; do
-  sed 's/^@def\(fn\|vr\)  *{[^}]*}  *\([^[:blank:]]*\).*/@anchor{Item: \2}\
+  if [ $f = "maxima.texi" ]
+    then echo SKIP OVER $f
+    else
+      sed 's/^@def\(fn\|vr\)  *{[^}]*}  *\([^[:blank:]]*\).*/@anchor{Item: \2}\
 \0/; s/^@node  *\([^,]*\).*/@anchor{Item: \1}\
 \0/' "$f" > tmp.texi
-  mv tmp.texi "$f"
+      mv tmp.texi "$f"
+    fi
 done
 
 cat *.texi\
-  | awk '!/^@def(fn|vr)x/ && !/^@c / && !/^@c$/ && (/^@deffn/||/^@defvr/||/^@end deffn/||/^@end defvr/ || /@category/ || /@node/)'\
+  | awk '!/^@c / && !/^@c$/ && (/^@deffn/ || /^@defvr/ || /^@end deffn/ || /^@end defvr/ || /@category/ || /@node/)'\
   | sed -f $d/extract_categories1.sed \
   | awk -F '$' -f $d/extract_categories1.awk \
   > tmp-make-categories.py
