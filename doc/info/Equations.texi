@@ -22,7 +22,7 @@ doing @code{concat ('%r, j)}.
 
 @c NEED EXAMPLE HERE
 @opencatbox
-@category{Global variables}
+@category{Algebraic equations} @category{Global variables}
 @closecatbox
 
 @end defvr
@@ -47,7 +47,7 @@ exact solutions, and only yield approximations when all else fails.
 @c ABOVE DESCRIPTION NOT TOO CLEAR -- MAYBE EXAMPLES WILL HELP
 
 @opencatbox
-@category{Global flags}
+@category{Algebraic equations} @category{Global flags}
 @closecatbox
 
 @end defvr
@@ -168,6 +168,9 @@ Examples:
      sqrt(3)        sqrt(3)          3        3
 @end example
 
+@opencatbox
+@category{Algebraic equations}
+@closecatbox
 @end deffn
 
 @deffn {Function} allroots (@var{expr})
@@ -240,7 +243,7 @@ x = - .9659625152196369 %i - .4069597231924075, x = 1.0]
 @end example
 
 @opencatbox
-@category{Numerical methods}
+@category{Polynomials} @category{Numerical methods}
 @closecatbox
 
 @end deffn
@@ -255,7 +258,7 @@ be helpful in very big problems where back substitution would cause
 the generation of extremely large expressions.
 
 @opencatbox
-@category{Global flags}
+@category{Algebraic equations} @category{Global flags}
 @closecatbox
 
 @end defvr
@@ -335,7 +338,7 @@ Solution:
 @end example
 
 @opencatbox
-@category{Global flags}
+@category{Algebraic equations} @category{Global flags}
 @closecatbox
 
 @end defvr
@@ -359,7 +362,7 @@ within  the @code{block}.  Termination of the @code{block} with a dollar sign, $
 @code{dispflag} to @code{false}.
 
 @opencatbox
-@category{Global flags}
+@category{Algebraic equations} @category{Global flags}
 @closecatbox
 
 @end defvr
@@ -449,7 +452,7 @@ Solution
 @end example
 
 @opencatbox
-@category{Global flags}
+@category{Linear equations} @category{Global flags}
 @closecatbox
 
 @end defvr
@@ -486,6 +489,9 @@ n: 1
 guess: @code{none} which will cause @code{neumann} and @code{firstkindseries} to use
 @code{@var{f}(@var{x})} as an initial guess.
 
+@opencatbox
+@category{Integral equations}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} ieqnprint
@@ -506,7 +512,7 @@ non-closed form solution, respectively. If a series method was used,
 given to @code{ieqn} if an error prevented generation of further terms).
 
 @opencatbox
-@category{Global flags}
+@category{Integral equations} @category{Global flags}
 @closecatbox
 
 @end defvr
@@ -573,6 +579,9 @@ Examples:
 (%o12)                         aa
 @end example
 
+@opencatbox
+@category{General equations}
+@closecatbox
 @end deffn
 
 @c REVISIT -- THERE'S PROBABLY MORE TO SAY HERE
@@ -666,6 +675,9 @@ Solution
 (%o17)                 [a + 1, 2 a, a - 1]
 @end example
 
+@opencatbox
+@category{Linear equations}
+@closecatbox
 @end deffn
 
 @c DO ANY FUNCTIONS OTHER THAN linsolve RESPECT linsolvewarn ??
@@ -676,7 +688,7 @@ When @code{linsolvewarn} is @code{true},
 @code{linsolve} prints a message "Dependent equations eliminated".
 
 @opencatbox
-@category{Global flags}
+@category{Linear equations} @category{Global flags}
 @closecatbox
 
 @end defvr
@@ -691,7 +703,7 @@ Otherwise, @code{linsolve} solves an under-determined system of
 equations with some variables expressed in terms of others.
 
 @opencatbox
-@category{Global flags}
+@category{Linear equations} @category{Global flags}
 @closecatbox
 
 @end defvr
@@ -705,7 +717,7 @@ multiplicities of the individual solutions returned by @code{solve} or
 @c NEED AN EXAMPLE HERE
 
 @opencatbox
-@category{Global variables}
+@category{Algebraic equations} @category{Global variables}
 @closecatbox
 
 @end defvr
@@ -726,7 +738,7 @@ infinity and plus infinity.
 @end example
 
 @opencatbox
-@category{Numerical methods}
+@category{Polynomials} @category{Numerical methods}
 @closecatbox
 
 @end deffn
@@ -738,6 +750,9 @@ n is a positive integer returns q, a polynomial over the integers, such
 that q^n=p or prints an error message indicating that p is not a perfect
 nth power. This routine is much faster than @code{factor} or even @code{sqfr}.
 
+@opencatbox
+@category{Polynomials}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} programmode
@@ -756,7 +771,7 @@ create intermediate expression labels
 @c NEED AN EXAMPLE HERE
 
 @opencatbox
-@category{Global flags}
+@category{Algebraic equations} @category{Global flags}
 @closecatbox
 
 @end defvr
@@ -768,7 +783,7 @@ When @code{realonly} is @code{true}, @code{algsys} returns only
 those solutions which are free of @code{%i}.
 
 @opencatbox
-@category{Global flags}
+@category{Algebraic equations} @category{Global flags}
 @closecatbox
 
 @end defvr
@@ -833,7 +848,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Numerical methods}
+@category{Polynomials} @category{Numerical methods}
 @closecatbox
 
 @end deffn
@@ -900,6 +915,9 @@ Examples:
 (%o12)                         bb
 @end example
 
+@opencatbox
+@category{General equations}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} rootsconmode
@@ -909,7 +927,7 @@ Default value: @code{true}
 @code{rootscontract} command.  See @code{rootscontract} for details.
 
 @opencatbox
-@category{Global flags}
+@category{Operations on expressions} @category{Global flags}
 @closecatbox
 
 @end defvr
@@ -994,6 +1012,9 @@ Examples:
 (%o13)                          0
 @end example
 
+@opencatbox
+@category{Operations on expressions}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} rootsepsilon
@@ -1005,7 +1026,7 @@ confidence interval for the roots found by the @code{realroots} function.
 @c NEED EXAMPLE HERE
 
 @opencatbox
-@category{Numerical methods} @category{Global variables}
+@category{Polynomials} @category{Numerical methods} @category{Global variables}
 @closecatbox
 
 @end defvr
@@ -1180,6 +1201,9 @@ y = - .1535675710019696]]
 (%o12)                          0
 @end example
 
+@opencatbox
+@category{Algebraic equations}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} solvedecomposes
@@ -1190,7 +1214,7 @@ When @code{solvedecomposes} is @code{true}, @code{solve} calls
 @c OTHERWISE WHAT HAPPENS -- CAN'T SOLVE POLYNOMIALS, OR SOME OTHER METHOD IS USED ??
 
 @opencatbox
-@category{Global flags}
+@category{Algebraic equations} @category{Global flags}
 @closecatbox
 
 @end defvr
@@ -1204,7 +1228,7 @@ where @code{F} is some function.
 @c NEED AN EXAMPLE HERE
 
 @opencatbox
-@category{Global flags}
+@category{Algebraic equations} @category{Global flags}
 @closecatbox
 
 @end defvr
@@ -1219,7 +1243,7 @@ where factoring is not necessary.
 @c NEED AN EXAMPLE HERE
 
 @opencatbox
-@category{Global flags}
+@category{Algebraic equations} @category{Global flags}
 @closecatbox
 
 @end defvr
@@ -1232,7 +1256,7 @@ When @code{solvenullwarn} is @code{true},
 For example, @code{solve ([], [])} would print two warning messages and return @code{[]}.
 
 @opencatbox
-@category{Global flags}
+@category{Algebraic equations} @category{Global flags}
 @closecatbox
 
 @end defvr
@@ -1246,7 +1270,7 @@ containing exponentials and logarithms to be solved.
 @c NEED AN EXAMPLE HERE
 
 @opencatbox
-@category{Global flags}
+@category{Algebraic equations} @category{Global flags}
 @closecatbox
 
 @end defvr
@@ -1262,7 +1286,7 @@ solutions.
 @c NEED AN EXAMPLE HERE
 
 @opencatbox
-@category{Global flags}
+@category{Algebraic equations} @category{Global flags}
 @closecatbox
 
 @end defvr
@@ -1289,7 +1313,7 @@ Inconsistent equations:  (2)
 @end example
 
 @opencatbox
-@category{Global flags}
+@category{Algebraic equations} @category{Global flags}
 @closecatbox
 
 @end defvr
