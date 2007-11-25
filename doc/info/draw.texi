@@ -3219,7 +3219,7 @@ point quantities, the coordinates of a polygonal segment or map boundary.
 See also @code{geomap}.
 
 @opencatbox
-@category{Package draw} @category{Global variables}
+@category{Package draw}
 @closecatbox
 
 @end defvr

@@ -53,7 +53,7 @@ distance from the random point which will be @var{b} times that segment's
 length. The procedure is repeated @var{n} times.
 
 @opencatbox
-@category{Package dynamics} @category{Plotting} @category{File output}
+@category{Package dynamics} @category{Plotting}
 @closecatbox
 
 @end deffn
@@ -79,7 +79,7 @@ depend on @var{y}, but any other variable can be used),
 @var{y0} must be a real number and @var{n} must be a positive integer.
 
 @opencatbox
-@category{Package dynamics} @category{Plotting} @category{File output}
+@category{Package dynamics} @category{Plotting}
 @closecatbox
 
 @end deffn
@@ -103,7 +103,7 @@ two expressions that depend only on two variables, @var{u} and
 @var{v}, which must be named explicitely in a list. 
 
 @opencatbox
-@category{Package dynamics} @category{Plotting} @category{File output}
+@category{Package dynamics} @category{Plotting}
 @closecatbox
 
 @end deffn
@@ -122,7 +122,7 @@ a non-uniform probability distribution defined by the weights
 0.3, the weights @var{r1}, @var{r2} and @var{r3} could be 2, 7 and 10.
 
 @opencatbox
-@category{Package dynamics} @category{Plotting} @category{File output}
+@category{Package dynamics} @category{Plotting}
 @closecatbox
 
 @end deffn
@@ -153,7 +153,7 @@ hue angles distributed uniformly between @var{hue} and (@var{hue} +
 options is given in a section below.
 
 @opencatbox
-@category{Package dynamics} @category{Plotting} @category{File output}
+@category{Package dynamics} @category{Plotting}
 @closecatbox
 
 @end deffn
@@ -183,7 +183,7 @@ different hue angles distributed uniformly between @var{hue} and
 options is given in a section below.
 
 @opencatbox
-@category{Package dynamics} @category{Plotting} @category{File output}
+@category{Package dynamics} @category{Plotting}
 @closecatbox
 
 @end deffn
@@ -205,7 +205,7 @@ of the sequence @var{y(n1+1)},..., @var{y(n1+n2+1)} obtained after letting
 the sequence evolve @var{n1} iterations.
 
 @opencatbox
-@category{Package dynamics} @category{Plotting} @category{File output}
+@category{Package dynamics} @category{Plotting}
 @closecatbox
 
 @end deffn
@@ -282,7 +282,7 @@ the procedure is repeated @var{n} times until the point (@var{yn}, @var{yn})
 is reached.
 
 @opencatbox
-@category{Package dynamics} @category{Plotting} @category{File output}
+@category{Package dynamics} @category{Plotting}
 @closecatbox
 
 @end deffn

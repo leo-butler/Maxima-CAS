@@ -339,7 +339,7 @@ I& NFN&   FUNC&                    GNORM&                   STEPLENGTH\cr
 @end example
 
 @opencatbox
-@category{Numerical methods} @category{Package lbfgs}
+@category{Package lbfgs}
 @closecatbox
 
 @end deffn
@@ -352,7 +352,7 @@ When @code{lbfgs_nfeval_max} is reached,
 @code{lbfgs} returns the result of the last successful line search.
 
 @opencatbox
-@category{Package lbfgs} @category{Global variables}
+@category{Package lbfgs}
 @closecatbox
 
 @end defvr
@@ -364,7 +364,7 @@ Default value: 25
 to the approximate inverse Hessian matrix which is maintained by @code{lbfgs}.
 
 @opencatbox
-@category{Package lbfgs} @category{Global variables}
+@category{Package lbfgs}
 @closecatbox
 
 @end defvr

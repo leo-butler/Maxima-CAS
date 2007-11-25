@@ -23,7 +23,7 @@ computation accurate enough.
 See also @code{ggf}.
 
 @opencatbox
-@category{Package ggf} @category{Global variables}
+@category{Package ggf}
 @closecatbox
 
 @end defvr
@@ -45,7 +45,7 @@ generating functions.
 See also @code{ggf}.
 
 @opencatbox
-@category{Package ggf} @category{Global variables}
+@category{Package ggf}
 @closecatbox
 
 @end defvr

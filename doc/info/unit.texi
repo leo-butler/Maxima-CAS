@@ -501,7 +501,7 @@ control over their working environment.
 @c @code{setunitprefix} is provided for this case.  Here is an example of its use:
 
 @opencatbox
-@category{Package unit} @category{Global variables}
+@category{Package unit}
 @closecatbox
 
 @end defvr
@@ -540,7 +540,7 @@ This is the value supplied to @code{metricexpandall} during the initial loading
 of @emph{unit}.
 
 @opencatbox
-@category{Package unit} @category{Global variables}
+@category{Package unit}
 @closecatbox
 
 @end defvr

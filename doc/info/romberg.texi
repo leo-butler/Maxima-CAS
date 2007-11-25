@@ -148,7 +148,7 @@ only the relative error test has any effect on @code{romberg}.
 See also @code{rombergit} and @code{rombergmin}.
 
 @opencatbox
-@category{Package romberg} @category{Global variables}
+@category{Package romberg}
 @closecatbox
 
 @end defvr
@@ -164,7 +164,7 @@ this is a heuristic intended to prevent spurious termination when the integrand 
 See also @code{rombergabs} and @code{rombergtol}.
 
 @opencatbox
-@category{Package romberg} @category{Global variables}
+@category{Package romberg}
 @closecatbox
 
 @end defvr
@@ -178,7 +178,7 @@ this is a heuristic intended to prevent spurious termination when the integrand 
 See also @code{rombergit}, @code{rombergabs}, and @code{rombergtol}.
 
 @opencatbox
-@category{Package romberg} @category{Global variables}
+@category{Package romberg}
 @closecatbox
 
 @end defvr
@@ -197,7 +197,7 @@ only the relative error test has any effect on @code{romberg}.
 See also @code{rombergit} and @code{rombergmin}.
 
 @opencatbox
-@category{Package romberg} @category{Global variables}
+@category{Package romberg}
 @closecatbox
 
 @end defvr

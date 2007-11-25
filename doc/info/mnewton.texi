@@ -25,7 +25,7 @@ Precision to determine when the @code{mnewton} function has converged towards th
 See also @code{mnewton}.
 
 @opencatbox
-@category{Package mnewton} @category{Global variables}
+@category{Package mnewton}
 @closecatbox
 
 @end defvr
@@ -40,7 +40,7 @@ if it does not converge or if it converges too slowly.
 See also @code{mnewton}.
 
 @opencatbox
-@category{Package mnewton} @category{Global variables}
+@category{Package mnewton}
 @closecatbox
 
 @end defvr

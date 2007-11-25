@@ -389,7 +389,7 @@ This is the selected algorithm for simulating random normal variates. Implemente
 See also @code{random_normal}.
 
 @opencatbox
-@category{Package distrib} @category{Global variables}
+@category{Package distrib}
 @closecatbox
 
 @end defvr
@@ -404,7 +404,7 @@ There are two algorithms implemented for this function, the one to be used can b
 See also @code{random_normal_algorithm}. To make use of this function, write first @code{load(distrib)}.
 
 @opencatbox
-@category{Package distrib}
+@category{Package distrib} @category{Random numbers}
 @closecatbox
 
 @end deffn
@@ -557,7 +557,7 @@ is a Student random variable with @var{n} degrees of freedom, @math{t(n)}.
 See also @code{random_student_t}.
 
 @opencatbox
-@category{Package distrib} @category{Global variables}
+@category{Package distrib}
 @closecatbox
 
 @end defvr
@@ -572,7 +572,7 @@ There are two algorithms implemented for this function, the one to be used can b
 See also @code{random_student_t_algorithm}. To make use of this function, write first @code{load(distrib)}.
 
 @opencatbox
-@category{Package distrib}
+@category{Package distrib} @category{Random numbers}
 @closecatbox
 
 @end deffn
@@ -818,7 +818,7 @@ This is the selected algorithm for simulating random Chi-square variates. Implem
 See also @code{random_chi2}.
 
 @opencatbox
-@category{Package distrib} @category{Global variables}
+@category{Package distrib}
 @closecatbox
 
 @end defvr
@@ -833,7 +833,7 @@ There are two algorithms implemented for this function, the one to be used can b
 See also @code{random_chi2_algorithm}. To make use of this function, write first @code{load(distrib)}.
 
 @opencatbox
-@category{Package distrib}
+@category{Package distrib} @category{Random numbers}
 @closecatbox
 
 @end deffn
@@ -986,7 +986,7 @@ is a F random variable with @var{m} and @var{n} degrees of freedom, @math{F(m,n)
 See also @code{random_f}.
 
 @opencatbox
-@category{Package distrib} @category{Global variables}
+@category{Package distrib}
 @closecatbox
 
 @end defvr
@@ -1001,7 +1001,7 @@ There are two algorithms implemented for this function, the one to be used can b
 See also @code{random_f_algorithm}. To make use of this function, write first @code{load(distrib)}.
 
 @opencatbox
-@category{Package distrib}
+@category{Package distrib} @category{Random numbers}
 @closecatbox
 
 @end deffn
@@ -1252,7 +1252,7 @@ This is the selected algorithm for simulating random exponential variates. Imple
 See also @code{random_exp}.
 
 @opencatbox
-@category{Package distrib} @category{Global variables}
+@category{Package distrib}
 @closecatbox
 
 @end defvr
@@ -1267,7 +1267,7 @@ There are three algorithms implemented for this function, the one to be used can
 See also @code{random_exp_algorithm}. To make use of this function, write first @code{load(distrib)}.
 
 @opencatbox
-@category{Package distrib}
+@category{Package distrib} @category{Random numbers}
 @closecatbox
 
 @end deffn
@@ -1377,7 +1377,7 @@ Log-normal variates are simulated by means of random normal variates. There are 
 See also @code{random_normal_algorithm}. To make use of this function, write first @code{load(distrib)}.
 
 @opencatbox
-@category{Package distrib}
+@category{Package distrib} @category{Random numbers}
 @closecatbox
 
 @end deffn
@@ -1498,7 +1498,7 @@ For @math{0<a<1}, Ahrens, J.H. and Dieter, U. (1974). @var{Computer methods for 
 See also @code{random_gamma}.
 
 @opencatbox
-@category{Package distrib} @category{Global variables}
+@category{Package distrib}
 @closecatbox
 
 @end defvr
@@ -1513,7 +1513,7 @@ There are two algorithms implemented for this function, the one to be used can b
 See also @code{random_gamma_algorithm}. To make use of this function, write first @code{load(distrib)}.
 
 @opencatbox
-@category{Package distrib}
+@category{Package distrib} @category{Random numbers}
 @closecatbox
 
 @end deffn
@@ -1636,7 +1636,7 @@ This is the selected algorithm for simulating random beta variates. Implemented 
 See also @code{random_beta}.
 
 @opencatbox
-@category{Package distrib} @category{Global variables}
+@category{Package distrib}
 @closecatbox
 
 @end defvr
@@ -1651,7 +1651,7 @@ There are three algorithms implemented for this function, the one to be used can
 See also @code{random_beta_algorithm}. To make use of this function, write first @code{load(distrib)}.
 
 @opencatbox
-@category{Package distrib}
+@category{Package distrib} @category{Random numbers}
 @closecatbox
 
 @end deffn
@@ -1744,7 +1744,7 @@ This is a direct application of the @code{random} built-in Maxima function.
 See also @code{random}. To make use of this function, write first @code{load(distrib)}.
 
 @opencatbox
-@category{Package distrib}
+@category{Package distrib} @category{Random numbers}
 @closecatbox
 
 @end deffn
@@ -1837,7 +1837,7 @@ Returns a @math{Logistic(a,b)} random variate, with @math{b>0}. Calling @code{ra
 Only the inverse method is implemented. To make use of this function, write first @code{load(distrib)}.
 
 @opencatbox
-@category{Package distrib}
+@category{Package distrib} @category{Random numbers}
 @closecatbox
 
 @end deffn
@@ -1930,7 +1930,7 @@ Returns a @math{Pareto(a,b)} random variate, with @math{a>0,b>0}. Calling @code{
 Only the inverse method is implemented. To make use of this function, write first @code{load(distrib)}.
 
 @opencatbox
-@category{Package distrib}
+@category{Package distrib} @category{Random numbers}
 @closecatbox
 
 @end deffn
@@ -2023,7 +2023,7 @@ Returns a @math{Weibull(a,b)} random variate, with @math{a,b>0}. Calling @code{r
 Only the inverse method is implemented. To make use of this function, write first @code{load(distrib)}.
 
 @opencatbox
-@category{Package distrib}
+@category{Package distrib} @category{Random numbers}
 @closecatbox
 
 @end deffn
@@ -2284,7 +2284,7 @@ Returns a @math{Rayleigh(b)} random variate, with @math{b>0}. Calling @code{rand
 Only the inverse method is implemented. To make use of this function, write first @code{load(distrib)}.
 
 @opencatbox
-@category{Package distrib}
+@category{Package distrib} @category{Random numbers}
 @closecatbox
 
 @end deffn
@@ -2378,7 +2378,7 @@ Returns a @math{Laplace(a,b)} random variate, with @math{b>0}. Calling @code{ran
 Only the inverse method is implemented. To make use of this function, write first @code{load(distrib)}.
 
 @opencatbox
-@category{Package distrib}
+@category{Package distrib} @category{Random numbers}
 @closecatbox
 
 @end deffn
@@ -2422,7 +2422,7 @@ Returns a @math{Cauchy(a,b)} random variate, with @math{b>0}. Calling @code{rand
 Only the inverse method is implemented. To make use of this function, write first @code{load(distrib)}.
 
 @opencatbox
-@category{Package distrib}
+@category{Package distrib} @category{Random numbers}
 @closecatbox
 
 @end deffn
@@ -2544,7 +2544,7 @@ Returns a @math{Gumbel(a,b)} random variate, with @math{b>0}. Calling @code{rand
 Only the inverse method is implemented. To make use of this function, write first @code{load(distrib)}.
 
 @opencatbox
-@category{Package distrib}
+@category{Package distrib} @category{Random numbers}
 @closecatbox
 
 @end deffn
@@ -2671,7 +2671,7 @@ This is the selected algorithm for simulating random binomial variates. Implemen
 See also @code{random_binomial}.
 
 @opencatbox
-@category{Package distrib} @category{Global variables}
+@category{Package distrib}
 @closecatbox
 
 @end defvr
@@ -2686,7 +2686,7 @@ There are three algorithms implemented for this function, the one to be used can
 See also @code{random_binomial_algorithm}. To make use of this function, write first @code{load(distrib)}.
 
 @opencatbox
-@category{Package distrib}
+@category{Package distrib} @category{Random numbers}
 @closecatbox
 
 @end deffn
@@ -2804,7 +2804,7 @@ This is the selected algorithm for simulating random Poisson variates. Implement
 See also @code{random_poisson}.
 
 @opencatbox
-@category{Package distrib} @category{Global variables}
+@category{Package distrib}
 @closecatbox
 
 @end defvr
@@ -2819,7 +2819,7 @@ There are two algorithms implemented for this function, the one to be used can b
 See also @code{random_poisson_algorithm}. To make use of this function, write first @code{load(distrib)}.
 
 @opencatbox
-@category{Package distrib}
+@category{Package distrib} @category{Random numbers}
 @closecatbox
 
 @end deffn
@@ -3008,7 +3008,7 @@ This is a direct application of the @code{random} built-in Maxima function.
 See also @code{random}. To make use of this function, write first @code{load(distrib)}.
 
 @opencatbox
-@category{Package distrib}
+@category{Package distrib} @category{Random numbers}
 @closecatbox
 
 @end deffn
@@ -3114,7 +3114,7 @@ This is the selected algorithm for simulating random geometric variates. Impleme
 See also @code{random_geometric}.
 
 @opencatbox
-@category{Package distrib} @category{Global variables}
+@category{Package distrib}
 @closecatbox
 
 @end defvr
@@ -3129,7 +3129,7 @@ There are three algorithms implemented for this function, the one to be used can
 See also @code{random_geometric_algorithm}. To make use of this function, write first @code{load(distrib)}.
 
 @opencatbox
-@category{Package distrib}
+@category{Package distrib} @category{Random numbers}
 @closecatbox
 
 @end deffn
@@ -3224,7 +3224,7 @@ This is a direct application of the @code{random} built-in Maxima function.
 See also @code{random}. To make use of this function, write first @code{load(distrib)}.
 
 @opencatbox
-@category{Package distrib}
+@category{Package distrib} @category{Random numbers}
 @closecatbox
 
 @end deffn
@@ -3326,7 +3326,7 @@ This is the selected algorithm for simulating random hypergeometric variates. Im
 See also @code{random_hypergeometric}.
 
 @opencatbox
-@category{Package distrib} @category{Global variables}
+@category{Package distrib}
 @closecatbox
 
 @end defvr
@@ -3341,7 +3341,7 @@ There are two algorithms implemented for this function, the one to be used can b
 See also @code{random_hypergeometric_algorithm}. To make use of this function, write first @code{load(distrib)}.
 
 @opencatbox
-@category{Package distrib}
+@category{Package distrib} @category{Random numbers}
 @closecatbox
 
 @end deffn
@@ -3464,7 +3464,7 @@ This is the selected algorithm for simulating random negative binomial variates.
 See also @code{random_negative_binomial}.
 
 @opencatbox
-@category{Package distrib} @category{Global variables}
+@category{Package distrib}
 @closecatbox
 
 @end defvr
@@ -3479,7 +3479,7 @@ There are three algorithms implemented for this function, the one to be used can
 See also @code{random_negative_binomial_algorithm}. To make use of this function, write first @code{load(distrib)}.
 
 @opencatbox
-@category{Package distrib}
+@category{Package distrib} @category{Random numbers}
 @closecatbox
 
 @end deffn

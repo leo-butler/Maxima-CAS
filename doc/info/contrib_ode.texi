@@ -322,7 +322,7 @@ The variable @code{method} is set to the successful solution
 method. 
 
 @opencatbox
-@category{Package contrib_ode} @category{Global variables}
+@category{Package contrib_ode}
 @closecatbox
 
 @end defvr

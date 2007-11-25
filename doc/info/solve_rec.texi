@@ -24,7 +24,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Share packages} @category{Package solve_rec}
+@category{Linear recurrences} @category{Share packages} @category{Package solve_rec}
 @closecatbox
 
 @node Functions and Variables for solve_rec,  , Introduction to solve_rec, solve_rec
@@ -94,7 +94,7 @@ simplify products in result.
 See also: @code{solve_rec}.
 
 @opencatbox
-@category{Package solve_rec} @category{Simplification flags}
+@category{Package solve_rec}
 @closecatbox
 
 @end defvr
@@ -250,7 +250,7 @@ into the expression if @code{product_use_gamma} is @code{true}.
 See also: @code{simplify_products}, @code{solve_rec}.
 
 @opencatbox
-@category{Package solve_rec} @category{Simplification flags}
+@category{Package solve_rec}
 @closecatbox
 
 @end defvr

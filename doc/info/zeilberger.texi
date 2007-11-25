@@ -221,7 +221,7 @@ functions in the @code{zeilberger} package attempt
 further simplification of the solution.
 
 @opencatbox
-@category{Package zeilberger} @category{Simplification flags}
+@category{Package zeilberger}
 @closecatbox
 
 @end defvr

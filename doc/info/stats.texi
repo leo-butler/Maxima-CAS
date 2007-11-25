@@ -110,7 +110,7 @@ Returns @code{true} or @code{false}, depending on whether @var{obj} is an
 @code{inference_result} object or not.
 
 @opencatbox
-@category{Package stats} @category{Predicate functions}
+@category{Package stats}
 @closecatbox
 
 @end deffn
