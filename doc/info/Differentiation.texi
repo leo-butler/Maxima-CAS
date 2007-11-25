@@ -293,7 +293,7 @@ each call to @code{depends} or @code{gradef} appends additional items.
 See @code{depends} and @code{gradef}.
 
 @opencatbox
-@category{Global variables}
+@category{Declarations and inferences}
 @closecatbox
 
 @end defvr
@@ -700,6 +700,9 @@ explicitly but its first derivatives are and it is desired to obtain
 higher order derivatives.
 
 @c NEED EXAMPLES HERE
+@opencatbox
+@category{Declarations and inferences}
+@closecatbox
 @end deffn
 
 @defvr {System variable} gradefs
@@ -711,7 +714,7 @@ for which partial derivatives have been defined by @code{gradef}.
 for which partial derivatives have been defined by @code{gradef}.
 
 @opencatbox
-@category{Global variables}
+@category{Declarations and inferences}
 @closecatbox
 
 @end defvr

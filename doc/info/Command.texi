@@ -648,7 +648,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Global flags}
+@category{Simplification flags}
 @closecatbox
 
 @end defvr

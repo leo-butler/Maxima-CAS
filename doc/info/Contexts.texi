@@ -15,6 +15,9 @@ The facts in these contexts are not listed by @code{facts ()}.
 The variable @code{activecontexts} is the list
 of contexts which are active by way of the @code{activate} function.
 
+@opencatbox
+@category{Declarations and inferences}
+@closecatbox
 @end deffn
 
 @defvr {System variable} activecontexts
@@ -25,7 +28,7 @@ by way of the @code{activate} function, as opposed to being active because
 they are subcontexts of the current context.
 
 @opencatbox
-@category{Global variables}
+@category{Declarations and inferences}
 @closecatbox
 
 @end defvr
@@ -100,6 +103,9 @@ Examples:
 (%o10)                       unknown
 @end example
 
+@opencatbox
+@category{Declarations and inferences}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} assumescalar
@@ -128,7 +134,7 @@ such expressions will behave like scalars for all the operators listed
 above.
 
 @opencatbox
-@category{Global flags}
+@category{Declarations and inferences}
 @closecatbox
 
 @end defvr
@@ -164,7 +170,7 @@ a function which returns @code{true} for all arguments.
 
 @c NEED EXAMPLES HERE
 @opencatbox
-@category{Global flags}
+@category{Declarations and inferences}
 @closecatbox
 
 @end defvr
@@ -254,7 +260,7 @@ p;
 @end example
 
 @opencatbox
-@category{Global flags}
+@category{Declarations and inferences}
 @closecatbox
 
 @end defvr
@@ -276,7 +282,7 @@ The specified context is activated automatically.
 See @code{contexts} for a general description of the context mechanism.
 
 @opencatbox
-@category{Global variables}
+@category{Declarations and inferences}
 @closecatbox
 
 @end defvr
@@ -313,7 +319,7 @@ See also @code{facts}, @code{newcontext},
 @code{supcontext}, @code{killcontext}, @code{activate}, @code{deactivate}, @code{assume}, and @code{forget}.
 
 @opencatbox
-@category{Global variables}
+@category{Declarations and inferences}
 @closecatbox
 
 @end defvr
@@ -335,6 +341,9 @@ context.  Facts that are active, but in a different context, are not listed.
 
 @code{facts ()} (i.e., without an argument) lists the current context.
 
+@opencatbox
+@category{Declarations and inferences}
+@closecatbox
 @end deffn
 
 @defvr {Declaration} features
@@ -366,7 +375,7 @@ plus any user-defined features.
 There is also a list of non-mathematical, system-dependent features. See @code{status}.
 
 @opencatbox
-@category{Global variables}
+@category{Declarations and inferences}
 @closecatbox
 
 @end defvr
@@ -380,6 +389,9 @@ those previously assumed.
 @code{forget (@var{L})}, where @var{L} is a list of predicates,
 forgets each item on the list.
 
+@opencatbox
+@category{Declarations and inferences}
+@closecatbox
 @end deffn
 
 @deffn {Function} killcontext (@var{context_1}, ..., @var{context_n})
@@ -398,6 +410,9 @@ context, or by use of the function @code{activate}.
 @code{killcontext} evaluates its arguments.
 @code{killcontext} returns @code{done}.
 
+@opencatbox
+@category{Declarations and inferences}
+@closecatbox
 @end deffn
 
 @deffn {Function} newcontext (@var{name})
@@ -408,6 +423,9 @@ becomes the currently active context.
 @code{newcontext} evaluates its argument.
 @code{newcontext} returns @var{name}.
 
+@opencatbox
+@category{Declarations and inferences}
+@closecatbox
 @end deffn
 
 @deffn {Function} supcontext (@var{name}, @var{context})
@@ -418,4 +436,7 @@ which has @var{context} as a subcontext.
 
 If @var{context} is not specified, the current context is assumed.
 
+@opencatbox
+@category{Declarations and inferences}
+@closecatbox
 @end deffn

@@ -1046,6 +1046,9 @@ and the result is a Boolean expression.
 Returns the absolute value @var{expr}.  If @var{expr} is complex, returns the complex
 modulus of @var{expr}.
 
+@opencatbox
+@category{Mathematical functions}
+@closecatbox
 @end deffn
 
 @defvr {Keyword} additive
@@ -1061,6 +1064,9 @@ additivity in the first argument to @code{f}, as in the case of @code{sum} or
 This simplification does not occur when @code{f} is applied to expressions of
 the form @code{sum(x[i],i,lower-limit,upper-limit)}.
 
+@opencatbox
+@category{Declarations and inferences}
+@closecatbox
 @end defvr
 
 @c NEEDS TO BE REWORKED. NOT CONVINCED THIS SYMBOL NEEDS ITS OWN ITEM
@@ -1121,12 +1127,18 @@ simplifier that @code{h} is antisymmetric.  E.g. @code{h(x,z,y)} will simplify t
 @code{symmetric} or @code{commutative}, where n is the number of interchanges of two
 arguments necessary to convert it to that form.
 
+@opencatbox
+@category{Declarations and inferences}
+@closecatbox
 @end defvr
 
 @deffn {Function} cabs (@var{expr})
 Returns the complex absolute value (the complex modulus) of
 @var{expr}.
 
+@opencatbox
+@category{Complex variables}
+@closecatbox
 @end deffn
 
 @deffn {Function} ceiling (@var{x})
@@ -1192,6 +1204,9 @@ can use this information; for example:
 (%o3)                       f(x) - 1
 @end example
 
+@opencatbox
+@category{Mathematical functions}
+@closecatbox
 @end deffn
 
 @deffn {Function} charfun (@var{p})
@@ -1219,6 +1234,9 @@ Examples:
 (%o4)                       [0, 1, 0]
 @end example
 
+@opencatbox
+@category{Mathematical functions}
+@closecatbox
 @end deffn
 
 @defvr {Declaration} commutative
@@ -1226,6 +1244,9 @@ If @code{declare(h,commutative)} is done, this tells the
 simplifier that @code{h} is a commutative function.  E.g. @code{h(x,z,y)} will
 simplify to @code{h(x, y, z)}.  This is the same as @code{symmetric}.
 
+@opencatbox
+@category{Declarations and inferences}
+@closecatbox
 @end defvr
 
 @deffn {Function} compare (@var{x}, @var{y})
@@ -1276,12 +1297,18 @@ its arguments are nonempty; thus
 
 The real domain of @code{acos (x^2 + 1)} is empty.
 
+@opencatbox
+@category{Declarations and inferences}
+@closecatbox
 @end deffn
 
 @deffn {Function} entier (@var{x})
 Returns the largest integer less than or equal to @var{x} where @var{x} is numeric.  @code{fix} (as in
 @code{fixnum}) is a synonym for this, so @code{fix(@var{x})} is precisely the same.
 
+@opencatbox
+@category{Mathematical functions}
+@closecatbox
 @end deffn
 
 @deffn {Function} equal (@var{a}, @var{b})
@@ -1502,6 +1529,9 @@ can use this information; for example:
 (%o3)                       f(x) - 1
 @end example
 
+@opencatbox
+@category{Mathematical functions}
+@closecatbox
 @end deffn
 
 @deffn {Function} notequal (@var{a}, @var{b})
@@ -1558,6 +1588,9 @@ As an argument in a call to @code{ev (@var{expr})},
 @code{eval} causes an extra evaluation of @var{expr}.
 See @code{ev}.
 
+@opencatbox
+@category{Evaluation flags}
+@closecatbox
 @end deffn
 
 @deffn {Function} evenp (@var{expr})
@@ -1573,6 +1606,9 @@ Returns @code{true} if @var{expr} is an even integer.
 @deffn {Function} fix (@var{x})
 A synonym for @code{entier (@var{x})}.
 
+@opencatbox
+@category{Mathematical functions}
+@closecatbox
 @end deffn
 
 @deffn {Function} fullmap (@var{f}, @var{expr_1}, ...)
@@ -1601,6 +1637,9 @@ Examples:
 (%o3)                     g(b c) + g(a)
 @end example
 
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @deffn {Function} fullmapl (@var{f}, @var{list_1}, ...)
@@ -1617,6 +1656,9 @@ Example:
 (%o1)                [[a + 3, 4], [4, 3.5]]
 @end example
 
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @deffn {Function} is (@var{expr})
@@ -1696,6 +1738,9 @@ a > 0
 (%o5)                        unknown
 @end example
 
+@opencatbox
+@category{Predicate functions} @category{Declarations and inferences}
+@closecatbox
 @end deffn
 
 @deffn {Function} maybe (@var{expr})
@@ -1727,6 +1772,9 @@ Examples:
 (%o3)                         true
 @end example
 
+@opencatbox
+@category{Predicate functions} @category{Declarations and inferences}
+@closecatbox
 @end deffn
 
 @deffn {Function} isqrt (@var{x})
@@ -1734,6 +1782,9 @@ Returns the "integer square root"
 of the absolute value of @var{x},
 which is an integer.
 
+@opencatbox
+@category{Mathematical functions}
+@closecatbox
 @end deffn
 
 @deffn {Function} lmax (@var{L})
@@ -1741,6 +1792,9 @@ which is an integer.
 When @var{L} is a list or a set, return @code{apply ('max, args (@var{L}))}.  When @var{L} isn't a
 list or a set, signal an error.
 
+@opencatbox
+@category{Mathematical functions} @category{Lists} @category{Sets}
+@closecatbox
 @end deffn
 
 @deffn {Function} lmin (@var{L})
@@ -1748,6 +1802,9 @@ list or a set, signal an error.
 When @var{L} is a list or a set, return @code{apply ('min, args (@var{L}))}. When @var{L} isn't a
 list or a set, signal an error.
 
+@opencatbox
+@category{Mathematical functions} @category{Lists} @category{Sets}
+@closecatbox
 @end deffn
 
 @deffn {Function} max (@var{x_1}, ..., @var{x_n})
@@ -1759,6 +1816,9 @@ to eliminate expressions that are between two other arguments; for example,
 @code{max (x, 2*x, 3*x) --> max (x, 3*x)}. To set the value of @code{trylevel} to 2, use
 @code{put (trylevel, 2, maxmin)}.
 
+@opencatbox
+@category{Mathematical functions}
+@closecatbox
 @end deffn
 
 @deffn {Function} min (@var{x_1}, ..., @var{x_n})
@@ -1770,6 +1830,9 @@ to eliminate expressions that are between two other arguments; for example,
 @code{min (x, 2*x, 3*x) --> min (x, 3*x)}. To set the value of @code{trylevel} to 2, use
 @code{put (trylevel, 2, maxmin)}.
 
+@opencatbox
+@category{Mathematical functions}
+@closecatbox
 @end deffn
 
 @deffn {Function} polymod (@var{p})
@@ -1783,6 +1846,9 @@ instead of the current value of @code{modulus}.
 
 See @code{modulus}.
 
+@opencatbox
+@category{Polynomials}
+@closecatbox
 @end deffn
 
 @deffn {Function} mod (@var{x}, @var{y})
@@ -1821,6 +1887,9 @@ rules:
 (%o3)                           0
 @end example
 
+@opencatbox
+@category{Mathematical functions}
+@closecatbox
 @end deffn
 
 @deffn {Function} oddp (@var{expr})
@@ -1842,6 +1911,9 @@ As an argument in a call to @code{ev (@var{expr})},
 or @code{false}) to be evaluated.
 See @code{ev}.
 
+@opencatbox
+@category{Evaluation flags}
+@closecatbox
 @end deffn
 
 @deffn {Function} make_random_state (@var{n})
@@ -1870,6 +1942,9 @@ using the current computer clock time as the seed.
 @code{make_random_state (false)} returns a copy of the current state
 of the random number generator.
 
+@opencatbox
+@category{Random numbers}
+@closecatbox
 @end deffn
 
 @deffn {Function} set_random_state (@var{s})
@@ -1877,6 +1952,9 @@ Copies @var{s} to the random number generator state.
 
 @code{set_random_state} always returns @code{done}.
 
+@opencatbox
+@category{Random numbers}
+@closecatbox
 @end deffn
 
 @deffn {Function} random (@var{x})
@@ -1936,7 +2014,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Numerical methods}
+@category{Random numbers} @category{Numerical methods}
 @closecatbox
 
 @end deffn
@@ -2044,6 +2122,9 @@ reverse(uf))
                                37
 @end example
 
+@opencatbox
+@category{Rational numbers}
+@closecatbox
 @end deffn
 
 @deffn {Function} sign (@var{expr})
@@ -2053,6 +2134,9 @@ the following answers: @code{pos} (positive), @code{neg} (negative), @code{zero}
 (positive or zero), @code{nz} (negative or zero), @code{pn} (positive or negative),
 or @code{pnz} (positive, negative, or zero, i.e. nothing known).
 
+@opencatbox
+@category{Declarations and inferences}
+@closecatbox
 @end deffn
 
 @deffn {Function} signum (@var{x})
@@ -2063,6 +2147,9 @@ If @var{x} is not numeric then a simplified but equivalent form is returned.
 For example, @code{signum(-x)} gives @code{-signum(x)}.
 @c UMM, THIS ISN'T THE WHOLE STORY, AS IT APPEARS signum CONSULTS THE assume DATABASE FOR SYMBOLIC ARGUMENT
 
+@opencatbox
+@category{Mathematical functions}
+@closecatbox
 @end deffn
 
 @deffn {Function} sort (@var{L}, @var{P})
@@ -2133,6 +2220,9 @@ Examples:
 (%o7) [[%pi, %e], [ee, cc], [zz, xx, mm, cc], [aa, hh, uu]]
 @end example
 
+@opencatbox
+@category{Lists}
+@closecatbox
 @end deffn
 
 @deffn {Function} sqrt (@var{x})
@@ -2143,6 +2233,9 @@ The square root of @var{x}. It is represented internally by
 which are powers of n to be pulled outside of the radical, e.g.
 @code{sqrt(16*x^2)} will become @code{4*x} only if @code{radexpand} is @code{true}.
 
+@opencatbox
+@category{Mathematical functions}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} sqrtdispflag
@@ -2153,7 +2246,7 @@ causes @code{sqrt} to display with exponent 1/2.
 @c AND OTHERWISE ... ??
 
 @opencatbox
-@category{Display flags}
+@category{Mathematical functions} @category{Display flags}
 @closecatbox
 
 @end defvr
@@ -2176,6 +2269,9 @@ Example:
 (%o1)                    sin(b) + cos(a)
 @end example
 
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @deffn {Function} sublist (@var{list}, @var{p})
@@ -2195,6 +2291,9 @@ Example:
 (%o2)                       [2, 4, 6]
 @end example
 
+@opencatbox
+@category{Lists}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} sublis_apply_lambda
@@ -2204,7 +2303,7 @@ whether you have to do an @code{ev} to get things to apply. @code{true} means do
 application.
 
 @opencatbox
-@category{Global flags}
+@category{Expressions}
 @closecatbox
 
 @end defvr
@@ -2257,6 +2356,9 @@ Examples:
 @noindent
 For further examples, do @code{example (subst)}.
 
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @c NEEDS CLARIFICATION
@@ -2337,6 +2439,9 @@ message is given.
 Also, setting the option @code{inflag} to @code{true} and calling @code{part} or @code{substpart} is 
 the same as calling @code{inpart} or @code{substinpart}.
 
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @c NEEDS CLARIFICATION
@@ -2373,6 +2478,9 @@ operator of @var{expr}.  In some cases @var{x} needs to be enclosed in double-qu
 Also, setting the option @code{inflag} to @code{true} and calling @code{part} or @code{substpart} is 
 the same as calling @code{inpart} or @code{substinpart}.
 
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @c NEEDS EXPANSION AND EXAMPLES
@@ -2432,6 +2540,9 @@ Examples:
 (%o5)                        a  - a
 @end example
 
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @c THIS ITEM SEEMS OUT OF PLACE -- IS IT FROM A SHARE PACKAGE ??
@@ -2443,6 +2554,9 @@ curl vector, in the current coordinate system.
 the left-hand sides of the equations must be a cyclic permutation of
 the coordinate variables.
 
+@opencatbox
+@category{Vectors}
+@closecatbox
 @end deffn
 
 @deffn {Function} xthru (@var{expr})
@@ -2477,6 +2591,9 @@ expression to be @code{ratsimp}ed.
                             (y + x)
 @end example
 
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @c THIS FUNCTION APPEARS TO BE A HACK; SEE 4'TH ITEM BELOW
@@ -2510,4 +2627,7 @@ For example @code{zeroequiv (sin(2*x) - 2*sin(x)*cos(x), x)} returns
 On the other hand @code{zeroequiv (log(a*b) - log(a) - log(b), a)} returns @code{dontknow} because
 of the presence of an extra parameter @code{b}.
 
+@opencatbox
+@category{Predicate functions}
+@closecatbox
 @end deffn

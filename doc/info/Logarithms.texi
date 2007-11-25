@@ -16,7 +16,7 @@ and more complicated transformations of this ilk as well.
 The @code{logcontract} command "contracts" expressions containing @code{log}.
 
 @opencatbox
-@category{Global flags}
+@category{Exponential and logarithm functions} @category{Simplification flags}
 @closecatbox
 
 @end defvr
@@ -94,6 +94,9 @@ Examples:
  - .7546938285978846 %i]
 @end example
 
+@opencatbox
+@category{Exponential and logarithm functions}
+@closecatbox
 @end deffn
 
 @deffn {Function} log (@var{x})
@@ -127,6 +130,9 @@ will also be converted to their absolute value.
 does this transformation, and more complicated transformations of this ilk as well.
 The @code{logcontract} command "contracts" expressions containing @code{log}.
 
+@opencatbox
+@category{Exponential and logarithm functions}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} logabs
@@ -140,7 +146,7 @@ used, because here "evaluation" of the indefinite integral at the
 endpoints is often needed.
 
 @opencatbox
-@category{Global flags}
+@category{Exponential and logarithm functions} @category{Integration} @category{Global flags}
 @closecatbox
 
 @end defvr
@@ -159,7 +165,7 @@ an expression @var{expr}
 without setting the global variable @code{logarc}.
 
 @opencatbox
-@category{Global flags}
+@category{Exponential and logarithm functions} @category{Simplification flags} @category{Simplification functions}
 @closecatbox
 
 @end defvr
@@ -175,7 +181,7 @@ logconfun(m):=featurep(m,integer) or ratnump(m)$} .  Then
 @code{logcontract(1/2*log(x));} will give @code{log(sqrt(x))}.
 
 @opencatbox
-@category{Global flags}
+@category{Exponential and logarithm functions} @category{Simplification flags}
 @closecatbox
 
 @end defvr
@@ -207,6 +213,9 @@ SQRTs, you can do @code{logconcoeffp:'logconfun$
 logconfun(m):=featurep(m,integer) or ratnump(m)$} .  Then
 @code{logcontract(1/2*log(x));} will give @code{log(sqrt(x))}.
 
+@opencatbox
+@category{Exponential and logarithm functions}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} logexpand
@@ -220,7 +229,7 @@ simplifies.)  If it is set to @code{false}, all of these simplifications will
 be turned off.
 
 @opencatbox
-@category{Global flags}
+@category{Exponential and logarithm functions} @category{Simplification flags}
 @closecatbox
 
 @end defvr
@@ -232,7 +241,7 @@ If @code{true} implements the rule
 @code{log(-n)} -> @code{log(n)+%i*%pi} for @code{n} a positive integer.
 
 @opencatbox
-@category{Global flags}
+@category{Exponential and logarithm functions} @category{Simplification flags}
 @closecatbox
 
 @end defvr
@@ -246,7 +255,7 @@ before the @code{log} is taken.  If @code{numer} is also @code{true}, then negat
 arguments to @code{log} will also be converted to their absolute value.
 
 @opencatbox
-@category{Global flags}
+@category{Exponential and logarithm functions} @category{Simplification flags} @category{Numerical evaluation}
 @closecatbox
 
 @end defvr
@@ -258,7 +267,7 @@ If @code{false} then no simplification of @code{%e} to a
 power containing @code{log}'s is done.
 
 @opencatbox
-@category{Global flags}
+@category{Exponential and logarithm functions} @category{Simplification flags}
 @closecatbox
 
 @end defvr
@@ -267,5 +276,8 @@ power containing @code{log}'s is done.
 Represents the principal branch of the complex-valued natural
 logarithm with @code{-%pi} < @code{carg(@var{x})} <= @code{+%pi} .
 
+@opencatbox
+@category{Exponential and logarithm functions} @category{Complex variables}
+@closecatbox
 @end deffn
 

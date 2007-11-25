@@ -18,7 +18,7 @@ summation.
 @code{load (zeilberger)} loads this package.
 
 @opencatbox
-@category{Summation} @category{Share packages} @category{Package zeilberger}
+@category{Sum and product functions} @category{Share packages} @category{Package zeilberger}
 @closecatbox
 
 @subsubsection The indefinite summation problem
@@ -208,7 +208,7 @@ Default value: 5
 @code{MAX_ORD} is the maximum recurrence order attempted by @code{Zeilberger}.
 
 @opencatbox
-@category{Package zeilberger} @category{Global variables}
+@category{Package zeilberger}
 @closecatbox
 
 @end defvr
@@ -221,7 +221,7 @@ functions in the @code{zeilberger} package attempt
 further simplification of the solution.
 
 @opencatbox
-@category{Package zeilberger} @category{Global flags}
+@category{Package zeilberger} @category{Simplification flags}
 @closecatbox
 
 @end defvr
@@ -233,7 +233,7 @@ Default value: @code{linsolve}
 of equations in Zeilberger's algorithm.
 
 @opencatbox
-@category{Package zeilberger} @category{Global variables}
+@category{Package zeilberger}
 @closecatbox
 
 @end defvr
@@ -246,7 +246,7 @@ functions in the @code{zeilberger} package print
 warning messages during execution.
 
 @opencatbox
-@category{Package zeilberger} @category{Global flags}
+@category{Package zeilberger}
 @closecatbox
 
 @end defvr
@@ -259,7 +259,7 @@ the @code{Zeilberger} function calls @code{Gosper} before calling @code{parGospe
 Otherwise, @code{Zeilberger} goes immediately to @code{parGosper}.
 
 @opencatbox
-@category{Package zeilberger} @category{Global flags}
+@category{Package zeilberger}
 @closecatbox
 
 @end defvr
@@ -272,7 +272,7 @@ When @code{trivial_solutions} is @code{true},
 which have certificate equal to zero, or all coefficients equal to zero.
 
 @opencatbox
-@category{Package zeilberger} @category{Global flags}
+@category{Package zeilberger}
 @closecatbox
 
 @end defvr
@@ -287,7 +287,7 @@ When @code{mod_test} is @code{true},
 modular test for discarding systems with no solutions.
 
 @opencatbox
-@category{Package zeilberger} @category{Global flags}
+@category{Package zeilberger}
 @closecatbox
 
 @end defvr
@@ -298,7 +298,7 @@ Default value: @code{linsolve}
 @code{modular_linear_solver} names the linear solver used by the modular test in @code{parGosper}.
 
 @opencatbox
-@category{Package zeilberger} @category{Global variables}
+@category{Package zeilberger}
 @closecatbox
 
 @end defvr
@@ -310,7 +310,7 @@ Default value: @code{big_primes[10]}
 when executing the modular test in @code{parGosper}.
 
 @opencatbox
-@category{Package zeilberger} @category{Global variables}
+@category{Package zeilberger}
 @closecatbox
 
 @end defvr
@@ -321,7 +321,7 @@ Default value: @code{big_primes[1]}
 @code{mod_big_prime} is the modulus used by the modular test in @code{parGosper}.
 
 @opencatbox
-@category{Package zeilberger} @category{Global variables}
+@category{Package zeilberger}
 @closecatbox
 
 @end defvr
@@ -333,7 +333,7 @@ Default value: 4
 greatest order for which the modular test in @code{parGosper} is attempted.
 
 @opencatbox
-@category{Package zeilberger} @category{Global variables}
+@category{Package zeilberger}
 @closecatbox
 
 @end defvr

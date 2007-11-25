@@ -41,6 +41,9 @@ subexpression, the result is returned.
 
 See also @code{applyb1}, @code{apply2}, and @code{let}.
 
+@opencatbox
+@category{Pattern-matching}
+@closecatbox
 @end deffn
 
 @c NEEDS CLARIFICATION AND EXAMPLES
@@ -56,6 +59,9 @@ subexpression is reprocessed, starting with the first rule.
 
 See also @code{apply1} and @code{let}.
 
+@opencatbox
+@category{Pattern-matching}
+@closecatbox
 @end deffn
 
 @c NEEDS CLARIFICATION AND EXAMPLES
@@ -75,6 +81,9 @@ before giving up.
 
 See also @code{apply1}, @code{apply2}, and @code{let}.
 
+@opencatbox
+@category{Pattern-matching}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} current_let_rule_package
@@ -91,7 +100,7 @@ the rule package @code{rule_pkg_name} is used for that function call only,
 and the value of @code{current_let_rule_package} is not changed.
 
 @opencatbox
-@category{Global variables}
+@category{Pattern-matching}
 @closecatbox
 
 @end defvr
@@ -106,7 +115,7 @@ is not explicitly set by the user with @code{let} or by changing the value of
 @code{current_let_rule_package}.
 
 @opencatbox
-@category{Global variables}
+@category{Pattern-matching}
 @closecatbox
 
 @end defvr
@@ -243,6 +252,9 @@ to see if it is a definite integral.
 (%o9)    [b = x + 2 %pi, a = x + %pi, x = t, f = sin(t)]
 @end example
 
+@opencatbox
+@category{Pattern-matching}
+@closecatbox
 @end deffn
 
 @c NEEDS CLARIFICATION AND EXAMPLES
@@ -260,6 +272,9 @@ treated as functions which transform an expression by one
 operation of the pattern match and replacement.
 If the match fails, the rule function returns @code{false}.
 
+@opencatbox
+@category{Pattern-matching}
+@closecatbox
 @end deffn
 
 @c NEEDS EXAMPLES
@@ -306,6 +321,9 @@ Examples:
      +rule1 : y + x -> special_add(x, y), quux : mumble(x) -> []]
 @end example
 
+@opencatbox
+@category{Pattern-matching}
+@closecatbox
 @end deffn
 
 @deffn {Function} let (@var{prod}, @var{repl}, @var{predname}, @var{arg_1}, ..., @var{arg_n})
@@ -394,6 +412,9 @@ If not otherwise specified,
 @end example
 
 @c NEEDS ADDITIONAL EXAMPLES
+@opencatbox
+@category{Pattern-matching}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} letrat
@@ -423,7 +444,7 @@ the numerator, denominator, and their quotient are simplified in that order.
 @end example
 
 @opencatbox
-@category{Global flags}
+@category{Pattern-matching}
 @closecatbox
 
 @end defvr
@@ -442,6 +463,9 @@ defaults to @code{default_let_rule_package}.
 See also @code{disprule}, which displays rules defined by @code{tellsimp} and @code{tellsimpafter}.
 @c WHAT ABOUT defmatch AND defrule ??
 
+@opencatbox
+@category{Pattern-matching}
+@closecatbox
 @end deffn
 
 @deffn {Function} letsimp (@var{expr})
@@ -460,6 +484,9 @@ is equivalent to @code{letsimp (@var{expr}, @var{package_name_1}},
 followed by @code{letsimp (%, @var{package_name_2})}, and so on.
 
 @c NEEDS EXAMPLES
+@opencatbox
+@category{Pattern-matching}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} let_rule_packages
@@ -469,7 +496,7 @@ Default value: @code{[default_let_rule_package]}
 plus the default package @code{default_let_rule_package}.
 
 @opencatbox
-@category{Global variables}
+@category{Pattern-matching}
 @closecatbox
 
 @end defvr
@@ -685,6 +712,9 @@ The functions @code{propvars} and @code{printprops} return information about mat
                       integerp(dd), atom(cc), atom(bb), atom(aa)]
 @end example
 
+@opencatbox
+@category{Pattern-matching} @category{Declarations and inferences}
+@closecatbox
 @end deffn
 
 @deffn {Function} matchfix (@var{ldelimiter}, @var{rdelimiter})
@@ -845,6 +875,9 @@ called the original substitution rule is revived.
 
 See also @code{remrule}, which removes a rule defined by @code{tellsimp} or @code{tellsimpafter}.
 
+@opencatbox
+@category{Pattern-matching}
+@closecatbox
 @end deffn
 
 @deffn {Function} remrule (@var{op}, @var{rulename})
@@ -911,6 +944,9 @@ Examples:
                                          quux(%e, %pi)]
 @end example
 
+@opencatbox
+@category{Pattern-matching}
+@closecatbox
 @end deffn
 
 @c NEEDS EXPANSION OR MAYBE JUST APPROPRIATE REFS TO tellsimpafter
@@ -976,6 +1012,9 @@ Examples:
 (%o17)                     1 - cos (y)
 @end example
 
+@opencatbox
+@category{Pattern-matching}
+@closecatbox
 @end deffn
 
 @deffn {Function} tellsimpafter (@var{pattern}, @var{replacement})
@@ -1240,10 +1279,16 @@ A worked example: anticommutative multiplication.
             9    8    7    6    5    4    3    2    1    0
 @end example
 
+@opencatbox
+@category{Pattern-matching}
+@closecatbox
 @end deffn
 
 @deffn {Function} clear_rules ()
 Executes @code{kill (rules)} and then resets the next rule number to 1
 for addition @code{+}, multiplication @code{*}, and exponentiation @code{^}.
 
+@opencatbox
+@category{Pattern-matching}
+@closecatbox
 @end deffn

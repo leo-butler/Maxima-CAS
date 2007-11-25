@@ -50,7 +50,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Global flags}
+@category{Sum and product functions}
 @closecatbox
 
 @end defvr
@@ -88,6 +88,9 @@ Example:
                      2     18432     307200
 @end example
 
+@opencatbox
+@category{Power series}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} maxtayorder
@@ -99,7 +102,7 @@ manipulation of (truncated) Taylor series, @code{taylor} tries to retain
 as many terms as are known to be correct.
 
 @opencatbox
-@category{Global flags}
+@category{Power series}
 @closecatbox
 
 @end defvr
@@ -140,6 +143,9 @@ Example:
                           k = 1
 @end example
 
+@opencatbox
+@category{Sum and product functions}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} niceindicespref
@@ -174,7 +180,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Global variables}
+@category{Sum and product functions}
 @closecatbox
 
 @end defvr
@@ -233,6 +239,9 @@ Dependent equations eliminated:  (2 3)
                           i = 1
 @end example
 
+@opencatbox
+@category{Sum and product functions}
+@closecatbox
 @end deffn
 
 @c THIS ITEM NEEDS SERIOUS WORK
@@ -302,6 +311,9 @@ in order to have enough unknown coefficients to solve.
  + 2856700692480 x  + 3370143559680 x + 2386516803584)]
 @end example
 
+@opencatbox
+@category{Power series}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} powerdisp
@@ -360,6 +372,9 @@ in the first simplification we have returned:
                                       2
 @end example
 
+@opencatbox
+@category{Power series}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} psexpand
@@ -425,6 +440,9 @@ Examples:
                          4    3    2
 @end example
 
+@opencatbox
+@category{Power series}
+@closecatbox
 @end deffn
 
 @deffn {Function} taylor (@var{expr}, @var{x}, @var{a}, @var{n})
@@ -605,6 +623,9 @@ Examples:
           x + y     6                   360
 @end example
 
+@opencatbox
+@category{Power series}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} taylordepth
@@ -616,7 +637,7 @@ degree of the expansion of @code{@var{g}(@var{x})}
 so long as the degree of the expansion is less than or equal to @code{@var{n} 2^taylordepth}.
 
 @opencatbox
-@category{Global variables}
+@category{Power series}
 @closecatbox
 
 @end defvr
@@ -648,6 +669,9 @@ Example:
 (%o2)               [[y, a, inf], [x, 0, 3]]
 @end example
 
+@opencatbox
+@category{Power series}
+@closecatbox
 @end deffn
 
 @deffn {Function} taylorp (@var{expr})
@@ -655,7 +679,7 @@ Returns @code{true} if @var{expr} is a Taylor series,
 and @code{false} otherwise.
 
 @opencatbox
-@category{Predicate functions}
+@category{Predicate functions} @category{Power series}
 @closecatbox
 @end deffn
 
@@ -676,7 +700,7 @@ that occur is that necessary to obtain a formal power series.
 
 @c NEED EXAMPLES HERE
 @opencatbox
-@category{Global flags}
+@category{Power series} @category{Exponential and logarithm functions}
 @closecatbox
 
 @end defvr
@@ -694,7 +718,7 @@ coefficients of taylor series are ordered canonically.
 
 @c NEED EXAMPLES HERE
 @opencatbox
-@category{Global flags}
+@category{Power series}
 @closecatbox
 
 @end defvr
@@ -703,6 +727,9 @@ coefficients of taylor series are ordered canonically.
 Simplifies coefficients of the power series @var{expr}.
 @code{taylor} calls this function.
 
+@opencatbox
+@category{Power series}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} taylor_truncate_polynomials
@@ -717,7 +744,7 @@ polynomials input to @code{taylor} are considered to have infinite precison.
 @c WHAT IS "INFINITE PRECISION" IN THIS CONTEXT ??
 
 @opencatbox
-@category{Global flags}
+@category{Power series}
 @closecatbox
 
 @end defvr
@@ -726,6 +753,9 @@ polynomials input to @code{taylor} are considered to have infinite precison.
 Converts @var{expr} from @code{taylor} form to canonical rational expression (CRE) form.
 The effect is the same as @code{rat (ratdisrep (@var{expr}))}, but faster.
 
+@opencatbox
+@category{Power series} @category{Rational expressions}
+@closecatbox
 @end deffn
 
 @deffn {Function} trunc (@var{expr})
@@ -746,6 +776,9 @@ Example:
 (%o3)                         true
 @end example
 
+@opencatbox
+@category{Power series}
+@closecatbox
 @end deffn
 
 @deffn {Function} unsum (@var{f}, @var{n})
@@ -784,6 +817,9 @@ Examples:
                         binomial(2 n, n)
 @end example
 
+@opencatbox
+@category{Sum and product functions}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} verbose
@@ -793,7 +829,7 @@ When @code{verbose} is @code{true},
 @code{powerseries} prints progress messages.
 
 @opencatbox
-@category{Global flags}
+@category{Power series}
 @closecatbox
 
 @end defvr

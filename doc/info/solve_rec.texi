@@ -94,7 +94,7 @@ simplify products in result.
 See also: @code{solve_rec}.
 
 @opencatbox
-@category{Package solve_rec} @category{Global flags}
+@category{Package solve_rec} @category{Simplification flags}
 @closecatbox
 
 @end defvr
@@ -129,7 +129,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Package solve_rec} @category{Summation}
+@category{Package solve_rec} @category{Sum and product functions} @category{Simplification functions}
 @closecatbox
 
 @end deffn
@@ -250,7 +250,7 @@ into the expression if @code{product_use_gamma} is @code{true}.
 See also: @code{simplify_products}, @code{solve_rec}.
 
 @opencatbox
-@category{Package solve_rec} @category{Global flags}
+@category{Package solve_rec} @category{Simplification flags}
 @closecatbox
 
 @end defvr

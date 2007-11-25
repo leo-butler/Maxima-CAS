@@ -37,7 +37,7 @@ Epsilon used for numerical computations in @code{linear_program}.
 See also: @code{linear_program}.
 
 @opencatbox
-@category{Package simplex} @category{Global variables}
+@category{Package simplex}
 @closecatbox
 
 @end defvr
@@ -165,7 +165,7 @@ If @code{nonegative_lp} is true all decision variables to
 See also: @code{minimize_lp}.
 
 @opencatbox
-@category{Package simplex} @category{Global flags}
+@category{Package simplex}
 @closecatbox
 
 @end defvr

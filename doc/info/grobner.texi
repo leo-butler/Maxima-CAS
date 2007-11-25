@@ -101,7 +101,7 @@ Default value: @code{lex}
 This global switch controls which monomial order is used in polynomial and Groebner Bases calculations. If not set, @code{lex} will be used.
 
 @opencatbox
-@category{Package grobner} @category{Global flags}
+@category{Package grobner}
 @closecatbox
 
 @end defvr
@@ -116,7 +116,7 @@ expression ring will be used. This variable may be set to
 @code{ring_of_integers} if desired.
 
 @opencatbox
-@category{Package grobner} @category{Global flags}
+@category{Package grobner}
 @closecatbox
 
 @end defvr
@@ -128,7 +128,7 @@ Name of the default order for eliminated variables in
 elimination-based functions. If not set, @code{lex} will be used.
 
 @opencatbox
-@category{Package grobner} @category{Global flags}
+@category{Package grobner}
 @closecatbox
 
 @end defvr
@@ -139,7 +139,7 @@ Default value: @code{false}
 Name of the default order for kept variables in elimination-based functions. If not set, @code{lex} will be used.
 
 @opencatbox
-@category{Package grobner} @category{Global flags}
+@category{Package grobner}
 @closecatbox
 
 @end defvr
@@ -154,7 +154,7 @@ The user must ensure that this is a true elimination order valid
 for the number of eliminated variables. 
 
 @opencatbox
-@category{Package grobner} @category{Global flags}
+@category{Package grobner}
 @closecatbox
 
 @end defvr
@@ -167,7 +167,7 @@ polynomial as a list of terms in the current monomial order rather
 than a @emph{maxima} general expression.
 
 @opencatbox
-@category{Package grobner} @category{Global flags}
+@category{Package grobner}
 @closecatbox
 
 @end defvr
@@ -178,7 +178,7 @@ Default value: @code{false}
 If set to @code{true}, produce debugging and tracing output.
 
 @opencatbox
-@category{Package grobner} @category{Global flags}
+@category{Package grobner}
 @closecatbox
 
 @end defvr
@@ -196,7 +196,7 @@ Possible values:
 The name of the algorithm used to find the Groebner Bases.
 
 @opencatbox
-@category{Package grobner} @category{Global flags}
+@category{Package grobner}
 @closecatbox
 
 @end defvr
@@ -209,7 +209,7 @@ reduction means that division algorithm stops after the first
 reduction.
 
 @opencatbox
-@category{Package grobner} @category{Global flags}
+@category{Package grobner}
 @closecatbox
 
 @end defvr

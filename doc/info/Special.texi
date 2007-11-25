@@ -266,7 +266,7 @@ the Bessel function is expanded.
 @end example
 
 @opencatbox
-@category{Global flags}
+@category{Simplification flags}
 @closecatbox
 
 @end defvr
@@ -328,7 +328,7 @@ simplification will occur.  Note that the @code{factlim} switch controls
 simplification of the result of @code{gamma} of an integer argument as well.
 
 @opencatbox
-@category{Global variables}
+@category{Simplification variables}
 @closecatbox
 
 @end defvr
@@ -424,7 +424,7 @@ corresponds to the interval [-2^(5-1)+1,2^(5-1)], or [-15,16], but it
 can be set to [-2^(n-1)+1, 2^(n-1)].
 
 @opencatbox
-@category{Global variables}
+@category{Simplification variables}
 @closecatbox
 
 @end defvr
@@ -448,6 +448,9 @@ Is functionally identical to @code{intopois (a + b)}.
 Converts @var{a} into a Poisson series for @var{a} in general
 representation.
 
+@opencatbox
+@category{Simplification functions}
+@closecatbox
 @end deffn
 
 @c MORE INFO NEEDED HERE
@@ -532,7 +535,7 @@ Default value: 20
 @code{psi[n](x)} will try to compute an exact value.
 
 @opencatbox
-@category{Global variables}
+@category{Simplification variables}
 @closecatbox
 
 @end defvr
@@ -546,7 +549,7 @@ Default value: -10
 return simplified answer, even if it could.
 
 @opencatbox
-@category{Global variables}
+@category{Simplification variables}
 @closecatbox
 
 @end defvr
@@ -560,7 +563,7 @@ If @code{p} is greater than @code{maxpsifracnum}, then
 value.
 
 @opencatbox
-@category{Global variables}
+@category{Simplification variables}
 @closecatbox
 
 @end defvr
@@ -574,7 +577,7 @@ If @code{q} is greater than @code{maxpsifracdenom}, then
 value.
 
 @opencatbox
-@category{Global variables}
+@category{Simplification variables}
 @closecatbox
 
 @end defvr

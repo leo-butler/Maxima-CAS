@@ -244,7 +244,7 @@ return their results in floating point numbers. If it is @code{false},
 results are given in symbolic and rational format.
 
 @opencatbox
-@category{Package stats} @category{Global flags}
+@category{Package stats} @category{Numerical evaluation}
 @closecatbox
 
 @end defvr

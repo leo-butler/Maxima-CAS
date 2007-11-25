@@ -177,7 +177,7 @@ safeguard is used to ensure that the function always terminates, even
 for complex expressions.
 
 @opencatbox
-@category{Package atensor}
+@category{Package atensor} @category{Simplification functions}
 @closecatbox
 
 @end deffn

@@ -694,7 +694,7 @@ Reference: Abramowitz and Stegun, equations 22.5.37, page 779, 8.6.6
 (second equation), page 334, and 8.2.5, page 333.
 
 @opencatbox
-@category{Package orthopoly}
+@category{Package orthopoly} @category{Orthogonal functions}
 @closecatbox
 
 @end deffn
@@ -705,7 +705,7 @@ The associated Legendre function of the second kind.
 Reference: Abramowitz and Stegun, equation 8.5.3 and 8.1.8.
 
 @opencatbox
-@category{Package orthopoly}
+@category{Package orthopoly} @category{Orthogonal functions}
 @closecatbox
 
 @end deffn
@@ -716,7 +716,7 @@ The Chebyshev function of the first kind.
 Reference: Abramowitz and Stegun, equation 22.5.47, page 779.
 
 @opencatbox
-@category{Package orthopoly}
+@category{Package orthopoly} @category{Orthogonal functions}
 @closecatbox
 
 @end deffn
@@ -727,7 +727,7 @@ The Chebyshev function of the second kind.
 Reference: Abramowitz and Stegun, equation 22.5.48, page 779.
 
 @opencatbox
-@category{Package orthopoly}
+@category{Package orthopoly} @category{Orthogonal functions}
 @closecatbox
 
 @end deffn
@@ -738,7 +738,7 @@ The generalized Laguerre polynomial.
 Reference: Abramowitz and Stegun, equation 22.5.54, page 780.
 
 @opencatbox
-@category{Package orthopoly}
+@category{Package orthopoly} @category{Orthogonal functions}
 @closecatbox
 
 @end deffn
@@ -749,7 +749,7 @@ The Hermite polynomial.
 Reference: Abramowitz and Stegun, equation 22.5.55, page 780.
 
 @opencatbox
-@category{Package orthopoly}
+@category{Package orthopoly} @category{Orthogonal functions}
 @closecatbox
 
 @end deffn
@@ -774,7 +774,7 @@ weight @code{(1 - @var{x})^@var{a} (1 + @var{x})^@var{b}} isn't integrable for @
 Reference: Abramowitz and Stegun, equation 22.5.42, page 779.
 
 @opencatbox
-@category{Package orthopoly}
+@category{Package orthopoly} @category{Orthogonal functions}
 @closecatbox
 
 @end deffn
@@ -785,7 +785,7 @@ The Laguerre polynomial.
 Reference: Abramowitz and Stegun, equations 22.5.16 and 22.5.54, page 780.
 
 @opencatbox
-@category{Package orthopoly}
+@category{Package orthopoly} @category{Orthogonal functions}
 @closecatbox
 
 @end deffn
@@ -796,7 +796,7 @@ The Legendre polynomial of the first kind.
 Reference: Abramowitz and Stegun, equations 22.5.50 and 22.5.51, page 779.
 
 @opencatbox
-@category{Package orthopoly}
+@category{Package orthopoly} @category{Orthogonal functions}
 @closecatbox
 
 @end deffn
@@ -807,7 +807,7 @@ The Legendre polynomial of the first kind.
 Reference: Abramowitz and Stegun, equations 8.5.3 and 8.1.8.
 
 @opencatbox
-@category{Package orthopoly}
+@category{Package orthopoly} @category{Orthogonal functions}
 @closecatbox
 
 @end deffn
@@ -870,7 +870,7 @@ and @var{r} is its radius. The center can be a complex number; in that
 case, the interval is a disk in the complex plane.
 
 @opencatbox
-@category{Package orthopoly} @category{Global flags}
+@category{Package orthopoly}
 @closecatbox
 
 @end defvr
@@ -981,7 +981,7 @@ Examples:
 Reference: Abramowitz and Stegun, equation 6.1.16, page 256.
 
 @opencatbox
-@category{Package orthopoly} @category{Global variables}
+@category{Package orthopoly} @category{Gamma and related functions}
 @closecatbox
 
 @end defvr
@@ -992,7 +992,7 @@ The spherical Bessel function of the first kind.
 Reference: Abramowitz and Stegun, equations 10.1.8, page 437 and 10.1.15, page 439.
 
 @opencatbox
-@category{Package orthopoly}
+@category{Package orthopoly} @category{Bessel functions}
 @closecatbox
 
 @end deffn
@@ -1003,7 +1003,7 @@ The spherical Bessel function of the second kind.
 Reference: Abramowitz and Stegun, equations 10.1.9, page 437 and 10.1.15, page 439.
 
 @opencatbox
-@category{Package orthopoly}
+@category{Package orthopoly} @category{Bessel functions}
 @closecatbox
 
 @end deffn
@@ -1015,7 +1015,7 @@ first kind.
 Reference: Abramowitz and Stegun, equation 10.1.36, page 439.
 
 @opencatbox
-@category{Package orthopoly}
+@category{Package orthopoly} @category{Bessel functions}
 @closecatbox
 
 @end deffn
@@ -1026,7 +1026,7 @@ The spherical Hankel function of the second kind.
 Reference: Abramowitz and Stegun, equation 10.1.17, page 439.
 
 @opencatbox
-@category{Package orthopoly}
+@category{Package orthopoly} @category{Bessel functions}
 @closecatbox
 
 @end deffn
@@ -1037,7 +1037,7 @@ The spherical harmonic function.
 Reference: Merzbacher 9.64.
 
 @opencatbox
-@category{Package orthopoly}
+@category{Package orthopoly} @category{Orthogonal functions}
 @closecatbox
 
 @end deffn
@@ -1051,7 +1051,7 @@ If you want a unit step function that
 takes on the value 1/2 at zero, use @code{(1 + signum (@var{x}))/2}.
 
 @opencatbox
-@category{Package orthopoly}
+@category{Package orthopoly} @category{Mathematical functions}
 @closecatbox
 
 @end deffn
@@ -1062,7 +1062,7 @@ The ultraspherical polynomial (also known as the Gegenbauer polynomial).
 Reference: Abramowitz and Stegun, equation 22.5.46, page 779.
 
 @opencatbox
-@category{Package orthopoly}
+@category{Package orthopoly} @category{Orthogonal functions}
 @closecatbox
 
 @end deffn

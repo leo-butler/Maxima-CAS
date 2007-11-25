@@ -14,7 +14,7 @@ rule is used in @code{limit}.  This prevents infinite looping in cases like
 @code{limit (cot(x)/csc(x), x, 0)}.
 
 @opencatbox
-@category{Global variables}
+@category{Limits}
 @closecatbox
 
 @end defvr
@@ -53,6 +53,9 @@ for example, @code{limit (inf-1)}.
 For the method see Wang, P., "Evaluation of Definite Integrals by Symbolic
 Manipulation", Ph.D. thesis, MAC TR-92, October 1971.
 
+@opencatbox
+@category{Limits}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} limsubst
@@ -62,7 +65,7 @@ giving 1.  Setting @code{limsubst} to @code{true} will allow such
 substitutions.
 
 @opencatbox
-@category{Global flags}
+@category{Limits}
 @closecatbox
 
 @end defvr
@@ -73,6 +76,9 @@ substitutions.
 Take the limit of the Taylor series expansion of @code{expr} in @code{x}
 at @code{val} from direction @code{dir}.
 
+@opencatbox
+@category{Limits}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} tlimswitch
@@ -85,7 +91,7 @@ When @code{tlimswitch} is @code{false} and the limit of input expression
 cannot be computed directly, @code{limit} will return an unevaluated limit expression.
 
 @opencatbox
-@category{Global flags}
+@category{Limits}
 @closecatbox
 
 @end defvr

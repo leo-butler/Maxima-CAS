@@ -14,7 +14,7 @@ as obtained from the SLATEC project.
 @closecatbox
 
 
-@node Functions and Variables for lapack, Introduction to lapack, lapack, lapack
+@node Functions and Variables for lapack, , Introduction to lapack, lapack
 @section Functions and Variables for lapack
 
 @deffn {Function} dgeev (@var{A})
@@ -65,7 +65,7 @@ in which all elements are numbers.
 @var{U}, @var{sigma}, and @var{V^T},
 such that
 
-@math{@var{A} = @var{U} . @var{Sigma} . @var{V^T}
+@math{@var{A} = @var{U} . @var{Sigma} . @var{V^T}}
 
 where @var{U} is an @math{m}-by-@math{m} unitary matrix,
 @var{Sigma} is an @math{m}-by-@math{n} matrix which is all zeros except for

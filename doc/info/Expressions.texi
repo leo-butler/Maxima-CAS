@@ -582,6 +582,9 @@ Examples:
                         -----------------
 @end example
 
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} boxchar
@@ -594,7 +597,7 @@ All boxes in an expression are drawn with the current value of @code{boxchar};
 the drawing character is not stored with the box expression.
 
 @opencatbox
-@category{Display variables}
+@category{Expressions}
 @closecatbox
 
 @end defvr
@@ -647,6 +650,9 @@ Examples:
 (%o6)                           2
 @end example
 
+@opencatbox
+@category{Complex variables}
+@closecatbox
 @end deffn
 
 @c NEEDS EXPANSION, CLARIFICATION, AND EXAMPLES
@@ -656,6 +662,9 @@ Examples:
 See @code{declare}.
 @c WHAT EXACTLY ARE THE CONSEQUENCES OF DECLARING AN ATOM TO BE CONSTANT ??
 
+@opencatbox
+@category{Declarations and inferences}
+@closecatbox
 @end deffn
 
 @deffn {Function} constantp (@var{expr})
@@ -1122,6 +1131,9 @@ aa unbound variable
                      k = 1        k = 1
 @end example
 
+@opencatbox
+@category{Declarations and inferences}
+@closecatbox
 @end deffn
 
 @c NEEDS WORK
@@ -1135,6 +1147,9 @@ integration variables.  This function is autoloaded from
 @file{simplification/disol.mac}.  A demo is available by
 @code{demo("disol")$}.
 
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @c NEEDS WORK
@@ -1149,6 +1164,9 @@ example, if @code{expr: sin (sqrt (x))}, then @code{freeof (sqrt, expr)} and
 @code{freeof (sqrt, dispform (expr))} give @code{true}, while
 @code{freeof (sqrt, dispform (expr, all))} gives @code{false}.
 
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @c NEEDS WORK
@@ -1175,6 +1193,9 @@ Examples:
                       b d + a d + b c + a c
 @end example
 
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @c NEEDS WORK
@@ -1194,6 +1215,9 @@ a box.  The box is actually part of the expression.
                             """
 @end example
 
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @c PROBABLY MORE TO BE SAID HERE
@@ -1212,6 +1236,9 @@ causes @code{%e^(%pi %i x)} to be simplified. See @code{%emode}.
 2.718...  whenever @code{numer} is @code{true}. See @code{%enumer}.
 
 @c NEED EXAMPLES HERE
+@opencatbox
+@category{Exponential and logarithm functions}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} %emode
@@ -1233,7 +1260,7 @@ special simplification of @code{%e^(%pi %i x)} is carried out.
 
 @c NEED EXAMPLES HERE
 @opencatbox
-@category{Global flags}
+@category{Exponential and logarithm functions} @category{Simplification flags}
 @closecatbox
 
 @end defvr
@@ -1252,7 +1279,7 @@ See also @code{ev} and @code{numer}.
 
 @c NEED EXAMPLES HERE
 @opencatbox
-@category{Global flags}
+@category{Exponential and logarithm functions} @category{Evaluation flags}
 @closecatbox
 
 @end defvr
@@ -1266,7 +1293,7 @@ examine exponents of atoms (such as @code{%e}) which contain @code{var}.
 
 @c NEED EXAMPLES HERE
 @opencatbox
-@category{Global flags}
+@category{Expressions}
 @closecatbox
 
 @end defvr
@@ -1279,7 +1306,7 @@ for @code{%e^x} in @code{%e^(a x)}.
 
 @c NEED EXAMPLES HERE
 @opencatbox
-@category{Global flags}
+@category{Exponential and logarithm functions} @category{Expressions}
 @closecatbox
 
 @end defvr
@@ -1386,6 +1413,9 @@ An indefinite integral is not free of its variable of integration.
 @end example
 @end itemize
 
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @c IS THIS DEFINITION CORRECT ??
@@ -1408,6 +1438,9 @@ See also @code{abs}, @code{carg}, @code{polarform}, @code{rectform},
 and @code{realpart}.
 
 @c NEED EXAMPLES HERE
+@opencatbox
+@category{Complex variables}
+@closecatbox
 @end deffn
 
 @deffn {Function} infix (@var{op})
@@ -1562,7 +1595,7 @@ the @code{for} ... @code{in} construct,
 
 @c NEED EXAMPLES HERE
 @opencatbox
-@category{Global flags}
+@category{Expressions}
 @closecatbox
 
 @end defvr
@@ -1597,6 +1630,9 @@ Examples:
 (%o5)                       g(x + 1)
 @end example
 
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @c NEEDS WORK
@@ -1617,6 +1653,9 @@ products. See @code{isolate_wrt_times}.
 
 Do @code{example (isolate)} for examples.
 
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @c NEEDS WORK
@@ -1649,7 +1688,7 @@ switch on
 @end example
 
 @opencatbox
-@category{Global flags}
+@category{Expressions}
 @closecatbox
 
 @end defvr
@@ -1664,7 +1703,7 @@ it returns if they appear in the expression @code{listofvars} is called on.
 The default is to omit these.
 
 @opencatbox
-@category{Global flags}
+@category{Expressions}
 @closecatbox
 
 @end defvr
@@ -1689,7 +1728,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Global flags}
+@category{Expressions}
 @closecatbox
 
 @end defvr
@@ -1708,12 +1747,19 @@ appear in @var{expr}.  The default is to omit these.
                                   1
 @end example
 
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @c NEEDS WORK
 @deffn {Function} lfreeof (@var{list}, @var{expr})
 For each member @var{m} of list, calls @code{freeof (@var{m}, @var{expr})}.
 It returns @code{false} if any call to @code{freeof} does and @code{true} otherwise.
+
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @deffn {Function} lopow (@var{expr}, @var{x})
@@ -1725,6 +1771,9 @@ Returns the lowest exponent of @var{x} which explicitly appears in
 (%o1)                       min(a, 2)
 @end example
 
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @c NEEDS WORK
@@ -1733,6 +1782,9 @@ is similar to @code{dpart} but uses a
 labelled box. A labelled box is similar to the one produced by @code{dpart}
 but it has a name in the top line.
 
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @c NEEDS WORK
@@ -1782,6 +1834,9 @@ form is equivalent to @code{multthru (@var{expr_1}*@var{expr_2})}.
 (%o7)         a . f + a . c . e + a . c . d + a . b
 @end example
 
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @c NEEDS WORK
@@ -1792,6 +1847,9 @@ were a noun.  Note that some verb functions will return their noun
 forms if they can't be evaluated for certain arguments.  This is also
 the form returned if a function call is preceded by a quote.
 
+@opencatbox
+@category{Nouns and verbs}
+@closecatbox
 @end deffn
 
 @c NEEDS WORK
@@ -1803,6 +1861,9 @@ Note that expressions like @code{sin (@var{expr})}, @code{sqrt (@var{expr})}, @c
 count as just one term regardless of how many terms @var{expr} has (if it is a
 sum).
 
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @c NEEDS WORK
@@ -1873,7 +1934,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Operators}
+@category{Expressions} @category{Operators}
 @closecatbox
 
 @end deffn
@@ -1903,6 +1964,9 @@ effect of "collapsing" its argument so that all common subexpressions
 are shared.
 Do @code{example (optimize)} for examples.
 
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} optimprefix
@@ -1912,7 +1976,7 @@ Default value: @code{%}
 the @code{optimize} command.
 
 @opencatbox
-@category{Global variables}
+@category{Expressions}
 @closecatbox
 
 @end defvr
@@ -1927,6 +1991,9 @@ argument.
 
 See also @code{orderless}.
 
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @c NEEDS WORK
@@ -1936,7 +2003,7 @@ Returns @code{true} if @var{expr_2} precedes @var{expr_1} in the
 ordering set up with the @code{ordergreat} function.
 
 @opencatbox
-@category{Predicate functions}
+@category{Expressions} @category{Predicate functions}
 @closecatbox
 
 @end deffn
@@ -1958,6 +2025,9 @@ declared constants < declared scalars < first argument to @code{orderless} <
 
 See also @code{ordergreat} and @code{mainvar}.
 
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @c NEEDS WORK
@@ -1967,7 +2037,7 @@ Returns @code{true} if @var{expr_1} precedes @var{expr_2} in the
 ordering set up by the @code{orderless} command.
 
 @opencatbox
-@category{Predicate functions}
+@category{Expressions} @category{Predicate functions}
 @closecatbox
 
 @end deffn
@@ -2002,6 +2072,9 @@ Example: @code{part (z+2*y, 2, 1)} yields 2.
 @c MERGE IN example (part) OUTPUT HERE
 @code{example (part)} displays additional examples.
 
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @c NEEDS WORK
@@ -2020,6 +2093,9 @@ the factors, terms, or list which do.
 (%o3)                  [[b, c], [a, f(a)]]
 @end example
 
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @c NEEDS EXAMPLE
@@ -2031,7 +2107,7 @@ when a selected part of an expression doesn't exist, otherwise an
 error message is given.
 
 @opencatbox
-@category{Global flags}
+@category{Expressions}
 @closecatbox
 
 @end defvr
@@ -2125,6 +2201,9 @@ Examples:
                 3        2
 @end example
 
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @c NEEDS WORK
@@ -2138,7 +2217,7 @@ may be referred to in the function itself.
 @c NEED "SEE ALSO" TO POINT TO LIST OF ALL RELEVANT FUNCTIONS
 
 @opencatbox
-@category{Global variables}
+@category{Expressions}
 @closecatbox
 
 @end defvr
@@ -2148,6 +2227,9 @@ may be referred to in the function itself.
 Returns an expression @code{r %e^(%i theta)} equivalent to @var{expr},
 such that @code{r} and @code{theta} are purely real.
 
+@opencatbox
+@category{Complex variables} @category{Exponential and logarithm functions}
+@closecatbox
 @end deffn
 
 @c ISN'T THERE AN EQUIVALENT FUNCTION SOMEWHERE ??
@@ -2170,6 +2252,9 @@ Gives the powers of @var{x} occuring in @var{expr}.
 @c MAP(LAMBDA([POW],COEFF(POLY,X,POW)),POWERS(POLY,X));
 @c AND MANY OTHER SIMILAR USEFUL HACKS.
 
+@opencatbox
+@category{Expressions} @category{Polynomials}
+@closecatbox
 @end deffn
 
 @deffn {Function} product (@var{expr}, @var{i}, @var{i_0}, @var{i_1})
@@ -2244,6 +2329,9 @@ Examples:
 (%o9)                        a   b
 @end example
 
+@opencatbox
+@category{Sum and product functions}
+@closecatbox
 @end deffn
 
 @c NEEDS EXAMPLES
@@ -2252,6 +2340,9 @@ Returns the real part of @var{expr}. @code{realpart} and @code{imagpart} will
 work on expressions involving trigonometic and hyperbolic functions,
 as well as square root, logarithm, and exponentiation.
 
+@opencatbox
+@category{Complex variables}
+@closecatbox
 @end deffn
 
 @c NEEDS EXAMPLES
@@ -2259,6 +2350,9 @@ as well as square root, logarithm, and exponentiation.
 Returns an expression @code{a + b %i} equivalent to @var{expr},
 such that @var{a} and @var{b} are purely real.
 
+@opencatbox
+@category{Complex variables}
+@closecatbox
 @end deffn
 
 @deffn {Function} rembox (@var{expr}, unlabelled)
@@ -2338,6 +2432,9 @@ Examples:
                                      h
 @end example
 
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @deffn {Function} sum (@var{expr}, @var{i}, @var{i_0}, @var{i_1})
@@ -2457,6 +2554,9 @@ Examples:
 (%o12)   b   + b  + b  + b  + b  + a  + a  + a  + a  + a
 @end example
 
+@opencatbox
+@category{Sum and product functions}
+@closecatbox
 @end deffn
 
 @deffn {Function} lsum (@var{expr}, @var{x}, @var{L})
@@ -2485,6 +2585,9 @@ Examples:
                      i in rootsof(x  - 1)
 @end example
 
+@opencatbox
+@category{Sum and product functions}
+@closecatbox
 @end deffn
 
 @deffn {Function} verbify (@var{f})
@@ -2511,4 +2614,7 @@ $FOO
 %FOO
 @end example
 
+@opencatbox
+@category{Nouns and verbs}
+@closecatbox
 @end deffn

@@ -36,7 +36,7 @@ the @code{alias}, @code{ordergreat}, @code{orderless} functions or by declaring 
 @code{noun} with @code{declare}).
 
 @opencatbox
-@category{Global variables}
+@category{Declarations and inferences} @category{Global variables}
 @closecatbox
 
 @end defvr
@@ -86,7 +86,7 @@ Similarly, you could say @code{apropos (tr_)} to find a list of many of the
 switches relating to the translator, most of which begin with @code{tr_}.
 
 @opencatbox
-@category{Help}
+@category{Console interaction}
 @closecatbox
 
 @end deffn
@@ -117,7 +117,7 @@ Default value: @code{i}
 next variable of summation when necessary.
 
 @opencatbox
-@category{Global variables}
+@category{Sums and products}
 @closecatbox
 
 @end defvr
@@ -130,7 +130,7 @@ of summation.  If it is set to @code{false} then the index will consist only
 of @code{genindex} with no numeric suffix.
 
 @opencatbox
-@category{Global variables}
+@category{Sums and products}
 @closecatbox
 
 @end defvr
@@ -485,6 +485,9 @@ the list of all variables given names by the user
 
 See also @code{values}.
 
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @c NEEDS EXAMPLES
@@ -513,7 +516,7 @@ declared @code{scalar} with @code{declare}, or composed entirely of numbers, con
 variables, but not containing matrices or lists.
 
 @opencatbox
-@category{Predicate functions}
+@category{Predicate functions} @category{Vectors} @category{Matrices}
 @closecatbox
 
 @end deffn

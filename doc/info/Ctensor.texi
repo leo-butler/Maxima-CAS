@@ -1403,7 +1403,7 @@ default 4. The command @code{dim: n} will reset the dimension to any other
 value @code{n}.
 
 @opencatbox
-@category{Package ctensor} @category{Global variables}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr
@@ -1419,7 +1419,7 @@ run times will, of course, result. Note: this option is set
 automatically by @code{csetup} if a diagonal metric is specified.
 
 @opencatbox
-@category{Package ctensor} @category{Global flags}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr
@@ -1430,7 +1430,7 @@ Causes trigonometric simplifications to be used when tensors are computed. Prese
 @code{ctrgsimp} affects only computations involving a moving frame.
 
 @opencatbox
-@category{Package ctensor} @category{Global flags}
+@category{Package ctensor} @category{Simplification flags}
 @closecatbox
 
 @end defvr
@@ -1445,7 +1445,7 @@ computations in a Lorentz frame, @code{lfg} should have the appropriate
 signature.
 
 @opencatbox
-@category{Package ctensor} @category{Global flags}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr
@@ -1457,7 +1457,7 @@ connection coefficients. The contortion tensor itself is computed by
 @code{contortion} from the user-supplied tensor @code{tr}.
 
 @opencatbox
-@category{Package ctensor} @category{Global flags}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr
@@ -1470,7 +1470,7 @@ from the user-supplied nonmetricity vector @code{nm} by the function
 @code{nonmetricity}.
 
 @opencatbox
-@category{Package ctensor} @category{Global flags}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr
@@ -1483,7 +1483,7 @@ Taylor-series expansions. Presently, @code{christof}, @code{ricci},
 setting.
 
 @opencatbox
-@category{Package ctensor} @category{Global flags}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr
@@ -1494,7 +1494,7 @@ Variable used for Taylor-series expansion if @code{ctayswitch} is set to
 @code{true}.
 
 @opencatbox
-@category{Package ctensor} @category{Global variables}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr
@@ -1505,7 +1505,7 @@ Maximum power used in Taylor-series expansion when @code{ctayswitch} is
 set to @code{true}.
 
 @opencatbox
-@category{Package ctensor} @category{Global variables}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr
@@ -1516,7 +1516,7 @@ Point around which Taylor-series expansion is carried out when
 @code{ctayswitch} is set to @code{true}.
 
 @opencatbox
-@category{Package ctensor} @category{Global variables}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr
@@ -1527,7 +1527,7 @@ The determinant of the metric tensor @code{lg}. Computed by @code{cmetric} when
 @code{cframe_flag} is set to @code{false}.
 
 @opencatbox
-@category{Package ctensor} @category{Global variables}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr
@@ -1537,7 +1537,7 @@ The determinant of the metric tensor @code{lg}. Computed by @code{cmetric} when
 Causes rational simplification to be applied by @code{christof}.
 
 @opencatbox
-@category{Package ctensor} @category{Global flags}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr
@@ -1550,7 +1550,7 @@ performed on the non-zero components of Einstein tensors; if
 @code{ratfac} is @code{true} then the components will also be factored.
 
 @opencatbox
-@category{Package ctensor} @category{Global flags}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr
@@ -1563,7 +1563,7 @@ simplification will be done; if @code{ratfac} is @code{true} then each of the
 components will also be factored.
 
 @opencatbox
-@category{Package ctensor} @category{Global flags}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr
@@ -1576,7 +1576,7 @@ to apply rational simplification to the values of the Weyl tensor. If
 @code{ratfac} is @code{true}, then the components will also be factored.
 
 @opencatbox
-@category{Package ctensor} @category{Global flags}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr
@@ -1585,7 +1585,7 @@ to apply rational simplification to the values of the Weyl tensor. If
 The covariant frame metric. By default, it is initialized to the 4-dimensional Lorentz frame with signature (+,+,+,-). Used when @code{cframe_flag} is @code{true}.
 
 @opencatbox
-@category{Package ctensor} @category{Global variables}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr
@@ -1594,7 +1594,7 @@ The covariant frame metric. By default, it is initialized to the 4-dimensional L
 The inverse frame metric. Computed from @code{lfg} when @code{cmetric} is called while @code{cframe_flag} is set to @code{true}.
 
 @opencatbox
-@category{Package ctensor} @category{Global variables}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr
@@ -1605,7 +1605,7 @@ The (3,1) Riemann tensor. Computed when the function @code{riemann} is invoked. 
 If @code{cframe_flag} is @code{true}, @code{riem} is computed from the covariant Riemann-tensor @code{lriem}.
 
 @opencatbox
-@category{Package ctensor} @category{Global variables}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr
@@ -1615,7 +1615,7 @@ If @code{cframe_flag} is @code{true}, @code{riem} is computed from the covariant
 The covariant Riemann tensor. Computed by @code{lriemann}.
 
 @opencatbox
-@category{Package ctensor} @category{Global variables}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr
@@ -1625,7 +1625,7 @@ The covariant Riemann tensor. Computed by @code{lriemann}.
 The contravariant Riemann tensor. Computed by @code{uriemann}.
 
 @opencatbox
-@category{Package ctensor} @category{Global variables}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr
@@ -1635,7 +1635,7 @@ The contravariant Riemann tensor. Computed by @code{uriemann}.
 The mixed Ricci-tensor. Computed by @code{ricci}.
 
 @opencatbox
-@category{Package ctensor} @category{Global variables}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr
@@ -1645,7 +1645,7 @@ The mixed Ricci-tensor. Computed by @code{ricci}.
 The contravariant Ricci-tensor. Computed by @code{uricci}.
 
 @opencatbox
-@category{Package ctensor} @category{Global variables}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr
@@ -1656,7 +1656,7 @@ The metric tensor. This tensor must be specified (as a @code{dim} by @code{dim} 
 before other computations can be performed.
 
 @opencatbox
-@category{Package ctensor} @category{Global variables}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr
@@ -1666,7 +1666,7 @@ before other computations can be performed.
 The inverse of the metric tensor. Computed by @code{cmetric}.
 
 @opencatbox
-@category{Package ctensor} @category{Global variables}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr
@@ -1676,7 +1676,7 @@ The inverse of the metric tensor. Computed by @code{cmetric}.
 The Weyl tensor. Computed by @code{weyl}.
 
 @opencatbox
-@category{Package ctensor} @category{Global variables}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr
@@ -1686,7 +1686,7 @@ The Weyl tensor. Computed by @code{weyl}.
 Frame bracket coefficients, as computed by @code{frame_bracket}.
 
 @opencatbox
-@category{Package ctensor} @category{Global variables}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr
@@ -1696,7 +1696,7 @@ Frame bracket coefficients, as computed by @code{frame_bracket}.
 The Kretchmann invariant. Computed by @code{rinvariant}.
 
 @opencatbox
-@category{Package ctensor} @category{Global variables}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr
@@ -1706,7 +1706,7 @@ The Kretchmann invariant. Computed by @code{rinvariant}.
 A Newman-Penrose null tetrad. Computed by @code{nptetrad}.
 
 @opencatbox
-@category{Package ctensor} @category{Global variables}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr
@@ -1728,7 +1728,7 @@ Defined as @code{ug.np}. The product @code{np.transpose(npi)} is constant:
 @end example
 
 @opencatbox
-@category{Package ctensor} @category{Global variables}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr
@@ -1738,7 +1738,7 @@ Defined as @code{ug.np}. The product @code{np.transpose(npi)} is constant:
 User-supplied rank-3 tensor representing torsion. Used by @code{contortion}.
 
 @opencatbox
-@category{Package ctensor} @category{Global variables}
+@category{Package ctensor}
 @closecatbox
 @end defvr
 
@@ -1747,7 +1747,7 @@ User-supplied rank-3 tensor representing torsion. Used by @code{contortion}.
 The contortion tensor, computed from @code{tr} by @code{contortion}.
 
 @opencatbox
-@category{Package ctensor} @category{Global variables}
+@category{Package ctensor}
 @closecatbox
 @end defvr
 
@@ -1756,7 +1756,7 @@ The contortion tensor, computed from @code{tr} by @code{contortion}.
 User-supplied nonmetricity vector. Used by @code{nonmetricity}.
 
 @opencatbox
-@category{Package ctensor} @category{Global variables}
+@category{Package ctensor}
 @closecatbox
 @end defvr
 
@@ -1765,7 +1765,7 @@ User-supplied nonmetricity vector. Used by @code{nonmetricity}.
 The nonmetricity coefficients, computed from @code{nm} by @code{nonmetricity}.
 
 @opencatbox
-@category{Package ctensor} @category{Global variables}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr
@@ -1776,7 +1776,7 @@ Variable indicating if the tensor package has been initialized. Set and used by
 @code{csetup}, reset by @code{init_ctensor}.
 
 @opencatbox
-@category{Package ctensor} @category{Global flags}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr
@@ -1792,7 +1792,7 @@ one may redefine the coordinates with the assignment
 See also @code{csetup}.
 
 @opencatbox
-@category{Package ctensor} @category{Global variables}
+@category{Package ctensor}
 @closecatbox
 
 @end defvr

@@ -105,7 +105,7 @@ Some identities are applied when @math{%pi} and @math{%pi/2} are multiplied by a
 @end example
 
 @opencatbox
-@category{Global flags}
+@category{Simplification flags}
 @closecatbox
 
 @end defvr
@@ -166,7 +166,7 @@ Even when the argument is demonstrably real, the simplification is applied.
 @end example
 
 @opencatbox
-@category{Global flags}
+@category{Simplification flags}
 @closecatbox
 
 @end defvr
@@ -310,7 +310,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Global flags}
+@category{Simplification flags}
 @closecatbox
 
 @end defvr
@@ -411,7 +411,7 @@ Default value: @code{true}
 @code{true}.
 
 @opencatbox
-@category{Global flags}
+@category{Simplification flags}
 @closecatbox
 
 @end defvr
@@ -425,7 +425,7 @@ Default value: @code{true}
 will take place only if @code{trigexpandtimes} is @code{true}.
 
 @opencatbox
-@category{Global flags}
+@category{Simplification flags}
 @closecatbox
 
 @end defvr
@@ -449,7 +449,7 @@ If @code{false}, both the
 simplifications are turned off.
 
 @opencatbox
-@category{Global flags}
+@category{Simplification flags}
 @closecatbox
 
 @end defvr
@@ -502,7 +502,7 @@ arguments to trigonometric functions. E.g., @code{sin(-x)} will become
 @code{-sin(x)} only if @code{trigsign} is @code{true}.
 
 @opencatbox
-@category{Global flags}
+@category{Simplification flags}
 @closecatbox
 
 @end defvr
@@ -518,6 +518,9 @@ able to further simplify the result.
 @code{demo ("trgsmp.dem")} displays some examples of @code{trigsimp}.
 @c MERGE EXAMPLES INTO THIS ITEM
 
+@opencatbox
+@category{Simplification functions}
+@closecatbox
 @end deffn
 
 @c NEEDS CLARIFICATION

@@ -11,7 +11,7 @@
 Default value: @code{[]}
 
 @code{%rnum_list} is the list of variables introduced in solutions
-by @code{algsys}.
+by @code{solve} and @code{algsys}.
 @code{%r} variables are added to @code{%rnum_list} in the order they
 are created.
 This is convenient for doing substitutions into the
@@ -22,7 +22,7 @@ doing @code{concat ('%r, j)}.
 
 @c NEED EXAMPLE HERE
 @opencatbox
-@category{Algebraic equations} @category{Global variables}
+@category{Algebraic equations}
 @closecatbox
 
 @end defvr
@@ -47,7 +47,7 @@ exact solutions, and only yield approximations when all else fails.
 @c ABOVE DESCRIPTION NOT TOO CLEAR -- MAYBE EXAMPLES WILL HELP
 
 @opencatbox
-@category{Algebraic equations} @category{Global flags}
+@category{Algebraic equations}
 @closecatbox
 
 @end defvr
@@ -258,7 +258,7 @@ be helpful in very big problems where back substitution would cause
 the generation of extremely large expressions.
 
 @opencatbox
-@category{Algebraic equations} @category{Global flags}
+@category{Algebraic equations}
 @closecatbox
 
 @end defvr
@@ -338,7 +338,7 @@ Solution:
 @end example
 
 @opencatbox
-@category{Algebraic equations} @category{Global flags}
+@category{Algebraic equations}
 @closecatbox
 
 @end defvr
@@ -362,7 +362,7 @@ within  the @code{block}.  Termination of the @code{block} with a dollar sign, $
 @code{dispflag} to @code{false}.
 
 @opencatbox
-@category{Algebraic equations} @category{Global flags}
+@category{Algebraic equations} @category{Display flags}
 @closecatbox
 
 @end defvr
@@ -452,7 +452,7 @@ Solution
 @end example
 
 @opencatbox
-@category{Linear equations} @category{Global flags}
+@category{Linear equations}
 @closecatbox
 
 @end defvr
@@ -512,7 +512,7 @@ non-closed form solution, respectively. If a series method was used,
 given to @code{ieqn} if an error prevented generation of further terms).
 
 @opencatbox
-@category{Integral equations} @category{Global flags}
+@category{Integral equations}
 @closecatbox
 
 @end defvr
@@ -688,7 +688,7 @@ When @code{linsolvewarn} is @code{true},
 @code{linsolve} prints a message "Dependent equations eliminated".
 
 @opencatbox
-@category{Linear equations} @category{Global flags}
+@category{Linear equations}
 @closecatbox
 
 @end defvr
@@ -703,7 +703,7 @@ Otherwise, @code{linsolve} solves an under-determined system of
 equations with some variables expressed in terms of others.
 
 @opencatbox
-@category{Linear equations} @category{Global flags}
+@category{Linear equations}
 @closecatbox
 
 @end defvr
@@ -717,7 +717,7 @@ multiplicities of the individual solutions returned by @code{solve} or
 @c NEED AN EXAMPLE HERE
 
 @opencatbox
-@category{Algebraic equations} @category{Global variables}
+@category{Algebraic equations} @category{Polynomials}
 @closecatbox
 
 @end defvr
@@ -771,7 +771,7 @@ create intermediate expression labels
 @c NEED AN EXAMPLE HERE
 
 @opencatbox
-@category{Algebraic equations} @category{Global flags}
+@category{Algebraic equations} @category{Polynomials}
 @closecatbox
 
 @end defvr
@@ -783,7 +783,7 @@ When @code{realonly} is @code{true}, @code{algsys} returns only
 those solutions which are free of @code{%i}.
 
 @opencatbox
-@category{Algebraic equations} @category{Global flags}
+@category{Algebraic equations}
 @closecatbox
 
 @end defvr
@@ -927,7 +927,7 @@ Default value: @code{true}
 @code{rootscontract} command.  See @code{rootscontract} for details.
 
 @opencatbox
-@category{Operations on expressions} @category{Global flags}
+@category{Operations on expressions} @category{Simplification flags}
 @closecatbox
 
 @end defvr
@@ -1013,7 +1013,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Operations on expressions}
+@category{Simplification functions}
 @closecatbox
 @end deffn
 
@@ -1026,7 +1026,7 @@ confidence interval for the roots found by the @code{realroots} function.
 @c NEED EXAMPLE HERE
 
 @opencatbox
-@category{Polynomials} @category{Numerical methods} @category{Global variables}
+@category{Polynomials} @category{Numerical methods}
 @closecatbox
 
 @end defvr
@@ -1214,7 +1214,7 @@ When @code{solvedecomposes} is @code{true}, @code{solve} calls
 @c OTHERWISE WHAT HAPPENS -- CAN'T SOLVE POLYNOMIALS, OR SOME OTHER METHOD IS USED ??
 
 @opencatbox
-@category{Algebraic equations} @category{Global flags}
+@category{Algebraic equations}
 @closecatbox
 
 @end defvr
@@ -1228,7 +1228,7 @@ where @code{F} is some function.
 @c NEED AN EXAMPLE HERE
 
 @opencatbox
-@category{Algebraic equations} @category{Global flags}
+@category{Algebraic equations}
 @closecatbox
 
 @end defvr
@@ -1243,7 +1243,7 @@ where factoring is not necessary.
 @c NEED AN EXAMPLE HERE
 
 @opencatbox
-@category{Algebraic equations} @category{Global flags}
+@category{Algebraic equations}
 @closecatbox
 
 @end defvr
@@ -1256,7 +1256,7 @@ When @code{solvenullwarn} is @code{true},
 For example, @code{solve ([], [])} would print two warning messages and return @code{[]}.
 
 @opencatbox
-@category{Algebraic equations} @category{Global flags}
+@category{Algebraic equations}
 @closecatbox
 
 @end defvr
@@ -1270,7 +1270,7 @@ containing exponentials and logarithms to be solved.
 @c NEED AN EXAMPLE HERE
 
 @opencatbox
-@category{Algebraic equations} @category{Global flags}
+@category{Algebraic equations}
 @closecatbox
 
 @end defvr
@@ -1286,7 +1286,7 @@ solutions.
 @c NEED AN EXAMPLE HERE
 
 @opencatbox
-@category{Algebraic equations} @category{Global flags}
+@category{Algebraic equations}
 @closecatbox
 
 @end defvr
@@ -1313,7 +1313,7 @@ Inconsistent equations:  (2)
 @end example
 
 @opencatbox
-@category{Algebraic equations} @category{Global flags}
+@category{Algebraic equations}
 @closecatbox
 
 @end defvr
