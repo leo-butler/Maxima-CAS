@@ -24,7 +24,7 @@ simplify, e.g. @code{j(j(a,b),j(c,d))} to @code{j(a, b, c, d)}.
 See also @code{syntax}.
 
 @opencatbox
-@category{Operators}
+@category{Operators} @category{Syntax}
 @closecatbox
 
 @node nofix, postfix, nary, Operators
@@ -39,7 +39,7 @@ function which declares x to be a @code{nofix} operator.
 See also @code{syntax}.
 
 @opencatbox
-@category{Operators}
+@category{Operators} @category{Syntax}
 @closecatbox
 
 @node postfix, prefix, nofix, Operators
@@ -53,7 +53,7 @@ to be a @code{postfix} operator.
 See also @code{syntax}.
 
 @opencatbox
-@category{Operators}
+@category{Operators} @category{Syntax}
 @closecatbox
 
 @node prefix, Arithmetic operators, postfix, Operators
@@ -66,7 +66,7 @@ be a @code{prefix} operator.
 See also @code{syntax}.
 
 @opencatbox
-@category{Operators}
+@category{Operators} @category{Syntax}
 @closecatbox
 
 @node Arithmetic operators, Relational operators, prefix, Operators
@@ -2246,7 +2246,7 @@ causes @code{sqrt} to display with exponent 1/2.
 @c AND OTHERWISE ... ??
 
 @opencatbox
-@category{Mathematical functions} @category{Display flags}
+@category{Mathematical functions} @category{Display flags and variables}
 @closecatbox
 
 @end defvr

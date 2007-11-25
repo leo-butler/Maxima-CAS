@@ -43,6 +43,10 @@ Examples:
 (%o5)                        xyz + 1
 @end example
 
+@opencatbox
+@category{Syntax}
+@closecatbox
+
 
 @node Files, Functions and Variables for Input and Output, Comments, Input and Output
 @section Files
@@ -277,7 +281,7 @@ Maxima displays @code{%e} to a negative exponent as a quotient.
 For example, @code{%e^-x} is displayed as @code{1/%e^x}.
 
 @opencatbox
-@category{Exponential and logarithm functions} @category{Display flags}
+@category{Exponential and logarithm functions} @category{Display flags and variables}
 @closecatbox
 
 @end defvr
@@ -358,7 +362,7 @@ Default value: @code{!}
 signs around expressions which are more than one line tall.
 
 @opencatbox
-@category{Display variables}
+@category{Display flags and variables}
 @closecatbox
 
 @end defvr
@@ -441,7 +445,7 @@ or to help organize one's thinking in solving complex problems.
 See also @code{load}, @code{batchload}, and @code{demo}.
 
 @opencatbox
-@category{State management} @category{File input}
+@category{Session management} @category{File input}
 @closecatbox
 
 @end deffn
@@ -466,7 +470,7 @@ See also @code{batch} and @code{load}.
 @c batchload APPEARS TO HAVE THE SAME EFFECT AS load. WHY NOT GET RID OF batchload ???
 
 @opencatbox
-@category{State management} @category{File input}
+@category{Session management} @category{File input}
 @closecatbox
 
 @end deffn
@@ -541,7 +545,7 @@ Note that although @code{concat (1, 2)} looks like a number, it is a string.
 @end example
 
 @opencatbox
-@category{Expressions}
+@category{Expressions} @category{Strings}
 @closecatbox
 @end deffn
 
@@ -556,7 +560,7 @@ Unlike @code{concat}, the arguments do @i{not} need to be atoms.
 @end example
 
 @opencatbox
-@category{Expressions}
+@category{Expressions} @category{Strings}
 @closecatbox
 @end deffn
 
@@ -633,7 +637,7 @@ the console display is a string (1-dimensional) form rather than a display
 (2-dimensional) form.
 
 @opencatbox
-@category{Display flags}
+@category{Display flags and variables}
 @closecatbox
 
 @end defvr
@@ -664,7 +668,7 @@ X*4/3;    ---        - X
 @end example
 
 @opencatbox
-@category{Display flags}
+@category{Display flags and variables}
 @closecatbox
 
 @end defvr
@@ -744,7 +748,7 @@ Example expression is --------------
 @end example
 
 @opencatbox
-@category{Debugging} @category{Display variables}
+@category{Debugging} @category{Display flags and variables}
 @closecatbox
 
 @end defvr
@@ -766,7 +770,7 @@ with the @var{n}-th symbol equivalent to @code{concat ('errexp, @var{n})}.
 See also @code{error} and @code{error_size}.
 
 @opencatbox
-@category{Debugging} @category{Display variables}
+@category{Debugging} @category{Display flags and variables}
 @closecatbox
 
 @end defvr
@@ -789,7 +793,7 @@ When @code{exptdispflag} is @code{true}, Maxima displays expressions
 with negative exponents using quotients, e.g., @code{X^(-1)} as @code{1/X}.
 
 @opencatbox
-@category{Expressions} @category{Display flags}
+@category{Expressions} @category{Display flags and variables}
 @closecatbox
 
 @end defvr
@@ -1046,7 +1050,7 @@ n do (for j from i+1 thru n do L[i,j]:0),L)
 @end example
 
 @opencatbox
-@category{Display functions} @category{Display flags}
+@category{Display functions} @category{Display flags and variables}
 @closecatbox
 
 @end deffn
@@ -1097,7 +1101,7 @@ by concatenating @code{inchar} and @code{linenum}.
 See also @code{labels}.
 
 @opencatbox
-@category{Display variables}
+@category{Display flags and variables}
 @closecatbox
 
 @end defvr
@@ -1192,7 +1196,7 @@ Intermediate expressions might or might not be displayed.
 See @code{programmode} and @code{labels}.
 
 @opencatbox
-@category{Display variables}
+@category{Display flags and variables}
 @closecatbox
 
 @end defvr
@@ -1208,7 +1212,7 @@ Text printed by built-in Maxima functions, such as error messages and the output
 is not affected by @code{linel}.
 
 @opencatbox
-@category{Display variables}
+@category{Display flags and variables}
 @closecatbox
 
 @end defvr
@@ -1239,7 +1243,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Display variables}
+@category{Display flags and variables}
 @closecatbox
 
 @end defvr
@@ -1274,7 +1278,7 @@ See @code{file_search} for more detail about the file search mechanism.
 @code{load} evaluates its argument.
 
 @opencatbox
-@category{State management} @category{File input}
+@category{Session management} @category{File input}
 @closecatbox
 
 @end deffn
@@ -1289,7 +1293,7 @@ the file extension and as much of the path as needed to find the file.
 The user may find it more convenient to use @code{load} instead of @code{loadfile}.
 
 @opencatbox
-@category{State management} @category{File input}
+@category{Session management} @category{File input}
 @closecatbox
 
 @end deffn
@@ -1337,7 +1341,7 @@ See also @code{ibase}.
 
 @c NEED EXAMPLES HERE
 @opencatbox
-@category{Display variables} @category{Console interaction}
+@category{Display flags and variables} @category{Console interaction}
 @closecatbox
 
 @end defvr
@@ -1362,7 +1366,7 @@ by concatenating @code{outchar} and @code{linenum}.
 See also @code{labels}.
 
 @opencatbox
-@category{Display variables}
+@category{Display flags and variables}
 @closecatbox
 
 @end defvr
@@ -1415,7 +1419,7 @@ is displayed as a leading multiplicative term @code{1/n}.
 @end example
 
 @opencatbox
-@category{Display flags}
+@category{Display flags and variables}
 @closecatbox
 
 @end defvr
@@ -1647,7 +1651,7 @@ Default value: @code{]}
 See also @code{lmxchar}.
 
 @opencatbox
-@category{Display variables}
+@category{Display flags and variables}
 @closecatbox
 
 @end defvr
@@ -1708,7 +1712,7 @@ see @code{myoptions}.
 @code{save} evaluates @var{filename} and quotes all other arguments.
 
 @opencatbox
-@category{State management} @category{File output}
+@category{Session management} @category{File output}
 @closecatbox
 
 @end deffn
@@ -1763,7 +1767,7 @@ When @code{stardisp} is @code{true}, multiplication is
 displayed with an asterisk @code{*} between operands.
 
 @opencatbox
-@category{Display flags}
+@category{Display flags and variables}
 @closecatbox
 
 @end defvr
@@ -1817,7 +1821,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Display flags}
+@category{Display flags and variables}
 @closecatbox
 
 @end defvr
@@ -1866,7 +1870,7 @@ value. Note that the general form of @code{stringout} does not print
 variables as assignment statements.
 
 @opencatbox
-@category{State management} @category{File output}
+@category{Session management} @category{File output}
 @closecatbox
 
 @end deffn
@@ -2160,7 +2164,7 @@ Text printed by built-in Maxima functions, such as error messages and the output
 is not affected by @code{ttyoff}.
 
 @opencatbox
-@category{Display flags}
+@category{Display flags and variables}
 @closecatbox
 
 @end defvr

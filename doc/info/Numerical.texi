@@ -1,36 +1,25 @@
 @menu
-* Introduction to Numerical::   
-* Fourier packages::                     
-* Functions and Variables for Numerical::   
-* Functions and Variables for Fourier Series::
+* Introduction to fast Fourier transform::                     
+* Functions and Variables for fast Fourier transform::
+* Introduction to Fourier series::
+* Functions and Variables for Fourier series::
 @end menu
 
-@node Introduction to Numerical, Fourier packages, Numerical, Numerical
-@section Introduction to Numerical
+@node Introduction to fast Fourier transform, Functions and Variables for fast Fourier transform, Numerical, Numerical
+@section Introduction to fast Fourier transform
 
-@node Fourier packages, Functions and Variables for Numerical, Introduction to Numerical, Numerical
-@section Fourier packages
 The @code{fft} package comprises functions for the numerical (not symbolic) computation
 of the fast Fourier transform.
-@code{load ("fft")} loads this package.
-See @code{fft}.
-
-The @code{fourie} package comprises functions for the symbolic computation
-of Fourier series.
-@code{load ("fourie")} loads this package.
-There are functions in the @code{fourie} package to calculate Fourier integral
-coefficients and some functions for manipulation of expressions.
-See @code{Functions and Variables for Fourier Series}.
 
 @opencatbox
-@category{Fourier transform} @category{Share packages} @category{Package fft} @category{Package fourie}
+@category{Fourier transform} @category{Numerical methods} @category{Share packages} @category{Package fft}
 @closecatbox
 
 
 @c end concepts Numerical
 
-@node Functions and Variables for Numerical, Functions and Variables for Fourier Series, Fourier packages, Numerical
-@section Functions and Variables for Numerical
+@node Functions and Variables for fast Fourier transform, Introduction to Fourier series, Introduction to fast Fourier transform, Numerical
+@section Functions and Variables for fast Fourier transform
 @c NOTE: Let's keep POLARTORECT, RECTTOPOLAR, and IFT before FFT
 @c in this file. Otherwise DESCRIBE returns the FFT text (because
 @c POLARTORECT, etc are list in the heading of FFT with @defunx).
@@ -102,7 +91,7 @@ x[j]: sum (y[j] exp (+2 %i %pi j k / n), k, 0, n-1)
 See @code{fft} for more details.
 
 @opencatbox
-@category{Package fft} @category{Numerical methods}
+@category{Package fft}
 @closecatbox
 
 @end deffn
@@ -180,7 +169,7 @@ to the form @code{a + b %i}. See @code{polartorect}.
 @code{demo ("fft")} displays a demonstration of the @code{fft} package.
 
 @opencatbox
-@category{Package fft} @category{Numerical methods}
+@category{Package fft}
 @closecatbox
 
 @end deffn
@@ -442,8 +431,22 @@ Examples:
 
 @end deffn
 
-@node Functions and Variables for Fourier Series, , Functions and Variables for Numerical, Numerical
-@section Functions and Variables for Fourier Series
+
+@node Introduction to Fourier series, Functions and Variables for Fourier series, Functions and Variables for fast Fourier transform, Numerical
+@section Introduction to Fourier series
+
+The @code{fourie} package comprises functions for the symbolic computation
+of Fourier series.
+There are functions in the @code{fourie} package to calculate Fourier integral
+coefficients and some functions for manipulation of expressions.
+
+@opencatbox
+@category{Fourier transform} @category{Share packages} @category{Package fourie}
+@closecatbox
+
+
+@node Functions and Variables for Fourier series, , Introduction to Fourier series, Numerical
+@section Functions and Variables for Fourier series
 
 @c REPHRASE
 @deffn {Function} equalp (@var{x}, @var{y})
@@ -504,7 +507,7 @@ returns the definite integral of @var{f} with respect to @var{x} from @var{a} to
 
 @c NEEDS EXAMPLES
 @opencatbox
-@category{Package fourie} @category{Integration}
+@category{Package fourie} @category{Integral calculus}
 @closecatbox
 @end deffn
 

@@ -25,7 +25,7 @@ it's a good idea to request a couple of extra.
 @code{load ("bffac")} loads this function.
 
 @opencatbox
-@category{Gamma and factorial function} @category{Numerical evaluation}
+@category{Gamma and factorial functions} @category{Numerical evaluation}
 @closecatbox
 @end deffn
 
@@ -193,7 +193,7 @@ and the number of digits printed is equal to @code{fpprec}.
 @code{fpprintprec} cannot be 1.
 
 @opencatbox
-@category{Numerical evaluation} @category{Display variables}
+@category{Numerical evaluation} @category{Display flags and variables}
 @closecatbox
 
 @end defvr

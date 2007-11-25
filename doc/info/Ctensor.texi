@@ -1430,7 +1430,7 @@ Causes trigonometric simplifications to be used when tensors are computed. Prese
 @code{ctrgsimp} affects only computations involving a moving frame.
 
 @opencatbox
-@category{Package ctensor} @category{Simplification flags}
+@category{Package ctensor} @category{Simplification flags and variables}
 @closecatbox
 
 @end defvr

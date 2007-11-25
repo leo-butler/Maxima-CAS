@@ -292,10 +292,10 @@ Differential Equations
 
 Numerical
 
-* Introduction to Numerical::   
-* Fourier packages::                     
-* Functions and Variables for Numerical::   
-* Functions and Variables for Fourier Series::
+* Introduction to fast Fourier transform::                     
+* Functions and Variables for fast Fourier transform::
+* Introduction to Fourier series::
+* Functions and Variables for Fourier series::
 
 Arrays
 

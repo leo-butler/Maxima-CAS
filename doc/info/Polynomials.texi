@@ -66,7 +66,7 @@ Default value: @code{false}
 simplification of algebraic integers to take effect.
 
 @opencatbox
-@category{Simplification flags}
+@category{Simplification flags and variables}
 @closecatbox
 
 @end defvr
@@ -1132,7 +1132,7 @@ denominators with respect to radicals to take effect.
 @code{ratalgdenom} has an effect only when canonical rational expressions (CRE) are used in algebraic mode.
 
 @opencatbox
-@category{Simplification flags}
+@category{Simplification flags and variables}
 @closecatbox
 
 @end defvr
@@ -1252,7 +1252,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Simplification flags} @category{Rational expressions}
+@category{Simplification flags and variables} @category{Rational expressions}
 @closecatbox
 
 @end defvr
@@ -1567,7 +1567,7 @@ When @code{ratsimpexpons} is @code{true},
 
 @c NEED AN EXAMPLE HERE -- RECYCLE THE ratsimpexpons EXAMPLE FROM ratsimp ABOVE
 @opencatbox
-@category{Simplification flags} @category{Rational expressions}
+@category{Simplification flags and variables} @category{Rational expressions}
 @closecatbox
 @end defvr
 

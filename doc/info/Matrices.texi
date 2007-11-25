@@ -507,7 +507,7 @@ and a nonscalar term is simplified to a commutative product.
 
 @c NEED EXAMPLE HERE
 @opencatbox
-@category{Simplification flags}
+@category{Simplification flags and variables}
 @closecatbox
 
 @end defvr
@@ -522,7 +522,7 @@ a scalar term is simplified to a commutative product.
 
 @c NEED EXAMPLE HERE
 @opencatbox
-@category{Simplification flags}
+@category{Simplification flags and variables}
 @closecatbox
 
 @end defvr
@@ -537,7 +537,7 @@ another term is simplified to a commutative product.
 
 @c NEED EXAMPLE HERE
 @opencatbox
-@category{Simplification flags}
+@category{Simplification flags and variables}
 @closecatbox
 
 @end defvr
@@ -551,7 +551,7 @@ When @code{dotassoc} is @code{true}, an expression @code{(A.B).C} simplifies to
 
 @c NEED EXAMPLE HERE
 @opencatbox
-@category{Simplification flags}
+@category{Simplification flags and variables}
 @closecatbox
 
 @end defvr
@@ -567,7 +567,7 @@ Turning on this flag effectively turns on @code{dot0simp}, @code{dot0nscsimp}, a
 
 @c NEED EXAMPLE HERE
 @opencatbox
-@category{Simplification flags}
+@category{Simplification flags and variables}
 @closecatbox
 
 @end defvr
@@ -579,7 +579,7 @@ When @code{dotdistrib} is @code{true}, an expression @code{A.(B + C)} simplifies
 
 @c NEED EXAMPLE HERE
 @opencatbox
-@category{Simplification flags}
+@category{Simplification flags and variables}
 @closecatbox
 
 @end defvr
@@ -591,7 +591,7 @@ When @code{dotexptsimp} is @code{true}, an expression @code{A.A} simplifies to @
 
 @c NEED EXAMPLE HERE
 @opencatbox
-@category{Simplification flags}
+@category{Simplification flags and variables}
 @closecatbox
 
 @end defvr
@@ -604,7 +604,7 @@ Default value: 1
 
 @c NEED EXAMPLE HERE
 @opencatbox
-@category{Simplification variables}
+@category{Simplification flags and variables}
 @closecatbox
 
 @end defvr
@@ -618,7 +618,7 @@ to @code{SC*A} and @code{A.(SC*B)} simplifies to @code{SC*(A.B)}.
 
 @c NEED EXAMPLE HERE
 @opencatbox
-@category{Simplification flags}
+@category{Simplification flags and variables}
 @closecatbox
 
 @end defvr
@@ -1016,7 +1016,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Display variables} @category{Matrices}
+@category{Display flags and variables} @category{Matrices}
 @closecatbox
 
 @end defvr
@@ -1534,7 +1534,7 @@ then all 1 x 1 matrices are simplified to scalars.
 When @code{scalarmatrixp} is @code{false}, 1 x 1 matrices are not simplified to scalars.
 
 @opencatbox
-@category{Matrices} @category{Simplification flags}
+@category{Matrices} @category{Simplification flags and variables}
 @closecatbox
 
 @end defvr
@@ -1777,7 +1777,7 @@ When @code{vect_cross} is @code{true}, it allows DIFF(X~Y,T) to work where
 ~ is defined in SHARE;VECT (where VECT_CROSS is set to @code{true}, anyway.)
 
 @opencatbox
-@category{Package vect} @category{Differentiation}
+@category{Package vect} @category{Differential calculus}
 @closecatbox
 
 @end defvr

@@ -75,7 +75,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Integration}
+@category{Integral calculus}
 @closecatbox
 @end deffn
 
@@ -142,7 +142,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Integration}
+@category{Integral calculus}
 @closecatbox
 @end deffn
 
@@ -154,7 +154,7 @@ This property is assigned by @code{gradef}.
 
 @c NEED EXAMPLE HERE
 @opencatbox
-@category{Differentiation}
+@category{Differential calculus}
 @closecatbox
 @end defvr
 
@@ -278,7 +278,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Differentiation}
+@category{Differential calculus}
 @closecatbox
 @end deffn
 
@@ -392,7 +392,7 @@ unless explicitly represented as @code{integrate (f(x), x)}.
 @end example
 
 @opencatbox
-@category{Differentiation} @category{Declarations and inferences}
+@category{Differential calculus} @category{Declarations and inferences}
 @closecatbox
 @end deffn
 
@@ -405,7 +405,7 @@ Otherwise, derivatives are displayed in the Leibniz notation @code{dy/dx}.
 
 @c NEED EXAMPLES HERE
 @opencatbox
-@category{Differentiation} @category{Global flags}
+@category{Differential calculus} @category{Global flags}
 @closecatbox
 
 @end defvr
@@ -432,7 +432,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Differentiation} @category{Expressions}
+@category{Differential calculus} @category{Expressions}
 @closecatbox
 @end deffn
 
@@ -442,7 +442,7 @@ Causes only differentiations with respect to
 the indicated variables, within the @code{ev} command.
 
 @opencatbox
-@category{Differentiation} @category{Evaluation}
+@category{Differential calculus} @category{Evaluation}
 @closecatbox
 @end deffn
 
@@ -453,7 +453,7 @@ When @code{derivsubst} is @code{true}, a non-syntactic substitution such as
 @code{subst (x, 'diff (y, t), 'diff (y, t, 2))} yields @code{'diff (x, t)}.
 
 @opencatbox
-@category{Differentiation} @category{Expressions}
+@category{Differential calculus} @category{Expressions}
 @closecatbox
 
 @end defvr
@@ -542,7 +542,7 @@ above.
 
 @c NEED EXAMPLES FOR TENSOR STUFF
 @opencatbox
-@category{Differentiation}
+@category{Differential calculus}
 @closecatbox
 @end deffn
 
@@ -582,7 +582,7 @@ Applies the scalar d'Alembertian to the scalar function @var{f}.
 @c @end example
 
 @opencatbox
-@category{Differentiation} @category{Package ctensor}
+@category{Differential calculus} @category{Package ctensor}
 @closecatbox
 @end deffn
 
@@ -672,7 +672,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Differentiation} @category{Vectors} @category{Operators}
+@category{Differential calculus} @category{Vectors} @category{Operators}
 @closecatbox
 @end deffn
 
@@ -740,7 +740,7 @@ higher order derivatives.
 
 @c NEED EXAMPLES HERE
 @opencatbox
-@category{Differentiation} @category{Declarations and inferences}
+@category{Differential calculus} @category{Declarations and inferences}
 @closecatbox
 @end deffn
 
@@ -753,7 +753,7 @@ for which partial derivatives have been defined by @code{gradef}.
 for which partial derivatives have been defined by @code{gradef}.
 
 @opencatbox
-@category{Differentiation} @category{Declarations and inferences}
+@category{Differential calculus} @category{Declarations and inferences}
 @closecatbox
 
 @end defvr

@@ -1402,7 +1402,7 @@ number and @var{n} and @var{m} are both positive integers.
 See also @code{test_rank_sum}.
 
 @opencatbox
-@category{Package stats}
+@category{Package stats} @category{Statistical estimation}
 @closecatbox
 
 @end deffn

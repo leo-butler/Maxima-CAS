@@ -18,7 +18,7 @@ summation.
 @code{load (zeilberger)} loads this package.
 
 @opencatbox
-@category{Sum and product functions} @category{Share packages} @category{Package zeilberger}
+@category{Sums and products} @category{Share packages} @category{Package zeilberger}
 @closecatbox
 
 @subsubsection The indefinite summation problem

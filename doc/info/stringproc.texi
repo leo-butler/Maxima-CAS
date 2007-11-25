@@ -151,7 +151,7 @@ and an integer: ~20t~d~%"$
 Closes @var{stream} and returns @code{true} if @var{stream} had been open. 
 
 @opencatbox
-@category{File input and output} @category{Package stringproc}
+@category{File input} @category{File output} @category{Package stringproc}
 @closecatbox
 
 @end deffn
@@ -160,7 +160,7 @@ Closes @var{stream} and returns @code{true} if @var{stream} had been open.
 Returns the number of elements in @var{stream}. 
 
 @opencatbox
-@category{File input and output} @category{Package stringproc}
+@category{File input} @category{File output} @category{Package stringproc}
 @closecatbox
 
 @end deffn
@@ -174,7 +174,7 @@ If @var{pos} is used,
 the first element in @var{stream} is in position 1.
 
 @opencatbox
-@category{File input and output} @category{Package stringproc}
+@category{File input} @category{File output} @category{Package stringproc}
 @closecatbox
 
 @end deffn

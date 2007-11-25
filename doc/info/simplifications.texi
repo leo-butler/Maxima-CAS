@@ -60,7 +60,7 @@ Examples:
 @c elim.usg: "eliminate" already in doc/info/Polynomials.texi
 
 @opencatbox
-@category{Simplification functions} @category{Pattern-matching} @category{Share packages} @category{Package absimp}
+@category{Simplification functions} @category{Rules and patterns} @category{Share packages} @category{Package absimp}
 @closecatbox
 
 
@@ -260,7 +260,7 @@ The functions are linearly dependent if this determinant is zero.
 To use this function write first @code{load(functs)}.
 
 @opencatbox
-@category{Package functs} @category{Differentiation}
+@category{Package functs} @category{Differential calculus}
 @closecatbox
 
 @end deffn
@@ -379,7 +379,7 @@ Returns the @var{n}-th term of the arithmetic series
 To use this function write first @code{load(functs)}.
 
 @opencatbox
-@category{Package functs} @category{Sum and product functions}
+@category{Package functs} @category{Sums and products}
 @closecatbox
 
 @end deffn
@@ -391,7 +391,7 @@ Returns the @var{n}-th term of the geometric series
 To use this function write first @code{load(functs)}.
 
 @opencatbox
-@category{Package functs} @category{Sum and product functions}
+@category{Package functs} @category{Sums and products}
 @closecatbox
 
 @end deffn
@@ -403,7 +403,7 @@ Returns the @var{n}-th term of the harmonic series
 To use this function write first @code{load(functs)}.
 
 @opencatbox
-@category{Package functs} @category{Sum and product functions}
+@category{Package functs} @category{Sums and products}
 @closecatbox
 
 @end deffn
@@ -414,7 +414,7 @@ Returns the sum of the arithmetic series from 1 to @var{n}.
 To use this function write first @code{load(functs)}.
 
 @opencatbox
-@category{Package functs} @category{Sum and product functions}
+@category{Package functs} @category{Sums and products}
 @closecatbox
 
 @end deffn
@@ -427,7 +427,7 @@ of @var{r} is less than 1.
 To use this function write first @code{load(functs)}.
 
 @opencatbox
-@category{Package functs} @category{Sum and product functions}
+@category{Package functs} @category{Sums and products}
 @closecatbox
 
 @end deffn
@@ -666,7 +666,7 @@ in @code{remrule ("+", "+rule1")} to specifically remove the first rule on @code
 or @code{disprule ("*rule2")} to display the definition of the second multiplicative rule.
 
 @opencatbox
-@category{Simplification functions} @category{Pattern-matching} @category{Share packages} @category{Package ineq}
+@category{Simplification functions} @category{Rules and patterns} @category{Share packages} @category{Package ineq}
 @closecatbox
 
 

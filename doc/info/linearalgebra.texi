@@ -448,7 +448,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Differentiation} @category{Package linearalgebra}
+@category{Differential calculus} @category{Package linearalgebra}
 @closecatbox
 
 @end deffn
@@ -526,7 +526,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Differentiation} @category{Package linearalgebra}
+@category{Differential calculus} @category{Package linearalgebra}
 @closecatbox
 
 @end deffn

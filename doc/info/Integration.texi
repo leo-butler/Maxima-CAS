@@ -86,7 +86,7 @@ higher degree function.  E.g.,
 @end example
 
 @opencatbox
-@category{Integration}
+@category{Integral calculus}
 @closecatbox
 @end deffn
 
@@ -139,7 +139,7 @@ magnitude speed improvement over interpreted code in many cases!
 @c @code{demo (dblint_1)} executes another demonstration.
 
 @opencatbox
-@category{Integration}
+@category{Integral calculus}
 @closecatbox
 @end deffn
 
@@ -155,7 +155,7 @@ either the computed integral or the noun form of the integral.
 See @code{quad_qag} and related functions for numerical approximation of definite integrals.
 
 @opencatbox
-@category{Integration}
+@category{Integral calculus}
 @closecatbox
 @end deffn
 
@@ -174,7 +174,7 @@ When @code{erfflag} is @code{false}, prevents @code{risch} from introducing the
 begin with.
 
 @opencatbox
-@category{Integration}
+@category{Integral calculus}
 @closecatbox
 
 @end defvr
@@ -418,7 +418,7 @@ and the result becomes the body of @code{f_2}.
 @end itemize
 
 @opencatbox
-@category{Integration}
+@category{Integral calculus}
 @closecatbox
 @end deffn
 
@@ -454,7 +454,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Integration}
+@category{Integral calculus}
 @closecatbox
 
 @end defvr
@@ -503,7 +503,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Integration}
+@category{Integral calculus}
 @closecatbox
 
 @end defvr
@@ -560,7 +560,7 @@ if the denominator is a cubic polynomial.
 Sometimes this will help Maxima obtain a more useful result.
 
 @opencatbox
-@category{Integration}
+@category{Integral calculus}
 @closecatbox
 
 @end defvr
@@ -580,7 +580,7 @@ so executing @code{ldefint (@var{expr}, @var{x}, @var{a}, @var{b})} may yield a 
 while @code{integrate} may employ various heuristics and may recognize some special cases.
 
 @opencatbox
-@category{Integration}
+@category{Integral calculus}
 @closecatbox
 @end deffn
 
@@ -622,7 +622,7 @@ for @var{expr}.
 @end example
 
 @opencatbox
-@category{Integration} @category{Complex variables}
+@category{Integral calculus} @category{Complex variables}
 @closecatbox
 @end deffn
 
@@ -651,7 +651,7 @@ with.
 @end example
 
 @opencatbox
-@category{Integration}
+@category{Integral calculus}
 @closecatbox
 @end deffn
 
@@ -660,7 +660,7 @@ with.
 Equivalent to @code{ldefint} with @code{tlimswitch} set to @code{true}.
 
 @opencatbox
-@category{Integration}
+@category{Integral calculus}
 @closecatbox
 @end deffn
 
@@ -748,7 +748,7 @@ which contain the point @math{x = c}.
 @end table
 
 @opencatbox
-@category{Integration} @category{Numerical methods} @category{Share packages} @category{Package quadpack}
+@category{Integral calculus} @category{Numerical methods} @category{Share packages} @category{Package quadpack}
 @closecatbox
 
 @node Functions and Variables for QUADPACK, , Introduction to QUADPACK, Integration

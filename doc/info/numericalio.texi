@@ -26,7 +26,7 @@ No continuation character (to join broken lines) is recognized.
 It is an optional argument for all read and write functions.
 
 @opencatbox
-@category{File input and output} @category{Share packages} @category{Package numericalio}
+@category{File input} @category{File output} @category{Share packages} @category{Package numericalio}
 @closecatbox
 
 @subsection Separator flag values for input

@@ -1279,7 +1279,7 @@ special simplification of @code{%e^(%pi %i x)} is carried out.
 
 @c NEED EXAMPLES HERE
 @opencatbox
-@category{Exponential and logarithm functions} @category{Simplification flags}
+@category{Exponential and logarithm functions} @category{Simplification flags and variables}
 @closecatbox
 
 @end defvr
@@ -2352,7 +2352,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Sum and product functions}
+@category{Sums and products}
 @closecatbox
 @end deffn
 
@@ -2577,7 +2577,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Sum and product functions}
+@category{Sums and products}
 @closecatbox
 @end deffn
 
@@ -2608,7 +2608,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Sum and product functions}
+@category{Sums and products}
 @closecatbox
 @end deffn
 

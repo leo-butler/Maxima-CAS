@@ -50,7 +50,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Sum and product functions}
+@category{Sums and products}
 @closecatbox
 
 @end defvr
@@ -144,7 +144,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Sum and product functions}
+@category{Sums and products}
 @closecatbox
 @end deffn
 
@@ -180,7 +180,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Sum and product functions}
+@category{Sums and products}
 @closecatbox
 
 @end defvr
@@ -240,7 +240,7 @@ Dependent equations eliminated:  (2 3)
 @end example
 
 @opencatbox
-@category{Sum and product functions}
+@category{Sums and products}
 @closecatbox
 @end deffn
 
@@ -328,7 +328,7 @@ By default, terms of a sum are displayed in order of decreasing power.
 
 @c NEED AN EXAMPLE HERE
 @opencatbox
-@category{Display flags}
+@category{Display flags and variables}
 @closecatbox
 
 @end defvr
@@ -393,7 +393,7 @@ When @code{psexpand} is  @code{multi},
 then terms with the same total degree in the variables are grouped together.
 
 @opencatbox
-@category{Display flags}
+@category{Display flags and variables}
 @closecatbox
 
 @end defvr
@@ -818,7 +818,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Sum and product functions}
+@category{Sums and products}
 @closecatbox
 @end deffn
 

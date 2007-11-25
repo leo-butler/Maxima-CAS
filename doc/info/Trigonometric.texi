@@ -109,7 +109,7 @@ Some identities are applied when @math{%pi} and @math{%pi/2} are multiplied by a
 @end example
 
 @opencatbox
-@category{Trigonometric functions} @category{Simplification flags}
+@category{Trigonometric functions} @category{Simplification flags and variables}
 @closecatbox
 
 @end defvr
@@ -170,7 +170,7 @@ Even when the argument is demonstrably real, the simplification is applied.
 @end example
 
 @opencatbox
-@category{Trigonometric functions} @category{Hyperbolic functions} @category{Simplification flags}
+@category{Trigonometric functions} @category{Hyperbolic functions} @category{Simplification flags and variables}
 @closecatbox
 
 @end defvr
@@ -374,7 +374,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Trigonometric functions} @category{Simplification flags}
+@category{Trigonometric functions} @category{Simplification flags and variables}
 @closecatbox
 
 @end defvr
@@ -499,7 +499,7 @@ Default value: @code{true}
 @code{true}.
 
 @opencatbox
-@category{Trigonometric functions} @category{Simplification flags}
+@category{Trigonometric functions} @category{Simplification flags and variables}
 @closecatbox
 
 @end defvr
@@ -513,7 +513,7 @@ Default value: @code{true}
 will take place only if @code{trigexpandtimes} is @code{true}.
 
 @opencatbox
-@category{Trigonometric functions} @category{Simplification flags}
+@category{Trigonometric functions} @category{Simplification flags and variables}
 @closecatbox
 
 @end defvr
@@ -537,7 +537,7 @@ If @code{false}, both the
 simplifications are turned off.
 
 @opencatbox
-@category{Trigonometric functions} @category{Simplification flags}
+@category{Trigonometric functions} @category{Simplification flags and variables}
 @closecatbox
 
 @end defvr
@@ -593,7 +593,7 @@ arguments to trigonometric functions. E.g., @code{sin(-x)} will become
 @code{-sin(x)} only if @code{trigsign} is @code{true}.
 
 @opencatbox
-@category{Trigonometric functions} @category{Simplification flags}
+@category{Trigonometric functions} @category{Simplification flags and variables}
 @closecatbox
 
 @end defvr

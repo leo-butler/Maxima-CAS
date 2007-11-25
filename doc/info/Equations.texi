@@ -365,7 +365,7 @@ within  the @code{block}.  Termination of the @code{block} with a dollar sign, $
 @code{dispflag} to @code{false}.
 
 @opencatbox
-@category{Algebraic equations} @category{Display flags}
+@category{Algebraic equations} @category{Display flags and variables}
 @closecatbox
 
 @end defvr
@@ -933,7 +933,7 @@ Default value: @code{true}
 @code{rootscontract} command.  See @code{rootscontract} for details.
 
 @opencatbox
-@category{Expressions} @category{Simplification flags}
+@category{Expressions} @category{Simplification flags and variables}
 @closecatbox
 
 @end defvr

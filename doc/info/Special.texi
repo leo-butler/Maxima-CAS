@@ -301,7 +301,7 @@ the Bessel function is expanded.
 @end example
 
 @opencatbox
-@category{Bessel functions} @category{Simplification flags}
+@category{Bessel functions} @category{Simplification flags and variables}
 @closecatbox
 
 @end defvr
@@ -375,7 +375,7 @@ simplification will occur.  Note that the @code{factlim} switch controls
 simplification of the result of @code{gamma} of an integer argument as well.
 
 @opencatbox
-@category{Gamma and factorial functions} @category{Simplification variables}
+@category{Gamma and factorial functions} @category{Simplification flags and variables}
 @closecatbox
 
 @end defvr

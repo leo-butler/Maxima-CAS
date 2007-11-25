@@ -33,7 +33,7 @@ The @code{maxima-init.mac} file can contain any other assignments or
 other Maxima statements.
 
 @opencatbox
-@category{State management}
+@category{Session management}
 @closecatbox
 
 @node Interrupts, Functions and Variables for Runtime Environment, Introduction for Runtime Environment, Runtime Environment

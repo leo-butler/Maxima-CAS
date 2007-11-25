@@ -129,7 +129,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Package solve_rec} @category{Sum and product functions} @category{Simplification functions}
+@category{Package solve_rec} @category{Sums and products} @category{Simplification functions}
 @closecatbox
 
 @end deffn

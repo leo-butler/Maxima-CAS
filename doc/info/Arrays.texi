@@ -311,7 +311,7 @@ referring to @code{gensumnum}, which can be changed by the user.  For
 example, @code{gensumnum:0$} resets it.
 
 @opencatbox
-@category{Sum and product functions}
+@category{Sums and products}
 @closecatbox
 @end deffn
 
