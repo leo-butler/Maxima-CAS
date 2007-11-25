@@ -131,7 +131,7 @@ The single quote does not prevent simplification.
 @end example
 
 @opencatbox
-@category{Operators}
+@category{Evaluation} @category{Operators}
 @closecatbox
 
 @end deffn
@@ -327,7 +327,7 @@ such as in function definitions, lambda expressions, and expressions quoted by s
 @end example
 
 @opencatbox
-@category{Operators}
+@category{Evaluation} @category{Operators}
 @closecatbox
 
 @end deffn
@@ -342,6 +342,9 @@ provides an
 alternate name for a (user or system) function, variable, array, etc.
 Any even number of arguments may be used.
 
+@opencatbox
+@category{Declarations and inferences}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} debugmode
@@ -356,7 +359,7 @@ Enabling @code{debugmode} will not catch Lisp errors.
 @c I'M NOT CONVINCED WE WANT TO OPEN THAT CAN OF WORMS !!!
 
 @opencatbox
-@category{Global flags}
+@category{Debugging} @category{Global flags}
 @closecatbox
 
 @end defvr
@@ -545,6 +548,9 @@ Solution
 (%o11)                               true
 @end example
 
+@opencatbox
+@category{Evaluation}
+@closecatbox
 @end deffn
 
 @defvr {Property} evflag
@@ -648,7 +654,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Simplification flags}
+@category{Evaluation flags} @category{Simplification flags}
 @closecatbox
 
 @end defvr
@@ -751,6 +757,9 @@ Examples:
 (%o15)                      G(F(cc))
 @end example
 
+@opencatbox
+@category{Evaluation flags}
+@closecatbox
 @end defvr
 @c NEEDS WORK
 @defvr {Option variable} infeval
@@ -760,6 +769,9 @@ variable, say @code{X}, from being evaluated away in this mode, simply
 include @code{X='X} as an argument to @code{ev}.  Of course expressions such as
 @code{ev (X, X=X+1, infeval)} will generate an infinite loop.
 
+@opencatbox
+@category{Evaluation flags}
+@closecatbox
 @end defvr
 
 @c REVIEW FOR ACCURACY AND COMPLETENESS
@@ -827,6 +839,9 @@ unbind a specific property.
 
 @code{kill} always returns @code{done}, even if an argument has no binding.
 
+@opencatbox
+@category{Evaluation} @category{Console interaction} @category{State management}
+@closecatbox
 @end deffn
 
 @deffn {Function} labels (@var{symbol})
@@ -862,7 +877,7 @@ Some other functions, such as @code{ldisplay}, always generate intermediate expr
 See also @code{inchar}, @code{outchar}, @code{linechar}, and @code{infolists}.
 
 @opencatbox
-@category{Display functions} @category{Display variables}
+@category{Display functions} @category{Display variables} @category{Console interaction}
 @closecatbox
 
 @end deffn
@@ -872,7 +887,7 @@ See also @code{inchar}, @code{outchar}, @code{linechar}, and @code{infolists}.
 The line number of the current pair of input and output expressions.
 
 @opencatbox
-@category{Display variables}
+@category{Display variables} @category{Console interaction}
 @closecatbox
 
 @end defvr
@@ -885,7 +900,7 @@ Default value: @code{[]}
 whether or not they get reset to their default value.
 
 @opencatbox
-@category{Global variables}
+@category{Global variables} @category{State management} @category{Console interaction}
 @closecatbox
 
 @end defvr
@@ -912,7 +927,7 @@ intermediate expression labels are bound and appended to the @code{labels} list.
 See also @code{batch}, @code{load}, and @code{labels}.
 
 @opencatbox
-@category{Global flags}
+@category{Global flags} @category{State management}
 @closecatbox
 
 @end defvr
@@ -927,7 +942,7 @@ user is doubtful of the spelling of some option and wants to make sure
 that the variable he assigned a value to was truly an option variable.
 
 @opencatbox
-@category{Global flags}
+@category{Global flags} @category{State management} @category{Console interaction}
 @closecatbox
 
 @end defvr
@@ -988,7 +1003,7 @@ Arguments may be combined, e.g.,
 @c APPEARS TO BE input INTERSECT (UNION OF ALL OTHER ARGUMENTS). CORRECT ???
 
 @opencatbox
-@category{Display functions}
+@category{Display functions} @category{Console interaction}
 @closecatbox
 
 @end deffn
@@ -1006,7 +1021,7 @@ properties that cannot otherwise be displayed, i.e. for
 @code{atvalue}, @code{atomgrad}, @code{gradef}, and @code{matchdeclare}.
 
 @opencatbox
-@category{Declarations and inferences}
+@category{Declarations and inferences} @category{Display functions}
 @closecatbox
 
 @end deffn
@@ -1018,7 +1033,7 @@ Default value: @code{_}
 @code{playback (slow)} mode, and the Maxima break loop (as invoked by @code{break}).
 
 @opencatbox
-@category{Global variables}
+@category{Global variables} @category{Console interaction}
 @closecatbox
 
 @end defvr
@@ -1035,6 +1050,9 @@ If @code{*debugger-hook*} is @code{nil},
 @code{control-C} opens the Lisp debugger.
 See also @code{debugging}.
 
+@opencatbox
+@category{Console interaction}
+@closecatbox
 @end deffn
 
 @deffn {Function} remfunction (@var{f_1}, ..., @var{f_n})
@@ -1053,6 +1071,9 @@ or macro functions (created by @code{::=}).
 @code{remfunction} does not apply to array functions or subscripted functions.
 @code{remarray} applies to those types of functions.
 
+@opencatbox
+@category{Function definition}
+@closecatbox
 @end deffn
 
 @deffn {Function} reset ()
@@ -1082,7 +1103,7 @@ even when @code{showtime} is @code{false}.
 See also @code{timer}.
 
 @opencatbox
-@category{Display flags}
+@category{Display flags} @category{Debugging}
 @closecatbox
 
 @end defvr
@@ -1119,7 +1140,7 @@ Initial value: @code{[]}
 The list comprises symbols bound by @code{:} , @code{::}, or @code{:=}.
 
 @opencatbox
-@category{Global variables}
+@category{Evaluation} @category{Global variables}
 @closecatbox
 
 @end defvr

@@ -350,6 +350,9 @@ Solution:
 @code{demo ("dimen")} displays a short demonstration.
 @c I GUESS THIS SHOULD BE EXPANDED TO COVER EACH FUNCTION IN THE PACKAGE
 
+@opencatbox
+@category{Share packages}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} dispflag
@@ -391,6 +394,9 @@ Dependent equations eliminated:  (4 3)
 Warning: this is a very rudimentary implementation -- many safety checks
 and obvious generalizations are missing.
 
+@opencatbox
+@category{Algebraic equations}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} globalsolve
@@ -580,7 +586,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{General equations}
+@category{Expressions}
 @closecatbox
 @end deffn
 
@@ -916,7 +922,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{General equations}
+@category{Expressions}
 @closecatbox
 @end deffn
 
@@ -927,7 +933,7 @@ Default value: @code{true}
 @code{rootscontract} command.  See @code{rootscontract} for details.
 
 @opencatbox
-@category{Operations on expressions} @category{Simplification flags}
+@category{Expressions} @category{Simplification flags}
 @closecatbox
 
 @end defvr

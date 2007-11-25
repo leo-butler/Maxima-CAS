@@ -12,6 +12,11 @@
 @c NEEDS WORK, THIS TOPIC IS IMPORTANT
 @c MENTION DYNAMIC SCOPE (VS LEXICAL SCOPE)
 @section Function
+
+@opencatbox
+@category{Function definition} @category{Programming}
+@closecatbox
+
 @subsection Ordinary functions
 
 To define a function in Maxima you use the @code{:=} operator.
@@ -284,7 +289,7 @@ and their values on the right-hand side.
 @end example
 
 @opencatbox
-@category{Functions and macros}
+@category{Function definition}
 @closecatbox
 @end deffn
 
@@ -331,7 +336,7 @@ Examples
 @end example
 
 @opencatbox
-@category{Functions and macros}
+@category{Function application}
 @closecatbox
 @end deffn
 
@@ -376,7 +381,7 @@ Examples
 @end example
 
 @opencatbox
-@category{Functions and macros}
+@category{Function application}
 @closecatbox
 @end deffn
 
@@ -390,7 +395,7 @@ and @code{kill}, @code{remove}, and @code{remfunction} remove macro functions fr
 See also @code{infolists}.
 
 @opencatbox
-@category{Functions and macros} @category{Global variables}
+@category{Function definition} @category{Global variables}
 @closecatbox
 
 @end defvr
@@ -436,7 +441,7 @@ Examples
 @end example
 
 @opencatbox
-@category{Functions and macros}
+@category{Function definition}
 @closecatbox
 @end deffn
 
@@ -527,7 +532,7 @@ Improper name or value in functional position.
 @end example
 
 @opencatbox
-@category{Functions and macros}
+@category{Function application}
 @closecatbox
 @end deffn
 
@@ -580,7 +585,7 @@ Blocks typically appear on the right side of a function definition
 but can be used in other places as well.
 
 @opencatbox
-@category{Expressions} @category{Programming structures}
+@category{Expressions} @category{Programming}
 @closecatbox
 @end deffn
 
@@ -624,7 +629,7 @@ consists only of non-negative numbers; otherwise, @code{g} "catches" the
 first negative element of @code{l} and "throws" it up.
 
 @opencatbox
-@category{Programming structures}
+@category{Programming}
 @closecatbox
 @end deffn
 
@@ -648,7 +653,7 @@ The Lisp translations are not evaluated, nor is the output file processed by the
 See also @code{translate}, @code{translate_file}, and @code{compile_file}.
 
 @opencatbox
-@category{Translation and compilation} @category{File output}
+@category{Translation and compilation}
 @closecatbox
 
 @end deffn
@@ -796,7 +801,7 @@ the first argument is evaluated.
 @end example
 
 @opencatbox
-@category{Functions and macros}
+@category{Function definition}
 @closecatbox
 @end deffn
 
@@ -1041,7 +1046,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Functions and macros} @category{Display functions}
+@category{Function definition} @category{Display functions}
 @closecatbox
 @end deffn
 
@@ -1104,7 +1109,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Functions and macros} @category{Global variables}
+@category{Function definition} @category{Global variables}
 @closecatbox
 
 @end defvr
@@ -1131,7 +1136,7 @@ and assigns the definition to the label.
 
 @c PROBABLY NEED SOME EXAMPLES HERE
 @opencatbox
-@category{Functions and macros}
+@category{Function definition}
 @closecatbox
 @end deffn
 
@@ -1263,7 +1268,7 @@ Maxima simplifies @code{funmake}'s return value.
 @end example
 
 @opencatbox
-@category{Functions and macros} @category{Expressions}
+@category{Function application} @category{Expressions}
 @closecatbox
 @end deffn
 
@@ -1448,7 +1453,7 @@ The arguments appear within the function body as a list.
 @end example
 
 @opencatbox
-@category{Functions and macros}
+@category{Function definition}
 @closecatbox
 @end deffn
 
@@ -1468,7 +1473,7 @@ occurrence is permitted in each.
 @code{local} is independent of @code{context}.
 
 @opencatbox
-@category{Functions and macros} @category{Programming structures}
+@category{Function definition} @category{Programming}
 @closecatbox
 @end deffn
 
@@ -1650,7 +1655,7 @@ x + 99 is equal to x
 @end example
 
 @opencatbox
-@category{Functions and macros} @category{Global flags}
+@category{Function application} @category{Global flags}
 @closecatbox
 
 @end defvr
@@ -1664,7 +1669,7 @@ of bound variables.
 @c NEED SOME EXAMPLES HERE.
 
 @opencatbox
-@category{Translation flags}
+@category{Translation flags and variables}
 @closecatbox
 
 @end defvr
@@ -1678,7 +1683,7 @@ error.
 @c NEED SOME EXAMPLES HERE.
 
 @opencatbox
-@category{Translation flags}
+@category{Translation flags and variables}
 @closecatbox
 
 @end defvr
@@ -1692,7 +1697,7 @@ described.
 @c NEED SOME EXAMPLES HERE.
 
 @opencatbox
-@category{Translation flags}
+@category{Translation flags and variables}
 @closecatbox
 
 @end defvr
@@ -1802,7 +1807,7 @@ declarations to make the translated code more suitable for compilation.
 @code{compfile} sets @code{transcompile: true} for the duration.
 
 @opencatbox
-@category{Translation flags}
+@category{Translation flags and variables}
 @closecatbox
 
 @end defvr
@@ -1938,7 +1943,7 @@ See also @code{tr_array_as_ref},
 and @code{tr_windy}.
 
 @opencatbox
-@category{Translation and compilation} @category{File output} @category{File input}
+@category{Translation and compilation}
 @closecatbox
 
 @end deffn
@@ -1951,7 +1956,7 @@ version of all functions to be run (provided they are still around)
 rather than the translated version.
 
 @opencatbox
-@category{Translation flags}
+@category{Translation flags and variables}
 @closecatbox
 
 @end defvr
@@ -1970,7 +1975,7 @@ otherwise array names appear as literal symbols in translated code.
 @code{tr_array_as_ref} has no effect if @code{translate_fast_arrays} is @code{true}.
 
 @opencatbox
-@category{Translation flags}
+@category{Translation flags and variables}
 @closecatbox
 
 @end defvr
@@ -1989,7 +1994,7 @@ For example, an expression such as @code{g (f, x) := f (x+1)} will trigger
 the warning message.
 
 @opencatbox
-@category{Translation flags}
+@category{Translation flags and variables}
 @closecatbox
 
 @end defvr
@@ -2004,7 +2009,7 @@ When @code{false}, messages about translation of the
 file are only inserted into the UNLISP file.
 
 @opencatbox
-@category{Translation flags}
+@category{Translation flags and variables}
 @closecatbox
 
 @end defvr
@@ -2027,7 +2032,7 @@ When @code{false} then @code{acos(x)} is of mode
 @code{float} if and only if @code{x} is of mode @code{float}.
 
 @opencatbox
-@category{Translation flags}
+@category{Translation flags and variables}
 @closecatbox
 
 @end defvr
@@ -2046,7 +2051,7 @@ default settings, no warning messages implies full compatibility of
 translated and compiled code with the Maxima interpreter.
 
 @opencatbox
-@category{Translation flags}
+@category{Translation flags and variables}
 @closecatbox
 
 @end defvr
@@ -2058,7 +2063,7 @@ When @code{tr_numer} is @code{true}, @code{numer} properties are used for
 atoms which have them, e.g. @code{%pi}.
 
 @opencatbox
-@category{Translation flags}
+@category{Translation flags and variables}
 @closecatbox
 
 @end defvr
@@ -2072,7 +2077,7 @@ considering a form.  This is to catch macro expansion errors, and
 non-terminating optimization properties.
 
 @opencatbox
-@category{Translation variables}
+@category{Translation flags and variables}
 @closecatbox
 
 @end defvr
@@ -2085,7 +2090,7 @@ output forms which will be macroexpanded but not compiled into machine
 code by the Lisp compiler.
 
 @opencatbox
-@category{Translation flags}
+@category{Translation flags and variables}
 @closecatbox
 
 @end defvr
@@ -2108,7 +2113,7 @@ to what should have been produced for a given state, it is possible to
 track down bugs.
 
 @opencatbox
-@category{Translation variables}
+@category{Translation flags and variables}
 @closecatbox
 
 @end defvr
@@ -2133,7 +2138,7 @@ when function calls are being made which may not be correct due to
 improper declarations that were made at translate time.
 
 @opencatbox
-@category{Translation flags}
+@category{Translation flags and variables}
 @closecatbox
 
 @end defvr
@@ -2146,7 +2151,7 @@ encountered.  FEXPRs should not normally be output in translated code,
 all legitimate special program forms are translated.
 
 @opencatbox
-@category{Translation flags}
+@category{Translation flags and variables}
 @closecatbox
 
 @end defvr
@@ -2159,7 +2164,7 @@ Default value: @code{compfile}
 translation.
 
 @opencatbox
-@category{Translation flags}
+@category{Translation flags and variables}
 @closecatbox
 
 @end defvr
@@ -2171,7 +2176,7 @@ Default value: @code{all}
 assigned values inappropriate for their mode.
 
 @opencatbox
-@category{Translation flags}
+@category{Translation flags and variables}
 @closecatbox
 
 @end defvr
@@ -2183,7 +2188,7 @@ Default value: @code{compile}
 warnings about undeclared variables to the TTY.
 
 @opencatbox
-@category{Translation flags}
+@category{Translation flags and variables}
 @closecatbox
 
 @end defvr
@@ -2195,7 +2200,7 @@ Default value: @code{all}
 undefined global variables are seen.
 
 @opencatbox
-@category{Translation flags}
+@category{Translation flags and variables}
 @closecatbox
 
 @end defvr
@@ -2211,7 +2216,7 @@ Default value: @code{true}
 programming hints.
 
 @opencatbox
-@category{Translation flags}
+@category{Translation flags and variables}
 @closecatbox
 
 @end defvr
@@ -2253,7 +2258,7 @@ assignments to the translation flags (@code{tr_numer}, etc.) have no effect on t
 @code{compile_file} evaluates its arguments.
 
 @opencatbox
-@category{Translation and compilation} @category{File output} @category{File input}
+@category{Translation and compilation}
 @closecatbox
 
 @end deffn

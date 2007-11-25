@@ -1,9 +1,20 @@
 @c end concepts Affine
 @menu
+* Introduction to Affine::
 * Functions and Variables for Affine::
 @end menu
 
-@node Functions and Variables for Affine,  , Affine, Affine
+@node Introduction to Affine, Functions and Variables for Affine, Affine, Affine
+@section Introduction to Affine
+
+@code{affine} is a package to work with groups of polynomials.
+
+@opencatbox
+@category{Polynomials} @category{Groebner bases} @category{Share packages} @category{Package affine}
+@closecatbox
+
+
+@node Functions and Variables for Affine,  , Introduction to Affine, Affine
 @section Functions and Variables for Affine
 
 @deffn {Function} fast_linsolve ([@var{expr_1}, ..., @var{expr_m}], [@var{x_1}, ..., @var{x_n}])

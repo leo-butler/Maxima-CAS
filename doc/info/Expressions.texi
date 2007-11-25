@@ -78,6 +78,10 @@ expanding the product.  Simplification of quotients, roots, and other
 functions of complex expressions can usually be accomplished by using
 the @code{realpart}, @code{imagpart}, @code{rectform}, @code{polarform}, @code{abs}, @code{carg} functions.
 
+@opencatbox
+@category{Complex variables}
+@closecatbox
+
 @node Nouns and Verbs, Identifiers, Complex, Expressions
 @section Nouns and Verbs
 Maxima distinguishes between operators which are "nouns" and operators which are "verbs".
@@ -152,6 +156,10 @@ Examples:
 (%o11)                       log(42)
 @end example
 
+@opencatbox
+@category{Evaluation} @category{Nouns and verbs}
+@closecatbox
+
 @node Identifiers, Strings, Nouns and Verbs, Expressions
 @section Identifiers
 Maxima identifiers may comprise alphabetic characters,
@@ -221,6 +229,10 @@ Examples:
 (%o12)                         foo
 @end example
 
+@opencatbox
+@category{Syntax}
+@closecatbox
+
 @node Strings, Inequality, Identifiers, Expressions
 @section Strings
 
@@ -288,6 +300,10 @@ this string.";
 (%i8) s_1;
 (%o8)                  "This is a string."
 @end example
+
+@opencatbox
+@category{Syntax}
+@closecatbox
 
 @node Inequality, Syntax, Strings, Expressions
 @section Inequality
@@ -458,7 +474,7 @@ Incorrect syntax: # is not a prefix operator
 @end example
 
 @opencatbox
-@category{Operators}
+@category{Operators} @category{Syntax}
 @closecatbox
 
 @node Functions and Variables for Expressions,  , Syntax, Expressions
@@ -519,6 +535,9 @@ Examples:
                                          !x = 0, y = 1
 @end example
 
+@opencatbox
+@category{Evaluation} @category{Differential equations}
+@closecatbox
 @end deffn
 
 @deffn {Function} box (@var{expr})
@@ -663,7 +682,7 @@ See @code{declare}.
 @c WHAT EXACTLY ARE THE CONSEQUENCES OF DECLARING AN ATOM TO BE CONSTANT ??
 
 @opencatbox
-@category{Declarations and inferences}
+@category{Declarations and inferences} @category{Constants}
 @closecatbox
 @end deffn
 
@@ -711,7 +730,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Predicate functions}
+@category{Predicate functions} @category{Constants}
 @closecatbox
 
 @end deffn
@@ -1424,6 +1443,9 @@ Returns the generalized factorial, defined as
 @code{x (x-z) (x - 2 z) ... (x - (y - 1) z)}.  Thus, for integral @var{x},
 @code{genfact (x, x, 1) = x!} and @code{genfact (x, x/2, 2) = x!!}.
 
+@opencatbox
+@category{Gamma and factorial functions}
+@closecatbox
 @end deffn
 
 @deffn {Function} imagpart (@var{expr})
@@ -1569,7 +1591,7 @@ if x ## y then
 @end example
 
 @opencatbox
-@category{Operators}
+@category{Operators} @category{Declarations and inferences} @category{Syntax}
 @closecatbox
 
 @end deffn
@@ -1950,7 +1972,7 @@ if @var{op} is equal to the operator of @var{expr}.
 if some element @var{op_1}, ..., @var{op_n} is equal to the operator of @var{expr}.
 
 @opencatbox
-@category{Predicate functions}
+@category{Operators} @category{Predicate functions}
 @closecatbox
 
 @end deffn

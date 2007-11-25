@@ -744,7 +744,7 @@ Example expression is --------------
 @end example
 
 @opencatbox
-@category{Display variables}
+@category{Debugging} @category{Display variables}
 @closecatbox
 
 @end defvr
@@ -766,7 +766,7 @@ with the @var{n}-th symbol equivalent to @code{concat ('errexp, @var{n})}.
 See also @code{error} and @code{error_size}.
 
 @opencatbox
-@category{Display variables}
+@category{Debugging} @category{Display variables}
 @closecatbox
 
 @end defvr
@@ -1384,7 +1384,7 @@ Setting the flag to @code{true} is also useful for creating Maxima
 init files.
 
 @opencatbox
-@category{Translation flags}
+@category{Translation flags and variables}
 @closecatbox
 
 @end defvr
@@ -1726,7 +1726,7 @@ When @code{savedef} is @code{false}, the names of translated functions are
 removed from the @code{functions} list.
 
 @opencatbox
-@category{Translation flags}
+@category{Translation flags and variables}
 @closecatbox
 
 @end defvr
@@ -1740,7 +1740,7 @@ superscripts.  The derivative indices are displayed as subscripts,
 separated from the covariant indices by a comma.
 
 @opencatbox
-@category{Display functions}
+@category{Package itensor} @category{Display functions}
 @closecatbox
 
 @end deffn
@@ -1751,7 +1751,7 @@ Returns a list of the canonical rational expression (CRE) variables in expressio
 See also @code{ratvars}.
 
 @opencatbox
-@category{Expressions} @category{Display functions}
+@category{Rational expressions} @category{Display functions}
 @closecatbox
 
 @end deffn

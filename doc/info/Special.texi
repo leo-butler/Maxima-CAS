@@ -34,6 +34,10 @@ kelliptic (z)                  Complete elliptic integral of the first
 %d [n] (z)                     Parabolic cylinder function
 @end example
 
+@opencatbox
+@category{Bessel functions} @category{Airy functions} @category{Special functions}
+@closecatbox
+
 @node Functions and Variables for Special Functions,  , Introduction to Special Functions, Special Functions
 @section Functions and Variables for Special Functions
 
@@ -50,6 +54,10 @@ number, the numerical value of @code{airy_ai} is returned
 when possible.
 
 See also @code{airy_bi}, @code{airy_dai}, @code{airy_dbi}.
+
+@opencatbox
+@category{Airy functions}
+@closecatbox
 @end deffn
 
 
@@ -57,6 +65,10 @@ See also @code{airy_bi}, @code{airy_dai}, @code{airy_dbi}.
 The derivative of the Airy function Ai @code{airy_ai(x)}. 
 
 See @code{airy_ai}.
+
+@opencatbox
+@category{Airy functions}
+@closecatbox
 @end deffn
 
 @deffn {Function} airy_bi (@var{x})
@@ -72,6 +84,10 @@ In other cases the unevaluated expression is returned.
 The derivative @code{diff (airy_bi(x), x)} is @code{airy_dbi(x)}.
 
 See @code{airy_ai}, @code{airy_dbi}.
+
+@opencatbox
+@category{Airy functions}
+@closecatbox
 @end deffn
 
 
@@ -79,6 +95,10 @@ See @code{airy_ai}, @code{airy_dbi}.
 The derivative of the Airy Bi function @code{airy_bi(x)}.
 
 See @code{airy_ai} and @code{airy_bi}.
+
+@opencatbox
+@category{Airy functions}
+@closecatbox
 @end deffn
 
 @deffn {Function} asympa
@@ -89,6 +109,9 @@ numerical analysis.
 
 @code{load ("asympa")} loads this package.
 
+@opencatbox
+@category{Package asympa}
+@closecatbox
 @end deffn
 
 @deffn {Function} bessel (@var{z}, @var{a}) 
@@ -136,6 +159,9 @@ $$\sum_{k=0}^{\infty }{{{\left(-1\right)^{k}\,\left(z\over 2\right)^{v+2\,k}
 
 although the infinite series is not used for computations.
 
+@opencatbox
+@category{Bessel functions}
+@closecatbox
 @end deffn
 
 
@@ -169,6 +195,9 @@ $${{\cos \left(\pi\,v\right)\,J_{v}(z)-J_{-v}(z)}\over{
 when @math{v} is not an integer.  When @math{v} is an integer @math{n},
 the limit as @math{v} approaches @math{n} is taken.
 
+@opencatbox
+@category{Bessel functions}
+@closecatbox
 @end deffn
 
 
@@ -209,6 +238,9 @@ $$\sum_{k=0}^{\infty } {{1\over{k!\,\Gamma
 
 although the infinite series is not used for computations.
 
+@opencatbox
+@category{Bessel functions}
+@closecatbox
 @end deffn
 
 
@@ -240,6 +272,9 @@ $${{\pi\,\csc \left(\pi\,v\right)\,\left(I_{-v}(z)-I_{v}(z)\right)}\over{2}}$$
 when @math{v} is not an integer.  If @math{v} is an integer @math{n},
 then the limit as @math{v} approaches @math{n} is taken.
 
+@opencatbox
+@category{Bessel functions}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} besselexpand
@@ -266,7 +301,7 @@ the Bessel function is expanded.
 @end example
 
 @opencatbox
-@category{Simplification flags}
+@category{Bessel functions} @category{Simplification flags}
 @closecatbox
 
 @end defvr
@@ -281,12 +316,18 @@ However, maxima does not otherwise know much about this function.  For
 symbolic work, it is probably preferable to work with the expression
 @code{exp(-abs(z))*bessel_i(v, z)}.
 
+@opencatbox
+@category{Bessel functions}
+@closecatbox
 @end deffn
 
 @deffn {Function} scaled_bessel_i0 (@var{z}) 
 
 Identical to @code{scaled_bessel_i(0,z)}.
 
+@opencatbox
+@category{Bessel functions}
+@closecatbox
 @end deffn
 
 @deffn {Function} scaled_bessel_i1 (@var{z}) 
@@ -300,6 +341,9 @@ The beta function, defined as @code{gamma(x) gamma(y)/gamma(x + y)}.
 @c SEEMS LIKE THERE SHOULD BE MORE TO SAY HERE
 @c ANY SIMPLIFICATION RULES FOR THIS FUNCTION ??
 
+@opencatbox
+@category{Gamma and factorial functions}
+@closecatbox
 @end deffn
 
 @deffn {Function} gamma (@var{x})
@@ -315,6 +359,9 @@ The variable @code{gammalim} controls simplification of the gamma function.
 
 The Euler-Mascheroni constant is @code{%gamma}.
 
+@opencatbox
+@category{Gamma and factorial functions}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} gammalim
@@ -328,7 +375,7 @@ simplification will occur.  Note that the @code{factlim} switch controls
 simplification of the result of @code{gamma} of an integer argument as well.
 
 @opencatbox
-@category{Simplification variables}
+@category{Gamma and factorial functions} @category{Simplification variables}
 @closecatbox
 
 @end defvr
@@ -337,6 +384,9 @@ simplification of the result of @code{gamma} of an integer argument as well.
 @deffn {Function} intopois (@var{a})
 Converts @var{a} into a Poisson encoding.
 
+@opencatbox
+@category{Poisson series}
+@closecatbox
 @end deffn
 
 @c NEED CROSS REFS HERE
@@ -347,6 +397,9 @@ functions in @var{expr} into factorials.
 
 See also @code{makegamma}.
 
+@opencatbox
+@category{Gamma and factorial functions}
+@closecatbox
 @end deffn
 
 @c NEED CROSS REFS HERE
@@ -357,6 +410,9 @@ functions in @var{expr} into gamma functions.
 
 See also @code{makefact}.
 
+@opencatbox
+@category{Gamma and factorial functions}
+@closecatbox
 @end deffn
 
 @c AREN'T THERE OTHER FUNCTIONS THAT DO ESSENTIALLY THE SAME THING ??
@@ -378,6 +434,9 @@ Returns the numerical factor multiplying the expression
                                8
 @end example
 
+@opencatbox
+@category{Expressions}
+@closecatbox
 @end deffn
 
 @c NEED EXAMPLES HERE
@@ -388,6 +447,9 @@ i.e., the return value is @code{outofpois (intopois (@var{a}))}.
 This function is thus a canonical simplifier
 for sums of powers of sine and cosine terms of a particular type.
 
+@opencatbox
+@category{Poisson series}
+@closecatbox
 @end deffn
 
 @c NEED MORE INFO HERE
@@ -396,6 +458,9 @@ for sums of powers of sine and cosine terms of a particular type.
 Differentiates @var{a} with respect to @var{b}. @var{b} must occur only
 in the trig arguments or only in the coefficients.
 
+@opencatbox
+@category{Poisson series}
+@closecatbox
 @end deffn
 
 @c LOOKING AT THE CODE IN src/pois3.lisp, THIS FCN SEEMS TO COMPUTE THE EXPONENT BY MULTIPLYING IN A LOOP
@@ -405,6 +470,9 @@ in the trig arguments or only in the coefficients.
 Functionally identical to @code{intopois (@var{a}^@var{b})}.
 @var{b} must be a positive integer.
 
+@opencatbox
+@category{Poisson series}
+@closecatbox
 @end deffn
 
 @c WHAT IS THIS ABOUT ??
@@ -413,6 +481,9 @@ Integrates in a similarly restricted sense (to
 @code{poisdiff}).  Non-periodic terms in @var{b} are dropped if @var{b} is in the trig
 arguments.
 
+@opencatbox
+@category{Poisson series}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} poislim
@@ -424,7 +495,7 @@ corresponds to the interval [-2^(5-1)+1,2^(5-1)], or [-15,16], but it
 can be set to [-2^(n-1)+1, 2^(n-1)].
 
 @opencatbox
-@category{Simplification variables}
+@category{Poisson series}
 @closecatbox
 
 @end defvr
@@ -436,12 +507,18 @@ sine terms and @var{cosfn} on the cosine terms of the Poisson series given.
 @var{sinfn} and @var{cosfn} are functions of two arguments which are a coefficient
 and a trigonometric part of a term in series respectively.
 
+@opencatbox
+@category{Poisson series}
+@closecatbox
 @end deffn
 
 @c REPHRASE WITHOUT USING THE TERM "FUNCTIONALLY IDENTICAL"
 @deffn {Function} poisplus (@var{a}, @var{b})
 Is functionally identical to @code{intopois (a + b)}.
 
+@opencatbox
+@category{Poisson series}
+@closecatbox
 @end deffn
 
 @deffn {Function} poissimp (@var{a})
@@ -449,7 +526,7 @@ Converts @var{a} into a Poisson series for @var{a} in general
 representation.
 
 @opencatbox
-@category{Simplification functions}
+@category{Poisson series}
 @closecatbox
 @end deffn
 
@@ -458,6 +535,9 @@ representation.
 The symbol @code{/P/} follows the line label of Poisson series
 expressions.
 
+@opencatbox
+@category{Poisson series}
+@closecatbox
 @end defvr
 
 @deffn {Function} poissubst (@var{a}, @var{b}, @var{c})
@@ -477,12 +557,18 @@ result of substituting @code{@var{a} + @var{d}} for @var{b} in @var{c}.  The ide
 expansion in terms of a small parameter.  For example,
 @code{poissubst (u, v, cos(v), %e, 3)} yields @code{cos(u)*(1 - %e^2/2) - sin(u)*(%e - %e^3/6)}.
 
+@opencatbox
+@category{Poisson series}
+@closecatbox
 @end deffn
 
 @c REPHRASE WITHOUT USING THE TERM "FUNCTIONALLY IDENTICAL"
 @deffn {Function} poistimes (@var{a}, @var{b})
 Is functionally identical to @code{intopois (@var{a}*@var{b})}.
 
+@opencatbox
+@category{Poisson series}
+@closecatbox
 @end deffn
 
 @c HOW DOES THIS WORK ?? NEED MORE INFO AND EXAMPLES
@@ -493,6 +579,9 @@ function of 6 arguments which are the coefficients of the @var{u}, @var{v}, ...,
 in a term.  Terms for which @code{poistrim} is @code{true} (for the coefficients of
 that term) are eliminated during multiplication.
 
+@opencatbox
+@category{Poisson series}
+@closecatbox
 @end deffn
 
 @deffn {Function} printpois (@var{a})
@@ -500,6 +589,9 @@ Prints a Poisson series in a readable format.  In common
 with @code{outofpois}, it will convert @var{a} into a Poisson encoding first, if
 necessary.
 
+@opencatbox
+@category{Poisson series} @category{Display functions}
+@closecatbox
 @end deffn
 
 @c NEED INFO HERE ABOUT THE SUBSCRIPTED FORM psi[n](x)
@@ -526,6 +618,9 @@ will return an exact value.
 The function @code{bfpsi} in the @code{bffac} package can compute
 numerical values.
 
+@opencatbox
+@category{Gamma and factorial functions}
+@closecatbox
 @end deffn
 
 @defvr {Option variable} maxpsiposint
@@ -535,7 +630,7 @@ Default value: 20
 @code{psi[n](x)} will try to compute an exact value.
 
 @opencatbox
-@category{Simplification variables}
+@category{Gamma and factorial functions}
 @closecatbox
 
 @end defvr
@@ -549,7 +644,7 @@ Default value: -10
 return simplified answer, even if it could.
 
 @opencatbox
-@category{Simplification variables}
+@category{Gamma and factorial functions}
 @closecatbox
 
 @end defvr
@@ -563,7 +658,7 @@ If @code{p} is greater than @code{maxpsifracnum}, then
 value.
 
 @opencatbox
-@category{Simplification variables}
+@category{Gamma and factorial functions}
 @closecatbox
 
 @end defvr
@@ -577,7 +672,7 @@ If @code{q} is greater than @code{maxpsifracdenom}, then
 value.
 
 @opencatbox
-@category{Simplification variables}
+@category{Gamma and factorial functions}
 @closecatbox
 
 @end defvr
@@ -622,4 +717,7 @@ Examples:
                                p
 @end example
 
+@opencatbox
+@category{Laplace transform}
+@closecatbox
 @end deffn

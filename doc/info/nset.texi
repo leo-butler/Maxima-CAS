@@ -689,7 +689,7 @@ yields the divisors without reevaluating @code{divisors(8)}.
 @end example
 
 @opencatbox
-@category{Operations on integers}
+@category{Integers}
 @closecatbox
 
 @end deffn
@@ -1028,7 +1028,7 @@ Wrong number of arguments to mod
 @end example
 
 @opencatbox
-@category{Set functions} @category{Operations on lists}
+@category{Set functions} @category{Lists}
 @closecatbox
 
 @end deffn
@@ -1086,7 +1086,7 @@ because the main operator of @code{f([b])} isn't a list.
 @end example
 
 @opencatbox
-@category{Operations on lists}
+@category{Lists}
 @closecatbox
 
 @end deffn
@@ -1174,7 +1174,7 @@ here is an example that finds all partitions of 10 that consist of prime numbers
 @end example
 
 @opencatbox
-@category{Operations on integers}
+@category{Integers}
 @closecatbox
 
 @end deffn
@@ -1479,7 +1479,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Operations on lists}
+@category{Lists}
 @closecatbox
 
 @end deffn
@@ -1588,7 +1588,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Operations on integers}
+@category{Integers}
 @closecatbox
 
 @end deffn
@@ -1635,7 +1635,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Operations on integers}
+@category{Integers}
 @closecatbox
 
 @end deffn
@@ -1672,7 +1672,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Operations on integers}
+@category{Integers}
 @closecatbox
 
 @end deffn
@@ -1709,7 +1709,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Operations on integers}
+@category{Integers}
 @closecatbox
 
 @end deffn
@@ -1778,7 +1778,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Set functions} @category{Operations on lists}
+@category{Set functions} @category{Lists}
 @closecatbox
 
 @end deffn
@@ -1858,7 +1858,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Set functions} @category{Operations on lists}
+@category{Set functions} @category{Lists}
 @closecatbox
 
 @end deffn
@@ -1924,7 +1924,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Operations on lists}
+@category{Lists}
 @closecatbox
 
 @end deffn
@@ -2031,7 +2031,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Operations on lists}
+@category{Lists}
 @closecatbox
 
 @end deffn
@@ -2255,7 +2255,7 @@ are governed by the global flag @code{prederror}.
 @end example
 
 @opencatbox
-@category{Set functions} @category{Operations on lists}
+@category{Set functions} @category{Lists}
 @closecatbox
 
 @end deffn
@@ -2345,7 +2345,7 @@ Maxima applies identities to @code{stirling1}.
 @end example
 
 @opencatbox
-@category{Operations on integers}
+@category{Integers}
 @closecatbox
 
 @end deffn
@@ -2444,7 +2444,7 @@ Maxima applies identities to @code{stirling2}.
 @end example
 
 @opencatbox
-@category{Operations on integers}
+@category{Integers}
 @closecatbox
 
 @end deffn
@@ -2602,7 +2602,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Set functions} @category{Operations on lists}
+@category{Set functions} @category{Lists}
 @closecatbox
 
 @end deffn
@@ -2714,7 +2714,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Set functions} @category{Operations on lists}
+@category{Set functions} @category{Lists}
 @closecatbox
 
 @end deffn

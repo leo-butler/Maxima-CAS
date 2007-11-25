@@ -86,7 +86,7 @@ Similarly, you could say @code{apropos (tr_)} to find a list of many of the
 switches relating to the translator, most of which begin with @code{tr_}.
 
 @opencatbox
-@category{Console interaction}
+@category{Help}
 @closecatbox
 
 @end deffn
@@ -131,27 +131,6 @@ of @code{genindex} with no numeric suffix.
 
 @opencatbox
 @category{Sums and products}
-@closecatbox
-
-@end defvr
-
-@c NEEDS EXPANSION AND EXAMPLES
-@defvr {Constant} inf
-Real positive infinity.
-
-@opencatbox
-@category{Constants}
-@closecatbox
-
-@end defvr
-
-@c NEEDS EXPANSION AND EXAMPLES
-@defvr {Constant} infinity
-Complex infinity, an infinite magnitude of arbitrary phase
-angle.  See also @code{inf} and @code{minf}.
-
-@opencatbox
-@category{Constants}
 @closecatbox
 
 @end defvr
@@ -486,7 +465,7 @@ the list of all variables given names by the user
 See also @code{values}.
 
 @opencatbox
-@category{Expressions}
+@category{Evaluation}
 @closecatbox
 @end deffn
 

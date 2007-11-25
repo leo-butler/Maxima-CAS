@@ -51,6 +51,10 @@ to and is a generalization of CRE form, but carries additional
 information such as the degree of truncation.  As with CRE form, the
 symbol /T/ follows the line label of such expressions.
 
+@opencatbox
+@category{Polynomials} @category{Rational expressions}
+@closecatbox
+
 @c end concepts Polynomials
 @node Functions and Variables for Polynomials,  , Introduction to Polynomials, Polynomials
 @section Functions and Variables for Polynomials
@@ -845,7 +849,7 @@ them are converted to canonical rational expression (CRE) form.
 @c NEED EXAMPLES HERE
 
 @opencatbox
-@category{Numerical evaluation} @category{Rational numbers}
+@category{Numerical evaluation}
 @closecatbox
 
 @end defvr
@@ -1341,7 +1345,7 @@ of floating point numbers to rational numbers.
 
 @c NEED EXAMPLES HERE
 @opencatbox
-@category{Numerical evaluation} @category{Rational numbers}
+@category{Numerical evaluation} @category{Rational expressions}
 @closecatbox
 
 @end defvr
@@ -1465,7 +1469,7 @@ Returns @code{true} if @var{expr} is a literal integer or ratio of literal integ
 otherwise @code{false}.
 
 @opencatbox
-@category{Predicate functions} @category{Rational numbers}
+@category{Predicate functions} @category{Rational expressions}
 @closecatbox
 @end deffn
 
@@ -1489,7 +1493,7 @@ a message informing the user of the conversion of floating point numbers
 to rational numbers is displayed.
 
 @opencatbox
-@category{Rational numbers} @category{Numerical evaluation}
+@category{Rational expressions} @category{Numerical evaluation} @category{Console interaction}
 @closecatbox
 @end defvr
 

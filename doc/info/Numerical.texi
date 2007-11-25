@@ -22,6 +22,11 @@ There are functions in the @code{fourie} package to calculate Fourier integral
 coefficients and some functions for manipulation of expressions.
 See @code{Functions and Variables for Fourier Series}.
 
+@opencatbox
+@category{Fourier transform} @category{Share packages} @category{Package fft} @category{Package fourie}
+@closecatbox
+
+
 @c end concepts Numerical
 
 @node Functions and Variables for Numerical, Functions and Variables for Fourier Series, Fourier packages, Numerical
@@ -51,7 +56,7 @@ The array size need not be a power of 2.
 @code{polartorect} is the inverse function of @code{recttopolar}.
 
 @opencatbox
-@category{Fourier transform} @category{Complex variables}
+@category{Package fft} @category{Complex variables}
 @closecatbox
 @end deffn
 
@@ -78,7 +83,7 @@ The array size need not be a power of 2.
 @code{recttopolar} is the inverse function of @code{polartorect}.
 
 @opencatbox
-@category{Fourier transform} @category{Complex variables}
+@category{Package fft} @category{Complex variables}
 @closecatbox
 @end deffn
 
@@ -97,7 +102,7 @@ x[j]: sum (y[j] exp (+2 %i %pi j k / n), k, 0, n-1)
 See @code{fft} for more details.
 
 @opencatbox
-@category{Fourier transform} @category{Numerical methods}
+@category{Package fft} @category{Numerical methods}
 @closecatbox
 
 @end deffn
@@ -175,7 +180,7 @@ to the form @code{a + b %i}. See @code{polartorect}.
 @code{demo ("fft")} displays a demonstration of the @code{fft} package.
 
 @opencatbox
-@category{Fourier transform} @category{Numerical methods}
+@category{Package fft} @category{Numerical methods}
 @closecatbox
 
 @end deffn
@@ -384,7 +389,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Numerical methods}
+@category{Algebraic equations} @category{Numerical methods}
 @closecatbox
 
 @end deffn
@@ -432,7 +437,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Numerical methods}
+@category{Algebraic equations} @category{Numerical methods}
 @closecatbox
 
 @end deffn
@@ -446,6 +451,9 @@ Returns @code{true} if @code{equal (@var{x}, @var{y})} otherwise @code{false} (d
 error message like @code{equal (x, y)} would do in this case).
 
 @c NEEDS EXAMPLES
+@opencatbox
+@category{Package fourie}
+@closecatbox
 @end deffn
 
 @deffn {Function} remfun (@var{f}, @var{expr})
@@ -458,6 +466,9 @@ replaces all occurrences of @code{@var{f} (@var{arg})} by @var{arg} in @var{expr
 only if @var{arg} contains the variable @var{x}.
 
 @c NEEDS EXAMPLES
+@opencatbox
+@category{Package fourie}
+@closecatbox
 @end deffn
 
 @deffn {Function} funp (@var{f}, @var{expr})
@@ -470,6 +481,9 @@ returns @code{true} if @var{expr} contains the function @var{f} and the variable
 @var{x} is somewhere in the argument of one of the instances of @var{f}.
 
 @c NEEDS EXAMPLES
+@opencatbox
+@category{Package fourie}
+@closecatbox
 @end deffn
 
 @deffn {Function} absint (@var{f}, @var{x}, @var{halfplane})
@@ -490,7 +504,7 @@ returns the definite integral of @var{f} with respect to @var{x} from @var{a} to
 
 @c NEEDS EXAMPLES
 @opencatbox
-@category{Integration}
+@category{Package fourie} @category{Integration}
 @closecatbox
 @end deffn
 
@@ -501,7 +515,7 @@ on the interval @code{[-p, p]}.
 
 @c NEEDS EXAMPLES
 @opencatbox
-@category{Fourier transform}
+@category{Package fourie}
 @closecatbox
 @end deffn
 
@@ -512,7 +526,7 @@ Simplifies @code{sin (n %pi)} to 0 if @code{sinnpiflag} is @code{true} and
 
 @c NEEDS EXAMPLES
 @opencatbox
-@category{Trigonometric functions} @category{Simplification functions}
+@category{Package fourie} @category{Trigonometric functions} @category{Simplification functions}
 @closecatbox
 @end deffn
 
@@ -522,7 +536,7 @@ Default value: @code{true}
 See @code{foursimp}.
 
 @opencatbox
-@category{Trigonometric functions} @category{Simplification flags}
+@category{Package fourie}
 @closecatbox
 
 @end defvr
@@ -533,7 +547,7 @@ Default value: @code{true}
 See @code{foursimp}.
 
 @opencatbox
-@category{Trigonometric functions} @category{Simplification flags}
+@category{Package fourie}
 @closecatbox
 
 @end defvr
@@ -547,7 +561,7 @@ may be @code{inf}). @var{x} and @var{p} have same meaning as in
 
 @c NEEDS EXAMPLES
 @opencatbox
-@category{Fourier transform}
+@category{Package fourie}
 @closecatbox
 @end deffn
 
@@ -557,7 +571,7 @@ Returns the Fourier cosine coefficients for @code{@var{f}(@var{x})} defined on @
 
 @c NEEDS EXAMPLES
 @opencatbox
-@category{Fourier transform}
+@category{Package fourie}
 @closecatbox
 @end deffn
 
@@ -567,7 +581,7 @@ Returns the Fourier sine coefficients for @code{@var{f}(@var{x})} defined on @co
 
 @c NEEDS EXAMPLES
 @opencatbox
-@category{Fourier transform}
+@category{Package fourie}
 @closecatbox
 @end deffn
 
@@ -577,7 +591,7 @@ Returns @code{fourexpand (foursimp (fourier (@var{f}, @var{x}, @var{p})), @var{x
 
 @c NEEDS EXAMPLES
 @opencatbox
-@category{Fourier transform}
+@category{Package fourie}
 @closecatbox
 @end deffn
 
@@ -588,7 +602,7 @@ defined on @code{[minf, inf]}.
 
 @c NEEDS EXAMPLES
 @opencatbox
-@category{Fourier transform}
+@category{Package fourie}
 @closecatbox
 @end deffn
 
@@ -598,7 +612,7 @@ Returns the Fourier cosine integral coefficients for @code{@var{f}(@var{x})} on 
 
 @c NEEDS EXAMPLES
 @opencatbox
-@category{Fourier transform}
+@category{Package fourie}
 @closecatbox
 @end deffn
 
@@ -608,6 +622,6 @@ Returns the Fourier sine integral coefficients for @code{@var{f}(@var{x})} on @c
 
 @c NEEDS EXAMPLES
 @opencatbox
-@category{Fourier transform}
+@category{Package fourie}
 @closecatbox
 @end deffn

@@ -64,6 +64,11 @@ The @code{vect} package contains these functions:
 Warning: the @code{vect} package declares the dot operator @code{.}
 to be a commutative operator.
 
+@opencatbox
+@category{Vectors} @category{Share packages} @category{Package vect}
+@closecatbox
+
+
 @node eigen, , Vectors, Introduction to Matrices and Linear Algebra
 @subsection eigen
 
@@ -82,6 +87,11 @@ The functions in the @code{eigen} package are
 @code{innerproduct}, @code{unitvector}, @code{columnvector},
 @code{gramschmidt}, @code{eigenvalues}, @code{eigenvectors}, @code{uniteigenvectors},
 and @code{similaritytransform}.
+
+@opencatbox
+@category{Vectors} @category{Matrices} @category{Share packages} @category{Package eigen}
+@closecatbox
+
 
 @c end concepts Matrices and Linear Algebra
 @node Functions and Variables for Matrices and Linear Algebra,  , Introduction to Matrices and Linear Algebra, Matrices and Linear Algebra
@@ -690,7 +700,7 @@ After loading, all functions and variables in the package are available.
 
 @c NEED EXAMPLES HERE
 @opencatbox
-@category{Matrices}
+@category{Package eigen}
 @closecatbox
 @end deffn
 
@@ -735,7 +745,7 @@ Following simplification, @code{eigenvectors} can be called again
 with the @code{knowneigvals} flag set to @code{true}.
 
 @opencatbox
-@category{Matrices}
+@category{Package eigen}
 @closecatbox
 @end deffn
 
@@ -918,7 +928,7 @@ Warning - you are redefining the Macsyma function eigenvectors
 @end example
 
 @opencatbox
-@category{Vectors}
+@category{Package eigen}
 @closecatbox
 @end deffn
 
@@ -943,7 +953,7 @@ where @code{.} is the noncommutative multiplication operator.
 
 @c NEED EXAMPLE HERE
 @opencatbox
-@category{Vectors}
+@category{Package eigen}
 @closecatbox
 @end deffn
 
@@ -1386,7 +1396,7 @@ an alternative to Maxima's @code{charpoly}.
 @code{load ("nchrpl")} loads this function.
 
 @opencatbox
-@category{Matrices}
+@category{Matrices} @category{Package nchrpl}
 @closecatbox
 @end deffn
 
@@ -1425,7 +1435,7 @@ since it avoids polynomial arithmetic altogether.
 @code{load ("nchrpl")} loads this file.
 
 @opencatbox
-@category{Matrices} @category{Share packages}
+@category{Matrices} @category{Package nchrpl}
 @closecatbox
 @end deffn
 
@@ -1497,7 +1507,7 @@ cause the elements to be expanded (depending on the setting of @code{ratfac})
 which might not always be desired.
 
 @opencatbox
-@category{Matrices}
+@category{Matrices} @category{Rational expressions}
 @closecatbox
 
 @end defvr
@@ -1547,6 +1557,9 @@ To expand an expression into physical components in the current
 coordinate system, there is a function with usage of the form
 @c SOME TEXT HAS GONE MISSING HERE
 
+@opencatbox
+@category{Package vect}
+@closecatbox
 @end deffn
 
 @deffn {Function} setelmx (@var{x}, @var{i}, @var{j}, @var{M})
@@ -1587,7 +1600,7 @@ to be able to form @code{rightmatrix}.
 @code{simtran} is a synonym for @code{similaritytransform}.
 
 @opencatbox
-@category{Matrices}
+@category{Package eigen}
 @closecatbox
 @end deffn
 
@@ -1693,7 +1706,7 @@ appropriate dimension.
 @code{ueivects} is a synonym for @code{uniteigenvectors}.
 
 @opencatbox
-@category{Matrices}
+@category{Package eigen}
 @closecatbox
 @end deffn
 
@@ -1707,7 +1720,7 @@ this is a unit vector in the same direction as @var{x}.
 @code{uvect} is a synonym for @code{unitvector}.
 
 @opencatbox
-@category{Vectors}
+@category{Package eigen}
 @closecatbox
 @end deffn
 
@@ -1752,7 +1765,7 @@ These flags have all been declared @code{evflag}.
 @c by the function invocation
 
 @opencatbox
-@category{Vectors} @category{Simplification functions}
+@category{Package vect} @category{Simplification functions}
 @closecatbox
 @end deffn
 
@@ -1764,7 +1777,7 @@ When @code{vect_cross} is @code{true}, it allows DIFF(X~Y,T) to work where
 ~ is defined in SHARE;VECT (where VECT_CROSS is set to @code{true}, anyway.)
 
 @opencatbox
-@category{Vectors} @category{Differentiation}
+@category{Package vect} @category{Differentiation}
 @closecatbox
 
 @end defvr

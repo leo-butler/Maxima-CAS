@@ -108,7 +108,7 @@ now offers a lot of functions for manipulating strings. Tokenizing can be done b
 @code{readline} returns @code{false} when the end of file occurs.
 
 @opencatbox
-@category{Operations on strings} @category{Share packages} @category{Package stringproc}
+@category{Strings} @category{Share packages} @category{Package stringproc}
 @closecatbox
 
 

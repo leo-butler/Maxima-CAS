@@ -226,7 +226,7 @@ pos;
 @end example
 
 @opencatbox
-@category{Integration}
+@category{Laplace transform}
 @closecatbox
 @end deffn
 

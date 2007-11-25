@@ -22,6 +22,10 @@ by an explicit function call.
 There are additional mechanisms for rules applied to polynomials by @code{tellrat},
 and for commutative and noncommutative algebra in @code{affine} package. 
 
+@opencatbox
+@category{Simplification} @category{Rules and patterns}
+@closecatbox
+
 @c end concepts Rules and Patterns
 @node Functions and Variables for Rules and Patterns,  , Introduction to Rules and Patterns, Rules and Patterns
 @section Functions and Variables for Rules and Patterns
@@ -42,7 +46,7 @@ subexpression, the result is returned.
 See also @code{applyb1}, @code{apply2}, and @code{let}.
 
 @opencatbox
-@category{Pattern-matching}
+@category{Rules and patterns}
 @closecatbox
 @end deffn
 
@@ -60,7 +64,7 @@ subexpression is reprocessed, starting with the first rule.
 See also @code{apply1} and @code{let}.
 
 @opencatbox
-@category{Pattern-matching}
+@category{Rules and patterns}
 @closecatbox
 @end deffn
 
@@ -82,7 +86,7 @@ before giving up.
 See also @code{apply1}, @code{apply2}, and @code{let}.
 
 @opencatbox
-@category{Pattern-matching}
+@category{Rules and patterns}
 @closecatbox
 @end deffn
 
@@ -100,7 +104,7 @@ the rule package @code{rule_pkg_name} is used for that function call only,
 and the value of @code{current_let_rule_package} is not changed.
 
 @opencatbox
-@category{Pattern-matching}
+@category{Rules and patterns}
 @closecatbox
 
 @end defvr
@@ -115,7 +119,7 @@ is not explicitly set by the user with @code{let} or by changing the value of
 @code{current_let_rule_package}.
 
 @opencatbox
-@category{Pattern-matching}
+@category{Rules and patterns}
 @closecatbox
 
 @end defvr
@@ -253,7 +257,7 @@ to see if it is a definite integral.
 @end example
 
 @opencatbox
-@category{Pattern-matching}
+@category{Rules and patterns}
 @closecatbox
 @end deffn
 
@@ -273,7 +277,7 @@ operation of the pattern match and replacement.
 If the match fails, the rule function returns @code{false}.
 
 @opencatbox
-@category{Pattern-matching}
+@category{Rules and patterns}
 @closecatbox
 @end deffn
 
@@ -322,7 +326,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Pattern-matching}
+@category{Rules and patterns} @category{Display functions}
 @closecatbox
 @end deffn
 
@@ -413,7 +417,7 @@ If not otherwise specified,
 
 @c NEEDS ADDITIONAL EXAMPLES
 @opencatbox
-@category{Pattern-matching}
+@category{Rules and patterns}
 @closecatbox
 @end deffn
 
@@ -444,7 +448,7 @@ the numerator, denominator, and their quotient are simplified in that order.
 @end example
 
 @opencatbox
-@category{Pattern-matching}
+@category{Rules and patterns}
 @closecatbox
 
 @end defvr
@@ -464,7 +468,7 @@ See also @code{disprule}, which displays rules defined by @code{tellsimp} and @c
 @c WHAT ABOUT defmatch AND defrule ??
 
 @opencatbox
-@category{Pattern-matching}
+@category{Rules and patterns}
 @closecatbox
 @end deffn
 
@@ -485,7 +489,7 @@ followed by @code{letsimp (%, @var{package_name_2})}, and so on.
 
 @c NEEDS EXAMPLES
 @opencatbox
-@category{Pattern-matching}
+@category{Rules and patterns}
 @closecatbox
 @end deffn
 
@@ -496,7 +500,7 @@ Default value: @code{[default_let_rule_package]}
 plus the default package @code{default_let_rule_package}.
 
 @opencatbox
-@category{Pattern-matching}
+@category{Rules and patterns}
 @closecatbox
 
 @end defvr
@@ -713,7 +717,7 @@ The functions @code{propvars} and @code{printprops} return information about mat
 @end example
 
 @opencatbox
-@category{Pattern-matching} @category{Declarations and inferences}
+@category{Rules and patterns} @category{Declarations and inferences}
 @closecatbox
 @end deffn
 
@@ -849,7 +853,7 @@ Matchfix operators are ordinary user-defined functions.
 @end example
 
 @opencatbox
-@category{Operators}
+@category{Syntax} @category{Operators}
 @closecatbox
 
 @end deffn
@@ -876,7 +880,7 @@ called the original substitution rule is revived.
 See also @code{remrule}, which removes a rule defined by @code{tellsimp} or @code{tellsimpafter}.
 
 @opencatbox
-@category{Pattern-matching}
+@category{Rules and patterns}
 @closecatbox
 @end deffn
 
@@ -945,7 +949,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Pattern-matching}
+@category{Rules and patterns}
 @closecatbox
 @end deffn
 
@@ -1013,7 +1017,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Pattern-matching}
+@category{Rules and patterns}
 @closecatbox
 @end deffn
 
@@ -1280,7 +1284,7 @@ A worked example: anticommutative multiplication.
 @end example
 
 @opencatbox
-@category{Pattern-matching}
+@category{Rules and patterns}
 @closecatbox
 @end deffn
 
@@ -1289,6 +1293,6 @@ Executes @code{kill (rules)} and then resets the next rule number to 1
 for addition @code{+}, multiplication @code{*}, and exponentiation @code{^}.
 
 @opencatbox
-@category{Pattern-matching}
+@category{Rules and patterns}
 @closecatbox
 @end deffn

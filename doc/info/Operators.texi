@@ -476,7 +476,7 @@ Thus @code{x!} may be replaced even in a quoted expression.
 @end example
 
 @opencatbox
-@category{Operators}
+@category{Gamma and factorial functions} @category{Operators}
 @closecatbox
 
 @end deffn
@@ -503,7 +503,7 @@ For an argument @code{n} which is not an integer, float, or rational,
 @c n!! IS NEITHER SIMPLIFIED NOR EVALUATED IN THIS CASE -- MENTION THAT? OR TOO MUCH DETAIL ???
 
 @opencatbox
-@category{Operators}
+@category{Gamma and factorial functions} @category{Operators}
 @closecatbox
 
 @end deffn
@@ -585,7 +585,7 @@ and
 The assignment operator.  E.g. A:3 sets the variable A to 3.
 
 @opencatbox
-@category{Operators}
+@category{Evaluation} @category{Operators}
 @closecatbox
 
 @end deffn
@@ -599,7 +599,7 @@ on its right to the value of the quantity on its left, which must
 evaluate to an atomic variable or subscripted variable.
 
 @opencatbox
-@category{Operators}
+@category{Evaluation} @category{Operators}
 @closecatbox
 
 @end deffn
@@ -728,7 +728,7 @@ x is equal to 1234 - 1729 w
 @end example
 
 @opencatbox
-@category{Operators}
+@category{Function definition} @category{Operators}
 @closecatbox
 
 @end deffn
@@ -813,7 +813,7 @@ the function defined by @code{:=} accepts a variable number of arguments.
 @end example
 
 @opencatbox
-@category{Operators}
+@category{Function definition} @category{Operators}
 @closecatbox
 
 @end deffn
@@ -1065,7 +1065,7 @@ This simplification does not occur when @code{f} is applied to expressions of
 the form @code{sum(x[i],i,lower-limit,upper-limit)}.
 
 @opencatbox
-@category{Declarations and inferences}
+@category{Operators} @category{Declarations and inferences}
 @closecatbox
 @end defvr
 
@@ -1128,7 +1128,7 @@ simplifier that @code{h} is antisymmetric.  E.g. @code{h(x,z,y)} will simplify t
 arguments necessary to convert it to that form.
 
 @opencatbox
-@category{Declarations and inferences}
+@category{Operators} @category{Declarations and inferences}
 @closecatbox
 @end defvr
 
@@ -1245,7 +1245,7 @@ simplifier that @code{h} is a commutative function.  E.g. @code{h(x,z,y)} will
 simplify to @code{h(x, y, z)}.  This is the same as @code{symmetric}.
 
 @opencatbox
-@category{Declarations and inferences}
+@category{Operators} @category{Declarations and inferences}
 @closecatbox
 @end defvr
 
@@ -1638,7 +1638,7 @@ Examples:
 @end example
 
 @opencatbox
-@category{Expressions}
+@category{Function application} @category{Expressions}
 @closecatbox
 @end deffn
 
@@ -1657,7 +1657,7 @@ Example:
 @end example
 
 @opencatbox
-@category{Expressions}
+@category{Function application} @category{Expressions}
 @closecatbox
 @end deffn
 
@@ -2123,7 +2123,7 @@ reverse(uf))
 @end example
 
 @opencatbox
-@category{Rational numbers}
+@category{Numerical evaluation}
 @closecatbox
 @end deffn
 
@@ -2555,7 +2555,7 @@ the left-hand sides of the equations must be a cyclic permutation of
 the coordinate variables.
 
 @opencatbox
-@category{Vectors}
+@category{Package vect}
 @closecatbox
 @end deffn
 

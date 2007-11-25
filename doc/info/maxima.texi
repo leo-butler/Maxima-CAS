@@ -311,6 +311,7 @@ Matrices and Linear Algebra
 
 Affine
 
+* Introduction to Affine::
 * Functions and Variables for Affine::      
 
 itensor
@@ -339,6 +340,7 @@ Number Theory
 
 Symmetries
 
+* Introduction to Symmetries::
 * Functions and Variables for Symmetries::  
 
 Groups
