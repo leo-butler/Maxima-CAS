@@ -799,6 +799,6 @@ Returns @code{true} if and only if @var{expr} contains an operator or function
 not recognized by the Maxima simplifier.
 
 @opencatbox
-@category{Simplification functions}
+@category{Predicate functions} @category{Simplification functions}
 @closecatbox
 @end deffn
