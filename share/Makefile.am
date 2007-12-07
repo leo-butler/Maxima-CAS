@@ -176,6 +176,8 @@ contrib/floatproperties.lisp\
 contrib/topoly.lisp\
 contrib/topoly_solver.mac\
 contrib/f90.lisp\
+contrib/fourier_elim/fourier_elim.lisp\
+contrib/fourier_elim/rtest_fourier_elim.mac\
 contrib/format/README\
 contrib/format/autoload-m.macsyma\
 contrib/format/autoload-mp.macsyma\
@@ -473,6 +475,7 @@ contrib/tex2ooo.lisp\
 contrib/tocl.lisp\
 contrib/multiadditive.lisp\
 contrib/tocl.lisp\
+contrib/unwind_protect.lisp\
 diff_form/cartan_new.lisp\
 diff_form/curvture2.mac\
 diff_form/diff_form.mac\
