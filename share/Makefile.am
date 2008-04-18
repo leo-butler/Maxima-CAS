@@ -356,6 +356,7 @@ contrib/numericalio/rectangular.data\
 contrib/numericalio/rtest_numericalio.mac\
 contrib/numericalio/semicolon.data\
 contrib/numericalio/test-binary.f8-lsb\
+contrib/numericalio/test-binary.f8-msb\
 contrib/pdiff/battex.sty\
 contrib/pdiff/history.txt\
 contrib/pdiff/pdiff-doc.pdf\
