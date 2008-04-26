@@ -10,6 +10,14 @@
 
 (defvar *macro-file* nil)
 
+#+ecl
+(eval-when (:load-toplevel)
+  (defun make-unspecial (s)
+    (when (symbolp s)
+      (ffi::c-inline (s) (:object) :object
+		     "((#0)->symbol.stype = stp_ordinary, #0)"
+		     :one-liner t))))
+
 #+gcl
 (progn 
   (lisp:clines "#define MAKE_UNSPECIAL(x) (check_type_symbol(&(x)),(x)->s.s_stype = stp_ordinary, Cnil)")
@@ -32,11 +40,11 @@
 	     when (eql (car v) 'unspecial)
 	     collect `(progn
 		       ,@(loop for w in (cdr v)
-				collect #-(or gcl scl cmu)
+				collect #-(or gcl scl cmu ecl)
                                        `(remprop ',w
 						 #-excl 'special
 						 #+excl 'excl::.globally-special.)
-				#+(or gcl scl cmu)
+				#+(or gcl scl cmu ecl)
 			        `(make-unspecial ',w)))
 	     else collect `(proclaim ',v))))
 

@@ -1902,7 +1902,8 @@ relational knowledge is contained in the default context GLOBAL."
 
 (eval-when
     #+gcl (load)
-    #-gcl (:load-toplevel)
+    #+ecl (load eval)
+    #-(or gcl ecl) (:load-toplevel)
 
   (setq %initiallearnflag t)
 

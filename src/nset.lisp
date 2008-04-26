@@ -753,21 +753,21 @@
 ;;   (2) p1, p2 in P and p1 # p2 implies p1 and p2 are disjoint,
 ;;   (3) union(x | x in P) = S.
 ;; Thus set() is a partition of set().
-      
-(defun $set_partitions (a &optional n)
+
+(defun $set_partitions (a &optional n-sub)
   (setq a (require-set a "$set_partitions"))
-  (cond ((and (integerp n) (> n -1))
-	 `(($set) ,@(set-partitions a n)))
-	((null n)
-	 (setq n (length a))
+  (cond ((and (integerp n-sub) (> n-sub -1))
+	 `(($set) ,@(set-partitions a n-sub)))
+	((null n-sub)
+	 (setq n-sub (length a))
 	 (let ((acc (set-partitions a 0)) (k 1))
-	   (while (<= k n)
+	   (while (<= k n-sub)
 	     (setq acc (append acc (set-partitions a k)))
 	     (incf k))
 	   `(($set) ,@acc)))
 	(t
 	 (merror "The optional second argument to set_partitions must be
-a positive integer; instead found ~:M" n))))
+a positive integer; instead found ~:M" n-sub))))
 
 (defun set-partitions (a n)
   (cond ((= n 0)

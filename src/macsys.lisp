@@ -487,6 +487,7 @@
 
 (defun $system (&rest args)
   #+gcl   (lisp:system (apply '$sconcat args))
+  #+ecl (si:system (apply '$concat args))
   #+clisp (ext:run-shell-command (apply '$sconcat args))
   #+(or cmu scl) (ext:run-program "/bin/sh"
 				  (list "-c" (apply '$sconcat args)) :output t)

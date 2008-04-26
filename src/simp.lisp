@@ -630,7 +630,8 @@
 
 (eval-when
     #+gcl (compile load)
-    #-gcl (:compile-toplevel :load-toplevel)
+    #+ecl (compile load eval)
+    #-(or gcl ecl) (:compile-toplevel :load-toplevel)
     (defconstant machine-mantissa-precision (float-digits 1.0)))
 
 (defun fpcofrat1 (nu d)

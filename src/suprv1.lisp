@@ -983,6 +983,7 @@
   #+mcl (ccl::quit)
   #+gcl (quit)
   #+abcl (cl-user::quit)
+  #+ecl (si:quit)
   #+excl "don't know quit function")
 
 (defmfun $logout () (bye))
