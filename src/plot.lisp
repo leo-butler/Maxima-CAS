@@ -128,7 +128,10 @@
 ;;            (si::fp-output-stream (si:run-process path nil)))
   #+gcl (setq *gnuplot-stream*
               (open (concatenate 'string "| " path) :direction :output))
-  #-(or clisp cmu sbcl gcl scl)
+  #+ecl (progn
+          (format t "HELLO FROM #+ECL START-GNUPLOT-PROCESS; PATH=~S; YET ANOTHER ATTEMPT~%" path)
+          (setq *gnuplot-stream* (ext:run-program path nil :input :stream :output t :error :output)))
+  #-(or clisp cmu sbcl gcl scl ecl)
   (merror "Gnuplot not supported with your lisp!")
   
   ;; set mouse must be the first command send to gnuplot
