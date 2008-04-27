@@ -131,7 +131,8 @@
 
 (eval-when
 	#+gcl (load)
-	#-gcl (:load-toplevel)
+    #+ecl (load eval)
+	#-(or gcl ecl) (:load-toplevel)
 	(mapc #'(lambda (x) (mputprop x t '$constant) (setf (get x 'sysconst) t))
 	'($%pi $%i $%e $%phi %i $%gamma	;numeric constants
 	       $inf $minf $und $ind $infinity ;pseudo-constants

@@ -439,7 +439,8 @@
 
 (eval-when
     #+gcl (load)
-    #-gcl (:load-toplevel)
+    #+ecl (load eval)
+    #-(or gcl ecl) (:load-toplevel)
 
     ;; it is convenient to have the bigprimes be actually less than
     ;; half the size of the most positive fixnum, so that arithmetic is
