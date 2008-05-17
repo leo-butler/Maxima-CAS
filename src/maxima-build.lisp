@@ -10,9 +10,9 @@
 			    :one-liner t))))
 
 (defun maxima-compile ()
-  (mk:oos "maxima" :compile #+ecl :load-source-instead-of-binary #+ecl t))
+  (mk:oos "maxima" :compile))
 (defun maxima-load ()
-  (mk:oos "maxima" :load #+ecl :load-source-instead-of-binary #+ecl t))
+  (mk:oos "maxima" :load))
 (defun maxima-dump ()
   #+clisp(ext:saveinitmem "binary-clisp/maxima.mem" 
 		   :init-function (function cl-user::run)))

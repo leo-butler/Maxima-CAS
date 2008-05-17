@@ -549,6 +549,7 @@
   (in-package :maxima)
   (setf *load-verbose* nil)
   (setf *debugger-hook* #'maxima-lisp-debugger)
+  (setf *debugger-hook* nil)
   (let ((input-stream *standard-input*)
 	(batch-flag nil))
     #+allegro
