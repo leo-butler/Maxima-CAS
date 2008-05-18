@@ -7,12 +7,12 @@
 ;;(let ((errset nil)) (errset (+ 2 'a))) ;==> nil
 ;;(let ((errset nil)) (errset (+ 2 3))) ;==> (5)
 
-#-ecl
+#-ecldebug
 (defmacro errset (&rest l)
   `(handler-case (list ,(car l))
     (error (e) (when errset (error e)))))
 
-#+ecl
+#+ecldebug
 (defmacro errset (&rest l)
   `(handler-case (list ,(car l))
     (error (e)
