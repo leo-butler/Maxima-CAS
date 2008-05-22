@@ -1901,9 +1901,8 @@ relational knowledge is contained in the default context GLOBAL."
 ;; %initiallearnflag is only necessary so that %PI, %E, etc. can be LEARNed.
 
 (eval-when
-    #+gcl (load)
-    #+ecl (load eval)
-    #-(or gcl ecl) (:load-toplevel)
+    #+gcl (load eval)
+    #-gcl (:load-toplevel :execute)
 
   (setq %initiallearnflag t)
 

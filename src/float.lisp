@@ -1672,7 +1672,6 @@ One extra decimal digit in actual representation for rounding purposes.")
 	    (bcons (fproot x 2))))))
 
 (eval-when
-    #+gcl (load)
-    #+ecl (load eval)
-    #-(or gcl ecl) (:load-toplevel)
+    #+gcl (load eval)
+    #-gcl (:load-toplevel :execute)
     (fpprec1 nil $fpprec))		; Set up user's precision

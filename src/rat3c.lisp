@@ -438,9 +438,8 @@
 (defvar bigprimes nil)
 
 (eval-when
-    #+gcl (load)
-    #+ecl (load eval)
-    #-(or gcl ecl) (:load-toplevel)
+    #+gcl (load eval)
+    #-gcl (:load-toplevel :execute)
 
     ;; it is convenient to have the bigprimes be actually less than
     ;; half the size of the most positive fixnum, so that arithmetic is
