@@ -33,8 +33,8 @@
 ;; regularization of package use within Maxima.)
 
 (eval-when
-    #+gcl (compile load eval)
-    #-gcl (:compile-toplevel :load-toplevel :execute)
+    #+gcl (load eval)
+    #-gcl (:load-toplevel :execute)
     ;; matchfix ("{", "}")
     (meval '(($matchfix) "{" "}"))
     ;; "{" ([L]) ::= buildq ([L], set (splice (L)));
@@ -931,8 +931,8 @@ a positive integer; instead found ~:M" n-sub))))
 (defprop $kron_delta simp-kron-delta operators)
 
 (eval-when
-    #+gcl (compile load eval)
-    #-gcl (:compile-toplevel :load-toplevel :execute)
+    #+gcl (load eval)
+    #-gcl (:load-toplevel :execute)
     ;; (kind '$kron_delta '$symmetric)) <-- This doesn't work. Why?
     ;; Put new fact in global context; 
     ;; otherwise it goes in initial context, which is meant for the user.
