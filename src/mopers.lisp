@@ -38,36 +38,36 @@
 ;; Addition -- call ADD with simplified operands; ADD* with unsimplified
 ;; operands.
 
-#-ecl (defopt add (&rest terms)
+(defopt add (&rest terms)
   (cond ((= (length terms) 2) `(add2 . ,terms))
 	(t `(addn (list . ,terms) t))))
-#+ecl (defun add (&rest terms)
+(defun add (&rest terms)
   (cond ((= (length terms) 2) (apply #'add2 terms))
         (t (apply #'addn `(,terms t)))))
 
-#-ecl (defopt add* (&rest terms)
+(defopt add* (&rest terms)
   (cond ((= (length terms) 2) `(add2* . ,terms))
 	(t `(addn (list . ,terms) nil))))
-#+ecl (defun add* (&rest terms)
+(defun add* (&rest terms)
   (cond ((= (length terms) 2) (apply #'add2* terms))
         (t (apply #'addn `(,terms nil)))))
 
 ;; Multiplication -- call MUL or NCMUL with simplified operands; MUL* or NCMUL*
 ;; with unsimplified operands.
 
-#-ecl (defopt mul (&rest factors)
+(defopt mul (&rest factors)
   (cond ((= (length factors) 2) `(mul2 . ,factors))
 	((= (length factors) 3) `(mul3 . ,factors))
 	(t `(muln (list . ,factors) t))))
-#+ecl (defun mul (&rest factors)
+(defun mul (&rest factors)
   (cond ((= (length factors) 2) (apply #'mul2 factors))
         ((= (length factors) 3) (apply #'mul3 factors))
         (t (apply #'muln `(,factors t)))))
 
-#-ecl (defopt mul* (&rest factors)
+(defopt mul* (&rest factors)
   (cond ((= (length factors) 2) `(mul2* . ,factors))
 	(t `(muln (list . ,factors) nil))))
-#+ecl (defun mul* (&rest factors)
+(defun mul* (&rest factors)
   (cond ((= (length factors) 2) (apply #'mul2* factors))
         (t (apply #'muln `(,factors nil)))))
 
@@ -113,8 +113,8 @@
 ;; several places.  In Franz, Multics, and the LISPM, this macros out on the
 ;; assumption that calls are more expensive than the additional memory.
 
-#-ecl (defopt simplify (x) `(simplifya ,x nil))
-#+ecl (defun simplify (x) (simplifya x nil))
+(defopt simplify (x) `(simplifya ,x nil))
+(defun simplify (x) (simplifya x nil))
 
 ;; A hand-made DEFSTRUCT for dealing with the Macsyma MDO structure.
 ;; Used in GRAM, etc. for storing/retrieving from DO structures.

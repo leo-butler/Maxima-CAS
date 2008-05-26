@@ -6,7 +6,7 @@
 	       (ffi::c-inline (s) (:object) :object
 		     "
 if ((#0)->symbol.stype==stp_special)
-	(#0)->symbol.stype = stp_ordinary;"
+	(#0)->symbol.stype &= ~stp_special;"
 		     :one-liner nil)
 	       s))))
 
@@ -16,8 +16,8 @@ if ((#0)->symbol.stype==stp_special)
       (format t "~%;;; Declaring ~A as NOT SPECIAL" s)
       (ffi::c-inline (s) (:object) :object
 		     "
-if ((#0)->symbol.stype==stp_special)
-	(#0)->symbol.stype = stp_ordinary;"
+if ((#0)->symbol.stype & stp_special)
+	(#0)->symbol.stype &= ~stp_special;"
 		     :one-liner nil)
       s)))
 

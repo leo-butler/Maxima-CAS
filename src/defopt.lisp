@@ -13,10 +13,5 @@
 ;; ***==> Right now, DEFOPT is used just like you would a DEFMACRO <==***
 ;; (defopt <name> <arlist> <body-boo>)
 
-;; I BELIEVE THE PROBLEM WITH ECL HERE IS THAT DEFINE-COMPILER-MACRO IS NOT
-;; PROCESSED WHEN FILES ARE ONLY LOADED AND NOT COMPILED; IT SEEMS PLAUSIBLE
-;; THAT OTHER LISPS WOULD DEMONSTRATE THE SAME PROBLEM IF ONLY LOADED.
-;; PROBABLY AN EVAL-WHEN IS NEEDED HERE.
-
 (defmacro defopt (&rest other)
-  `(#-(or gcl ecl) define-compiler-macro #+gcl si::define-compiler-macro #+ecl defmacro ,@other)) 
+  `(#-gcl define-compiler-macro #+gcl si::define-compiler-macro ,@other)) 
