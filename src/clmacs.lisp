@@ -337,7 +337,7 @@
 #-(or flonum-long flonum-double-double)
 (progn
 ;; Tell Lisp the float type for a 'flonum.
-#-(or clisp ecl)
+#-clisp
 (deftype flonum (&optional low high)
   (cond (high
 	 `(double-float ,low ,high))
@@ -350,7 +350,7 @@
 ;; signals an error.  So does (coerce 1 '(double-float 0d0)).  But
 ;; (coerce 1 'double-float) returns 1d0 as expected.  So for now, make
 ;; flonum be exactly the same as double-float, without bounds.
-#+(or clisp ecl)
+#+clisp
 (deftype flonum (&optional low high)
   'double-float)
 
