@@ -20,6 +20,7 @@
   :description "Maxima is a symbolic computation program." 
   :licence "GPL" 
   :version "5.10" 
+  :serial t
   :components (
 	       (:module package :pathname ""
 			:components (#-gcl(:file "maxima-package")
@@ -456,6 +457,7 @@
 				     (:file "sin") 
 				     (:file "risch")))
 	       (:module taylor-series :pathname ""
+			:depends-on (rat-macros)
 			:components ((:file "hayat")))
 	       (:module definite-integration :pathname ""
 			:components ((:file "defint") 
