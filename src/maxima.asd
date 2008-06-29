@@ -92,6 +92,7 @@
 				  ((:file "f2cl-package")
 				   (:file "slatec")))
 			 (:module f2cl-lib :pathname ""
+                  :depends-on (packages)
 				  :components ((:file "f2cl-lib")))
 			 (:module slatec 
 				  :depends-on (f2cl-lib packages)
