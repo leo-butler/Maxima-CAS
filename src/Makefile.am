@@ -265,32 +265,40 @@ include openmcl-depends.mk
 endif
 
 if ECL
-EXECUTEECL = $(ECL_NAME) -eval
-all-local: binary-ecl/maxima.image
+EXECUTEECL = $(ECL_NAME)
+all-local: binary-ecl/maxima
 install-exec-local: install-ecl
 uninstall-hook: uninstall-ecl
 clean: clean-ecl
 distclean: clean-ecl
 
-ecl:binary-ecl/maxima.image
+ecl:binary-ecl/maxima
 
-# ECL EQUIVALENT ?? !!  $(EXECUTEECL) '(progn $(LOADDEFSYSTEM) $(DEFSYSTEMLOAD) (ccl:save-application "binary-ecl/maxima.image" :toplevel-function (function cl-user::run)) (ccl::quit))'
-binary-ecl/maxima.image:
-	$(EXECUTEECL) '(progn $(LOADDEFSYSTEM) $(DEFSYSTEMCOMPILE) (si::quit))'
-	touch binary-ecl/maxima-image
+# We have to do some gymnastics here because ECL puts the
+# compiled application in the file "maxima", which would
+# overwrite the maxima shell script.
+binary-ecl/maxima:
+	test -f maxima && mv maxima maxima-tmp
+	success=true && \
+	$(EXECUTEECL) -eval "(require 'asdf)" -eval "(asdf:make-build \"maxima\" :type :program)" -eval "(ext:quit)" && \
+	mv maxima binary-ecl/maxima || \
+	success=false; \
+	test -f maxima-tmp && mv maxima-tmp maxima ; \
+	test $$success = true && /bin/true || /bin/false
 
 install-ecl:
 	$(mkinstalldirs) "$(DESTDIR)$(verpkglibdir)/binary-ecl"
-	$(INSTALL_DATA) binary-ecl/maxima.image "$(DESTDIR)$(verpkglibdir)/binary-ecl/maxima.image"
+	$(INSTALL_PROGRAM) binary-ecl/maxima "$(DESTDIR)$(verpkglibdir)/binary-ecl/maxima"
 
 uninstall-ecl:
-	rm -f "$(DESTDIR)$(verpkglibdir)/binary-ecl/maxima.image"
+	rm -f "$(DESTDIR)$(verpkglibdir)/binary-ecl/maxima"
 
 clean-ecl:
-	rm -rf binary-ecl
+	rm -rf binary-ecl libmaxima.a
+
 ecl-depends.mk: maxima.system
 	test -d binary-ecl || mkdir binary-ecl
-	$(EXECUTEECL) '(progn $(LOADDEFSYSTEM) $(LOADMAKEDEPENDS) (funcall (intern "CREATE-DEPENDENCY-FILE" :mk) "binary-ecl/maxima.image" "ecl-depends.mk"))'
+	$(EXECUTEECL) -eval '(progn $(LOADDEFSYSTEM) $(LOADMAKEDEPENDS) (funcall (intern "CREATE-DEPENDENCY-FILE" :mk) "binary-ecl/maxima" "ecl-depends.mk"))'
 include ecl-depends.mk
 endif
 
@@ -330,6 +338,7 @@ desoln.lisp \
 displa.lisp \
 displm.lisp \
 dskfn.lisp \
+ecl-port.lisp \
 elim.lisp \
 ellipt.lisp \
 evalw.lisp \
@@ -602,4 +611,4 @@ numerical/slatec/zwrsk.lisp
 
 genericdirDATA = $(real_lisp_sources) autoconf-variables.lisp
 
-EXTRA_DIST = $(real_lisp_sources) maxima.system clisp-depends.mk  cmucl-depends.mk  scl-depends.mk  gcl-depends.mk acl-depends.mk openmcl-depends.mk ecl-depends.mk sbcl-depends.mk numerical/slatec/fortran maxima-build.lisp maxima-command.ico set_lang.vbs
+EXTRA_DIST = $(real_lisp_sources) maxima.asd maxima.system clisp-depends.mk  cmucl-depends.mk  scl-depends.mk  gcl-depends.mk acl-depends.mk openmcl-depends.mk ecl-depends.mk sbcl-depends.mk numerical/slatec/fortran maxima-build.lisp maxima-command.ico set_lang.vbs
