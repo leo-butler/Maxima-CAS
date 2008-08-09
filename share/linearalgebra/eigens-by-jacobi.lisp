@@ -127,7 +127,7 @@
 	(push row mm))
       (setq mm (reverse mm))
       (push '($matrix) mm)
-      (setq d `((mlist) ,@(coerce d 'list)))
+      (setq d `((mlist) ,@(cl:coerce d 'list)))
       `((mlist) ,d ,mm))))
 
       

@@ -156,7 +156,7 @@
   (cons '($matrix) (mapcar #'(lambda (s) (cons '(mlist) s)) (array-to-row-list mat fn))))
 
 (defun array-to-maxima-list (ar &optional (fn 'identity))
-  (cons '(mlist) (mapcar fn (coerce ar 'list))))
+  (cons '(mlist) (mapcar fn (cl:coerce ar 'list))))
   
 (defun maxima-to-array (mat &optional (fn 'identity) typ)
   (let ((r ($matrix_size mat)) (c))
