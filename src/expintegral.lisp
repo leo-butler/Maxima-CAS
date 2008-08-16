@@ -189,7 +189,8 @@
   (declare (ignore ignored))
   (twoargcheck exp)
   (let ((order (simpcheck (cadr exp) z))
-        (arg   (simpcheck (caddr exp) z)))
+        (arg   (simpcheck (caddr exp) z))
+        (ratorder))
 
     (when *debug-expintegral* 
       (format t "~&SIMP-EXPINTEGRAL-E:~%")
@@ -541,7 +542,7 @@
       (format t "~&   : z = ~A~%" z))
 
     (cond
-      ((and (> (realpart z) 0) (> (cabs z) 1.0))
+      ((and (> (realpart z) 0) (> (abs z) 1.0))
        ;; We expand in continued fractions.
        (when *debug-expintegral*
          (format t "~&We expand in continued fractions.~%"))
@@ -562,7 +563,7 @@
            (setq e (* c d))
            (setq h (* h e))
             
-           (when (< (cabs (- e 1.0)) *expint-eps*)
+           (when (< (abs (- e 1.0)) *expint-eps*)
              (when *debug-expintegral*
                (setq *debug-expint-maxit* (max *debug-expint-maxit* i)))
              (return (* h (exp (- z))))))))
@@ -588,7 +589,7 @@
              (t 
               (setq e (/ (- f) (- i n1)))))
            (setq r (+ r e))
-           (when (< (cabs e) (* (cabs r) *expint-eps*))
+           (when (< (abs e) (* (abs r) *expint-eps*))
              (when *debug-expintegral*
                (setq *debug-expint-maxit* (max *debug-expint-maxit* i)))
              (return r))))))))
@@ -610,7 +611,7 @@
       (format t "~&   : z = ~A~%" z))
 
     (cond
-      ((and (> (realpart z) 0) (> (cabs z) 1.0))
+      ((and (> (realpart z) 0) (> (abs z) 1.0))
        ;; We expand in continued fractions.
        (when *debug-expintegral*
          (format t "~&We expand in continued fractions.~%"))
@@ -631,7 +632,7 @@
            (setq e (* c d))
            (setq h (* h e))
             
-           (when (< (cabs (- e 1.0)) *expint-eps*)
+           (when (< (abs (- e 1.0)) *expint-eps*)
              (when *debug-expintegral*
                (setq *debug-expint-fracmaxit* (max *debug-expint-fracmaxit* i)))
              (return (* h (exp (- z))))))))
@@ -665,7 +666,7 @@
            (setq f (* -1 f (/ z (float i))))
            (setq e (/ (- f) (- (float i) n1)))
            (setq r (+ r e))
-           (when (< (cabs e) (* (cabs r) *expint-eps*))
+           (when (< (abs e) (* (abs r) *expint-eps*))
              (when *debug-expintegral*
                (setq *debug-expint-fracmaxit* (max *debug-expint-fracmaxit* i)))
              (return r))))))))
@@ -1347,8 +1348,7 @@
             (not (eq $expintrep '$expintegral_hyp)))
        (when *debug-expintegral*
          (format t "~&Transform Shi to ~A~%" $expintrep))
-       (let ((logarg (list '(%log) arg)))
-         (case $expintrep
+       (case $expintrep
            ($gammaincomplete
              (mul
                (inv 2)
@@ -1392,7 +1392,7 @@
                (list '($signum) ($imagpart arg)))))
 
            ($expintegral_trig
-             (mul -1 '$%i (list '($expintegral_si) (mul '$%i arg)))))))
+             (mul -1 '$%i (list '($expintegral_si) (mul '$%i arg))))))
 
       (t (eqtest (list '(%expintegral_shi) arg) exp)))))
 
@@ -1476,8 +1476,7 @@
             (not (eq $expintrep '$expintegral_trig)))
        (when *debug-expintegral*
          (format t "~&Transform Ci to ~A~%" $expintrep))
-       (let ((logarg (list '(%log) arg)))
-         (case $expintrep
+       (case $expintrep
            ($gammaincomplete
              (sub
                (list '(%log) arg)
@@ -1532,7 +1531,7 @@
              (add
                (list '($expintegral_chi) (mul '$%i arg))
                (mul -1 (list '(%log) (mul '$%i arg)))
-               (list '(%log) arg))))))
+               (list '(%log) arg)))))
 
       (t (eqtest (list '(%expintegral_ci) arg) exp)))))
 
