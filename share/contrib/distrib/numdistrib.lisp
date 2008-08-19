@@ -185,7 +185,8 @@
 ;;  Conditions: 0<=x<=1; a, b>0
 (defun ibeta (x a b)
    (declare (type flonum x a b))
-   (cond ((or (= x 0) (= x 1)) 0.0)
+   (cond ((= x 0) 0.0)
+         ((= x 1) 1.0)
          (t (let ((bt (exp (+ (- (lnbeta a b))
                               (* a (log x))
                               (* b (log (- 1 x)))))))
@@ -534,7 +535,7 @@
          (racc 8.881784197001252e-16)
          (dbl_epsilon 8.881784197001252e-16)
          (dbl_min 2.2250738585072014e-308)
-         (dbl_max 1.7976931348623157e+308)
+         (dbl_max most-positive-flonum) ;; GCL and CLISP on W2k can't read 1.7976931348623157e+308
          (eps 1e-11)    ; must be > accu
          (reps 1e-10)   ; relative tolerance
          (ux 1.0) (lx 1.0) (nx 1.0) (pp 1.0))
