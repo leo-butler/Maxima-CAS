@@ -820,6 +820,7 @@ numeric/newton.mac\
 numeric/newton1.mac\
 numeric/riemsum.mac\
 numeric/romberg.lisp\
+numeric/rtest_interpol.mac\
 numeric/rtest_romberg.mac\
 numeric/simpsn.dem\
 numeric/simpsn.mac\
@@ -863,6 +864,7 @@ simplification/rducon.dem\
 simplification/rducon.lisp\
 simplification/rncomb.dem\
 simplification/rncomb.mac\
+simplification/rtest_rncomb.mac\
 simplification/scifac.dem\
 simplification/scifac.lisp\
 simplification/sqdnst.mac\
