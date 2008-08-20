@@ -75,7 +75,8 @@
 	#+openmcl "openmcl"
 	#+abcl "abcl"
 	#+lispworks "lispworks"
-	#-(or clisp cmu scl sbcl gcl allegro openmcl abcl lispworks) "unknownlisp")
+	#+ecl "ecl"
+	#-(or clisp cmu scl sbcl gcl allegro openmcl abcl lispworks ecl) "unknownlisp")
 
 (defvar $file_search_lisp nil
   "Directories to search for Lisp source code.")
@@ -397,9 +398,9 @@
 	    (combine-path *maxima-infodir* subdir-bit "maxima-index.lisp")))))
 
 (defun get-dirs (path)
-  #+(or :clisp :sbcl)
+  #+(or :clisp :sbcl :ecl)
   (directory (concatenate 'string (namestring path) "/*/"))
-  #-(or :clisp :sbcl)
+  #-(or :clisp :sbcl :ecl)
   (directory (concatenate 'string (namestring path) "/*")))
 
 (defun unix-like-basename (path)
