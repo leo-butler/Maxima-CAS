@@ -787,7 +787,7 @@
      del	(cond ((not (mtimesp (cadr fm))) (go check))
 		      ((onep1 (cadadr fm))
 		       (rplacd (cadr fm) (cddadr fm)) (return (cdr fm)))
-		      ((not (zerop1 (cadadr fm))) (return (cdr fm))))
+                     ((not (zerop1 (cadadr fm))) (return (cdr fm))))
      (return (rplacd fm (cddr fm)))
      equt (setq x1 (testtneg (list* '(mtimes simp)
 				    (addk (cond (flag (cadadr fm))
@@ -810,6 +810,8 @@
 	       ((not errorsw) (merror "log(0) has been generated."))
 	       (t (throw 'errorsw t))))
 	((eq y '$%e) 1)
+	((and (mexptp y) (eq (cadr y) '$%e))	;; log(%e^x) -> x
+	 (simplifya (caddr y) t))
 	((ratnump y)
 	 (cond ((equal (cadr y) 1) (simpln1 (list nil (caddr y) -1)))
 	       ((eq $logexpand '$super)
@@ -993,7 +995,7 @@
 						(mul2 res (cadr eqnflag))
 						(mul2 res (caddr eqnflag)))))
 			 (t (dolist (u x)
-			      (cond ((mxorlistp1 u)
+                             (cond ((mxorlistp1 u)
 				     (return
 				       (setq res (constmx res u))))
 				    ((and (mexptp u)
@@ -1368,14 +1370,23 @@
 (defmfun simpsignum (x y z) 
   (oneargcheck x)
   (setq y (simpcheck (cadr x) z))
-  (cond ((mnump y)
-	 (setq y (num1 y)) (cond ((plusp y) 1) ((minusp y) -1) (t 0))) 
-	((eq (setq z (csign y)) t) (eqtest (list '(%signum) y) x))
-	((eq z '$pos) 1) 
-	((eq z '$neg) -1) 
-	((eq z '$zero) 0) 
-	((mminusp y) (neg (take '(%signum) (neg y))))
-	(t (eqtest (list '(%signum) y) x))))
+  (setq z (csign y))
+  ;; When csign thinks y is complex, let it be.
+  (cond ((eq t z) (eqtest (list '(%signum) y) x))
+	(t 
+	 ;; positive * x --> x and negative * x --> -1 * x.
+	 (if (mtimesp y)
+	     (setq y (muln (mapcar #'(lambda (s) (let ((sgn (csign s)))
+						   (cond ((eq sgn '$neg) -1)
+							 ((eq sgn '$pos) 1)
+							 (t s)))) (margs y)) t)))
+
+	 (cond ((and (not ($mapatom y)) (eq (mop y) '%signum)) y) ;; signum(signum(x)) --> signum(x)
+	       ((eq z '$pos) 1) 
+	       ((eq z '$neg) -1) 
+	       ((eq z '$zero) 0) 
+	       ((great (neg y) y) (neg (take '(%signum) (neg y)))) ;; signum(x) --> -signum(-x).
+	       (t (eqtest (list '(%signum) y) x))))))
 
 (defmfun exptrl (r1 r2)
   (cond ((equal r2 1) r1)
