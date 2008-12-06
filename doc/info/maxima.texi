@@ -1,3 +1,4 @@
 \input texinfo
 @setfilename  maxima.info
 @include include-maxima.texi
+@bye
