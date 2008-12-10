@@ -6,6 +6,8 @@
 ;; Copyright (C)  Nov. 2008  Volker van Nek
 
 ;; modified 08-12-03: vector_factor factors lists and matrices
+;;          08-12-05: vector_eval: $ratprint set to false
+;;          08-12-10: rename stardisp to stardisp1, assign property of $stardisp
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -61,11 +63,13 @@
 
 (putprop 'mtimesq (get 'mtimes 'dissym) 'dissym)
 
-;; overwrites stardisp in displa.lisp :
-(defun stardisp (symbol val)
+;; extend stardisp in displa.lisp :
+(defun stardisp1 (symbol val)
   (declare (ignore symbol))
   (putprop 'mtimes (if val '(#\*) '(#\space)) 'dissym)
-  (putprop 'mtimesq (get 'mtimes 'dissym) 'dissym)))
+  (putprop 'mtimesq (get 'mtimes 'dissym) 'dissym) )
+;;
+(defprop $stardisp stardisp1 assign)
 
 (defun mtimesqp (expr)
   (and (not (atom expr)) (eq 'mtimesq (caar expr))) )
@@ -75,7 +79,7 @@
 ;; $vector_eval
 
 (defun $vector_eval (expre$$ion)
-  (let (($listarith t) ($doallmxops t))
+  (let (($listarith t) ($doallmxops t) $ratprint)
     ($expand (sratsimp (meval `(($ev) ,expre$$ion $infeval)))) ))
     ;; mtimesq needs an extra evaluation here
 
