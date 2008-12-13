@@ -291,4 +291,3 @@ binary-ecl/maxima : openmath.lisp
 binary-ecl/maxima : autol.lisp
 binary-ecl/maxima : max_ext.lisp
 binary-ecl/maxima : init-cl.lisp
-
