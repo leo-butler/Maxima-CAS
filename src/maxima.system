@@ -42,7 +42,6 @@
 
 #+ecl
 (defun build-maxima-lib ()
-(format t "~%HELLO FROM BUILD-MAXIMA-LIB~%~%")
   (labels ((list-all-objects (module)
              (if (eql (mk::component-type module) :file)
 		 (list (mk::component-full-pathname module :binary))
@@ -60,7 +59,7 @@
 			     ;; Convert dir/foo.fas to dir/foo.o
 			     (make-pathname :type "o" :defaults p))
 			 files)))
-	(c::build-program "binary-ecl/maxima" :lisp-files obj :ld-flags '("-Wl,-rpath=/usr/local/lib")
+	(c::build-program "binary-ecl/maxima" :lisp-files obj
 			  :epilogue-code '(progn (require :defsystem)
 					         (cl-user::run)))))))
 
