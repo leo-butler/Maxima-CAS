@@ -35,10 +35,6 @@
 
 (defvar *windows-OS* (string= *autoconf-win32* "true"))
 
-(defvar $draw_command (if (string= *autoconf-win32* "true")
-                              "wgnuplot"
-                              "gnuplot"))
-
 (defvar $gnuplot_file_name "maxout.gnuplot")
 
 (defvar $data_file_name "data.gnuplot")
@@ -2844,7 +2840,7 @@
              (format cmdstorage "~%quit~%~%")
              (close cmdstorage)
              ($system (format nil "~a \"~a\"" 
-                                  $draw_command
+                                  $gnuplot_command
                                   (plot-temp-file $gnuplot_file_name)) ))
           (t ; non animated gif
              ; command file maxout.gnuplot is now ready
@@ -2858,9 +2854,6 @@
                       (format cmdstorage "set print \"~a\" append~%bind x \"print MOUSE_X,MOUSE_Y\"~%"
                                    (gethash '$xy_file *gr-options*))) )
 
-             (format cmdstorage "unset output~%")
-             (format cmdstorage "reset~%")
-
              (close cmdstorage)
 
              ; get the plot
@@ -2868,32 +2861,41 @@
                 (*windows-OS*
                    ($system (if (equal (gethash '$terminal *gr-options*) '$screen)
                                    (format nil "~a ~a"
-                                               $draw_command
+                                               $gnuplot_command
                                                (format nil $gnuplot_view_args (plot-temp-file $gnuplot_file_name)))
                                    (format nil "~a \"~a\"" 
-                                               $draw_command
+                                               $gnuplot_command
                                                (plot-temp-file $gnuplot_file_name)))) )
                 (t  ; non windows operating system
-                   (setf $gnuplot_command $draw_command)
                    (check-gnuplot-process)
                    (send-gnuplot-command "unset output")
                    (send-gnuplot-command "reset")
                    (send-gnuplot-command (format nil "load '~a'" (plot-temp-file $gnuplot_file_name))) ))))
 
     ; the output is a simplified description of the scene(s)
-    (reverse scenes-list)    ) )
+    (reverse scenes-list)) )
 
 
 
 ;; Equivalent to draw2d(opt & obj)
 (defun $draw2d (&rest args)
-   ($draw (cons '($gr2d) args)) )
+   ($draw (cons '($gr2d) (draw-transform args '$draw2d_transform))) )
 
 
 ;; Equivalent to draw3d(opt & obj)
 (defun $draw3d (&rest args)
-   ($draw (cons '($gr3d) args)) )
+   ($draw (cons '($gr3d) (draw-transform args '$draw3d_transform))) )
 
+(defun draw-transform-one (expr transform)
+  (if (atom expr)
+      (list expr)
+      (if ($get (caar expr) transform)
+	  (cdr (mfuncall ($get (caar expr) transform) expr))
+	  (list expr))))
+
+(defun draw-transform (expr transform)
+  (if (null expr) ()
+      (append (draw-transform-one (car expr) transform) (draw-transform (cdr expr) transform))))
 
 ;; This function transforms an integer number into
 ;; a string, adding zeros at the left side until the
@@ -2901,4 +2903,3 @@
 ;; useful to name a sequence of frames.
 (defun $add_zeroes (num)
    (format nil "~10,'0d" num) )
-
