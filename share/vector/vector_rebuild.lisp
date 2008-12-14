@@ -8,6 +8,8 @@
 ;; modified 08-12-03: vector_factor factors lists and matrices
 ;;          08-12-05: vector_eval: $ratprint set to false
 ;;          08-12-10: rename stardisp to stardisp1, assign property of $stardisp
+;;          08-12-14: vector_eval: cut out sratsimp
+;;                    $vector_rebuild: evaluate mnctimes, bugfix case mdefine
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -46,9 +48,9 @@
 ;; In combination with setting listarith & friends to false 
 ;; mtimesq allows to suppress automatic arithmetrics
 ;; and to bypass the displa function dim-mquotient:
-;;                  1				            1 [ 2 ]
+;;                  1                                       1 [ 2 ]
 ;;   1/r*[2,3]; --> - [2, 3]   or   1/r*matrix([2],[3]);--> - [   ]
-;;                  r				            r [ 3 ]
+;;                  r                                       r [ 3 ]
 ;; mtimesq display symbol is "*" and is settable by stardisp.
 ;; One evaluation steps from mtimesq to mtimes and vice versa.
 
@@ -79,8 +81,8 @@
 ;; $vector_eval
 
 (defun $vector_eval (expre$$ion)
-  (let (($listarith t) ($doallmxops t) $ratprint)
-    ($expand (sratsimp (meval `(($ev) ,expre$$ion $infeval)))) ))
+  (let (($listarith t) ($doallmxops t))
+    ($expand (meval `(($ev) ,expre$$ion $infeval))) ))
     ;; mtimesq needs an extra evaluation here
 
 (putprop '$vector_eval t 'evfun)
@@ -103,13 +105,13 @@
           (args (margs expr)) )
       (if (not (car args)) (return-from $vector_rebuild expr)) ;; noarg-op
       (cond
-        ((member op '(mequal mnctimes crossq) :test #'eq)
-          (cons `(,op simp)
+        ((eq op 'mequal)
+          (cons `(mequal simp)
             (mapcar #'(lambda (arg) ($vector_rebuild arg params)) args) ))
         ((eq op 'mdefine)
           (meval `((mdefine simp) 
             ,(cadr expr) 
-            ,($vector_rebuild (caddr expr))) ))
+            ,($vector_rebuild (caddr expr) params)) ))
         (t
           (vector-rebuild expr (cdr params)) )))))
 
