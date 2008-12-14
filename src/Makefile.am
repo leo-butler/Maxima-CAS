@@ -276,7 +276,7 @@ ecl:binary-ecl/maxima
 
 binary-ecl/maxima:
 	test -d binary-ecl || mkdir binary-ecl
-	$(EXECUTEECL) -eval '(progn $(LOADDEFSYSTEM) $(DEFSYSTEMCOMPILE))' -eval '(ext:quit)'
+	$(EXECUTEECL) -eval '(progn $(LOADDEFSYSTEM) $(DEFSYSTEMCOMPILE) (build-maxima-lib))' -eval '(ext:quit)'
 
 install-ecl:
 	$(mkinstalldirs) "$(DESTDIR)$(verpkglibdir)/binary-ecl"
