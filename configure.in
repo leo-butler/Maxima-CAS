@@ -772,6 +772,7 @@ AC_SUBST(expanded_datadir)
 AC_SUBST(expanded_infodir)
 default_layout_autotools="true"
 AC_SUBST(default_layout_autotools)
+AC_SUBST(LDFLAGS)
 
 dnl Look for grep that can handle long lines and -e.
 AC_PROG_EGREP
