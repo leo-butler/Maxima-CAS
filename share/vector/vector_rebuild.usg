@@ -242,7 +242,7 @@ Factoring matrices:
                                  1 [ 1   2  ]
 (%o3)                            - [        ]
                                  7 [ 3  - 1 ]
-(%i5) M.M_1, vector_eval;
+(%i5) M.M_1, vector_simp;
                                    [ 1  0 ]
 (%o5)                              [      ]
                                    [ 0  1 ]
