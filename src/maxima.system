@@ -60,10 +60,10 @@
 			     (make-pathname :type "o" :defaults p))
 			 files)))
 	(c::build-program "binary-ecl/maxima" :lisp-files obj
-        :ld-flags
-        (let
-          ((x (symbol-value (find-symbol "*AUTOCONF-LD-FLAGS*" (find-package "MAXIMA")))))
-          (if (and x (not (string= x ""))) (list x)))
+			  :ld-flags
+			  (let ((x (symbol-value (find-symbol "*AUTOCONF-LD-FLAGS*"
+							      (find-package "MAXIMA")))))
+			    (if (and x (not (string= x ""))) (list x)))
 			  :epilogue-code '(progn (require :defsystem)
 					         (cl-user::run)))))))
 
