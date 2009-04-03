@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT(src/macsys.lisp)
 
-AM_INIT_AUTOMAKE(maxima,5.17post)
+AM_INIT_AUTOMAKE(maxima,5.18.0)
 
 AM_PATH_LISPDIR
 
@@ -342,6 +342,17 @@ if test x"${ecl}" = xtrue ; then
 		AC_MSG_WARN(ecl executable ${ECL_NAME} not found in PATH)
 	fi
 fi
+
+dnl xgettext
+AC_ARG_ENABLE(gettext,[  --enable-gettext                 Locale support],
+	[case "${enableval}" in
+	       yes) enable_gettext=true  ;;
+ 	       no)  enable_gettext=false ;;
+	       *) AC_MSG_ERROR(bad value ${enableval} for --enable-gettext) ;;
+	 esac],
+	 [enable_gettext=false])
+
+AM_CONDITIONAL(ENABLE_GETTEXT, test x$enable_gettext = xtrue)
 
 dnl languages
 AC_ARG_ENABLE(lang-es,[  --enable-lang-es                 Spanish language support],
