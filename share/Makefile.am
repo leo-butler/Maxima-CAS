@@ -83,7 +83,7 @@ calculus/revert.mac\
 calculus/taylor1.mac\
 combinatorics/README\
 colnew/colnew-package.lisp\
-colnew/colnew.system\
+colnew/colnew-lisp.system\
 colnew/lisp/approx.lisp\
 colnew/lisp/appsln.lisp\
 colnew/lisp/colnew.lisp\
@@ -481,6 +481,7 @@ contrib/rtest_lsquares.mac\
 contrib/rtest_z_transform.mac\
 contrib/sarag/aliases.mac\
 contrib/sarag/arag_test.mac\
+contrib/sarag/certificateOfPositivity.mac\
 contrib/sarag/constants.mac\
 contrib/sarag/examples.mac\
 contrib/sarag/hard_test.mac\
@@ -594,6 +595,7 @@ draw/wbd.lisp\
 dynamics/complex_dynamics.lisp\
 dynamics/dynamics.mac\
 dynamics/plotdf.lisp\
+dynamics/rtest_dynamics.mac\
 integequations/inteqn.mac\
 integequations/inteqn.usg\
 integequations/intexs.mac\
@@ -912,6 +914,7 @@ orthopoly/orthopoly.lisp\
 orthopoly/README\
 orthopoly/test_orthopoly.mac\
 orthopoly/variational_method.dem\
+orthopoly/rtest_pochhammer.mac\
 physics/battex.sty\
 physics/dimen.dem\
 physics/dimen.mac\
