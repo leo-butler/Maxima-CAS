@@ -20,9 +20,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifht Floor, Boston,
 # MA 02110-1301, USA
 
-proc trajectory { f g t0 x0 y0 sx sy nsteps dir} {
+proc fieldlines { f g t0 x0 y0 sx sy nsteps dir} {
     set n $nsteps
-    set ans "$x0 $y0"
+    set ans "$t0 $x0 $y0"
     set xn $x0
     set yn $y0
     set tn $t0
@@ -55,15 +55,15 @@ proc trajectory { f g t0 x0 y0 sx sy nsteps dir} {
 	    set yn [expr {$yn + $dy}]
 	    set tn [expr {$tn + $h}]
 
-	    lappend ans  $xn $yn
+	    lappend ans $tn $xn $yn
 	}
     }
     return $ans
 }
 
-proc orthogonal { f g t0 x0 y0 sx sy nsteps dir} {
+proc curves { f g t0 x0 y0 sx sy nsteps dir} {
     set n $nsteps
-    set ans "$x0 $y0"
+    set ans "$t0 $x0 $y0"
     set xn $x0
     set yn $y0
     set tn $t0
@@ -96,7 +96,7 @@ proc orthogonal { f g t0 x0 y0 sx sy nsteps dir} {
 	    set yn [expr {$yn + $dy}]
 	    set tn [expr {$tn + $h}]
 
-	    lappend ans  $xn $yn
+	    lappend ans $tn $xn $yn
 	}
     }
     return $ans
