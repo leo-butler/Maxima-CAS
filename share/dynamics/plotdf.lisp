@@ -22,7 +22,7 @@
 ;; See plotdf.usg (which should come together with this program) for
 ;; a usage summary
 ;;
-;; $Id: plotdf.lisp,v 1.6 2008/11/07 15:05:14 villate Exp $
+;; $Id: plotdf.lisp,v 1.10.2.1 2009/04/13 16:51:54 villate Exp $
 
 (in-package :maxima)
 
@@ -41,8 +41,20 @@
         ($trajectory_at
          (check-list-items name (rest (rest value)) 'number 2))
         ($bbox (check-list-items name (rest (rest value)) 'number 4))
-        (($xfun $parameters $sliders $vector $trajectory $orthogonal) value)
-        ('$direction
+        (($xfun $parameters $sliders $vectors $fieldlines $curves 
+		$windowtitle $xaxislabel $yaxislabel $psfile) value)
+	($axes
+	 (if (not (third value))
+	     (setq value '((mlist simp) $axes 0))  
+	   (case (third value)
+		 ($x (setq value '((mlist simp) $axes "x")))
+		 ($y (setq value '((mlist simp) $axes "y")))
+		 (t (setq value '((mlist simp) $axes "xy"))))))
+	($box
+	 (if (not (third value))
+	     (setq value '((mlist simp) $nobox 1))
+	   (setq value '((mlist simp) $nobox 0))))
+        ($direction
          (or (member (third value) '($forward $backward $both))
              (merror "direction: choose one of [forward,backward,both]")) 
          value)
@@ -63,7 +75,7 @@
              (format st "{~a}" (/ (- (third vv) (second vv)) 2)))
             (t
              (format st "-~(~a~) " (first vv))
-             (format st "{~{~(~a~)~^ ~}}" (rest vv)))))))
+             (format st "{~{~a~^ ~}}" (rest vv)))))))
 
 ;; applies float(ev(expression, numer)) to an expression, and returns a string
 
@@ -111,6 +123,12 @@
            (dolist (v options) 
              (setq opts (concatenate 'string opts " "
                                   (plotdf-option-to-tcl v s1 s2))))))
+
+    (unless (search "-xaxislabel " opts)
+      (setq opts (concatenate 'string opts " -xaxislabel " (ensure-string s1))))
+    (unless (search "-yaxislabel " opts)
+      (setq opts (concatenate 'string opts " -yaxislabel " (ensure-string s2))))
+
     (show-open-plot
      (with-output-to-string (st)
                   (cond ($show_openplot (format st "plotdf ~a ~a~%" cmd opts))
@@ -137,7 +155,7 @@
 	      (if (listp expr)
 		  (mapcar #'subxy expr)
 		(cond ((eq expr s1) '$x) ((eq expr s2) '$y) (t expr))))
-	    (setf fun (mapcar #'subxy fun))
+	    (setf mfun (mapcar #'subxy mfun))
 	    (setf options (cdr options)))))
 ;; the next two lines should take into account parameters given in the options
 ;;    (if (delete '$y (delete '$x (rest (mfuncall '$listofvars ode))))
@@ -146,13 +164,27 @@
 			   (expr_to_str (mfuncall '$diff mfun '$x))
 			   "\" -dydt \""
 			   (expr_to_str (mfuncall '$diff mfun '$y)) 
-			   "\" -vector {} -trajectory {} -orthogonal {red} "))
+			   "\" "))
     
     ;; parse options and copy them to string opts
     (cond (options
            (dolist (v options) 
              (setq opts (concatenate 'string opts " "
                                   (plotdf-option-to-tcl v s1 s2))))))
+
+    (unless (search "-vectors " opts)
+      (setq opts (concatenate 'string opts " -vectors {}")))
+    (unless (search "-fieldlines " opts)
+      (setq opts (concatenate 'string opts " -fieldlines {}")))
+    (unless (search "-curves " opts)
+      (setq opts (concatenate 'string opts " -curves {red}")))
+    (unless (search "-windowtitle " opts)
+      (setq opts (concatenate 'string opts " -windowtitle {Ploteq}")))
+    (unless (search "-xaxislabel " opts)
+      (setq opts (concatenate 'string opts " -xaxislabel " (ensure-string s1))))
+    (unless (search "-yaxislabel " opts)
+      (setq opts (concatenate 'string opts " -yaxislabel " (ensure-string s2))))
+							      
     (show-open-plot
      (with-output-to-string (st)
                   (cond ($show_openplot (format st "plotdf ~a ~a~%" cmd opts))
