@@ -21,3 +21,5 @@
 
 (si::trap-fpe 'floating-point-underflow nil)
 
+(ext:package-lock "CL" nil)
+
