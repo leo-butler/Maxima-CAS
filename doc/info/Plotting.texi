@@ -152,14 +152,12 @@ legend. Gnuplot chooses, by default, 3 contours to show. to increase the
 number of levels, it is necessary to specify a custom gnuplot preamble:
 
 @c ===beg===
-@c contour_plot (u^3 + v^2, [u, -4, 4], [v, -4, 4], [legend,false],
-@c   [gnuplot_preamble, "set cntrparam levels 12"])$
+@c contour_plot (u^3 + v^2, [u, -4, 4], [v, -4, 4],
+@c [legend,false], [gnuplot_preamble,"set cntrparam levels 12"])$
 @c ===end===
 @example
-@group
-(%i1) contour_plot (u^3 + v^2, [u, -4, 4], [v, -4, 4], [legend,false],
-  [gnuplot_preamble, "set cntrparam levels 12"])$
-@end group
+(%i1) contour_plot (u^3 + v^2, [u, -4, 4], [v, -4, 4],
+(%i2) [legend,false], [gnuplot_preamble,"set cntrparam levels 12"])$
 @end example
 
 @ifnotinfo
@@ -309,8 +307,10 @@ plot the axes using arrows:
 @c            [plot_format, xmaxima])$
 @c ===end===
 @example
+@group
 (%i1) plot2d ( x^2-1, [x, -3, 3], [y, -2, 10], [box, false],
-               [plot_format, xmaxima])$
+           [plot_format, xmaxima])$
+@end group
 @end example
 
 @ifnotinfo
@@ -355,12 +355,14 @@ A plot of the butterfly curve, defined parametrically:
 @c ===beg===
 @c r: (exp(cos(t))-2*cos(4*t)-sin(t/12)^5)$
 @c plot2d([parametric, r*sin(t), r*cos(t), [t, -8*%pi, 8*%pi], 
-          [nticks, 2000]])$
+@c          [nticks, 2000]])$
 @c ===end===
 @example
 (%i1) r: (exp(cos(t))-2*cos(4*t)-sin(t/12)^5)$
+@group
 (%i2) plot2d([parametric, r*sin(t), r*cos(t), [t, -8*%pi, 8*%pi],
-             [nticks, 2000]])$
+         [nticks, 2000]])$
+@end group
 @end example
 
 @ifnotinfo
@@ -371,11 +373,13 @@ A ``circle'' with two turns, when plotted with only 7 points:
 
 @c ===beg===
 @c plot2d ([parametric, cos(t), sin(t), [t, -2*%pi, 2*%pi],
-            [nticks, 8]])$
+@c            [nticks, 8]])$
 @c ===end===
 @example
+@group
 (%i1) plot2d ([parametric, cos(t), sin(t), [t, -2*%pi, 2*%pi],
-              [nticks, 8]])$
+           [nticks, 8]])$
+@end group
 @end example
 
 @ifnotinfo
@@ -389,13 +393,13 @@ These values work well for the Postscript terminal used to produce this
 plot; you might have to adjust the values for your screen.
 
 @c ===beg===
-@c plot2d([[parametric, cos(t), sin(t) ,[t,0,2*%pi], [nticks, 80]],
-@c         abs(x)], [x,-2,2], [y, -1.5, 1.5])$
+@c plot2d([[parametric, cos(t), sin(t) ,[t,0,2*%pi],
+@c        [nticks, 80]], abs(x)], [x,-2,2], [y, -1.5, 1.5])$
 @c ===end===
 @example
 @group
-(%i1) plot2d([[parametric, cos(t), sin(t) ,[t,0,2*%pi], [nticks, 80]],
-        abs(x)], [x,-2,2], [y, -1.5, 1.5])$
+(%i1) plot2d([[parametric, cos(t), sin(t) ,[t,0,2*%pi],
+       [nticks, 80]], abs(x)], [x,-2,2], [y, -1.5, 1.5])$
 plot2d: some values were clipped.
 @end group
 @end example
@@ -406,10 +410,14 @@ plot2d: some values were clipped.
 
 A plot of a discrete set of points, defining x and y coordinates separately:
 @c ===beg===
-@c plot2d ([discrete,[10, 20, 30, 40, 50],[.6, .9, 1.1, 1.3, 1.4]])$
+@c plot2d ( [ discrete, [10, 20, 30, 40, 50],
+@c                [.6, .9, 1.1, 1.3, 1.4]] )$
 @c ===end===
 @example
-(%i1) plot2d ([discrete,[10, 20, 30, 40, 50],[.6, .9, 1.1, 1.3, 1.4]])$
+@group
+(%i1) plot2d ( [ discrete, [10, 20, 30, 40, 50],
+               [.6, .9, 1.1, 1.3, 1.4]] )$
+@end group
 @end example
 
 @ifnotinfo
@@ -425,7 +433,7 @@ separately and without any lines joining the points:
 @example
 @group
 (%i1) plot2d([discrete, [[10, .6], [20, .9], [30, 1.1], [40, 1.3],
-                         [50, 1.4]]], [style, points])$
+                   [50, 1.4]]], [style, points])$
 @end group
 @end example
 
@@ -437,17 +445,21 @@ In this example, a table with three columns is saved in a file
 ``data.txt'' which is then read and the second and third column are
 plotted on the two axes:
 @c ===beg===
-@c with_stdout ("data.txt", for x:0 thru 10 do print (x, x^2, x^3))$
+@c with_stdout ("data.txt",
+@c          for x:0 thru 10 do print (x, x^2, x^3))$
 @c data: transpose ( read_matrix ("data.txt"))$
 @c plot2d ([discrete, data[2], data[3]],
 @c         [style,points], [point_type,diamond], [color,red])$
 @c ===end===
 @example
-(%i1) with_stdout ("data.txt", for x:0 thru 10 do print (x, x^2, x^3))$
-(%i2) data: transpose( read_matrix ("data.txt"))$
+@group
+(%i1) with_stdout ("data.txt",
+         for x:0 thru 10 do print (x, x^2, x^3))$
+@end group
+(%i2) data: transpose ( read_matrix ("data.txt"))$
 @group
 (%i3) plot2d ([discrete, data[2], data[3]],
-              [style,points], [point_type,diamond], [color,red])$
+        [style,points], [point_type,diamond], [color,red])$
 @end group
 @end example
 
@@ -460,17 +472,17 @@ function that predicts the data:
 @c ===beg===
 @c xy: [[10, .6], [20, .9], [30, 1.1], [40, 1.3], [50, 1.4]]$
 @c plot2d([[discrete, xy], 2*%pi*sqrt(l/980)], [l,0,50],
-@c         [style, points, lines], [color, red, blue],
-@c         [point_type, asterisk], [legend, "experiment", "theory"],
-@c         [xlabel, "pendulum's length (cm)"], [ylabel, "period (s)"])$
+@c    [style, points, lines], [color, red, blue],
+@c    [point_type, asterisk], [legend, "experiment", "theory"],
+@c    [xlabel, "pendulum's length (cm)"], [ylabel, "period (s)"])$
 @c ===end===
 @example
 (%i1) xy: [[10, .6], [20, .9], [30, 1.1], [40, 1.3], [50, 1.4]]$
 @group
 (%i2) plot2d([[discrete, xy], 2*%pi*sqrt(l/980)], [l,0,50],
-        [style, points, lines], [color, red, blue],
-        [point_type, asterisk], [legend, "experiment", "theory"],
-        [xlabel, "pendulum's length (cm)"], [ylabel, "period (s)"])$
+   [style, points, lines], [color, red, blue],
+   [point_type, asterisk], [legend, "experiment", "theory"],
+   [xlabel, "pendulum's length (cm)"], [ylabel, "period (s)"])$
 @end group
 @end example
 
@@ -519,8 +531,10 @@ shows how to plot with only lines and no shading:
 @c          [palette, false], [color, magenta, blue])$
 @c ===end===
 @example
+@group
 (%i1) plot3d ( log ( x^2*y^2 ), [x, -2, 2], [y, -2, 2], [z, -8, 4],
-               [palette, false], [color, magenta, blue])$
+         [palette, false], [color, magenta, blue])$
+@end group
 @end example
 
 @ifnotinfo
@@ -531,12 +545,12 @@ The infinite values of z can also be avoided by choosing a grid that
 does not fall on any asymptotes; this example also shows how to select
 one of the predefined palettes, in this case the fourth one:
 @c ===beg===
-@c plot3d (log (x^2*y^2), [x, -2, 2], [y, -2, 2], [grid, 29, 29],
+@c plot3d(log(x^2*y^2), [x, -2, 2], [y, -2, 2], [grid, 29, 29],
 @c       [palette, get_plot_option(palette,5)])$
 @c ===end===
 @example
 @group
-(%i1) plot3d (log (x^2*y^2), [x, -2, 2], [y, -2, 2], [grid, 29, 29],
+(%i1) plot3d(log(x^2*y^2), [x, -2, 2], [y, -2, 2], [grid, 29, 29],
       [palette, get_plot_option(palette,5)])$
 @end group
 @end example
@@ -552,8 +566,10 @@ two surfaces will use the same palette:
 @c          [x, -3, 3], [y, -2, 2]])$
 @c ===end===
 @example
+@group
 (%i1) plot3d ( [2^(-x^2 + y^2), 4*sin(3*(x^2+y^2))/(x^2+y^2),
-               [x, -3, 3], [y, -2, 2]])$
+         [x, -3, 3], [y, -2, 2]])$
+@end group
 @end example
 
 @ifnotinfo
@@ -569,9 +585,11 @@ the option palette:
 @c          [plot_format,xmaxima])$
 @c ===end===
 @example
+@group
 (%i1) plot3d ( [[2^(-x^2 + y^2),[x,-2,2],[y,-2,2]],
-               4*sin(3*(x^2+y^2))/(x^2+y^2), [x, -3, 3], [y, -2, 2]],
-               [plot_format,xmaxima])$
+         4*sin(3*(x^2+y^2))/(x^2+y^2), [x, -3, 3], [y, -2, 2]],
+         [plot_format,xmaxima])$
+@end group
 @end example
 
 @ifnotinfo
@@ -580,18 +598,18 @@ the option palette:
 
 Plot of a Klein bottle, defined parametrically:
 @c ===beg===
-@c expr_1: 5*cos(x)*(cos(x/2)*cos(y) + sin(x/2)*sin(2*y) + 3.0)-10.0$
-@c expr_2: -5*sin(x)*(cos(x/2)*cos(y) + sin(x/2)*sin(2*y) + 3.0)$
-@c expr_3: 5*(-sin(x/2)*cos(y) + cos(x/2)*sin(2*y))$
-@c plot3d ([expr_1, expr_2, expr_3], [x, -%pi, %pi],
+@c e_1: 5*cos(x)*(cos(x/2)*cos(y)+sin(x/2)*sin(2*y)+3.0)-10.0$
+@c e_2: -5*sin(x)*(cos(x/2)*cos(y)+sin(x/2)*sin(2*y)+3.0)$
+@c e_3: 5*(-sin(x/2)*cos(y)+cos(x/2)*sin(2*y))$
+@c plot3d ([e_1, e_2, e_3], [x, -%pi, %pi],
 @c         [y, -%pi, %pi], [grid, 40, 40])$
 @c ===end===
 @example
-(%i1) expr_1: 5*cos(x)*(cos(x/2)*cos(y) + sin(x/2)*sin(2*y) + 3.0)-10.0$
-(%i2) expr_2: -5*sin(x)*(cos(x/2)*cos(y) + sin(x/2)*sin(2*y) + 3.0)$
-(%i3) expr_3: 5*(-sin(x/2)*cos(y) + cos(x/2)*sin(2*y))$
+(%i1) e_1: 5*cos(x)*(cos(x/2)*cos(y)+sin(x/2)*sin(2*y)+3.0)-10.0$
+(%i2) e_2: -5*sin(x)*(cos(x/2)*cos(y)+sin(x/2)*sin(2*y)+3.0)$
+(%i3) e_3: 5*(-sin(x/2)*cos(y)+cos(x/2)*sin(2*y))$
 @group
-(%i4) plot3d ([expr_1, expr_2, expr_3], [x, -%pi, %pi],
+(%i4) plot3d ([e_1, e_2, e_3], [x, -%pi, %pi],
         [y, -%pi, %pi], [grid, 40, 40])$
 @end group
 @end example
@@ -604,12 +622,12 @@ Plot of a spherical harmonic, using of the predefined transformations,
 @code{spherical_to_xyz}, to transform from spherical to rectangular
 coordinates. See the documentation for @code{spherical_to_xyz}.
 @c ===beg===
-@c plot3d (sin(2*theta)*cos(phi), [theta, 0, %pi], [phi, 0, 2*%pi],
+@c plot3d (sin(2*theta)*cos(phi), [theta,0,%pi], [phi,0,2*%pi],
 @c         [transform_xy, spherical_to_xyz], [grid,30,60])$
 @c ===end===
 @example
 @group
-(%i1) plot3d (sin(2*theta)*cos(phi), [theta, 0, %pi], [phi, 0, 2*%pi],
+(%i1) plot3d (sin(2*theta)*cos(phi), [theta,0,%pi], [phi,0,2*%pi],
         [transform_xy, spherical_to_xyz], [grid,30,60])$
 @end group
 @end example
@@ -623,12 +641,12 @@ cylindrical to rectangular coordinates. See the documentation for
 @code{polar_to_xy}. This example also shows how to eliminate the
 bounding box and the legend.
 @c ===beg===
-@c plot3d(r^.33*cos(th/3), [r, 0, 1], [th, 0, 6*%pi], [grid, 12, 80],
+@c plot3d(r^.33*cos(th/3), [r,0,1], [th,0,6*%pi], [grid,12,80],
 @c        [transform_xy, polar_to_xy], [box, false], [legend,false])$
 @c ===end===
 @example
 @group
-(%i1) plot3d(r^.33*cos(th/3), [r, 0, 1], [th, 0, 6*%pi], [grid, 12, 80],
+(%i1) plot3d(r^.33*cos(th/3), [r,0,1], [th,0,6*%pi], [grid,12,80],
        [transform_xy, polar_to_xy], [box, false], [legend,false])$
 @end group
 @end example
@@ -642,13 +660,15 @@ coordinates. In xmaxima the three axes are scaled in the same
 proportion, maintaining the symmetric shape of the sphere. A palette with
 different shades of a single color is used:
 @c ===beg===
-@c plot3d (5, [theta, 0, %pi], [phi, 0, 2*%pi], [plot_format,xmaxima],
-@c  [transform_xy, spherical_to_xyz], [palette,[value,0.65,0.7,0.1,0.9]])$
+@c plot3d (5, [theta, 0, %pi], [phi, 0, 2*%pi],
+@c  [transform_xy, spherical_to_xyz], [plot_format,xmaxima],
+@c  [palette,[value,0.65,0.7,0.1,0.9]])$
 @c ===end===
 @example
 @group
-(%i1) plot3d (5, [theta, 0, %pi], [phi, 0, 2*%pi], [plot_format,xmaxima],
-  [transform_xy, spherical_to_xyz], [palette,[value,0.65,0.7,0.1,0.9]])$
+(%i1) plot3d (5, [theta, 0, %pi], [phi, 0, 2*%pi],
+ [transform_xy, spherical_to_xyz], [plot_format,xmaxima],
+ [palette,[value,0.65,0.7,0.1,0.9]])$
 @end group
 @end example
 
@@ -660,12 +680,12 @@ Definition of a function of two-variables using a matrix. Notice the
 single quote in the definition of the function, to prevent plot3d from
 failing when it realizes that the matrix will require integer indices.
 @c ===beg===
-@c M: matrix([1, 2, 3, 4], [1, 2, 3, 2], [1, 2, 3, 4],[1, 2, 3, 3])$
+@c M: matrix([1,2,3,4], [1,2,3,2], [1,2,3,4], [1,2,3,3])$
 @c f(x, y) := float('M [round(x), round(y)])$
 @c plot3d (f(x,y), [x, 1, 4], [y, 1, 4], [grid, 4, 4])$
 @c ===end===
 @example
-(%i1) M: matrix([1, 2, 3, 4], [1, 2, 3, 2], [1, 2, 3, 4],[1, 2, 3, 3])$
+(%i1) M: matrix([1,2,3,4], [1,2,3,2], [1,2,3,4], [1,2,3,3])$
 (%i2) f(x, y) := float('M [round(x), round(y)])$
 @group
 (%i3) plot3d (f(x,y), [x, 1, 4], [y, 1, 4], [grid, 4, 4])$
