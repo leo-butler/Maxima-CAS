@@ -6,10 +6,10 @@
 Examples
 
 /* plot of z^(1/3)...*/
-plot3d(r^.33*cos(th/3),[r,0,1],[th,0,6*%pi],['grid,12,80],['transform_xy,polar_to_xy],['plot_format,zic]) ;
+plot3d(r^.33*cos(th/3),[r,0,1],[th,0,6*%pi],['grid,12,80],['transform_xy,polar_to_xy],['plot_format,geomview]) ;
 
 /* plot of z^(1/2)...*/
-plot3d(r^.5*cos(th/2),[r,0,1],[th,0,6*%pi],['grid,12,80],['transform_xy,polar_to_xy],['plot_format,zic]) ;
+plot3d(r^.5*cos(th/2),[r,0,1],[th,0,6*%pi],['grid,12,80],['transform_xy,polar_to_xy],['plot_format,xmaxima]) ;
 
 /* moebius */
 plot3d([cos(x)*(3+y*cos(x/2)),sin(x)*(3+y*cos(x/2)),y*sin(x/2)],[x,-%pi,%pi],[y,-1,1],['grid,50,15]) ;
@@ -240,8 +240,8 @@ sin(y)*(10.0+6*cos(x)),
            (case (third value) ($openmath (setf (third value) '$xmaxima)))
            (unless (member (third value)
                        (if (string= *autoconf-win32* "true")
-                           '($zic $geomview $gnuplot $mgnuplot $xmaxima)
-                           '($zic $geomview $gnuplot $gnuplot_pipes
+                           '($geomview $gnuplot $mgnuplot $xmaxima)
+                           '($geomview $gnuplot $gnuplot_pipes
                              $mgnuplot $xmaxima)))
              (merror
               (intl:gettext
@@ -1251,7 +1251,7 @@ sin(y)*(10.0+6*cos(x)),
   (let (($display2d nil)
         (*plot-realpart* *plot-realpart*)
         ($plot_options $plot_options) (i 0)
-        (output-file "") (features '(:type "plot2d"))
+        (output-file "") features
         gnuplot-term gnuplot-out-file file points-lists)
 
     ;; 1- Put fun in its most general form: a maxima list with several objects
@@ -1260,6 +1260,7 @@ sin(y)*(10.0+6*cos(x)),
 
     ;; If there is a single parametric function use its range as the range for
     ;; the plot and put it inside another maxima list
+    (setf (getf features :type) "plot2d")
     (when (and (consp fun) (eq (second fun) '$parametric))
       (unless range
         (setq range (check-range (nth 4 fun))))
@@ -1637,20 +1638,6 @@ output-file))
         (t (tcl-output-list st (car lis))
            (tcl-output-list st (cdr lis)))))
 
-
-(defun $view_zic ()
-  (let ((izdir (maxima-getenv "IZICDIR")))
-    (or (probe-file
-         (format nil "~a/tcl-files/maxima.tcl" izdir))
-        (error
-         "could not find file ~a :  Set environment variable IZICDIR" izdir))
-    ($system "izic -interface ${IZICDIR}/tcl-files/maxima.tcl  1> /dev/null &")))
-
-(defun $isend (x)
-  ($system (format nil " izic -app izic -cmd '{~a}'" (string-trim '(#\&) (string x)))))
-
-
-
 (defvar *some-colours*
   ;; from rgb.txt
   '(135 206 250         lightskyblue
@@ -1660,29 +1647,6 @@ output-file))
     176  48  96         maroon
     221 160 221         plum
     238 130 238         violet))
-
-
-;; one of $zic or $geomview
-
-(defun plot-zic-colors (&aux (ncolors  (/ (length *some-colours*) 4))) 
-  (format $pstream "couleurs ~% ~a ~% " ncolors  )
-  (loop for v in *some-colours*
-         with do-ind = t with ind = -1 
-         do
-         (cond (do-ind
-                   (format $pstream "~a " (incf ind))
-                 (setq do-ind nil)
-                 ))
-         (cond ((numberp v)
-                (print-pt (/ v 256.0)))
-               (t 
-                (setq do-ind t)
-                (format $pstream "~%# ~(~a~)~%" v))))
-  (format $pstream " 1
-0
-~a 0.801 0.359 0.359 
-128 .8 1 0
-" ncolors))
 
 (defun check-range (range &aux tem a b)
   (or (and ($listp range)
@@ -1846,9 +1810,9 @@ output-file))
 
 (defun $plot3d
     ( fun &rest options &aux
-     lvars trans rangex rangey *original-points*
+     lvars trans xrange yrange *original-points*
      functions exprn domain tem ($plot_options $plot_options)
-     ($in_netmath $in_netmath) (features '(:type "plot3d"))
+     ($in_netmath $in_netmath) features
      gnuplot-term gnuplot-out-file file titles (output-file "")
      (usage (intl:gettext
 "plot3d: Usage.
@@ -1860,6 +1824,7 @@ several functions depending on the two variables v1 and v2:
   plot3d ( [f1, f2, ..., fn], [v1, min, max], [v2, min, max], options")))
   
   (declare (special *original-points*))
+  (setf (getf features :type) "plot3d")
   
   ;; Ensure that fun is a list of expressions and maxima lists, followed
   ;; by a domain definition
@@ -2024,17 +1989,6 @@ several functions depending on the two variables v1 and v2:
 
     (unwind-protect
          (case (getf features :plot-format)
-           ($zic
-            (let ((x-range ($get_range ar 0))
-                  (y-range ($get_range ar 1))
-                  (z-range ($get_range ar 2)))
-              (plot-zic-colors)
-              (format $pstream "domaine ~a ~a ~a ~a ~a ~a ~%"
-                      (first x-range) (second x-range) (first y-range)
-                      (second y-range) (first z-range) (second z-range))
-              (format $pstream "surface ~a ~a ~%"
-                      (+ 1 (fourth (getf features :grid)))
-                      (+ 1 (third (getf features :grid))))))
            ($gnuplot
             (gnuplot-print-header $pstream features)
             (format $pstream "~a" (gnuplot-plot3d-command "-" titles n)))
@@ -2046,9 +2000,7 @@ several functions depending on the two variables v1 and v2:
            ($xmaxima
             (xmaxima-print-header $pstream features))
            ($geomview
-            (format $pstream " MESH ~a ~a ~%"
-                    (+ 1 (third (getf features :grid)))
-                    (+ 1 (fourth (getf features :grid))))))
+            (format $pstream "LIST~%")))
       
       ;; generate the mesh points for each surface in the functions stack
       (let ((i 0))
@@ -2087,8 +2039,6 @@ several functions depending on the two variables v1 and v2:
             (if tem (mfuncall tem ar))
             
             (case (getf features :plot-format)
-              ($zic
-               (output-points pl nil))
               ($gnuplot
                (when (> i 1) (format $pstream "e~%"))
                (output-points pl (third (getf features :grid))))
@@ -2101,7 +2051,11 @@ several functions depending on the two variables v1 and v2:
               ($xmaxima
                (output-points-tcl $pstream pl (third (getf features :grid)) i))
               ($geomview
-               (output-points pl nil))))))
+               (format $pstream "{ appearance { +smooth }~%MESH ~a ~a ~%"
+                       (+ 1 (third (getf features :grid)))
+                       (+ 1 (fourth (getf features :grid))))
+               (output-points pl nil)
+               (format $pstream "}~%"))))))
       
       ;; close the stream and plot..
       (cond ($in_netmath (format $pstream "}~%") (return-from $plot3d ""))
@@ -2114,7 +2068,6 @@ several functions depending on the two variables v1 and v2:
         (gnuplot-process file)
         (cond (($get_plot_option '$run_viewer 2)
                (case (getf features :plot-format)
-                 ($zic ($view_zic))
                  ($xmaxima
                   ($system
                    (concatenate
@@ -2143,7 +2096,7 @@ several functions depending on the two variables v1 and v2:
 ;; When it is a parametric representation it returns an empty Maxima list.
 ;;
 (defun check-list-plot3d (lis)
-  (let (rangex rangey)
+  (let (xrange yrange)
     ;; wrong syntax: lis must be [something, something, something]
     (unless ($listp lis) (return-from check-list-plot3d nil))
     (unless (= 3 ($length lis)) (return-from check-list-plot3d nil))
@@ -2156,9 +2109,9 @@ several functions depending on the two variables v1 and v2:
             (if ($listp (fourth lis))
                 ;; we do have a function and a domain. Return the domain
                 (progn
-                  (setq rangex (check-range (third lis)))
-                  (setq rangey (check-range (fourth lis)))
-                  (return-from check-list-plot3d `((mlist) ,rangex ,rangey)))
+                  (setq xrange (check-range (third lis)))
+                  (setq yrange (check-range (fourth lis)))
+                  (return-from check-list-plot3d `((mlist) ,xrange ,yrange)))
                 ;; wrong syntax: [expr1, list, expr2]
                 (return-from check-list-plot3d nil))
             ;; lis is probably a parametric representation
