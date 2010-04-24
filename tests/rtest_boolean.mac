@@ -406,3 +406,16 @@ unknown;
 ev (maybe (a or false), prederror = true);
 unknown;
 
+/* bug reported to mailing list April 2010 -- is(foo("x")) causes an error */
+
+(kill (foo), is (foo ("x") > 0));
+unknown;
+
+(declare (foo, posfun), is (foo ("x") > 0));
+true;
+
+is (foo (1, 2, 3, a, b, c, "x", "y", "z") < 0);
+false;
+
+is (bar("a")^2 < 0);
+false;
