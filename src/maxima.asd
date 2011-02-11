@@ -51,9 +51,40 @@
 					  #+ecl (:file "ecl-port")
 					  (:file "autoconf-variables" :depends-on ("maxima-package"))))
 	       (:module info :pathname ""
-			:components ((:file "nregex")
-                     (:file "intl")
-				     (:file "cl-info")))
+			:components (
+				     (:module cl-ppcre :pathname "cl-ppcre"
+					      :components ((:file "packages")
+							   (:file "specials")
+							   (:file "util")
+							   (:file "errors")
+							   (:file "charset")
+							   (:file "charmap")
+							   (:file "chartest")
+							   #-:use-acl-regexp2-engine
+							   (:file "lexer")
+							   #-:use-acl-regexp2-engine
+							   (:file "parser")
+							   #-:use-acl-regexp2-engine
+							   (:file "regex-class")
+							   #-:use-acl-regexp2-engine
+							   (:file "regex-class-util")
+							   #-:use-acl-regexp2-engine
+							   (:file "convert")
+							   #-:use-acl-regexp2-engine
+							   (:file "optimize")
+							   #-:use-acl-regexp2-engine
+							   (:file "closures")
+							   #-:use-acl-regexp2-engine
+							   (:file "repetition-closures")
+							   #-:use-acl-regexp2-engine
+							   (:file "scanner")
+							   (:file "api")))
+				     (:module cl-info-intl :pathname ""
+					      :components
+					      ((:file "intl")
+					       (:file "build-index")
+					       (:file "cl-info"))))); :depends-on (cl-ppcre))))))
+
 	       (:module sloop :pathname ""
 			:components ((:file "sloop")))
                (:module declarations :pathname ""

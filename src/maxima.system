@@ -118,14 +118,44 @@
 				     #+ecl (:file "ecl-port")
 				     (:file "autoconf-variables")))
 	       (:module info :source-pathname ""
-			:components ((:file "nregex")
-				     ;; Some versions of CMUCL already
-				     ;; have a compatible version of
-				     ;; INTL, so skip it if we have
-				     ;; it.
-				     #+#.(cl:if (cl:and (cl:member :cmu cl:*features*) (cl:find-package '#:intl))  '(or) '(and))
-				     (:file "intl")
-				     (:file "cl-info")))
+			:components (
+				     (:module cl-ppcre :source-pathname "cl-ppcre"
+					      :components ((:file "packages")
+							   (:file "specials")
+							   (:file "util")
+							   (:file "errors")
+							   (:file "charset")
+							   (:file "charmap")
+							   (:file "chartest")
+							   #-:use-acl-regexp2-engine
+							   (:file "lexer")
+							   #-:use-acl-regexp2-engine
+							   (:file "parser")
+							   #-:use-acl-regexp2-engine
+							   (:file "regex-class")
+							   #-:use-acl-regexp2-engine
+							   (:file "regex-class-util")
+							   #-:use-acl-regexp2-engine
+							   (:file "convert")
+							   #-:use-acl-regexp2-engine
+							   (:file "optimize")
+							   #-:use-acl-regexp2-engine
+							   (:file "closures")
+							   #-:use-acl-regexp2-engine
+							   (:file "repetition-closures")
+							   #-:use-acl-regexp2-engine
+							   (:file "scanner")
+							   (:file "api")))
+				     (:module cl-info-intl :source-pathname ""
+					      :components
+					      (;; Some versions of CMUCL already
+					       ;; have a compatible version of
+					       ;; INTL, so skip it if we have
+					       ;; it.
+					       #+#.(cl:if (cl:and (cl:member :cmu cl:*features*) (cl:find-package '#:intl))  '(or) '(and))
+						   (:file "intl")
+						   (:file "build-index")
+						   (:file "cl-info"))))); :depends-on (cl-ppcre))))))
 	       (:module sloop :source-pathname ""
 			:components ((:file "sloop")))
                (:module declarations :source-pathname ""

@@ -118,11 +118,11 @@
 (defmspec $describe (x)
   (let ((topic ($sconcat (cadr x)))
 	(exact-p (or (null (caddr x)) (eq (caddr x) '$exact)))
-	(cl-info::*prompt-prefix* *prompt-prefix*)
-	(cl-info::*prompt-suffix* *prompt-suffix*))
+	(cl-info:*prompt-prefix* *prompt-prefix*)
+	(cl-info:*prompt-suffix* *prompt-suffix*))
     (if exact-p
-	(cl-info::info-exact topic)
-	(cl-info::info topic))))
+	(cl-info:info-exact topic)
+	(cl-info:info topic))))
 
 ; The old implementation
 ;(defun $apropos (s)
@@ -163,3 +163,14 @@
           (t
            (merror
              (intl:gettext "apropos: argument must be a string; found: ~M") s)))))
+
+
+;; setup-info-database is exported to maxima package from cl-info
+(defmfun $setup_help_database (&optional maxima-info-list)
+  (setf maxima-info-list (cond (($listp maxima-info-list)
+				(cdr maxima-info-list))
+			       (t
+				maxima-info-list)))
+  (cl-info:setup-help-database :maxima-info-list maxima-info-list)
+  '$done)
+

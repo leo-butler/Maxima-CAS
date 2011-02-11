@@ -1,16 +1,51 @@
 (in-package :common-lisp-user)
 
-(defpackage :maxima-nregex
-  (:use :common-lisp)
-  (:export
-   ;; vars
-   #:*regex-debug* #:*regex-groups* #:*regex-groupings*
-   ;; functions
-   #:regex-compile
-   ))
+;; from cl-ppcre/packages.lisp
+(defpackage :cl-ppcre
+  (:nicknames :ppcre)
+  #+:genera
+  (:shadowing-import-from :common-lisp :lambda :simple-string :string)
+  (:use #-:genera :cl #+:genera :future-common-lisp)
+  (:shadow :digit-char-p :defconstant)
+  (:export :parse-string
+           :create-scanner
+           :create-optimized-test-function
+           :parse-tree-synonym
+           :define-parse-tree-synonym
+           :scan
+           :scan-to-strings
+           :do-scans
+           :do-matches
+           :do-matches-as-strings
+           :all-matches
+           :all-matches-as-strings
+           :split
+           :regex-replace
+           :regex-replace-all
+           :regex-apropos
+           :regex-apropos-list
+           :quote-meta-chars
+           :*regex-char-code-limit*
+           :*use-bmh-matchers*
+           :*allow-quoting*
+           :*allow-named-registers*
+           :*optimize-char-classes*
+           :*property-resolver*
+           :ppcre-error
+           :ppcre-invocation-error
+           :ppcre-syntax-error
+           :ppcre-syntax-error-string
+           :ppcre-syntax-error-pos
+           :register-groups-bind
+           :do-register-groups))
 
 (defpackage :cl-info
-  (:use :common-lisp))
+  (:use :common-lisp)
+  (:export #:setup-help-database
+	   #:info
+	   #:info-exact
+	   #:*prompt-prefix*
+	   #:*prompt-suffix*))
 
 (defpackage :command-line
   (:use :common-lisp)
@@ -69,7 +104,6 @@
 		#:short-name #:cleanup #:instream-stream-name #:instream-line
 		#:instream-name #:instream-stream #:stream-name #:complete-prop
 		#:*stream-alist* #:break-call))
-
 
 (defpackage :mt19937
   (:use :common-lisp)
