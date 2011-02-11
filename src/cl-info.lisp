@@ -2,7 +2,10 @@
 
 (defvar *info-section-hashtable* (make-hash-table :test 'equal))
 (defvar *info-deffn-defvr-hashtable* (make-hash-table :test 'equal))
-
+(defvar *info-case-fold-search* t
+  "If t, info searches are done case insensitively.")
+(defvar *info-special-chars* '(#\. #\? #\+ #\* #\[ #\] #\{ #\} #\| #\^)
+  "Single characters that are escaped when info-exact-match is called.")
 (defvar *prompt-prefix* "")
 (defvar *prompt-suffix* "")
 
@@ -53,20 +56,7 @@
 
 ; ------------------ search help topics ------------------
 
-(defun autoload-maxima-index ()
-  ;; Autoload the index, but make sure we use a sensible *read-base*.
-  ;; See bug 1951964.  GCL doesn't seem to have
-  ;; with-standard-io-syntax.  Is just binding *read-base* enough?  Is
-  ;; with-standard-io-syntax too much for what we want?
-  #-gcl
-  (with-standard-io-syntax
-    (maxima::mfuncall 'cause-maxima-index-to-load))
-  #+gcl
-  (let ((*read-base* 10.))
-    (maxima::mfuncall 'cause-maxima-index-to-load)))
-
 (defun info-exact (x)
-  (autoload-maxima-index)
   (let ((exact-matches (exact-topic-match x)))
     (if (null exact-matches)
       (progn
@@ -83,15 +73,33 @@
 (defun some-inexact (x inexact-matches)
   (some #'(lambda (y) (not (equal y x))) (mapcar #'car inexact-matches)))
 
+(defun regex-sanitize (x)
+  "x is a search string to be sanitized. The first n contiguous
+special characters are escaped; subsequent special characters are NOT
+escaped. The list of special characters is `*info-special-char*'."
+  (let ((match t) e y (x (coerce x 'list)))
+    (flet ((is-a-special-char (s)
+	     (some (lambda(c) (string= c s)) *info-special-chars*))
+	   (escape-char (c)
+	     (list c #\\)))
+       (loop for s in x
+	  do
+	    (setq match (and match (is-a-special-char s)))
+	    (setq  e (if match (escape-char s) (list s)))
+	    (setq y (append e y))))
+    (coerce (reverse y) 'string)))
+      
 (defun exact-topic-match (topic)
   (setq topic (regex-sanitize topic))
-  (setq topic (concatenate 'string "^" topic "$"))
-  (append
-    (find-regex-matches topic *info-section-hashtable*)
-    (find-regex-matches topic *info-deffn-defvr-hashtable*)))
+  (setq topic (if *info-case-fold-search*
+		  (concatenate 'string "^(?i:" topic ")$")
+		  (concatenate 'string "^("    topic ")$")))
+  (reverse
+   (append
+    (find-regex-matches topic *info-deffn-defvr-hashtable*)
+    (find-regex-matches topic *info-section-hashtable*))))
 
 (defun info (x)
-  (autoload-maxima-index)
   (let (wanted tem)
     (setf tem (inexact-topic-match x))
     (when tem
@@ -128,72 +136,10 @@
 
 (defun inexact-topic-match (topic)
   (setq topic (regex-sanitize topic))
-  (append
+  (setq topic (if *info-case-fold-search*
+		  (concatenate 'string "(?i:" topic ")")
+		  topic))
+  (reverse
+   (append
     (find-regex-matches topic *info-section-hashtable*)
-    (find-regex-matches topic *info-deffn-defvr-hashtable*)))
-
-(defun regex-sanitize (s)
-  "Precede any regex special characters with a backslash."
-  (let
-    ((L (coerce maxima-nregex::*regex-special-chars* 'list)))
-
-    ; WORK AROUND NREGEX STRANGENESS: CARET (^) IS NOT ON LIST *REGEX-SPECIAL-CHARS*
-    ; INSTEAD OF CHANGING NREGEX (WITH POTENTIAL FOR INTRODUCING SUBTLE BUGS)
-    ; JUST APPEND CARET TO LIST HERE
-    (setq L (cons #\^ L))
-
-    (coerce (apply #'append
-                   (mapcar #'(lambda (c) (if (member c L :test #'eq)
-					     `(#\\ ,c) `(,c))) (coerce s 'list)))
-            'string)))
-
-(defun find-regex-matches (regex-string hashtable)
-  (let*
-    ((regex (maxima-nregex::regex-compile regex-string :case-sensitive nil))
-     (regex-fcn (coerce regex 'function))
-     (regex-matches nil))
-    (maphash
-      #'(lambda (key value)
-          (if (funcall regex-fcn key)
-            (setq regex-matches (cons `(,key . ,value) regex-matches))
-            nil))
-      hashtable)
-    (stable-sort regex-matches #'string-lessp :key #'car)))
-
-(defun read-info-text (x)
-  (declare (special maxima::*maxima-infodir* maxima::*maxima-lang-subdir*))
-  (let* ((value (cdr x))
-	 (filename (car value))
-	 (byte-offset (cadr value))
-	 (byte-count (caddr value))
-	 (text (make-string byte-count))
-	 (subdir-bit
-	  (if (null maxima::*maxima-lang-subdir*)
-	      ""
-	      (concatenate 'string "/" maxima::*maxima-lang-subdir*)))
-	 (path+filename (concatenate 'string maxima::*maxima-infodir* subdir-bit "/" filename)))
-    (with-open-file (in path+filename :direction :input)
-      (file-position in byte-offset)
-      #+gcl (gcl-read-sequence text in :start 0 :end byte-count)
-      #-gcl (read-sequence text in :start 0 :end byte-count))
-    text))
-
-#+gcl
-(defun gcl-read-sequence (s in &key (start 0) (end nil))
-  (dotimes (i (- end start))
-    (setf (aref s i) (read-char in))))
-
-; --------------- build help topic indices ---------------
-
-(defun load-info-hashtables ()
-  (declare (special *info-section-pairs* *info-deffn-defvr-pairs*))
-  (if (and (zerop (length *info-section-pairs*)) 
-           (zerop (length *info-deffn-defvr-pairs*)))
-    (format t (intl:gettext "warning: empty documentation index; ? and ?? won't work!~%")))
-  ; (format t "HEY, I'M LOADING THE INFO HASHTABLES NOW~%")
-  (mapc
-    #'(lambda (x) (setf (gethash (car x) *info-section-hashtable*) (cdr x)))
-    *info-section-pairs*)
-  (mapc
-    #'(lambda (x) (setf (gethash (car x) *info-deffn-defvr-hashtable*) (cdr x)))
-    *info-deffn-defvr-pairs*))
+    (find-regex-matches topic *info-deffn-defvr-hashtable*))))
