@@ -1,0 +1,361 @@
+;; Copyright Leo Butler 2010
+;; Released under the terms of GPLv3
+;;
+;; This code generates the hashs *info-section-hashtable* and
+;; *info-deffn-defvr-hashtable*. These hashes contain look-up data used by
+;; find-regex-match and other functions in cl-info.lisp.
+;;
+;; $Id: build-index.lisp,v 1.17 2011/01/31 18:44:35 work Exp work $
+
+(in-package :cl-info)
+
+;;
+;; Maxima Info Files
+;;
+(defparameter *maxima-info-list* nil
+  "List of master info files. If set to nil, the function
+  `canonicalize-info-pathnames' will use `*maxima-info-default*' and
+  `*maxima-lang-subdir' to set this to a reasonable default. A
+  reasonable value might be '(\"de.utf8/maxima.info\"
+  \"en/maxima.info\" \"es.utf8/maxima.info\"), to pick up
+  documentation in either the PWD or `*maxima-infodir*'.")
+(defparameter *maxima-info-default* "maxima.info"
+  "Default main info file name.")
+
+(defun maxima-info-list-re (&optional (maxima-info-list *maxima-info-list*) (maxima-info-default *maxima-info-default*))
+  (loop for f in (or maxima-info-list (list maxima-info-default))
+     collect (concatenate 'string
+			  (file-namestring (pathname f)) 
+			  "-[0-9]+")))
+(defparameter *maxima-info-list-re* (maxima-info-list-re)
+  "List of Regexps to identify each info file in the master info file.")
+(defparameter *maxima-info-default-re* (car *maxima-info-list-re*)
+  "Default Regexp to identify each info file.")
+
+;;
+;; Info Nodes:
+;;
+;;Info files are broken into nodes arranged in hierarchical way, and
+;;numbered. We want those nodes that are below the section nodes,
+;;because in the Maxima info manual, section nodes are just ToCs.
+;;
+(defparameter *info-nodes-start-header-re* "\\nFile: .+\\n\\n")
+(defparameter *info-nodes-start-re* "[0-9]+\\.[0-9]+")
+(defparameter *info-nodes-name-re* "(?<=Node: )([^,]+)")
+(defparameter *info-nodes-end-re* "(?=(?:|$))")
+(defparameter *info-nodes-re* (concatenate 'string
+					   *info-nodes-start-header-re*
+					   *info-nodes-start-re*
+					   "(?:(?sm:.*?))"
+					   *info-nodes-end-re*)
+  "Regexp identifies the whole info-node, beginning at the header.")
+(defparameter *info-nodes-hash-size* 200)
+
+;;
+;; Info Topics:
+;;
+;;We also want all topics. These begin with two newlines and a ' -- '
+;;and they end with one of: the same, a new section/node or end of file.
+;;
+(defparameter *info-topics-start-re* "(?sm:^ -- )(.+?): ([^\\s]+)")
+(defparameter *info-topics-name-re* ": ([^\\s]+)")
+(defparameter *info-topics-end-re* "(?=(?:\\n\\n -- ||^[0-9]|$))")
+(defparameter *info-topics-re* (concatenate 'string
+					    *info-topics-start-re*
+					    "(?:(?sm:.+?))"
+					    *info-topics-end-re*)
+  "Regexp identifies the whole topic listing, beginning two lines
+  above the start.")
+(defparameter *info-topics-hash-size* 2000)
+
+
+;;
+;; Hashes
+;;
+(defparameter *info-section-hashtable* (make-hash-table :test #'eql :size 500)
+  "Hashtable whose keys are the info-nodes-names identified by
+  `*info-nodes-name-re*' and whose values are a list: '(filename
+  byte-offset length). Additional information may be appended to this
+  list, but is not used at present.")
+(defparameter *info-deffn-defvr-hashtable* (make-hash-table :test #'eql :size 10000)
+  "Hashtable whose keys are the info-topics-names identified by
+  `*info-topics-name-re*' and whose values are a list: '(filename
+  byte-offset length). Additional information may be appended to this
+  list, but is not used at present.")
+(defparameter *info-files* (make-hash-table :test #'equal)
+  "Hash table of info files: key=filename, value=dotted list, whose
+  car is the symbol 'string and cdr is the file's contents.")
+
+
+;;
+;; Helper functions + macros
+;;
+(defun canonicalize-info-pathnames (p)
+  (cond ((null p)
+	 (list (canonicalize-info-pathnames *maxima-info-default*)))
+	((consp p)
+	 (cons (canonicalize-info-pathnames (car p))
+	       (and (cdr p)
+		    (canonicalize-info-pathnames (cdr p)))))
+	((pathnamep p)
+	 p)
+	((stringp p)
+	 (setq p (or (probe-file p)
+		     (make-pathname :directory (pathname-directory
+						(concatenate 'string
+							     maxima::*maxima-infodir*
+							     (and maxima::*maxima-lang-subdir*
+								  (concatenate 'string "/" maxima::*maxima-lang-subdir*))
+							     "/maxima.info")) ; "/maxima.info" part is not used
+				    :name (pathname-name (pathname p))
+				    :type (pathname-type (pathname p)))))
+	 p)
+	(t
+	 nil)))
+
+;; Using  (maxima::$file_search (namestring f)) instead of probe-file
+;; is *very* slow
+(defun file-exists-p (f &optional (use-file-search nil))
+  (cond (use-file-search
+	 (maxima::$file_search (namestring f)))
+	(t
+	 (probe-file f))))
+
+(defun codes-string (code-vec)
+  (declare (type vector code-vec))
+  (declare (optimize (speed 3) (safety 0)))
+  (map 'string #'code-char code-vec))
+
+(defmacro setf-hash (to from &optional (delete-first nil))
+  (let* ((k (gensym))
+	 (v (gensym))
+	 (over-write (if delete-first
+			 `(maphash #'(lambda (,k ,v) (declare (ignore ,v)) (remhash ,k ,to)) ,to))))
+    `(progn
+       ,over-write
+       (maphash #'(lambda (,k ,v) (setf (gethash ,k ,to) ,v)) ,from)
+       t)))
+
+(defun get-info-file-names (maxima-info info-dir maxima-info-re)
+  (let ((fs))
+    (with-open-file (in maxima-info :direction :input :element-type 'unsigned-byte)
+      (setq fs (file-length in))
+      (let ((contents      (make-array fs :element-type 'unsigned-byte))
+	    (str-contents  nil))
+	(read-sequence contents in :start 0 :end nil)
+	(setq str-contents (codes-string contents))
+	(loop for f in (cl-ppcre:all-matches-as-strings maxima-info-re str-contents)
+	   for fp = (pathname f)
+	   for fn = (pathname-name fp)
+	   for ft = (pathname-type fp)
+	   for file = (make-pathname :directory info-dir :name fn :type ft)
+	   when (file-exists-p file) collect file))
+      )))
+
+(defun slurp-info-file (filename)
+  (let ((fs))
+    (with-open-file (in filename :direction :input :element-type 'unsigned-byte)
+      (setq fs (file-length in))
+      (let ((contents (make-array fs :element-type 'unsigned-byte)))
+	(read-sequence contents in :start 0 :end nil)
+	(codes-string contents)))))
+
+;;
+;; Core functions
+;;
+(defun get-info-file (&key
+		       ((:over-write over-write) t)
+		       ((:maxima-info maxima-info) nil)
+		       ((:maxima-info-re maxima-info-re) *maxima-info-default-re*))
+  "Slurps a main info file and extracts the sub info file names. If
+`over-write' is true, then all keys are removed from `*info-files*'
+before adding new contents."
+  (let ((info-files (make-hash-table :test #'equal))
+	(filenames)
+	(info-dir (pathname-directory maxima-info)))
+    (setq filenames (get-info-file-names maxima-info info-dir maxima-info-re))
+    (loop for filename in filenames
+       for str-contents = (slurp-info-file filename)
+       for k = (namestring filename)
+       for v = `(string . ,str-contents)
+       do (setf (gethash k info-files) v))
+    (if over-write
+	(setf-hash *info-files* info-files))
+    info-files
+    ))
+
+(defun periodically-extend (l n)
+  (let ((k (if (= 1 (length l)) (1- n) (floor (/ n (length l)))))
+	(m (copy-list l)))
+    (dotimes (i k m)
+      (setq m (append m (copy-list l))))))
+
+(defun get-all-info-files (&key
+			   ((:over-write over-write) t)
+			   ((:maxima-info-list maxima-info-list) *maxima-info-list*)
+			   ((:maxima-info-list-re maxima-info-list-re) *maxima-info-list-re*))
+  "Loops over a joint list of main info files and regexps, calling `get-info-file' on each."
+  (if (< (length maxima-info-list-re) (length maxima-info-list))
+      (setq maxima-info-list-re (periodically-extend maxima-info-list-re (length maxima-info-list))))
+  (loop for maxima-info in maxima-info-list
+     for maxima-info-re in maxima-info-list-re
+     do (get-info-file :maxima-info maxima-info :maxima-info-re maxima-info-re :over-write over-write)))
+
+(defun get-info-file-string-contents (filename &key
+				      ((:info-files info-files) *info-files*)
+				      ((:start start) 0)
+				      ((:end end) nil)
+				      ((:length length) nil))
+  "Extracts the contents, from byte `start' to `end' (equal to start+length), from `filename'."
+  (setq end (if length (+ start length) end))
+  (setq filename (if (pathnamep filename) (namestring filename) filename))
+  (let* ((slurp (null (cdr (gethash filename info-files))))
+	 (str-contents (if slurp
+			   (slurp-info-file filename)
+			   (cdr (gethash filename info-files)))))
+    (if slurp (setf (gethash filename info-files) `(string . ,str-contents)))
+    (subseq str-contents start end)))
+  
+(defun hash-keys (h)
+  (if (hash-table-p h)
+      (loop for k being the hash-keys of h
+	 collect k)))
+
+(defun get-nodes+topics (&key
+			 ((:over-write over-write) t)
+			 ((:info-files info-files) *info-files*)
+			 ((:info-nodes-start-re info-nodes-start-re) *info-nodes-start-re*)
+			 ((:info-nodes-re info-nodes-re) *info-nodes-re*)
+			 ((:info-nodes-name-re info-nodes-name-re) *info-nodes-name-re*)
+			 ((:info-nodes-hash-size info-nodes-hash-size) *info-nodes-hash-size*)
+			 ((:info-topics-re info-topics-re) *info-topics-re*)
+			 ((:info-topics-start-re info-topics-start-re) *info-topics-start-re*)
+			 ((:info-topics-hash-size info-topics-hash-size) *info-topics-hash-size*))
+  "Creates the hash table `*info-section-hashtable*'."
+  (let ((filenames (hash-keys info-files))
+	(info-nodes-s-e  (make-hash-table :test #'eql :size info-nodes-hash-size))
+	(info-topics-s-e (make-hash-table :test #'eql :size info-topics-hash-size))
+	(topic-types     (make-hash-table :test #'equal))
+	)
+    (labels ((topic-types (tt)
+	       (cond ((string= (gethash tt topic-types) tt)
+		      (gethash tt topic-types))
+		     (t
+		      (setf (gethash tt topic-types) tt))))
+	      (safe-setf-hash (new-k given-k h v)
+	       (cond ((string= new-k given-k)
+		      t)
+		     (t
+		      (setf (gethash new-k h) v))))
+	     (get-topics-in-text-block (contents filename k a b l info-node-name)
+		 (cl-ppcre:do-register-groups (topic-type topic-name) (info-topics-start-re contents nil :start a :end b :sharedp t)
+		   (safe-setf-hash topic-name k info-topics-s-e (list filename a l info-node-name (topic-types topic-type)))))
+	     )
+      (loop for filename in filenames
+	 for contents = (get-info-file-string-contents filename)
+	 for nodes = (cl-ppcre:all-matches info-nodes-re contents)
+	 do
+	 ;;(format t "Reading ~a~%" filename)
+	   (loop for (b end) on nodes by #'cddr
+	      for e = (1- end)
+	      for info-node-name = (cl-ppcre:scan-to-strings info-nodes-name-re contents :start b)
+	      for s = (cl-ppcre:scan info-nodes-start-re contents :start b)
+	      for l = (- e s)
+	      for k = info-node-name
+	      for v = (list filename s l)
+	      for topics = (cl-ppcre:all-matches info-topics-re contents :start b :end end)
+	      do
+		(if topics (setf (gethash k info-nodes-s-e) v))
+		(loop for (bt et) on topics by #'cddr
+		   for l = (- et bt)
+		   do
+		     (cl-ppcre:do-register-groups (topic-type topic-name) (info-topics-re contents nil :start bt :end et :sharedp t)
+		       (safe-setf-hash topic-name "" info-topics-s-e (list filename bt l info-node-name (topic-types topic-type)))
+		       (get-topics-in-text-block contents filename topic-name bt et l info-node-name)))))
+      (and over-write
+	   (setf-hash *info-section-hashtable* info-nodes-s-e)
+	   (setf-hash *info-deffn-defvr-hashtable* info-topics-s-e))
+      (values info-nodes-s-e info-topics-s-e)
+      )))
+
+(defun setup-help-database (&key
+			    ((:over-write over-write) t)
+			    ((:maxima-info-list maxima-info-list) *maxima-info-list*)
+			    ((:maxima-info-list-re maxima-info-list-re) *maxima-info-list-re*)
+			    ((:info-files info-files) *info-files*)
+			    ((:info-nodes-start-re info-nodes-start-re) *info-nodes-start-re*)
+			    ((:info-nodes-re info-nodes-re) *info-nodes-re*)
+			    ((:info-nodes-name-re info-nodes-name-re) *info-nodes-name-re*)
+			    ((:info-nodes-hash-size info-nodes-hash-size) *info-nodes-hash-size*)
+			    ((:info-topics-re info-topics-re) *info-topics-re*)
+			    ((:info-topics-start-re info-topics-start-re) *info-topics-start-re*)
+			    ((:info-topics-hash-size info-topics-hash-size) *info-topics-hash-size*))
+  (if (null maxima-info-list)
+      (setf maxima-info-list (canonicalize-info-pathnames nil)))
+  (cond (over-write
+	 (clrhash *info-deffn-defvr-hashtable*)
+	 (clrhash *info-section-hashtable*))
+	(t t))
+  (get-all-info-files :over-write over-write :maxima-info-list maxima-info-list :maxima-info-list-re maxima-info-list-re)
+  (get-nodes+topics :over-write over-write :info-files info-files :info-nodes-start-re info-nodes-start-re :info-nodes-re info-nodes-re :info-nodes-name-re info-nodes-name-re :info-nodes-hash-size info-nodes-hash-size
+		    :info-topics-start-re info-topics-start-re :info-topics-re info-topics-re :info-topics-hash-size info-topics-hash-size)
+  )
+
+;;
+;; Utilities to dump info hashes.
+;;
+
+(defun dump-info-hashes (&optional (file nil))
+  (labels ((print-hash-table (h &optional (out *standard-output*))
+	     (format out "~s" (loop for k being the hash-keys of h
+				 for v being the hash-values of h
+				 collect (cons k v))))
+	   (dump (out x)
+	     (format out "(defparameter ~s (make-hash-table :test #'eql))~%" x)
+	     (format out "(loop for u in ~%'")
+	     (print-hash-table (eval x) out)
+	     (format out "~%do (setf (gethash (car u) ~a) (cdr u)))~%" x))
+	   (dump-info-files (out x)
+	     (format out ";;We deliberately zero-out the entries of *info-files*~%")
+	     (format out "(defparameter ~s (make-hash-table :test #'equal))~%" x)
+	     (loop for k being the hash-keys of (eval x)
+		do (format out "(setf (gethash ~s ~s) nil)~%" k x)))
+	   (dump-hashes (out)
+	     (format out "(in-package :cl-info)~%")
+	     (dump out '*info-deffn-defvr-hashtable*)
+	     (dump out '*info-section-hashtable*)
+	     (dump-info-files out '*info-files*)))
+    (cond (file
+	   (with-open-file (out file :direction :output :if-exists :supersede :if-does-not-exist :create)
+	     (dump-hashes out)))
+	  (t
+	   (dump-hashes *standard-output*)))))
+
+;;
+;; PATCHED VERSIONS OF FNS IN cl-info.lisp
+;;
+
+(defun read-info-text (value)
+  "Value is a 4-element list of (matched-string filename start length)
+where start and length are the byte offsets in the filename where the
+docuemntation for the matched string is. Printing is done by
+`get-info-file-string-contents'."
+  (let* ((match (first value))
+	 (filename (second value))
+	 (start (third value))
+	 (length (fourth value)))
+    (declare (ignore match))
+    ;;(format t "x: ~a~%file: ~a~%start ~a~%length: ~a~%" value filename start length)
+    (get-info-file-string-contents filename :start start :length length)))
+
+(defun find-regex-matches (regex-string hash)
+  "Each key in `hash' is matched against `regex-string'. Matched keys
+are consed with the hash's value and collected in a list. The list is
+sorted (and generally passed to `read-info-text')."
+  (let ((regex-matches
+	 (loop for k being the hash-keys of hash
+	    when (cl-ppcre:scan regex-string k) collect (cons k (gethash k hash)))))
+    ;;(format t "~a~%" regex-matches)
+    (stable-sort regex-matches #'string-lessp :key #'car)))
+
+;; end of build-index.lisp
