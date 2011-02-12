@@ -305,7 +305,7 @@ before adding new contents."
 ;; Utilities to dump info hashes.
 ;;
 
-(defun dump-info-hashes (&optional (file nil))
+(defun print-info-hashes (&optional (file nil))
   (labels ((print-hash-table (h &optional (out *standard-output*))
 	     (format out "~s" (loop for k being the hash-keys of h
 				 for v being the hash-values of h

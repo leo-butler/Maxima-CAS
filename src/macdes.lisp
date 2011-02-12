@@ -174,3 +174,6 @@
   (cl-info:setup-help-database :maxima-info-list maxima-info-list)
   '$done)
 
+(defmfun $print_help_database (&optional (file nil))
+  (cl-info:print-info-hashes file)
+  '$done)

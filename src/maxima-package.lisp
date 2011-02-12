@@ -42,6 +42,7 @@
 (defpackage :cl-info
   (:use :common-lisp)
   (:export #:setup-help-database
+	   #:print-help-database
 	   #:info
 	   #:info-exact
 	   #:*prompt-prefix*

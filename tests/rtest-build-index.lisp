@@ -131,18 +131,18 @@
 			  ;;(format t "~a~%~a~%~a~%~a~%" macro-matches macro-matches-e expand-matches expand-matches-e)
 			  (and (equal macro-matches macro-matches-e)
 			       (equal expand-matches expand-matches-e)))))
-    ;; dump-info-hashes
+    ;; print-info-hashes
     (defrtest 'x :func (lambda-lex-env
 			(let* ((s-out (make-string-output-stream :element-type 'character))
 			       (*standard-output* s-out)
 			       (s-in)
 			       (s1)
 			       (s2))
-			  (dump-info-hashes)
+			  (print-info-hashes)
 			  (setq s1 (get-output-stream-string s-out))
 			  (setq s-in (make-string-input-stream s1))
 			  (load s-in)
-			  (dump-info-hashes)
+			  (print-info-hashes)
 			  (setq s2 (get-output-stream-string s-out))
 			  (string= s1 s2))))
     ))
