@@ -9,13 +9,13 @@
 ;; Check test/rtest functions
 ;;
 
-(require :rtest "./rtest.lisp")
 (in-package :rtest)
 
 (defparameter x (make-instance 'test :tname "(r)test checks 1" :tpasses 0 :tfails nil :tnumber 0))
 (defrtest 'x)
 (defrtest 'x :func #'(lambda () t))
 (defrtest 'x :func #'(lambda () nil) :expect 'deliberate-fail)
+(defrtest 'x :func #'(lambda () (error "Deliberate error, tests should continue.")) :expect 'deliberate-fail :name 'deliberate-error)
 (defrtest 'x :func #'(lambda () 'a) :answer 'a)
 (defrtest 'x :func #'(lambda () (do-tests x #'check) (test-fails x)) :answer '((3 . deliberate-fail)))
 (do-tests x #'check)
