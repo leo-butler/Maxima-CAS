@@ -19,7 +19,7 @@
 ;; canonicalize-info-pathnames
 (let* ((default-answer (canonicalize-info-pathnames *maxima-info-default*))
        (pwd (maxima::maxima-getenv "PWD"))
-       (rel-dirs '("en/maxima.info" "de.utf8/maxima.info" "es.utf8/maxima.info"))
+       (rel-dirs '("rtest-build-index/en/maxima.info" "rtest-build-index/de.utf8/maxima.info" "rtest-build-index/es.utf8/maxima.info"))
        (abs-dirs (mapcar #'(lambda (f) (concatenate 'string pwd "/" f)) rel-dirs)))
   (labels ((equal-pathname-p (x y)
 	     (cond ((and (or (stringp x) (pathnamep x))
@@ -63,9 +63,9 @@
   )
 
 ;; get-info-file-names
-(let ((files (directory "en/maxima.info-*")))
+(let ((files (directory "rtest-build-index/en/maxima.info-*")))
   (defrtest 'x :func #'(lambda ()
-			 (let* ((maxima-info (probe-file "en/maxima.info"))
+			 (let* ((maxima-info (probe-file "rtest-build-index/en/maxima.info"))
 				(info-dir (pathname-directory maxima-info))
 				(maxima-info-re *maxima-info-default-re*))
 			   (get-info-file-names maxima-info info-dir maxima-info-re)))
@@ -100,7 +100,7 @@
       (*info-deffn-defvr-hashtable* (make-hash-table :test #'eql :size 6000)))
   (macrolet ((lambda-lex-env (&rest body)
 	       `(lambda ()
-		  (let* ((*maxima-info-list* (canonicalize-info-pathnames '("de.utf8/maxima.info" "en/maxima.info" "es.utf8/maxima.info")))
+		  (let* ((*maxima-info-list* (canonicalize-info-pathnames '("rtest-build-index/de.utf8/maxima.info" "rtest-build-index/en/maxima.info" "rtest-build-index/es.utf8/maxima.info")))
 			 (*maxima-info-list-re* (maxima-info-list-re))
 			 (*info-files* (make-hash-table :test #'equal))
 			 (maxima-info (car *maxima-info-list*)))
@@ -108,7 +108,7 @@
 		    ,@body))))
     ;; get-info-file
     (defrtest 'x :func (lambda-lex-env
-			(equal (directory "de.utf8/maxima.info-*") (mapcar #'probe-file (hash-keys (get-info-file :maxima-info maxima-info :over-write nil))))))
+			(equal (directory "rtest-build-index/de.utf8/maxima.info-*") (mapcar #'probe-file (hash-keys (get-info-file :maxima-info maxima-info :over-write nil))))))
     (defrtest 'x :func (lambda-lex-env
 			(let* ((info-file (get-info-file :maxima-info maxima-info :over-write nil))
 			       (file-name (car (hash-keys info-file)))
@@ -118,7 +118,7 @@
     ;; get-all-info-files
     (defrtest 'x :func (lambda-lex-env
 			(get-all-info-files)
-			(equal (directory "*/maxima.info-*") (mapcar #'probe-file (hash-keys *info-files*)))))
+			(equal (directory "rtest-build-index/*/maxima.info-*") (mapcar #'probe-file (hash-keys *info-files*)))))
     ;; setup-help-database
     (defrtest 'x :func (lambda-lex-env
 			(setup-help-database)
@@ -128,7 +128,7 @@
 			      (expand-matches   (mapcar #'(lambda (r) (list (first r) (third r) (fourth r) (fifth r)))
 							(find-regex-matches "^expand$" *info-deffn-defvr-hashtable*)))
 			      (expand-matches-e '(("expand" 290879 4411 "Funktionen und Variablen fÃ¼r die Vereinfachung") ("expand" 238810 4314 "Functions and Variables for Simplification") ("expand" 253740 4495 "Funciones y variables para simplificación"))))
-			  (format t "~a~%~a~%~a~%~a~%" macro-matches macro-matches-e expand-matches expand-matches-e)
+			  ;;(format t "~a~%~a~%~a~%~a~%" macro-matches macro-matches-e expand-matches expand-matches-e)
 			  (and (equal macro-matches macro-matches-e)
 			       (equal expand-matches expand-matches-e)))))
     ;; dump-info-hashes
