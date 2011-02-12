@@ -24,6 +24,25 @@
    (tname        :accessor test-name          :initarg :tname        :initform nil :allocation :class)
    (tests        :accessor test-tests         :initarg :tests        :initform nil :allocation :class)))
 
+(defmacro report-error-and-continue (x &body body)
+  (let ((results (gensym))
+	(condition (gensym)))
+    `(let ((,results (multiple-value-list (ignore-errors ,@body))))
+       (if (and (null (first ,results))
+		(typep (second ,results) 'condition)
+		(null (nthcdr 2 ,results)))
+	   (let ((,condition (second ,results)))
+	     (format t "~&Test name: ~a~%" (or (rtest-name (car ,x)) (rtest-number (car ,x))))
+	     (typecase ,condition
+	       (simple-condition
+		(apply #'format t
+		       (simple-condition-format-control ,condition)
+		       (simple-condition-format-arguments ,condition)))
+	       (otherwise
+		(format t "~A error." (type-of ,condition))))
+	     (values))
+	   (values-list ,results)))))
+
 (defmethod add-test ((x test) form)
   (setf (test-tests x) (push (cons form nil) (test-tests x))))
 (defmethod do-tests ((x test) fn)
@@ -32,7 +51,7 @@
     (dolist (i tests)
       (cond ((and (consp i) (null (cdr i)))
 	     (setf more t (cdr i) t)
-	     (funcall fn (car i)))
+	     (report-error-and-continue i (funcall fn (car i))))
 	    (t
 	     nil)))
     (if more
