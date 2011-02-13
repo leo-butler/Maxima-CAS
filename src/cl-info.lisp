@@ -1,7 +1,6 @@
 (in-package :cl-info)
 
-(defvar *info-section-hashtable* (make-hash-table :test 'equal))
-(defvar *info-deffn-defvr-hashtable* (make-hash-table :test 'equal))
+(defvar *maxima-info-index-list* '("maxima-index.lisp"))
 (defvar *info-case-fold-search* t
   "If t, info searches are done case insensitively.")
 (defvar *info-special-chars* '(#\. #\? #\+ #\* #\[ #\] #\{ #\} #\| #\^)
@@ -90,6 +89,7 @@ escaped. The list of special characters is `*info-special-char*'."
     (coerce (reverse y) 'string)))
       
 (defun exact-topic-match (topic)
+  (check-info-hashes)
   (setq topic (regex-sanitize topic))
   (setq topic (if *info-case-fold-search*
 		  (concatenate 'string "^(?i:" topic ")$")
@@ -135,6 +135,7 @@ escaped. The list of special characters is `*info-special-char*'."
     (not (null tem))))
 
 (defun inexact-topic-match (topic)
+  (check-info-hashes)
   (setq topic (regex-sanitize topic))
   (setq topic (if *info-case-fold-search*
 		  (concatenate 'string "(?i:" topic ")")
@@ -143,3 +144,14 @@ escaped. The list of special characters is `*info-special-char*'."
    (append
     (find-regex-matches topic *info-section-hashtable*)
     (find-regex-matches topic *info-deffn-defvr-hashtable*))))
+
+(defun check-info-hashes ()
+  (cond ((or (null *info-section-hashtable*) (null *info-deffn-defvr-hashtable*) (null *info-files*)
+	     (eq 0 (hash-table-count *info-section-hashtable*)) (eq 0 (hash-table-count *info-deffn-defvr-hashtable*)) (eq 0 (hash-table-count *info-files*)))
+	 (loop for m in *maxima-info-index-list*
+	    for maxima-info-index = (canonicalize-info-pathnames m)
+	    do
+	      (if (file-exists-p maxima-info-index)
+		  (load maxima-info-index)
+		  (setup-help-database))))
+	(t t)))
