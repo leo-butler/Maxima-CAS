@@ -42,7 +42,7 @@
 (defpackage :cl-info
   (:use :common-lisp)
   (:export #:setup-help-database
-	   #:print-help-database
+	   #:print-info-hashes
 	   #:info
 	   #:info-exact
 	   #:*prompt-prefix*
