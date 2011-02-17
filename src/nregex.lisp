@@ -32,6 +32,7 @@
 	      #:*regex-debug* #:*regex-groups* #:*regex-groupings*
 	      ;; Functions
 	      #:regex-compile
+	      #:regex
 	      ))
 	   )
 
@@ -42,12 +43,15 @@
 
   (defmacro info (message &rest args)
     (if *regex-debug*
-	`(format *trace-output* ,message ,@args)))
+	`(progn (format *trace-output* ,message ,@args) t)
+	t))
+    
 
 ;;;
 ;;; Declare the global variables for storing the paren index list.
 ;;;
-  (defvar *regex-groups* (make-array 10))
+  (defvar *nregex-default-array-length* 100)
+  (defvar *regex-groups* (make-array *nregex-default-array-length* :initial-element nil))
   (defvar *regex-groupings* 0)
   )
 
@@ -533,3 +537,185 @@
 	(bit-xor result #*1111111110011111111111111111111101111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 t))
     (values result used-length)))
 
+(defmacro def-regex (fn re)
+  "Takes a regex `re' (string) and produces a customised function `fn'."
+  (let* ((nregex-re-l (gensym))
+	 (ref (cons nregex-re-l (cdr (regex-compile re)))))
+    `(defun ,fn (str)
+       (flet (,ref)
+	 (,nregex-re-l str)))))
+
+
+(defmacro r-flet (re &optional body)
+  "Takes a regex `re' (string) and produces a customised local function `this-regex'."
+  (let* ((ref (cons 'this-regex (cdr (regex-compile re)))))
+    `(flet (,ref)
+       ,body)))
+
+(defmacro nregex-flet (re &rest body)
+  "Takes a regex `re' (a string), or list thereof, and produces a
+customised local function `this-regex'."
+  (setq re (if (listp re) re (list re)))
+  (info "~a~%" re)
+  (let ((l (if t
+	       '(this-regex-0
+		 this-regex-1
+		 this-regex-2
+		 this-regex-3
+		 this-regex-4
+		 this-regex-5
+		 this-regex-6
+		 this-regex-7
+		 this-regex-8
+		 this-regex-9)
+	       (loop for x in re
+		  for i  = 0 then (1+ i)
+		  for s = (format nil "this-regex-~A" i)
+		  collect (intern s))))
+	(fnames))
+    (info "~A~%" l)
+    (labels ((regex-labels (re)
+	       (cond ((= 1 (length re))
+		      '(this-regex))
+		     (t (subseq l 0 (length re))))))
+      (setq fnames (regex-labels re))
+      (let ((ref (mapcar #'(lambda(fname regex)
+			     (cons fname (cdr (regex-compile regex))))
+			 fnames re)))
+	(setq ref (cons ref body))
+	(info "~A~%" ref)
+	`(flet ,@ref)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun nregex-all-matches-as-strings (re str &optional (start 0) end matches)
+  (let* (match)
+    (labels ((nregex-all-matches-as-strings-l (re str end matches)
+	       (cond ((setq match (car (maxima-nregex:regex re str)))
+		      (push match matches)
+		      (setq start (cadr (aref *regex-groups* 0))
+			    end (min end (length str)))
+		      (setq str (subseq str start end))
+		      (info "match: ~a~%start: ~a~%end: ~a~%" match start end)
+		      (nregex-all-matches-as-strings-l re str end matches))
+		     (t matches))))
+      (setq end (or end (length str))
+	    str (subseq str start end))
+      (reverse (nregex-all-matches-as-strings-l re str end matches)))))
+      
+
+(defun nregex-all-matches (re str &optional (start 0) end matches)
+  (let* (match b e)
+    (labels ((nregex-all-matches-l (re str end matches)
+	       (cond ((setq match (car (maxima-nregex:regex re str)))
+		      (push (setf b (car (aref *regex-groups* 0))) matches)
+		      (push (setf e (cadr (aref *regex-groups* 0))) matches)
+		      (format t "match: ~a~%start: ~a~%end: ~a~%" match b e)
+		      (setq end (min end (length str)))
+		      (nregex-all-matches-l re (subseq str e end) end matches))
+		     (t matches))))
+      (setq end (or end (length str))
+	    str (subseq str start end))
+      (setq matches (reverse (nregex-all-matches-l re str end matches)))
+      (loop for (b e) on matches by #'cddr
+	 for x = b then (+ x e)
+	 for y = e then (+ y e)
+	 collect x collect y))))
+
+
+(defun nregex-scan-to-strings (re str &key
+			       ((:start start) 0)
+			       ((:end end) nil)
+			       ((:sharedp sharedp) t))
+  (declare (ignorable sharedp))
+  (let* ((end (or end (length str)))
+	 (str (subseq str start end))
+	 (match))
+    (cond ((setq match (maxima-nregex:regex re str))
+	   (let ((registers (make-array (1- (length match)))))
+	     (loop for r in (cdr match)
+		  for j = 0 then (1+ j)
+		  do (setf (aref registers j) r))
+	     (values (car match) registers)))
+	  (t nil))))
+
+(defun nregex-scan (re str &key
+		    ((:start start) 0)
+		    ((:end end) nil)
+		    ((:sharedp sharedp) t))
+  (declare (ignorable sharedp))
+  (let* ((end (or end (length str)))
+	 (str (subseq str start end))
+	 (*regex-groups* (make-array *nregex-default-array-length* :initial-element nil))
+	 match f-match)
+    (cond ((setq match (maxima-nregex:regex re str))
+	   (let* ((l (1- (length match)))
+		  (b-registers (make-array l))
+		  (e-registers (make-array l)))
+	     (loop for i from 0 to (1- l)
+		for register = (aref *regex-groups* (1+ i))
+		for b = (car register)
+		for e = (cadr register)
+		do (setf (aref b-registers i) b
+			 (aref e-registers i) e))
+	     (setq f-match (aref *regex-groups* 0))
+	     (values (car f-match) (cadr f-match) b-registers e-registers)))
+	  (t nil))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;  
+(defmacro nregex-do-register-groups (var-list opts-list &optional (declaration nil) (result nil))
+  (info "~a~%" opts-list)
+  (let* ((match (gensym))
+	 (string (gensym))
+	 (e (gensym))
+	 (s (gensym))
+	 (re (gensym))
+	 (str (gensym))
+	 (start (gensym))
+	 (end (gensym))
+	 (sharedp (gensym))
+	 (opts-list `(list ,@opts-list))
+	 (bindings))
+    (setf bindings (loop for var in var-list
+		      for i = 0 then (1+ i)
+		      collect `(,var (if (and ,match (< ,i (length ,match))) (elt ,match ,i)) (if (and ,match (< ,i (length ,match))) (elt ,match ,i)))))
+    (info "~a~%" bindings)
+    `(lambda ()
+       (let* ((opts-list ,opts-list)
+	      (,re (car opts-list))
+	      (,str (cadr opts-list))
+	      (,start 0)
+	      (,end (length ,str))
+	      (,sharedp t)
+	      )
+	 (info "~a~%" opts-list)
+	 (loop for (k v) on (cddr opts-list) by #'cddr
+	    do
+	      (cond ((eql k :start)
+		      (setf ,start v))
+		     ((eql k :end)
+		      (setf ,end v))
+		     ((eql k :sharedp)
+		      (setf ,sharedp v))))
+	 (info "~a~%" (list ,re ,start ,end ,sharedp))
+	 (info "~a~%" (list ,bindings))
+	 (setf ,str  (subseq ,str ,start ,end))
+	 (let ((*regex-groups* (make-array 1000 :initial-element nil))
+	       (,e (min ,end (length ,str))))
+	   (do* ((,s ,start (+ ,s (cadr (aref *regex-groups* 0))))
+		 (,string (subseq ,str ,s ,e) (subseq ,str ,s ,e))
+		 (,match (maxima-nregex:regex ,re ,string) (maxima-nregex:regex ,re ,string))
+		 ,@bindings)
+		((null ,match))
+	     ,declaration
+	     (info "~a~%" *regex-groups*))
+	   ,result)))))
+
+(let ((c))
+  (nregex-do-register-groups (a b d) ("maxima.info-([0-9]+)" mi :start 2 :end 10)
+			     (push a c)
+			     (reverse c)))
+(let ((c))
+  (nregex-do-register-groups (a b d) ("maxima.info-([0-9]+)" mi :start 2)
+			     (push a c)
+			     (reverse c)))
