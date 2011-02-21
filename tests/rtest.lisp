@@ -6,23 +6,25 @@
 ;; $Id: rtest.lisp,v 1.2 2011/01/17 23:23:31 work Exp $
 
 (defpackage #:rtest
-  (:use #:cl)
+  #-gcl(:use #:cl)
+  #+gcl(:use #:cl #:pcl)
   (:export #:defrtest
 	   #:do-tests
 	   #:reset
 	   #:report-summary
 	   #:check
 	   #:test)
+  #+gcl(:import-from #:pcl #:lambda-closure)
   (:documentation "Regression tester"))
 
 (in-package :rtest)
 
 (defclass test ()
   ((tpasses      :accessor test-passes        :initarg :tpasses      :initform 0   :allocation :class)
-   (tfails       :accessor test-fails         :initarg :tfails       :initform nil :allocation :class)
+   (tfails       :accessor test-fails         :initarg :tfails       :initform '() :allocation :class)
    (tnumber      :accessor test-number        :initarg :tnumber      :initform 0   :allocation :class)
-   (tname        :accessor test-name          :initarg :tname        :initform nil :allocation :class)
-   (tests        :accessor test-tests         :initarg :tests        :initform nil :allocation :class)))
+   (tname        :accessor test-name          :initarg :tname        :initform '() :allocation :class)
+   (tests        :accessor test-tests         :initarg :tests        :initform '() :allocation :class)))
 
 (defmacro report-error-and-continue (x &body body)
   (let ((results (gensym))
@@ -40,7 +42,7 @@
 		       (simple-condition-format-arguments ,condition)))
 	       (otherwise
 		(format t "~A error." (type-of ,condition))))
-	     (values))
+	     nil)
 	   (values-list ,results)))))
 
 (defmethod add-test ((x test) form)
@@ -80,6 +82,7 @@
    (verbose      :accessor rtest-verbose      :initarg :verbose      :initform nil)
    (inputs       :accessor rtest-inputs       :initarg :inputs       :initform nil)
    (expect       :accessor rtest-expect       :initarg :expect       :initform 'pass)
+   (source       :accessor rtest-source       :initarg :source       :initform '())
    (current      :accessor rtest-current :allocation :class)))
 
 (defmethod reset ((x rtest)) (setf (rtest-passes x) 0
@@ -94,7 +97,7 @@
 		     expect*)))
     (or (equal expect 'deliberate-fail) (incf (rtest-fails x) inc))
     (if (> inc 0)
-	(setf (test-fails x) (push (cons (test-number x) expect) (test-fails x))))))
+	(setf (test-fails x) (push (list (test-number x) expect (rtest-source x)) (test-fails x))))))
 (defmethod passes++ ((x rtest) &optional (inc 1)) (incf (rtest-passes x) inc) (incf (test-passes x) inc))
 (defmethod tests++  ((x rtest) &optional (inc 1)) (incf (rtest-number x) inc) (incf (test-number x) inc))
 (defmethod testname ((x rtest) &optional name)
@@ -129,11 +132,14 @@
     (format t "~&~:[Fails:  ~a~%~;~]" (eq fails 0) fails))
   t)
 
+(defmethod deliberate-fails ((x test))
+  (count 'deliberate-fail (mapcar #'second (test-fails x))))
+
 (defmethod report-summary ((x test) &optional (ignore-deliberate-fails t))
   (format t "~&Test name: ~a~%" (test-name x))
-  (format t "~&Passes/Tests: ~a/~a" (test-passes x) (test-number x))
+  (format t "~&Passes/Intended Fails/Tests: ~a/~a/~a" (test-passes x) (deliberate-fails x) (test-number x))
   (let ((fails (if ignore-deliberate-fails
-		   (loop for k in (test-fails x) unless (eql (cdr k) 'deliberate-fail) collect k)
+		   (loop for k in (test-fails x) unless (eql (cadr k) 'deliberate-fail) collect k)
 		   (test-fails x))))
     (format t "~&~:[Fails:  ~a~%~;~]" (eq fails nil) fails))
   t)
@@ -141,12 +147,15 @@
 (defmethod check ((x rtest) &optional (do-report nil))
   (tests++ x)
   (flet ((compute-tests (f in)
-	   (cond ((and (listp f) (null in))
-		  (mapcar #'(lambda(fn) (apply fn in)) f))
-		 ((listp f)
-		  (mapcar #'(lambda(fn inp) (apply fn inp)) f in))
+	   (cond ((and (listp f) (null in) (not (eq (car f) 'lambda-closure)))
+		  (mapcar #'(lambda(fn) (report-error-and-continue x (funcall fn))) f))
+		 ((and (listp f) (not (eq (car f) 'lambda-closure)))
+		  (mapcar #'(lambda(fn inp) (report-error-and-continue x (apply fn inp))) f in))
+		 ((functionp f)
+		  ;;(format t "~&f = ~A~%" f)
+		  (report-error-and-continue x (apply f in)))
 		 (t
-		  (apply f in)))))
+		  f))))
     (let* ((inputs (rtest-inputs x))
 	   (function (rtest-func x))
 	   (test (rtest-equality-fn x))
@@ -154,19 +163,27 @@
 	   (report (rtest-report x))
 	   (computed-result (compute-tests function inputs))
 	   (y-n             (funcall test computed-result answer)))
+      ;;(format t "~A~%~A~%" computed-result answer)
       (if y-n (passes++ x) (fails++ x))
       (if report
 	  (report-results x :outcome y-n :computed-result computed-result))
       (if do-report (report x (testname x)))
       y-n)))
 
-(defun defrtest (y &rest opts)
-  (let* ((u (get-test))
-	 (args (loop for (k v) on opts by #'cddr
-		  collect k collect `(quote ,v))))
-    (eval
-     `(progn
-	(setf ,y (funcall #'make-instance 'rtest ,@args :expect 'pass))
-	(setf (rtest-current ,y) ,y)
-	(add-test ,u ,y))))
-  y)
+(defmacro defrtest (y &rest opts)
+  (if (and (consp y) (eq (car y) 'quote))
+      (setq y (cadr y)))
+  (let ((source (loop for (k v) on opts by #'cddr
+		   when (eql k :func) return v)))
+    (let ((dfrt `(lambda (&rest opts)
+		   (setq opts (append (list 'rtest)
+				      (loop for (k v) on opts by #'cddr
+					 collect k collect v)
+				      '(:expect pass)
+				      '(:source ,source)))
+		   (setf ,y (apply #'make-instance opts))
+		   (setf (rtest-current ,y) ,y)
+		   (add-test ,(get-test) ,y)
+		   ,y
+		   )))
+      `(funcall ,dfrt ,@opts))))

@@ -17,7 +17,9 @@
 (defrtest 'x :func #'(lambda () nil) :expect 'deliberate-fail)
 (defrtest 'x :func #'(lambda () (error "Deliberate error, tests should continue.")) :expect 'deliberate-fail :name 'deliberate-error)
 (defrtest 'x :func #'(lambda () 'a) :answer 'a)
-(defrtest 'x :func #'(lambda () (do-tests x #'check) (test-fails x)) :answer '((3 . deliberate-fail)))
+(defrtest 'x :func #'(lambda ()
+		       (do-tests x #'check)
+		       (not(some #'(lambda(x)(eq x 'pass)) (mapcar #'second (test-fails x))))) :answer t) ;'((3 . deliberate-fail)))
 (do-tests x #'check)
 (report-summary x)
 (reset x)
@@ -46,6 +48,7 @@
 						(let ((x (make-instance 'test)))
 						  ;; this test fails intentionally
 						  (defrtest 'x :func #'cons :inputs '(a b) :equality-fn #'equal :answer '(b . a) :expect 'deliberate-fail)
+						  'x
 						  ))
 				   :answer 'x)
 			 (defrtest 'x
@@ -55,11 +58,13 @@
 				    #'(lambda ()
 					(let ((x (make-instance 'test)))
 					  (defrtest 'x :func #'cons :inputs '(a b) :equality-fn #'equal :answer '(a . b))
+					  'x
 					  ))
 				    #'(lambda ()
 					(let ((x (make-instance 'test)))
 					  ;; this test fails intentionally
 					  (defrtest 'x :func #'cons :inputs '(a b) :equality-fn #'equal :answer '(b . a) :expect 'deliberate-fail)
+					  'x
 					  )))
 			     :answer '(t a x x))
 			 )
