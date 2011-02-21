@@ -75,12 +75,12 @@
 (defparameter *info-section-hashtable* (make-hash-table :test #'eql :size 500)
   "Hashtable whose keys are the info-nodes-names identified by
   `*info-nodes-name-re*' and whose values are a list: '(filename
-  byte-offset length). Additional information may be appended to this
+  character-offset length). Additional information may be appended to this
   list, but is not used at present.")
 (defparameter *info-deffn-defvr-hashtable* (make-hash-table :test #'eql :size 10000)
   "Hashtable whose keys are the info-topics-names identified by
   `*info-topics-name-re*' and whose values are a list: '(filename
-  byte-offset length). Additional information may be appended to this
+  character-offset length). Additional information may be appended to this
   list, but is not used at present.")
 (defparameter *info-files* (make-hash-table :test #'equal)
   "Hash table of info files: key=filename, value=dotted list, whose
@@ -138,12 +138,12 @@
 
 (defun get-info-file-names (maxima-info info-dir maxima-info-re)
   (let ((fs))
-    (with-open-file (in maxima-info :direction :input :element-type 'unsigned-byte)
+    (with-open-file (in maxima-info :direction :input)
       (setq fs (file-length in))
-      (let ((contents      (make-array fs :element-type 'unsigned-byte))
+      (let ((contents      (make-array fs :element-type 'character))
 	    (str-contents  nil))
 	(read-sequence contents in :start 0 :end nil)
-	(setq str-contents (codes-string contents))
+	(setq str-contents (coerce contents 'string))
 	(loop for f in (cl-ppcre:all-matches-as-strings maxima-info-re str-contents)
 	   for fp = (pathname f)
 	   for fn = (pathname-name fp)
@@ -154,11 +154,11 @@
 
 (defun slurp-info-file (filename)
   (let ((fs))
-    (with-open-file (in filename :direction :input :element-type 'unsigned-byte)
+    (with-open-file (in filename :direction :input)
       (setq fs (file-length in))
-      (let ((contents (make-array fs :element-type 'unsigned-byte)))
+      (let ((contents (make-array fs :element-type 'character)))
 	(read-sequence contents in :start 0 :end nil)
-	(codes-string contents)))))
+	(coerce contents 'string)))))
 
 ;;
 ;; Core functions
@@ -206,7 +206,7 @@ before adding new contents."
 				      ((:start start) 0)
 				      ((:end end) nil)
 				      ((:length length) nil))
-  "Extracts the contents, from byte `start' to `end' (equal to start+length), from `filename'."
+  "Extracts the contents, from character `start' to `end' (equal to start+length), from `filename'."
   (setq end (if length (+ start length) end))
   (setq filename (if (pathnamep filename) (namestring filename) filename))
   (let* ((slurp (null (cdr (gethash filename info-files))))
@@ -337,7 +337,7 @@ before adding new contents."
 
 (defun read-info-text (value)
   "Value is a 4-element list of (matched-string filename start length)
-where start and length are the byte offsets in the filename where the
+where start and length are the character offsets in the filename where the
 docuemntation for the matched string is. Printing is done by
 `get-info-file-string-contents'."
   (let* ((match (first value))

@@ -1,7 +1,24 @@
 binary-sbcl/maxima.core : maxima-package.lisp
 binary-sbcl/maxima.core : autoconf-variables.lisp
-binary-sbcl/maxima.core : nregex.lisp
+binary-sbcl/maxima.core : cl-ppcre/packages.lisp
+binary-sbcl/maxima.core : cl-ppcre/specials.lisp
+binary-sbcl/maxima.core : cl-ppcre/util.lisp
+binary-sbcl/maxima.core : cl-ppcre/errors.lisp
+binary-sbcl/maxima.core : cl-ppcre/charset.lisp
+binary-sbcl/maxima.core : cl-ppcre/charmap.lisp
+binary-sbcl/maxima.core : cl-ppcre/chartest.lisp
+binary-sbcl/maxima.core : cl-ppcre/lexer.lisp
+binary-sbcl/maxima.core : cl-ppcre/parser.lisp
+binary-sbcl/maxima.core : cl-ppcre/regex-class.lisp
+binary-sbcl/maxima.core : cl-ppcre/regex-class-util.lisp
+binary-sbcl/maxima.core : cl-ppcre/convert.lisp
+binary-sbcl/maxima.core : cl-ppcre/optimize.lisp
+binary-sbcl/maxima.core : cl-ppcre/closures.lisp
+binary-sbcl/maxima.core : cl-ppcre/repetition-closures.lisp
+binary-sbcl/maxima.core : cl-ppcre/scanner.lisp
+binary-sbcl/maxima.core : cl-ppcre/api.lisp
 binary-sbcl/maxima.core : intl.lisp
+binary-sbcl/maxima.core : build-index.lisp
 binary-sbcl/maxima.core : cl-info.lisp
 binary-sbcl/maxima.core : sloop.lisp
 binary-sbcl/maxima.core : lmdcls.lisp
@@ -292,5 +309,6 @@ binary-sbcl/maxima.core : gnuplot_def.lisp
 binary-sbcl/maxima.core : xmaxima_def.lisp
 binary-sbcl/maxima.core : autol.lisp
 binary-sbcl/maxima.core : max_ext.lisp
+binary-sbcl/maxima.core : share-subdirs.lisp
 binary-sbcl/maxima.core : init-cl.lisp
 
