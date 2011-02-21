@@ -19,8 +19,8 @@ maxima.texi: $(origlangsdir)/maxima.texi
 	rm -f *.texi
 	cp -p $(origlangsdir)/*.texi .
 
-maxima-index.lisp: maxima.info ../build_index.pl
-	perl ../build_index.pl maxima.info ':utf8' > maxima-index.lisp
+maxima-index.lisp: maxima.info
+	$(top_srcdir)/maxima-local --very-quiet --init=/dev/null --batch-string='setup_help_database();print_help_database("$@");'
 
 maxima.html: maxima.texi
 	rm -f maxima*.html 2>/dev/null

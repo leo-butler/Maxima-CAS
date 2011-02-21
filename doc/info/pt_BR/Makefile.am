@@ -80,8 +80,8 @@ zeilberger.texi
 
 all-local: maxima-index.lisp maxima.html contents.hhc
 
-maxima-index.lisp: maxima.info ../build_index.pl
-	perl ../build_index.pl maxima.info ':crlf' > maxima-index.lisp
+maxima-index.lisp: maxima.info
+	$(top_srcdir)/maxima-local --very-quiet --init=/dev/null --batch-string='setup_help_database();print_help_database("$@");'
 
 maxima.html: maxima.texi $(maxima_TEXINFOS)
 	perl ../texi2html -split_chapter --lang=pt --output=. --css-include=../manual.css --init-file ../texi2html.init maxima.texi 
