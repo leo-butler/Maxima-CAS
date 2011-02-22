@@ -241,8 +241,10 @@
 			   (not (eql (char source (+ x 2)) #\])))
 		      (if (>= (char-code (char source x))
 			      (char-code (char source (+ 2 x))))
-			  (error (intl:gettext "regex: ranges must be in acending order; found: \"~A-~A\"")
-				 (char source x) (char source (+ 2 x))))
+;;			  (error (intl:gettext "regex: ranges must be in acending order; found: \"~A-~A\"")
+;;				 (char source x) (char source (+ 2 x))))
+			  (error (format t "regex: ranges must be in acending order; found: \"~A-~A\""
+					 (char source x) (char source (+ 2 x)))))
 		      (do ((j (char-code (char source x)) (1+ j)))
 			  ((> j (char-code (char source (+ 2 x))))
 			   (incf x 2))
@@ -538,6 +540,11 @@
 	(bit-xor result #*1111111110011111111111111111111101111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 t))
     (values result used-length)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defmacro let-gs (l &body body)
+  "Usage: (let-gs (a b c) body-using-a-b-and/or-c-as-gensym)"
+  `(let ,(mapcar #'(lambda(x) `(,x (gensym (concatenate 'string (symbol-name ',x) "-")))) l) ,@body))
+
 (defun compile-regex (re)
   "Rewrites the lambda s-exp from `regex-compile': the regex function
 from the latter is wrapped in a lexical environment containing lexical
@@ -557,6 +564,12 @@ values of both lexicals if the regex succeeds."
 	 (fn-let   `(lambda ,args ,mlet)))
     (compile nil fn-let)))
 
+
+(defmacro nregex-match-begin (regex-groups)
+  `(if ,regex-groups (car (aref ,regex-groups 0))))
+(defmacro nregex-match-end   (regex-groups)
+  `(if ,regex-groups (cadr (aref ,regex-groups 0))))
+
 (defmacro def-regex (fn re)
   "Takes a regex `re' (string) and produces a customised function `fn'."
   (let* ((nregex-re-l (gensym)))
@@ -568,37 +581,85 @@ values of both lexicals if the regex succeeds."
   "Takes a regex `re' (string) and produces a customised flet function
 `name' which executes the regex function determined by `re' and
 `body'."
-  (flet ((r-flet-l (re)
-	   (let ((cre (gensym))
-		 (body body))
-	     `(let ((,cre (compile-regex ,re)))
-		(flet ((,name (string &optional (start 0) (end (length string)))
-			 (funcall ,cre string start end)))
-		  ,@body)))))
-    (r-flet-l re)))
-
+  (let-gs (cre)
+	  `(let ((,cre (compile-regex ,re)))
+	     (flet ((,name (string &optional (start 0) (end (length string)))
+		       (funcall ,cre string start end)))
+		,@body))))
 
 (defmacro nregex-flet-strings-1 (name re &body body)
   "Takes a regex `re' (string) and produces a customised local function `this-regex'."
-  (flet ((r-flet-strings-l (re)
-	   (let ((cre          (gensym))
-		 (regex-groups (gensym))
-		 (body          body))
-	     `(let ((,cre (compile-regex ,re)))
-		(flet ((,name (string &optional (start 0) (end (length string)))
-			 (let* ((,regex-groups  (remove-if #'null (funcall ,cre string start end)))
-				(l              (1- (length ,regex-groups))))
-			   (if ,regex-groups
-			       (do* ((i 0    (1+ i))
-				     (rgx  (aref ,regex-groups i)  (aref ,regex-groups i))
-				     (b    (car  rgx)              (car  rgx)            )
-				     (e    (cadr rgx)              (cadr rgx)            )
-				     (m    (subseq string b e)     (subseq string b e)   )
-				     (mat  (list m)                (push m mat)))
-				    ((>= i l)
-				     (values (reverse mat) ,regex-groups (length ,regex-groups))))))))
-		  ,@body)))))
-    (r-flet-strings-l re)))
+  (let-gs (regex-groups l cre)
+	  `(let ((,cre (compile-regex ,re)))
+	     (flet ((,name (string &optional (start 0) (end (length string)))
+		      (let* ((,regex-groups  (remove-if #'null (funcall ,cre string start end)))
+			     (,l             (1- (length ,regex-groups))))
+			(if ,regex-groups
+			    (do* ((i 0    (1+ i))
+				  (rgx  (aref ,regex-groups i)  (aref ,regex-groups i))
+				  (b    (car  rgx)              (car  rgx)            )
+				  (e    (cadr rgx)              (cadr rgx)            )
+				  (m    (subseq string b e)     (subseq string b e)   )
+				  (mat  (list m)                (push m mat)))
+				 ((>= i ,l)
+				  (values (reverse mat) ,regex-groups (length ,regex-groups))))))))
+	       ,@body))))
+
+(defmacro nregex-labels (name-re-list &body body)
+  "Takes a list of names and regexes and produces a customised labels
+function which executes the regex function determined by `re'
+and `body'."
+  (let ((code (loop for name-re in name-re-list
+		 for name = (car name-re)
+		 for re = (cadr name-re)
+		 collect `(,name (string &optional (start 0) (end (length string)))
+				 (funcall ,(compile-regex re) string start end)))))
+    `(labels ,code
+       ,@body)))
+
+(defmacro nregex-labels-strings (name-re-list &body body)
+  "Creates a labels environment for a list of named regexes."
+  (flet ((nregex-labels-strings-l (name re regex-groups l)
+	   `(,name (string &optional (start 0) (end (length string)))
+		   (let* ((,regex-groups  (remove-if #'null (funcall ,(compile-regex re) string start end)))
+			  (,l             (1- (length ,regex-groups))))
+		     (if ,regex-groups
+			 (do* ((i 0    (1+ i))
+			       (rgx  (aref ,regex-groups i)  (aref ,regex-groups i))
+			       (b    (car  rgx)              (car  rgx)            )
+			       (e    (cadr rgx)              (cadr rgx)            )
+			       (m    (subseq string b e)     (subseq string b e)   )
+			       (mat  (list m)                (push m mat)))
+			      ((>= i ,l)
+			       (values (reverse mat) ,regex-groups (length ,regex-groups)))))))))
+    (let ((code (loop for name-re in name-re-list
+		   for name = (car name-re)
+		   for re = (cadr name-re)
+		   for regex-groups = (gensym "REGEX-GROUPS-")
+		   for l = (gensym "L-")
+		   collect (nregex-labels-strings-l name re regex-groups l))))
+      `(labels ,code
+	 ,@body))))
+
+(defmacro nregex-delimited-block (name re-begin re-end &body body)
+  "Creates a lambda function that scans a string and identifies the
+  beginning and end points of a pair regexes. Within the body of the
+  lambda function, the labels function `name' is available and once
+  applied to a string, regex-groups-b and regex-groups-e are bound to
+  the beginning and ending regex-groups array.
+Example:
+(setq f (nregex-delimited-block info-item \" -- \" \"\\n\\n\" (info-item string)))"
+  (let-gs (begin end)
+	  (let ((code `(nregex-labels ((,begin ,re-begin) (,end ,re-end))
+			 (labels ((,name (string &optional (begin 0) (end (length string)))
+				    (let* ((regex-groups-b (,begin string begin end))
+					   (regex-groups-e  (if regex-groups-b (,end   string (nregex-match-begin regex-groups-b) end))))
+				      (and regex-groups-b
+					   regex-groups-e
+					   (list (nregex-match-begin regex-groups-b) (nregex-match-begin regex-groups-e))))))
+			   ,@body))))
+	    `(lambda (string &optional (start 0) (end (length string)))
+	       ,code))))
 
 (defun nregex-all-matches-as-strings (re str &optional (start 0) (end (length str)))
   (nregex-flet-strings-1 regex-match re
@@ -667,43 +728,42 @@ values of both lexicals if the regex succeeds."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;  
 (defmacro nregex-do-register-groups (var-list opts-list &optional (declaration nil) (result nil))
-  (macrolet ((let-gs (l &body body) `(let ,(mapcar #'(lambda(x) `(,x (gensym (concatenate 'string (symbol-name ',x) "-")))) l) ,@body)))
-    (info "~a~%" opts-list)
-    (let-gs (match length-match m-r-r e s re str start end sharedp regex-groups)
-	    (let* ((opts-list `(list ,@opts-list))
-		   (bindings))
-	      (setf bindings (loop for var in var-list
-				for i = 1 then (1+ i)
-				collect `(,var (safe-elt ,match ,length-match ,i) (safe-elt ,match ,length-match ,i))))
-	      (info "~a~%" bindings)
-	      `(macrolet ((info (a &rest b) (if nil `(format t ,a ,@b))))
-		 (let* ((opts-list ,opts-list)
-			(,re       (car opts-list))
-			(,str      (cadr opts-list))
-			(,end      (length ,str))
-			(,start     0)
-			(,sharedp   t)
-			)
-		   (info "~a~%" opts-list)
-		   (loop for (k v) on (cddr opts-list) by #'cddr
-		      do (cond ((eql k :start)   (setf ,start v))
-			       ((eql k :end)     (setf ,end v))
-			       ((eql k :sharedp) (setf ,sharedp v))))
-		   (info "~a~%" (list ,re ,start ,end ,sharedp))
-		   (info "~a~%" ',bindings)
-		   (let ((,e (min ,end (length ,str))))
-		     (flet ((safe-elt (s l i) (if (and s (< i l)) (elt s i))))
-		       (nregex-flet-strings-1 regex-match ,re
-			 (do* ((,s            ,start               (cadr (aref ,regex-groups 0)))
-			       (,m-r-r        (multiple-value-list (regex-match ,str ,s ,e)) (multiple-value-list (regex-match ,str ,s ,e)))
-			       (,match        (car  ,m-r-r)        (car ,m-r-r))
-			       (,regex-groups (cadr ,m-r-r)        (cadr ,m-r-r))
-			       (,length-match (length ,match)      (length ,match))
-			       ,@bindings)
-			      ((null ,match))
-			   ,declaration
-			   (info "~a~%" ,regex-groups))
-			 ,result)))))))))
+  (info "~a~%" opts-list)
+  (let-gs (match length-match m-r-r e s re str start end sharedp regex-groups)
+	  (let* ((opts-list `(list ,@opts-list))
+		 (bindings))
+	    (setf bindings (loop for var in var-list
+			      for i = 1 then (1+ i)
+			      collect `(,var (safe-elt ,match ,length-match ,i) (safe-elt ,match ,length-match ,i))))
+	    (info "~a~%" bindings)
+	    `(macrolet ((info (a &rest b) (if nil `(format t ,a ,@b))))
+	       (let* ((opts-list ,opts-list)
+		      (,re       (car opts-list))
+		      (,str      (cadr opts-list))
+		      (,end      (length ,str))
+		      (,start     0)
+		      (,sharedp   t)
+		      )
+		 (info "~a~%" opts-list)
+		 (loop for (k v) on (cddr opts-list) by #'cddr
+		    do (cond ((eql k :start)   (setf ,start v))
+			     ((eql k :end)     (setf ,end v))
+			     ((eql k :sharedp) (setf ,sharedp v))))
+		 (info "~a~%" (list ,re ,start ,end ,sharedp))
+		 (info "~a~%" ',bindings)
+		 (let ((,e (min ,end (length ,str))))
+		   (flet ((safe-elt (s l i) (if (and s (< i l)) (elt s i))))
+		     (nregex-flet-strings-1 regex-match ,re
+		       (do* ((,s            ,start               (cadr (aref ,regex-groups 0)))
+			     (,m-r-r        (multiple-value-list (regex-match ,str ,s ,e)) (multiple-value-list (regex-match ,str ,s ,e)))
+			     (,match        (car  ,m-r-r)        (car ,m-r-r))
+			     (,regex-groups (cadr ,m-r-r)        (cadr ,m-r-r))
+			     (,length-match (length ,match)      (length ,match))
+			     ,@bindings)
+			    ((null ,match))
+			 ,declaration
+			 (info "~a~%" ,regex-groups))
+		       ,result))))))))
 
 (defmacro nregex-register-groups-bind (var-list opts-list &optional (declaration nil))
   (let ((block (gensym)))
