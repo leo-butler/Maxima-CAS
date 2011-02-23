@@ -13,6 +13,7 @@
 ;;
 ;; Check helper functions/macros
 ;;
+(tagbody
 (defrtest 'x :func #'file-exists-p :inputs '(".") :equality-fn #'(lambda(x y)(and x y)))
 (defrtest 'x :func #'file-exists-p :inputs '("/dev/null") :answer '#P"/dev/null")
 
@@ -47,7 +48,7 @@
 			    (list :inputs `("maxima.info")     :answer default-answer))
        for arg-list = (append (list 'x :func #'canonicalize-info-pathnames) args)
        do
-	 (apply #'defrtest arg-list))
+	 `(defrtest ,@arg-list))
     ))
 
 
@@ -80,20 +81,22 @@
 					(c nil (random-lower-case))
 					(s nil (cons c s)))
 				       ((>= k l)
-					(concatenate 'string (map 'string #'code-char s) ending)))))
-			 (let ((ascii-chars (do* ((k -1    (1+ k))
-						  (c #\Nul (code-char k))
-						  (s ""    (format nil "~3s ~5a ~s~%" k c c))
-						  (str ""  (concatenate 'string str s)))
-						 ((>= k 255) str)))
-			       (file-name (make-pathname :directory "/tmp/" :name (random-file-name 10 ".txt")))
-			       (read-chars))
-			   (progn
-			     (with-open-file (out file-name :direction :output :if-exists :overwrite :if-does-not-exist :create)
-			       (format out "~a" ascii-chars))
-			     (setq read-chars (slurp-info-file file-name))
-			     (if (probe-file file-name) (delete-file file-name))
-			     (string= read-chars ascii-chars)))))
+					(concatenate 'string (map 'string #'code-char s) ending))))
+				(write-read (ef n)
+				  (let ((write-chars (do* ((k -1    (1+ k))
+							   (c #\Nul (code-char k))
+							   (s ""    (format nil "~3s ~5a ~s~%" k c c))
+							   (str ""  (concatenate 'string str s)))
+							  ((>= k n) str)))
+					(file-name (make-pathname :directory "/tmp/" :name (random-file-name 10 ".txt")))
+					(read-chars))
+				    (progn
+				      (with-open-file (out file-name :direction :output :if-exists :overwrite :if-does-not-exist :create :element-type 'character :external-format ef)
+					(format out "~a" write-chars))
+				      (setq read-chars (slurp-info-file file-name ef))
+				      (if (probe-file file-name) (delete-file file-name))
+				      (string= read-chars write-chars)))))
+			 (and (write-read :utf-8 127) (write-read :iso-8859-1 255))))
 	  :answer t)
 
 (let ((*info-section-hashtable*     (make-hash-table :test #'eql :size 600))
@@ -122,15 +125,26 @@
     ;; setup-help-database
     (defrtest 'x :func (lambda-lex-env
 			(setup-help-database)
-			(let ((macro-matches    (mapcar #'(lambda (r) (list (first r) (third r) (fourth r)))
-							(find-regex-matches "^Ma[ck]ros$" *info-section-hashtable*)))
-			      (macro-matches-e '(("Macros" 193000 8636) ("Macros" 135070 9085) ("Makros" 282280 8583)))
-			      (expand-matches   (mapcar #'(lambda (r) (list (first r) (third r) (fourth r) (fifth r)))
-							(find-regex-matches "^expand$" *info-deffn-defvr-hashtable*)))
-			      (expand-matches-e '(("expand" 290879 4411 "Funktionen und Variablen fÃ¼r die Vereinfachung") ("expand" 238810 4314 "Functions and Variables for Simplification") ("expand" 253740 4495 "Funciones y variables para simplificación"))))
-			  ;;(format t "~a~%~a~%~a~%~a~%" macro-matches macro-matches-e expand-matches expand-matches-e)
-			  (and (equal macro-matches macro-matches-e)
-			       (equal expand-matches expand-matches-e)))))
+			(macrolet ((expand-match (e)
+				     (with-output-to-string (stream nil :element-type 'character)
+				       (dolist (c e)
+					 (princ c stream)))))
+			  (let ((macro-matches    (mapcar #'(lambda (r) (list (first r) (third r) (fourth r)))
+							  (find-regex-matches "^Ma[ck]ros$" *info-section-hashtable*)))
+				(macro-matches-e '(("Macros" 193000 8636) ("Macros" 135070 9085) ("Makros" 282126 8529)))
+				(expand-matches   (mapcar #'(lambda (r) (list (first r) (third r) (fourth r) (fifth r)))
+							  (find-regex-matches "^expand$" *info-deffn-defvr-hashtable*)))
+				(expand-matches-e `(("expand" 288341 4373 ,(expand-match (#\F #\u #\n #\k #\t #\i #\o #\n #\e #\n #\  #\u #\n #\d #\  #\V #\a #\r #\i
+											      #\a #\b #\l #\e #\n #\  #\f #\LATIN_CAPITAL_LETTER_A_WITH_TILDE
+											      #\VULGAR_FRACTION_ONE_QUARTER #\r #\  #\d #\i #\e #\  #\V #\e #\r #\e #\i #\n
+											      #\f #\a #\c #\h #\u #\n #\g)))
+						    ("expand" 238810 4314 "Functions and Variables for Simplification")
+						    ("expand" 253740 4495 ,(expand-match (#\F #\u #\n #\c #\i #\o #\n #\e #\s #\  #\y #\  #\v #\a #\r #\i #\a #\b #\l
+											      #\e #\s #\  #\p #\a #\r #\a #\  #\s #\i #\m #\p #\l #\i #\f #\i #\c #\a #\c
+											      #\i #\LATIN_CAPITAL_LETTER_A_WITH_TILDE #\SUPERSCRIPT_THREE #\n))))))
+			    ;;(format t "~&~a~%~a~%~a~%~a~%" macro-matches macro-matches-e expand-matches expand-matches-e)
+			    (and (equal macro-matches macro-matches-e)
+				 (equal expand-matches expand-matches-e))))))
     ;; print-info-hashes
     (defrtest 'x :func (lambda-lex-env
 			(let* ((s-out (make-string-output-stream :element-type 'character))
@@ -146,7 +160,9 @@
 			  (setq s2 (get-output-stream-string s-out))
 			  (string= s1 s2))))
     ))
+
+:check-report
 (do-tests x #'check)
 (report-summary x)
-
+)
 ;; end of rtest-build-index.lisp
