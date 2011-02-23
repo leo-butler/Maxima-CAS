@@ -86,6 +86,9 @@
   "Hash table of info files: key=filename, value=dotted list, whose
   car is the symbol 'string and cdr is the file's contents.")
 
+(defparameter *info-encoding-re* "\\ncoding: ([a-zA-Z0-9-]+)"
+  "Regex to extract the encoding string in each master info file.")
+(defparameter *info-default-external-format* :utf-8)
 
 ;;
 ;; Helper functions + macros
@@ -136,29 +139,37 @@
        (maphash #'(lambda (,k ,v) (setf (gethash ,k ,to) ,v)) ,from)
        t)))
 
-(defun get-info-file-names (maxima-info info-dir maxima-info-re)
-  (let ((fs))
-    (with-open-file (in maxima-info :direction :input)
-      (setq fs (file-length in))
-      (let ((contents      (make-array fs :element-type 'character))
-	    (str-contents  nil))
-	(read-sequence contents in :start 0 :end nil)
-	(setq str-contents (coerce contents 'string))
-	(loop for f in (cl-ppcre:all-matches-as-strings maxima-info-re str-contents)
-	   for fp = (pathname f)
-	   for fn = (pathname-name fp)
-	   for ft = (pathname-type fp)
-	   for file = (make-pathname :directory info-dir :name fn :type ft)
-	   when (file-exists-p file) collect file))
-      )))
+(defun get-info-file-names+external-format (maxima-info info-dir maxima-info-re &optional (ef *info-default-external-format*) (info-encoding-re *info-encoding-re*))
+  "Returns a list of info file pathnames in the master info file
+maxima-info and the encoding (external format) of these files."
+  (let* ((str-contents (slurp-info-file maxima-info ef))
+	 (efr (get-info-file-encoding str-contents info-encoding-re))
+	 info-file-names)
+    (if (null (eq ef efr))
+	(setf str-contents (slurp-info-file maxima-info efr)))
+    (setf info-file-names
+	  (loop for f in (cl-ppcre:all-matches-as-strings maxima-info-re str-contents)
+       for fp = (pathname f)
+       for fn = (pathname-name fp)
+       for ft = (pathname-type fp)
+       for file = (make-pathname :directory info-dir :name fn :type ft)
+       when (file-exists-p file) collect file))
+    (values info-file-names efr)))
 
-(defun slurp-info-file (filename)
+(defun slurp-info-file (filename &optional (ef *info-default-external-format*))
   (let ((fs))
-    (with-open-file (in filename :direction :input)
+    (with-open-file (in filename :direction :input :element-type 'character :external-format ef)
       (setq fs (file-length in))
-      (let ((contents (make-array fs :element-type 'character)))
+      (let ((contents (make-array fs :element-type 'character :initial-element #\Null)))
 	(read-sequence contents in :start 0 :end nil)
 	(coerce contents 'string)))))
+
+(defun get-info-file-encoding (maxima-info-contents &optional (info-encoding-re *info-encoding-re*))
+  (let (dummy coding)
+    (multiple-value-setq (dummy coding) (cl-ppcre:scan-to-strings info-encoding-re maxima-info-contents))
+    (if coding
+	(intern (string-upcase (aref coding 0)) :keyword)
+	*info-default-external-format*)))
 
 ;;
 ;; Core functions
@@ -171,13 +182,13 @@
 `over-write' is true, then all keys are removed from `*info-files*'
 before adding new contents."
   (let ((info-files (make-hash-table :test #'equal))
-	(filenames)
+	ef filenames
 	(info-dir (pathname-directory maxima-info)))
-    (setq filenames (get-info-file-names maxima-info info-dir maxima-info-re))
+    (multiple-value-setq (filenames ef) (get-info-file-names+external-format maxima-info info-dir maxima-info-re))
     (loop for filename in filenames
-       for str-contents = (slurp-info-file filename)
+       for str-contents = (slurp-info-file filename ef)
        for k = (namestring filename)
-       for v = `(string . ,str-contents)
+       for v = `(,ef . ,str-contents)
        do (setf (gethash k info-files) v))
     (if over-write
 	(setf-hash *info-files* info-files))
@@ -210,10 +221,11 @@ before adding new contents."
   (setq end (if length (+ start length) end))
   (setq filename (if (pathnamep filename) (namestring filename) filename))
   (let* ((slurp (null (cdr (gethash filename info-files))))
+	 (ef (or (car (gethash filename info-files)) *info-default-external-format*))
 	 (str-contents (if slurp
-			   (slurp-info-file filename)
+			   (slurp-info-file filename ef)
 			   (cdr (gethash filename info-files)))))
-    (if slurp (setf (gethash filename info-files) `(string . ,str-contents)))
+    (if slurp (setf (gethash filename info-files) `(,ef . ,str-contents)))
     (subseq str-contents start end)))
   
 (defun hash-keys (h)
@@ -305,7 +317,7 @@ before adding new contents."
 ;; Utilities to dump info hashes.
 ;;
 
-(defun print-info-hashes (&optional (file nil))
+(defun print-info-hashes (&optional (file nil) (ef *info-default-external-format*))
   (labels ((print-hash-table (h &optional (out *standard-output*))
 	     (format out "~s" (loop for k being the hash-keys of h
 				 for v being the hash-values of h
@@ -318,15 +330,27 @@ before adding new contents."
 	   (dump-info-files (out x)
 	     (format out ";;We deliberately zero-out the entries of *info-files*~%")
 	     (format out "(defparameter ~s (make-hash-table :test #'equal))~%" x)
-	     (loop for k being the hash-keys of (eval x)
-		do (format out "(setf (gethash ~s ~s) nil)~%" k x)))
+	     (let ((xev (eval x)))
+	       (loop for k being the hash-keys of xev
+		  for v = (car (gethash k xev))
+		  do (format out "(setf (gethash ~s ~s) '(~s))~%" k x v))))
 	   (dump-hashes (out)
 	     (format out "(in-package :cl-info)~%")
 	     (dump out '*info-deffn-defvr-hashtable*)
 	     (dump out '*info-section-hashtable*)
-	     (dump-info-files out '*info-files*)))
+	     (dump-info-files out '*info-files*))
+	   (get-external-format (ef)
+	     (let ((efs (remove-duplicates (loop for v being the hash-values of *info-files* collect (car v)))))
+	       (cond ((> 1 (length efs))
+		      (warn (intl:gettext "Info files have multiple external formats. Info database may be corrupted."))
+		      (car ef))
+		     ((null efs)
+		      ef)
+		     (t
+		      (car efs))))))
     (cond (file
-	   (with-open-file (out file :direction :output :if-exists :supersede :if-does-not-exist :create)
+	   (setf ef (get-external-format ef))
+	   (with-open-file (out file :direction :output :if-exists :supersede :if-does-not-exist :create :external-format ef)
 	     (dump-hashes out)))
 	  (t
 	   (dump-hashes *standard-output*)))))
