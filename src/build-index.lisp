@@ -139,7 +139,7 @@
        (maphash #'(lambda (,k ,v) (setf (gethash ,k ,to) ,v)) ,from)
        t)))
 
-(defun get-info-file-names+external-format (maxima-info info-dir maxima-info-re &optional (ef *info-default-external-format*) (info-encoding-re *info-encoding-re*))
+(defun get-info-file-names+external-format (maxima-info info-dir maxima-info-re &optional ef (info-encoding-re *info-encoding-re*))
   "Returns a list of info file pathnames in the master info file
 maxima-info and the encoding (external format) of these files."
   (let* ((str-contents (slurp-info-file maxima-info ef))
@@ -156,13 +156,21 @@ maxima-info and the encoding (external format) of these files."
        when (file-exists-p file) collect file))
     (values info-file-names efr)))
 
-(defun slurp-info-file (filename &optional (ef *info-default-external-format*))
-  (let ((fs))
-    (with-open-file (in filename :direction :input :element-type 'character :external-format ef)
-      (setq fs (file-length in))
-      (let ((contents (make-array fs :element-type 'character :initial-element #\Null)))
-	(read-sequence contents in :start 0 :end nil)
-	(coerce contents 'string)))))
+(defun slurp-info-file (filename &optional ef)
+  (cond (ef
+	 (let ((fs))
+	   (with-open-file (in filename :direction :input :element-type 'character :external-format ef)
+	     (setq fs (file-length in))
+	     (let ((contents (make-array fs :element-type 'character :initial-element #\Null)))
+	       (read-sequence contents in :start 0 :end nil)
+	       (coerce contents 'string)))))
+	(t
+	 (let ((fs))
+	   (with-open-file (in filename :direction :input :element-type 'unsigned-byte)
+	     (setq fs (file-length in))
+	     (let ((contents (make-array fs :element-type 'unsigned-byte)))
+	       (read-sequence contents in :start 0 :end nil)
+	       (codes-string contents)))))))
 
 (defun get-info-file-encoding (maxima-info-contents &optional (info-encoding-re *info-encoding-re*))
   (let (dummy coding)
