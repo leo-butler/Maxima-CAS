@@ -1,0 +1,5009 @@
+This is maxima.info, produced by makeinfo version 4.13 from
+/home/work/maxima/sandbox/maxima/doc/info/de.utf8//include-maxima.de.texi.
+
+Das ist ein Texinfo Maxima Manual
+
+   Copyright 1994,2001 William F. Schelter
+
+START-INFO-DIR-ENTRY
+* Maxima: (maxima).     Ein Computer Algebra System.
+END-INFO-DIR-ENTRY
+
+
+File: maxima.info,  Node: Functions and Variables for plotdf,  Prev: Introduction to plotdf,  Up: plotdf
+
+60.2 Functions and Variables for plotdf
+=======================================
+
+ -- Function: plotdf (<dydx>, ...options...)
+ -- Function: plotdf (<dvdu>, `['<u>,<v>`]', ...options...)
+ -- Function: plotdf (`['<dxdt>,<dydt>`]', ...options...)
+ -- Function: plotdf (`['<dudt>,<dvdt>`]', `['<u>,<v>`]', ...options...)
+     Displays a direction field in two dimensions <x> and <y>.
+
+     <dydx>, <dxdt> and <dydt> are expressions that depend on <x> and
+     <y>. <dvdu>, <dudt> and <dvdt> are expressions that depend on <u>
+     and <v>. In addition to those two variables, the expressions can
+     also depend on a set of parameters, with numerical values given
+     with the `parameters' option (the option syntax is given below),
+     or with a range of allowed values specified by a <sliders> option.
+
+     Several other options can be given within the command, or selected
+     in the menu. Integral curves can be obtained by clicking on the
+     plot, or with the option `trajectory_at'. The direction of the
+     integration can be controlled with the `direction' option, which
+     can have values of _forward_, _backward_ or _both_. The number of
+     integration steps is given by `nsteps' and the time interval
+     between them is set up with the `tstep' option. The Adams Moulton
+     method is used for the integration; it is also possible to switch
+     to an adaptive Runge-Kutta 4th order method.
+
+     Plot window menu:
+
+     The menu in the plot window has the following options: _Zoom_, will
+     change the behavior of the mouse so that it will allow you to zoom
+     in on a region of the plot by clicking with the left button. Each
+     click near a point magnifies the plot, keeping the center at the
+     point where you clicked. Holding the <Shift> key while clicking,
+     zooms out to the previous magnification. To resume computing
+     trajectories when you click on a point, select _Integrate_ from
+     the menu.
+
+     The option _Config_ in the menu can be used to change the ODE(s) in
+     use and various other settings. After configuration changes are
+     made, the menu option _Replot_ should be selected, to activate the
+     new settings.  If a pair of coordinates are entered in the field
+     _Trajectory at_ in the _Config_ dialog menu, and the <enter> key
+     is pressed, a new integral curve will be shown, in addition to the
+     ones already shown. When _Replot_ is selected, only the last
+     integral curve entered will be shown.
+
+     Holding the right mouse button down while the cursor is moved, can
+     be used to drag the plot sideways or up and down. Additional
+     parameters such as the number of steps, the initial value of <t>
+     and the x and y centers and radii, may be set in the Config menu.
+
+     A copy of the plot can be saved as a postscript file, using the
+     menu option _Save_.
+
+     Plot options:
+
+     The `plotdf' command may include several commands, each command is
+     a list of two or more items.  The first item is the name of the
+     option, and the remainder comprises the value or values assigned
+     to the option.
+
+     The options which are recognized by `plotdf' are the following:
+
+        * "tstep" defines the length of the increments on the
+          independent variable <t>, used to compute an integral curve.
+          If only one expression <dydx> is given to `plotdf', the <x>
+          variable will be directly proportional to <t>.  The default
+          value is 0.1.
+
+        * "nsteps" defines the number of steps of length `tstep' that
+          will be used for the independent variable, to compute an
+          integral curve.  The default value is 100.
+
+        * "direction" defines the direction of the independent variable
+          that will be followed to compute an integral curve. Possible
+          values are `forward', to make the independent variable
+          increase `nsteps' times, with increments `tstep', `backward',
+          to make the independent variable decrease, or `both' that
+          will lead to an integral curve that extends `nsteps' forward,
+          and `nsteps' backward. The keywords `right' and `left' can be
+          used as synonyms for `forward' and `backward'.  The default
+          value is `both'.
+
+        * "tinitial" defines the initial value of variable <t> used to
+          compute integral curves. Since the differential equations are
+          autonomous, that setting will only appear in the plot of the
+          curves as functions of <t>.  The default value is 0.
+
+        * "versus_t" is used to create a second plot window, with a
+          plot of an integral curve, as two functions <x>, <y>, of the
+          independent variable <t>. If `versus_t' is given any value
+          different from 0, the second plot window will be displayed.
+          The second plot window includes another menu, similar to the
+          menu of the main plot window.  The default value is 0.
+
+        * "trajectory_at" defines the coordinates <xinitial> and
+          <yinitial> for the starting point of an integral curve.  The
+          option is empty by default.
+
+        * "parameters" defines a list of parameters, and their
+          numerical values, used in the definition of the differential
+          equations. The name and values of the parameters must be
+          given in a string with a comma-separated sequence of pairs
+          `name=value'.
+
+        * "sliders" defines a list of parameters that will be changed
+          interactively using slider buttons, and the range of
+          variation of those parameters. The names and ranges of the
+          parameters must be given in a string with a comma-separated
+          sequence of elements `name=min:max'
+
+        * "xfun" defines a string with semi-colon-separated sequence of
+          functions of <x> to be displayed, on top of the direction
+          field.  Those functions will be parsed by Tcl and not by
+          Maxima.
+
+        * "x" should be followed by two numbers, which will set up the
+          minimum and maximum values shown on the horizontal axis. If
+          the variable on the horizontal axis is not <x>, then this
+          option should have the name of the variable on the horizontal
+          axis.  The default horizontal range is from -10 to 10.
+
+        * "y" should be followed by two numbers, which will set up the
+          minimum and maximum values shown on the vertical axis. If the
+          variable on the vertical axis is not <y>, then this option
+          should have the name of the variable on the vertical axis.
+          The default vertical range is from -10 to 10.
+
+     Examples:
+
+        * To show the direction field of the differential equation y' =
+          exp(-x) + y and the solution that goes through (2, -0.1):
+               (%i1) load("plotdf")$
+
+               (%i2) plotdf(exp(-x)+y,[trajectory_at,2,-0.1])$
+
+        * To obtain the direction field for the equation diff(y,x) = x
+          - y^2 and the solution with initial condition y(-1) = 3, we
+          can use the command:
+               (%i3) plotdf(x-y^2,[xfun,"sqrt(x);-sqrt(x)"],
+                         [trajectory_at,-1,3], [direction,forward],
+                         [y,-5,5], [x,-4,16])$
+          The graph also shows the function y = sqrt(x).
+
+        * The following example shows the direction field of a harmonic
+          oscillator, defined by the two equations dz/dt = v and dv/dt
+          = -k*z/m, and the integral curve through (z,v) = (6,0), with
+          a slider that will allow you to change the value of m
+          interactively (k is fixed at 2):
+               (%i4) plotdf([v,-k*z/m], [z,v], [parameters,"m=2,k=2"],
+                           [sliders,"m=1:5"], [trajectory_at,6,0])$
+
+        * To plot the direction field of the Duffing equation,
+          m*x"+c*x'+k*x+b*x^3 = 0, we introduce the variable y=x' and
+          use:
+               (%i5) plotdf([y,-(k*x + c*y + b*x^3)/m],
+                             [parameters,"k=-1,m=1.0,c=0,b=1"],
+                             [sliders,"k=-2:2,m=-1:1"],[tstep,0.1])$
+
+        * The direction field for a damped pendulum, including the
+          solution for the given initial conditions, with a slider that
+          can be used to change the value of the mass m, and with a
+          plot of the two state variables as a function of time:
+
+               (%i6) plotdf([w,-g*sin(a)/l - b*w/m/l], [a,w],
+                        [parameters,"g=9.8,l=0.5,m=0.3,b=0.05"],
+                        [trajectory_at,1.05,-9],[tstep,0.01],
+                        [a,-10,2], [w,-14,14], [direction,forward],
+                        [nsteps,300], [sliders,"m=0.1:1"], [versus_t,1])$
+
+
+
+
+File: maxima.info,  Node: romberg,  Next: simplex,  Prev: plotdf,  Up: Top
+
+61 romberg
+**********
+
+* Menu:
+
+* Functions and Variables for romberg::
+
+
+File: maxima.info,  Node: Functions and Variables for romberg,  Prev: Top,  Up: Top
+
+61.1 Functions and Variables for romberg
+========================================
+
+ -- Function: romberg (<expr>, <x>, <a>, <b>)
+ -- Function: romberg (<F>, <a>, <b>)
+     Computes a numerical integration by Romberg's method.
+
+     `romberg(<expr>, <x>, <a>, <b>)' returns an estimate of the
+     integral `integrate(<expr>, <x>, <a>, <b>)'.  <expr> must be an
+     expression which evaluates to a floating point value when <x> is
+     bound to a floating point value.
+
+     `romberg(<F>, <a>, <b>)' returns an estimate of the integral
+     `integrate(<F>(x), x, <a>, <b>)' where `x' represents the unnamed,
+     sole argument of <F>; the actual argument is not named `x'.  <F>
+     must be a Maxima or Lisp function which returns a floating point
+     value when the argument is a floating point value.  <F> may name a
+     translated or compiled Maxima function.
+
+     The accuracy of `romberg' is governed by the global variables
+     `rombergabs' and `rombergtol'.  `romberg' terminates successfully
+     when the absolute difference between successive approximations is
+     less than `rombergabs', or the relative difference in successive
+     approximations is less than `rombergtol'.  Thus when `rombergabs'
+     is 0.0 (the default) only the relative error test has any effect
+     on `romberg'.
+
+     `romberg' halves the stepsize at most `rombergit' times before it
+     gives up; the maximum number of function evaluations is therefore
+     `2^rombergit'.  If the error criterion established by `rombergabs'
+     and `rombergtol' is not satisfied, `romberg' prints an error
+     message.  `romberg' always makes at least `rombergmin' iterations;
+     this is a heuristic intended to prevent spurious termination when
+     the integrand is oscillatory.
+
+     `romberg' repeatedly evaluates the integrand after binding the
+     variable of integration to a specific value (and not before).
+     This evaluation policy makes it possible to nest calls to
+     `romberg', to compute multidimensional integrals.  However, the
+     error calculations do not take the errors of nested integrations
+     into account, so errors may be underestimated.  Also, methods
+     devised especially for multidimensional problems may yield the
+     same accuracy with fewer function evaluations.
+
+     `load(romberg)' loads this function.
+
+     See also `QUADPACK', a collection of numerical integration
+     functions.
+
+     Examples:
+
+     A 1-dimensional integration.
+
+          (%i1) load (romberg);
+          (%o1)    /usr/share/maxima/5.11.0/share/numeric/romberg.lisp
+          (%i2) f(x) := 1/((x - 1)^2 + 1/100) + 1/((x - 2)^2 + 1/1000)
+                        + 1/((x - 3)^2 + 1/200);
+                              1                 1                1
+          (%o2) f(x) := -------------- + --------------- + --------------
+                               2    1           2    1            2    1
+                        (x - 1)  + ---   (x - 2)  + ----   (x - 3)  + ---
+                                   100              1000              200
+          (%i3) rombergtol : 1e-6;
+          (%o3)                 9.9999999999999995E-7
+          (%i4) rombergit : 15;
+          (%o4)                          15
+          (%i5) estimate : romberg (f(x), x, -5, 5);
+          (%o5)                   173.6730736617464
+          (%i6) exact : integrate (f(x), x, -5, 5);
+          (%o6) 10 sqrt(10) atan(70 sqrt(10))
+           + 10 sqrt(10) atan(30 sqrt(10)) + 10 sqrt(2) atan(80 sqrt(2))
+           + 10 sqrt(2) atan(20 sqrt(2)) + 10 atan(60) + 10 atan(40)
+          (%i7) abs (estimate - exact) / exact, numer;
+          (%o7)                7.5527060865060088E-11
+
+     A 2-dimensional integration, implemented by nested calls to
+     `romberg'.
+
+          (%i1) load (romberg);
+          (%o1)    /usr/share/maxima/5.11.0/share/numeric/romberg.lisp
+          (%i2) g(x, y) := x*y / (x + y);
+                                              x y
+          (%o2)                   g(x, y) := -----
+                                             x + y
+          (%i3) rombergtol : 1e-6;
+          (%o3)                 9.9999999999999995E-7
+          (%i4) estimate : romberg (romberg (g(x, y), y, 0, x/2), x, 1, 3);
+          (%o4)                   0.81930239628356
+          (%i5) assume (x > 0);
+          (%o5)                        [x > 0]
+          (%i6) integrate (integrate (g(x, y), y, 0, x/2), x, 1, 3);
+                                                    3
+                                              2 log(-) - 1
+                              9                     2        9
+          (%o6)       - 9 log(-) + 9 log(3) + ------------ + -
+                              2                    6         2
+          (%i7) exact : radcan (%);
+                              26 log(3) - 26 log(2) - 13
+          (%o7)             - --------------------------
+                                          3
+          (%i8) abs (estimate - exact) / exact, numer;
+          (%o8)                1.3711979871851024E-10
+
+
+ -- Option variable: rombergabs
+     Default value: 0.0
+
+     The accuracy of `romberg' is governed by the global variables
+     `rombergabs' and `rombergtol'.  `romberg' terminates successfully
+     when the absolute difference between successive approximations is
+     less than `rombergabs', or the relative difference in successive
+     approximations is less than `rombergtol'.  Thus when `rombergabs'
+     is 0.0 (the default) only the relative error test has any effect
+     on `romberg'.
+
+     See also `rombergit' and `rombergmin'.
+
+
+ -- Option variable: rombergit
+     Default value: 11
+
+     `romberg' halves the stepsize at most `rombergit' times before it
+     gives up; the maximum number of function evaluations is therefore
+     `2^rombergit'.  `romberg' always makes at least `rombergmin'
+     iterations; this is a heuristic intended to prevent spurious
+     termination when the integrand is oscillatory.
+
+     See also `rombergabs' and `rombergtol'.
+
+
+ -- Option variable: rombergmin
+     Default value: 0
+
+     `romberg' always makes at least `rombergmin' iterations; this is a
+     heuristic intended to prevent spurious termination when the
+     integrand is oscillatory.
+
+     See also `rombergit', `rombergabs', and `rombergtol'.
+
+
+ -- Option variable: rombergtol
+     Default value: 1e-4
+
+     The accuracy of `romberg' is governed by the global variables
+     `rombergabs' and `rombergtol'.  `romberg' terminates successfully
+     when the absolute difference between successive approximations is
+     less than `rombergabs', or the relative difference in successive
+     approximations is less than `rombergtol'.  Thus when `rombergabs'
+     is 0.0 (the default) only the relative error test has any effect
+     on `romberg'.
+
+     See also `rombergit' and `rombergmin'.
+
+
+
+File: maxima.info,  Node: simplex,  Next: simplification,  Prev: romberg,  Up: Top
+
+62 simplex
+**********
+
+* Menu:
+
+* Introduction to simplex::
+* Functions and Variables for simplex::
+
+
+File: maxima.info,  Node: Introduction to simplex,  Next: Functions and Variables for simplex,  Prev: simplex,  Up: simplex
+
+62.1 Introduction to simplex
+============================
+
+`simplex' is a package for linear optimization using the simplex
+algorithm.
+
+   Example:
+
+     (%i1) load("simplex")$
+     (%i2) minimize_lp(x+y, [3*x+2*y>2, x+4*y>3]);
+                       9        7       1
+     (%o2)            [--, [y = --, x = -]]
+                       10       10      5
+
+
+File: maxima.info,  Node: Functions and Variables for simplex,  Prev: Introduction to simplex,  Up: simplex
+
+62.2 Functions and Variables for simplex
+========================================
+
+ -- Option variable: epsilon_lp
+     Default value: `10^-8'
+
+     Epsilon used for numerical computations in `linear_program'.
+
+     See also: `linear_program'.
+
+
+ -- Function: linear_program (<A>, <b>, <c>)
+     `linear_program' is an implementation of the simplex algorithm.
+     `linear_program(A, b, c)' computes a vector <x> for which `c.x' is
+     minimum possible among vectors for which `A.x = b' and `x >= 0'.
+     Argument <A> is a matrix and arguments <b> and <c> are lists.
+
+     `linear_program' returns a list which contains the minimizing
+     vector <x> and the minimum value `c.x'. If the problem is not
+     bounded, it returns "Problem not bounded!" and if the problem is
+     not feasible, it returns "Problem not feasible!".
+
+     To use this function first load the `simplex' package with
+     `load(simplex);'.
+
+     Example:
+
+          (%i2) A: matrix([1,1,-1,0], [2,-3,0,-1], [4,-5,0,0])$
+          (%i3) b: [1,1,6]$
+          (%i4) c: [1,-2,0,0]$
+          (%i5) linear_program(A, b, c);
+                             13     19        3
+          (%o5)            [[--, 4, --, 0], - -]
+                             2      2         2
+
+     See also: `minimize_lp', `scale_lp', and `epsilon_lp'.
+
+
+ -- Function: maximize_lp (<obj>, <cond>, [<pos>])
+     Maximizes linear objective function <obj> subject to some linear
+     constraints <cond>. See `minimize_lp' for detailed description of
+     arguments and return value.
+
+     See also: `minimize_lp'.
+
+
+ -- Function: minimize_lp (<obj>, <cond>, [<pos>])
+     Minimizes a linear objective function <obj> subject to some linear
+     constraints <cond>. <cond> a list of linear equations or
+     inequalities. In strict inequalities `>' is replaced by `>=' and
+     `<' by `<='. The optional argument <pos> is a list of decision
+     variables which are assumed to be positive.
+
+     If the minimum exists, `minimize_lp' returns a list which contains
+     the minimum value of the objective function and a list of decision
+     variable values for which the minimum is attained. If the problem
+     is not bounded, `minimize_lp' returns "Problem not bounded!" and
+     if the problem is not feasible, it returns "Ploblem not feasible!".
+
+     The decision variables are not assumed to be nonegative by
+     default. If all decision variables are nonegative, set
+     `nonegative_lp' to `true'.  If only some of decision variables are
+     positive, list them in the optional argument <pos> (note that this
+     is more efficient than adding constraints).
+
+     `minimize_lp' uses the simplex algorithm which is implemented in
+     maxima `linear_program' function.
+
+     To use this function first load the `simplex' package with
+     `load(simplex);'.
+
+     Examples:
+
+          (%i1) minimize_lp(x+y, [3*x+y=0, x+2*y>2]);
+                                4       6        2
+          (%o1)                [-, [y = -, x = - -]]
+                                5       5        5
+          (%i2) minimize_lp(x+y, [3*x+y>0, x+2*y>2]), nonegative_lp=true;
+          (%o2)                [1, [y = 1, x = 0]]
+          (%i3) minimize_lp(x+y, [3*x+y=0, x+2*y>2]), nonegative_lp=true;
+          (%o3)                Problem not feasible!
+          (%i4) minimize_lp(x+y, [3*x+y>0]);
+          (%o4)                Problem not bounded!
+
+     See also: `maximize_lp', `nonegative_lp', `epsilon_lp'.
+
+
+ -- Option variable: nonegative_lp
+     Default value: `false'
+
+     If `nonegative_lp' is true all decision variables to `minimize_lp'
+     and `maximize_lp' are assumed to be positive.
+
+     See also: `minimize_lp'.
+
+
+
+File: maxima.info,  Node: simplification,  Next: solve_rec,  Prev: simplex,  Up: Top
+
+63 simplification
+*****************
+
+* Menu:
+
+* Introduction to simplification::
+* Package absimp::
+* Package facexp::
+* Package functs::
+* Package ineq::
+* Package rducon::
+* Package scifac::
+* Package sqdnst::
+
+
+File: maxima.info,  Node: Introduction to simplification,  Next: Package absimp,  Prev: simplification,  Up: simplification
+
+63.1 Introduction to simplification
+===================================
+
+The directory `maxima/share/simplification' contains several scripts
+which implement simplification rules and functions, and also some
+functions not related to simplification.
+
+
+File: maxima.info,  Node: Package absimp,  Next: Package facexp,  Prev: Introduction to simplification,  Up: simplification
+
+63.2 Package absimp
+===================
+
+The `absimp' package contains pattern-matching rules that extend the
+built-in simplification rules for the `abs' and `signum' functions.
+`absimp' respects relations established with the built-in `assume'
+function and by declarations such as  `modedeclare (m, even, n, odd)'
+for even or odd integers.
+
+   `absimp' defines `unitramp' and `unitstep' functions in terms of
+`abs' and `signum'.
+
+   `load (absimp)' loads this package.  `demo (absimp)' shows a
+demonstration of this package.
+
+   Examples:
+
+     (%i1) load (absimp)$
+     (%i2) (abs (x))^2;
+                                            2
+     (%o2)                                 x
+     (%i3) diff (abs (x), x);
+                                           x
+     (%o3)                               ------
+                                         abs(x)
+     (%i4) cosh (abs (x));
+     (%o4)                               cosh(x)
+
+
+File: maxima.info,  Node: Package facexp,  Next: Package functs,  Prev: Package absimp,  Up: simplification
+
+63.3 Package facexp
+===================
+
+The `facexp' package contains several related  functions that provide
+the user with the ability to structure expressions by controlled
+expansion.   This capability  is especially  useful when  the expression
+contains variables that have physical meaning, because it is  often true
+that the most economical form  of such an expression can be  obtained by
+fully expanding the expression with respect to those variables, and then
+factoring their coefficients.  While it is  true that this  procedure is
+not difficult to carry out using standard Maxima  functions, additional
+fine-tuning may also  be desirable, and  these finishing touches  can be
+more  difficult to  apply.
+
+   The  function `facsum'  and its  related forms provide a convenient
+means for controlling the structure  of expressions in this way.
+Another function, `collectterms', can be used to add  two or more
+expressions that have already been simplified to this form, without
+resimplifying the whole expression again.  This function may be useful
+when the expressions are very large.
+
+   `load (facexp)' loads this package.  `demo (facexp)' shows a
+demonstration of this package.
+
+ -- Function: facsum (<expr>, <arg_1>, ..., <arg_n>)
+     Returns  a form  of <expr>  which depends  on the arguments
+     <arg_1>, ..., <arg_n>.  The arguments can be any form suitable for
+     `ratvars', or they can be lists  of such  forms.  If  the
+     arguments  are not  lists, then  the form returned is  fully
+     expanded with respect  to the arguments,  and the coefficients of
+     the arguments are factored.  These  coefficients are free of the
+     arguments, except perhaps in a non-rational sense.
+
+     If any of the arguments are  lists, then all such lists are
+     combined into  a  single  list,   and  instead  of  calling
+     `factor'   on  the coefficients  of  the  arguments,  `facsum'
+     calls  itself   on  these coefficients, using  this newly
+     constructed  single list as  the new argument list  for this
+     recursive  call.  This  process can  be  repeated to arbitrary
+     depth by nesting the desired elements in lists.
+
+     It is possible that one may wish to `facsum' with respect  to more
+     complicated subexpressions,  such as  `log (x + y)'.  Such
+     arguments are also  permissible.
+
+     Occasionally the user may wish to obtain any of the  above forms
+     for expressions which are specified only by their leading
+     operators.  For example, one may wish  to `facsum' with respect to
+     all  `log''s.  In this situation, one may  include among the
+     arguments either  the specific `log''s which are to be treated in
+     this way, or  alternatively, either the expression  `operator
+     (log)' or `'operator (log)'.   If one  wished to `facsum' the
+     expression <expr> with respect to the operators <op_1>, ...,
+     <op_n>, one   would  evaluate  `facsum (<expr>, operator (<op_1>,
+     ..., <op_n>))'.  The `operator' form may also appear inside list
+     arguments.
+
+     In  addition,  the  setting  of  the  switches   `facsum_combine'
+     and `nextlayerfactor' may affect the result of `facsum'.
+
+
+ -- Global variable: nextlayerfactor
+     Default value: `false'
+
+     When `nextlayerfactor' is `true', recursive calls  of `facsum' are
+     applied  to  the  factors  of  the  factored  form   of  the
+     coefficients of the arguments.
+
+     When  `false', `facsum' is applied to each coefficient as a whole
+     whenever recusive calls to  `facsum' occur.
+
+     Inclusion   of   the  atom `nextlayerfactor' in  the argument
+     list of `facsum'  has the  effect of `nextlayerfactor: true', but
+     for the next level of the expression only.  Since
+     `nextlayerfactor' is  always bound to  either `true' or  `false',
+     it must be presented single-quoted whenever it appears in the
+     argument list of `facsum'.
+
+
+ -- Global variable: facsum_combine
+     Default value: `true'
+
+     `facsum_combine' controls the form  of the final result  returned
+     by `facsum'  when  its  argument  is  a  quotient  of
+     polynomials.   If `facsum_combine' is `false'  then the form will
+     be returned as  a fully expanded  sum  as described  above,  but
+     if  `true',  then  the expression returned is a ratio of
+     polynomials, with each polynomial in the form described above.
+
+     The `true' setting of this switch is useful when one wants to
+     `facsum' both  the numerator and  denominator of  a rational
+     expression,  but  does not  want  the denominator  to  be
+     multiplied through the terms of the numerator.
+
+
+ -- Function: factorfacsum (<expr>, <arg_1>, ... <arg_n>)
+     Returns a  form of <expr>  which is obtained by calling  `facsum'
+     on the factors  of <expr> with <arg_1>, ... <arg_n> as arguments.
+     If any of the factors of <expr> is raised to a  power, both the
+     factor and the exponent will be processed in this way.
+
+
+ -- Function: collectterms (<expr>, <arg_1>, ..., <arg_n>)
+     If several  expressions  have been simplified  with  `facsum',
+     `factorfacsum',  `factenexpand',  `facexpten' or
+     `factorfacexpten',  and  they are  to  be added  together,  it
+     may be desirable   to  combine   them  using   the   function
+     `collecterms'.  `collecterms' can take as arguments  all of the
+     arguments that  can be given  to these  other associated
+     functions with  the  exception of `nextlayerfactor', which has no
+     effect on `collectterms'.  The advantage of `collectterms'  is
+     that it  returns a form  similar to  `facsum', but since it is
+     adding forms that have already been processed by `facsum', it
+     does  not  need  to  repeat  that  effort.   This  capability is
+     especially useful when the expressions to be summed are very large.
+
+
+
+File: maxima.info,  Node: Package functs,  Next: Package ineq,  Prev: Package facexp,  Up: simplification
+
+63.4 Package functs
+===================
+
+ -- Function: rempart (<expr>, <n>)
+     Removes part <n> from the expression <expr>.
+
+     If <n> is a list of the form `[<l>, <m>]' then parts <l> thru <m>
+     are removed.
+
+     To use this function write first `load(functs)'.
+
+
+ -- Function: wronskian ([<f_1>, ..., <f_n>], <x>)
+     Returns the Wronskian matrix of the list of expressions [<f_1>,
+     ..., <f_n>] in the variable <x>.  The determinant of the Wronskian
+     matrix is the Wronskian determinant of the list of expressions.
+
+     To use `wronskian', first `load(functs)'. Example:
+
+          (%i1) load(functs)$
+          (%i2) wronskian([f(x), g(x)],x);
+          (%o2) matrix([f(x),g(x)],['diff(f(x),x,1),'diff(g(x),x,1)])
+
+
+ -- Function: tracematrix (<M>)
+     Returns the trace (sum of the diagonal elements) of matrix <M>.
+
+     To use this function write first `load(functs)'.
+
+
+ -- Function: rational (`z')
+     Multiplies numerator and denominator of <z> by the complex
+     conjugate of denominator, thus rationalizing the denominator.
+     Returns canonical rational expression (CRE) form if given one,
+     else returns general form.
+
+     To use this function write first `load(functs)'.
+
+
+ -- Function: logand (`x',`y')
+     Returns logical (bit-wise) "and" of arguments x and y.
+
+     To use this function write first `load(functs)'.
+
+
+ -- Function: logor (`x',`y')
+     Returns logical (bit-wise) "or" of arguments x and y.
+
+     To use this function write first `load(functs)'.
+
+
+ -- Function: logxor (`x',`y')
+     Returns logical (bit-wise) exclusive-or of arguments x and y.
+
+     To use this function write first `load(functs)'.
+
+
+ -- Function: nonzeroandfreeof (<x>, <expr>)
+     Returns `true' if <expr> is nonzero and `freeof (<x>, <expr>)'
+     returns `true'.  Returns `false' otherwise.
+
+     To use this function write first `load(functs)'.
+
+
+ -- Function: linear (<expr>, <x>)
+     When <expr> is an expression linear in variable <x>, `linear'
+     returns `<a>*<x> + <b>' where <a> is nonzero, and <a> and <b> are
+     free of <x>.  Otherwise, `linear' returns <expr>.
+
+     To use this function write first `load(functs)'.
+
+
+ -- Function: gcdivide (<p>, <q>)
+     When `takegcd' is `true', `gcdivide' divides the polynomials <p>
+     and <q> by their greatest common divisor and returns the ratio of
+     the results.
+
+     When `takegcd' is `false', `gcdivide' returns the ratio `<p>/<q>'.
+
+     To use this function write first `load(functs)'.
+
+
+ -- Function: arithmetic (<a>, <d>, <n>)
+     Returns the <n>-th term of the arithmetic series `<a>, <a> + <d>,
+     <a> + 2*<d>, ..., <a> + (<n> - 1)*<d>'.
+
+     To use this function write first `load(functs)'.
+
+
+ -- Function: geometric (<a>, <r>, <n>)
+     Returns the <n>-th term of the geometric series `<a>, <a>*<r>,
+     <a>*<r>^2, ..., <a>*<r>^(<n> - 1)'.
+
+     To use this function write first `load(functs)'.
+
+
+ -- Function: harmonic (<a>, <b>, <c>, <n>)
+     Returns the <n>-th term of the harmonic series `<a>/<b>, <a>/(<b>
+     + <c>), <a>/(<b> + 2*<c>), ..., <a>/(<b> + (<n> - 1)*<c>)'.
+
+     To use this function write first `load(functs)'.
+
+
+ -- Function: arithsum (<a>, <d>, <n>)
+     Returns the sum of the arithmetic series from 1 to <n>.
+
+     To use this function write first `load(functs)'.
+
+
+ -- Function: geosum (<a>, <r>, <n>)
+     Returns the sum of the geometric series from 1 to <n>.  If <n> is
+     infinity (`inf') then a sum is finite only if the absolute value
+     of <r> is less than 1.
+
+     To use this function write first `load(functs)'.
+
+
+ -- Function: gaussprob (<x>)
+     Returns the Gaussian probability function `%e^(-<x>^2/2) /
+     sqrt(2*%pi)'.
+
+     To use this function write first `load(functs)'.
+
+
+ -- Function: gd (<x>)
+     Returns the Gudermannian function `2*atan(%e^x)-%pi/2'.
+
+     To use this function write first `load(functs)'.
+
+
+ -- Function: agd (<x>)
+     Returns the inverse Gudermannian function `log (tan (%pi/4 +
+     x/2)))'.
+
+     To use this function write first `load(functs)'.
+
+
+ -- Function: vers (<x>)
+     Returns the versed sine `1 - cos (x)'.
+
+     To use this function write first `load(functs)'.
+
+
+ -- Function: covers (<x>)
+     Returns the coversed sine `1 - sin (<x>)'.
+
+     To use this function write first `load(functs)'.
+
+
+ -- Function: exsec (<x>)
+     Returns the exsecant `sec (<x>) - 1'.
+
+     To use this function write first `load(functs)'.
+
+
+ -- Function: hav (<x>)
+     Returns the haversine `(1 - cos(x))/2'.
+
+     To use this function write first `load(functs)'.
+
+
+ -- Function: combination (<n>, <r>)
+     Returns the number of combinations of <n> objects taken <r> at a
+     time.
+
+     To use this function write first `load(functs)'.
+
+
+ -- Function: permutation (<n>, <r>)
+     Returns the number of permutations of <r> objects selected from a
+     set of <n> objects.
+
+     To use this function write first `load(functs)'.
+
+
+
+File: maxima.info,  Node: Package ineq,  Next: Package rducon,  Prev: Package functs,  Up: simplification
+
+63.5 Package ineq
+=================
+
+The `ineq' package contains simplification rules for inequalities.
+
+   Example session:
+
+     (%i1) load(ineq)$
+     Warning: Putting rules on '+' or '*' is inefficient, and may not work.
+     Warning: Putting rules on '+' or '*' is inefficient, and may not work.
+     Warning: Putting rules on '+' or '*' is inefficient, and may not work.
+     Warning: Putting rules on '+' or '*' is inefficient, and may not work.
+     Warning: Putting rules on '+' or '*' is inefficient, and may not work.
+     Warning: Putting rules on '+' or '*' is inefficient, and may not work.
+     Warning: Putting rules on '+' or '*' is inefficient, and may not work.
+     Warning: Putting rules on '+' or '*' is inefficient, and may not work.
+     (%i2) a>=4;  /* a sample inequality */
+     (%o2)                               a >= 4
+     (%i3) (b>c)+%; /* add a second, strict inequality */
+     (%o3)                            b + a > c + 4
+     (%i4) 7*(x<y); /* multiply by a positive number */
+     (%o4)                              7 x < 7 y
+     (%i5) -2*(x>=3*z); /* multiply by a negative number */
+     (%o5)                           - 2 x <= - 6 z
+     (%i6) (1+a^2)*(1/(1+a^2)<=1); /* Maxima knows that 1+a^2 > 0 */
+                                             2
+     (%o6)                             1 <= a  + 1
+     (%i7) assume(x>0)$ x*(2<3); /* assuming x>0 */
+     (%o7)                              2 x < 3 x
+     (%i8) a>=b; /* another inequality */
+     (%o8)                               a >= b
+     (%i9) 3+%; /* add something */
+     (%o9)                           a + 3 >= b + 3
+     (%i10) %-3; /* subtract it out */
+     (%o10)                              a >= b
+     (%i11) a>=c-b; /* yet another inequality */
+     (%o11)                            a >= c - b
+     (%i12) b+%; /* add b to both sides */
+     (%o12)                            b + a >= c
+     (%i13) %-c; /* subtract c from both sides */
+     (%o13)                         - c + b + a >= 0
+     (%i14) -%;  /* multiply by -1 */
+     (%o14)                          c - b - a <= 0
+     (%i15) (z-1)^2>-2*z; /* determining truth of assertion */
+                                           2
+     (%o15)                         (z - 1)  > - 2 z
+     (%i16) expand(%)+2*z; /* expand this and add 2*z to both sides */
+                                        2
+     (%o16)                            z  + 1 > 0
+     (%i17) %,pred;
+     (%o17)                               true
+
+   Be careful about using parentheses around the inequalities: when the
+user types in `(A > B) + (C = 5)' the result is `A + C > B + 5', but `A
+> B + C = 5' is a syntax error, and `(A > B + C) = 5' is something else
+entirely.
+
+   Do `disprule (all)' to see a complete listing of the rule
+definitions.
+
+   The user will be queried if Maxima is unable to decide the sign of a
+quantity multiplying an inequality.
+
+   The most common mis-feature is illustrated by:
+
+     (%i1) eq: a > b;
+     (%o1)                              a > b
+     (%i2) 2*eq;
+     (%o2)                            2 (a > b)
+     (%i3) % - eq;
+     (%o3)                              a > b
+
+   Another problem is 0 times an inequality; the default to have this
+turn into 0 has been left alone. However, if you type
+`X*<some_inequality>' and Maxima asks about the sign of `X' and you
+respond `zero' (or `z'), the program returns `X*<some_inequality>' and
+not use the information that `X' is 0. You should do `ev (%, x: 0)' in
+such a case, as the database will only be used for comparison purposes
+in decisions, and not for the purpose of evaluating `X'.
+
+   The user may note a slower response when this package is loaded, as
+the simplifier is forced to examine more rules than without the
+package, so you might wish to remove the rules after making use of
+them. Do `kill (rules)' to eliminate all of the rules (including any
+that you might have defined); or you may be more selective by killing
+only some of them; or use `remrule' on a specific rule.
+
+   Note that if you load this package after defining your own rules you
+will clobber your rules that have the same name. The rules in this
+package are: `*rule1', ..., `*rule8', `+rule1', ..., `+rule18', and you
+must enclose the rulename in quotes to refer to it, as in `remrule
+("+", "+rule1")' to specifically remove the first rule on `"+"' or
+`disprule ("*rule2")' to display the definition of the second
+multiplicative rule.
+
+
+File: maxima.info,  Node: Package rducon,  Next: Package scifac,  Prev: Package ineq,  Up: simplification
+
+63.6 Package rducon
+===================
+
+ -- Function: reduce_consts (<expr>)
+     Replaces constant subexpressions of <expr> with constructed
+     constant atoms, saving the definition of all these constructed
+     constants in the list of equations `const_eqns', and returning the
+     modified <expr>.  Those parts of <expr> are constant which return
+     `true' when operated on by the function `constantp'.  Hence,
+     before invoking `reduce_consts', one should do
+
+          declare ([<objects to be given the constant property>], constant)$
+
+     to set up a database of the constant quantities occurring in your
+     expressions.
+
+     If you are planning to generate Fortran output after these symbolic
+     calculations, one of the first code sections should be the
+     calculation of all constants.  To generate this code segment, do
+
+          map ('fortran, const_eqns)$
+
+     Variables besides `const_eqns' which affect `reduce_consts' are:
+
+     `const_prefix' (default value: `xx') is the string of characters
+     used to prefix all symbols generated by `reduce_consts' to
+     represent constant subexpressions.
+
+     `const_counter' (default value: 1) is the integer index used to
+     generate unique symbols to represent each constant subexpression
+     found by `reduce_consts'.
+
+     `load (rducon)' loads this function.  `demo (rducon)' shows a
+     demonstration of this function.
+
+
+
+File: maxima.info,  Node: Package scifac,  Next: Package sqdnst,  Prev: Package rducon,  Up: simplification
+
+63.7 Package scifac
+===================
+
+ -- Function: gcfac (<expr>)
+     `gcfac' is a factoring function that attempts to apply the same
+     heuristics which scientists apply in trying to make expressions
+     simpler.  `gcfac' is limited to monomial-type factoring.  For a
+     sum, `gcfac' does the following:
+
+       1. Factors over the integers.
+
+       2. Factors out the largest powers of terms occurring as
+          coefficients, regardless of the complexity of the terms.
+
+       3. Uses (1) and (2) in factoring adjacent pairs of terms.
+
+       4. Repeatedly and recursively applies these techniques until the
+          expression no longer changes.
+
+     Item (3) does not necessarily do an optimal job of pairwise
+     factoring because of the combinatorially-difficult nature of
+     finding which of all possible rearrangements of the pairs yields
+     the most compact pair-factored result.
+
+     `load (scifac)' loads this function.  `demo (scifac)' shows a
+     demonstration of this function.
+
+
+
+File: maxima.info,  Node: Package sqdnst,  Prev: Package scifac,  Up: simplification
+
+63.8 Package sqdnst
+===================
+
+ -- Function: sqrtdenest (<expr>)
+     Denests `sqrt' of simple, numerical, binomial surds, where
+     possible.  E.g.
+
+          (%i1) load (sqdnst)$
+          (%i2) sqrt(sqrt(3)/2+1)/sqrt(11*sqrt(2)-12);
+                                              sqrt(3)
+                                         sqrt(------- + 1)
+                                                 2
+          (%o2)                        ---------------------
+                                       sqrt(11 sqrt(2) - 12)
+          (%i3) sqrtdenest(%);
+                                            sqrt(3)   1
+                                            ------- + -
+                                               2      2
+          (%o3)                            -------------
+                                              1/4    3/4
+                                           3 2    - 2
+
+     Sometimes it helps to apply `sqrtdenest' more than once, on such as
+     `(19601-13860 sqrt(2))^(7/4)'.
+
+     `load (sqdnst)' loads this function.
+
+
+
+File: maxima.info,  Node: solve_rec,  Next: stats,  Prev: simplification,  Up: Top
+
+64 solve_rec
+************
+
+* Menu:
+
+* Introduction to solve_rec::
+* Functions and Variables for solve_rec::
+
+
+File: maxima.info,  Node: Introduction to solve_rec,  Next: Functions and Variables for solve_rec,  Prev: solve_rec,  Up: solve_rec
+
+64.1 Introduction to solve_rec
+==============================
+
+`solve_rec' is a package for solving linear recurrences with polynomial
+coefficients.
+
+   A demo is available with `demo(solve_rec);'.
+
+   Example:
+
+     (%i1) load("solve_rec")$
+     (%i2) solve_rec((n+4)*s[n+2] + s[n+1] - (n+1)*s[n], s[n]);
+                                         n
+                      %k  (2 n + 3) (- 1)          %k
+                        1                            2
+     (%o2)       s  = -------------------- + ---------------
+                  n     (n + 1) (n + 2)      (n + 1) (n + 2)
+
+
+File: maxima.info,  Node: Functions and Variables for solve_rec,  Prev: Introduction to solve_rec,  Up: solve_rec
+
+64.2 Functions and Variables for solve_rec
+==========================================
+
+ -- Function: reduce_order (<rec>, <sol>, <var>)
+     Reduces the order of linear recurrence <rec> when a particular
+     solution <sol> is known. The reduced reccurence can be used to get
+     other solutions.
+
+     Example:
+
+          (%i3) rec: x[n+2] = x[n+1] + x[n]/n;
+                                                x
+                                                 n
+          (%o3)               x      = x      + --
+                               n + 2    n + 1   n
+          (%i4) solve_rec(rec, x[n]);
+          WARNING: found some hypergeometrical solutions!
+          (%o4)                    x  = %k  n
+                                    n     1
+          (%i5) reduce_order(rec, n, x[n]);
+          (%t5)                    x  = n %z
+                                    n       n
+
+                                     n - 1
+                                     ====
+                                     \
+          (%t6)                %z  =  >     %u
+                                 n   /        %j
+                                     ====
+                                     %j = 0
+
+          (%o6)             (- n - 2) %u     - %u
+                                        n + 1     n
+          (%i6) solve_rec((n+2)*%u[n+1] + %u[n], %u[n]);
+                                               n
+                                      %k  (- 1)
+                                        1
+          (%o6)                 %u  = ----------
+                                  n    (n + 1)!
+
+          So the general solution is
+
+                       n - 1
+                       ====        j
+                       \      (- 1)
+                 %k  n  >    -------- + %k  n
+                   2   /     (j + 1)!     1
+                       ====
+                       j = 0
+
+
+ -- Option variable: simplify_products
+     Default value: `true'
+
+     If `simplify_products' is `true', `solve_rec' will try to simplify
+     products in result.
+
+     See also: `solve_rec'.
+
+
+ -- Function: simplify_sum (<expr>)
+     Tries to simplify all sums appearing in <expr> to a closed form.
+
+     To use this function first load the `simplify_sum' package with
+     `load(simplify_sum)'.
+
+     Example:
+
+          (%i1) load("simplify_sum")$
+          (%i2) sum(binom(n+k,k)/2^k, k, 0, n)
+                                       + sum(binom(2*n, 2*k), k, 0, n);
+                   n                            n
+                  ====                         ====
+                  \      binomial(n + k, k)    \
+          (%o2)    >     ------------------ +   >    binomial(2 n, 2 k)
+                  /               k            /
+                  ====           2             ====
+                  k = 0                        k = 0
+          (%i3) simplify_sum(%);
+                                         n
+                                        4     n
+          (%o3)                         -- + 2
+                                        2
+
+
+ -- Function: solve_rec (<eqn>, <var>, [<init>])
+     Solves for hypergeometrical solutions to linear recurrence <eqn>
+     with polynomials coefficient in variable <var>. Optional arguments
+     <init> are initial conditions.
+
+     `solve_rec' can solve linear recurrences with constant
+     coefficients, finds hypergeometrical solutions to homogeneous
+     linear recurrences with polynomial coefficients, rational
+     solutions to linear recurrences with polynomial coefficients and
+     can solve Ricatti type recurrences.
+
+     Note that the running time of the algorithm used to find
+     hypergeometrical solutions is exponential in the degree of the
+     leading and trailing coefficient.
+
+     To use this function first load the `solve_rec' package with
+     `load(solve_rec);'.
+
+     Example of linear recurrence with constant coefficients:
+
+          (%i2) solve_rec(a[n]=a[n-1]+a[n-2]+n/2^n, a[n]);
+                                  n          n
+                     (sqrt(5) - 1)  %k  (- 1)
+                                      1           n
+          (%o2) a  = ------------------------- - ----
+                 n               n                  n
+                                2                5 2
+                                                          n
+                                             (sqrt(5) + 1)  %k
+                                                              2    2
+                                           + ------------------ - ----
+                                                      n              n
+                                                     2            5 2
+
+     Example of linear recurrence with polynomial coefficients:
+
+          (%i7) 2*x*(x+1)*y[x] - (x^2+3*x-2)*y[x+1] + (x-1)*y[x+2];
+                                   2
+          (%o7) (x - 1) y      - (x  + 3 x - 2) y      + 2 x (x + 1) y
+                         x + 2                   x + 1                x
+          (%i8) solve_rec(%, y[x], y[1]=1, y[3]=3);
+                                        x
+                                     3 2    x!
+          (%o9)                 y  = ---- - --
+                                 x    4     2
+
+     Example of Ricatti type recurrence:
+
+          (%i2) x*y[x+1]*y[x] - y[x+1]/(x+2) + y[x]/(x-1) = 0;
+                                      y         y
+                                       x + 1     x
+          (%o2)         x y  y      - ------ + ----- = 0
+                           x  x + 1   x + 2    x - 1
+          (%i3) solve_rec(%, y[x], y[3]=5)$
+          (%i4) ratsimp(minfactorial(factcomb(%)));
+                                             3
+                                         30 x  - 30 x
+          (%o4) y  = - -------------------------------------------------
+                 x        6      5       4       3       2
+                       5 x  - 3 x  - 25 x  + 15 x  + 20 x  - 12 x - 1584
+
+     See also: `solve_rec_rat', `simplify_products', and
+     `product_use_gamma'.
+
+
+ -- Function: solve_rec_rat (<eqn>, <var>, [<init>])
+     Solves for rational solutions to linear recurrences. See solve_rec
+     for description of arguments.
+
+     To use this function first load the `solve_rec' package with
+     `load(solve_rec);'.
+
+     Example:
+
+          (%i1) (x+4)*a[x+3] + (x+3)*a[x+2] - x*a[x+1] + (x^2-1)*a[x];
+          (%o1)  (x + 4) a      + (x + 3) a      - x a
+                          x + 3            x + 2      x + 1
+                                                             2
+                                                         + (x  - 1) a
+                                                                      x
+          (%i2) solve_rec_rat(% = (x+2)/(x+1), a[x]);
+                                 1
+          (%o2)      a  = ---------------
+                      x   (x - 1) (x + 1)
+
+     See also: `solve_rec'.
+
+
+ -- Option variable: product_use_gamma
+     Default value: `true'
+
+     When simplifying products, `solve_rec' introduces gamma function
+     into the expression if `product_use_gamma' is `true'.
+
+     See also: `simplify_products', `solve_rec'.
+
+
+ -- Function: summand_to_rec (<summand>, <k>, <n>)
+ -- Function: summand_to_rec (<summand>, [<k>, <lo>, <hi>], <n>)
+     Returns the recurrence sattisfied by the sum
+
+               hi
+              ====
+              \
+               >     summand
+              /
+              ====
+            k = lo
+
+     where summand is hypergeometrical in <k> and <n>. If <lo> and <hi>
+     are omited, they are assumed to be `lo = -inf' and `hi = inf'.
+
+     To use this function first load the `simplify_sum' package with
+     `load(simplify_sum)'.
+
+     Example:
+
+          (%i1) load("simplify_sum")$
+          (%i2) summand: binom(n,k);
+          (%o2)                           binomial(n, k)
+          (%i3) summand_to_rec(summand,k,n);
+          (%o3)                      2 sm  - sm      = 0
+                                         n     n + 1
+          (%i7) summand: binom(n, k)/(k+1);
+                                          binomial(n, k)
+          (%o7)                           --------------
+                                              k + 1
+          (%i8) summand_to_rec(summand, [k, 0, n], n);
+          (%o8)               2 (n + 1) sm  - (n + 2) sm      = - 1
+                                          n             n + 1
+
+
+
+File: maxima.info,  Node: stats,  Next: stirling,  Prev: solve_rec,  Up: Top
+
+65 stats
+********
+
+* Menu:
+
+* Introduction to stats::
+* Functions and Variables for inference_result::
+* Functions and Variables for stats::
+* Functions and Variables for special distributions::
+
+
+File: maxima.info,  Node: Introduction to stats,  Next: Functions and Variables for inference_result,  Prev: Top,  Up: Top
+
+65.1 Introduction to stats
+==========================
+
+Package `stats' contains a set of classical statistical inference and
+hypothesis testing procedures.
+
+   All these functions return an `inference_result' Maxima object which
+contains the necessary results for population inferences and decision
+making.
+
+   Global variable `stats_numer' controls whether results are given in
+floating point or symbolic and rational format; its default value is
+`true' and results are returned in floating point format.
+
+   Package `descriptive' contains some utilities to manipulate data
+structures (lists and matrices); for example, to extract subsamples. It
+also contains some examples on how to use package `numericalio' to read
+data from plain text files. See `descriptive' and `numericalio' for
+more details.
+
+   Package `stats' loads packages `descriptive', `distrib' and
+`inference_result'.
+
+   For comments, bugs or suggestions, please contact the author at
+
+   <'mario AT edu DOT xunta DOT es'>.
+
+
+File: maxima.info,  Node: Functions and Variables for inference_result,  Next: Functions and Variables for stats,  Prev: Introduction to stats,  Up: Top
+
+65.2 Functions and Variables for inference_result
+=================================================
+
+ -- Function: inference_result (<title>, <values>, <numbers>)
+     Constructs an `inference_result' object of the type returned by the
+     stats functions. Argument <title> is a string with the name of the
+     procedure; <values> is a list with elements of the form `symbol =
+     value' and <numbers> is a list with positive integer numbers
+     ranging from one to `length(<values>)', indicating which values
+     will be shown by default.
+
+     Example:
+
+     This is a simple example showing results concerning a rectangle.
+     The title of this object is the string `"Rectangle"', it stores
+     five results, named `'base', `'height', `'diagonal', `'area', and
+     `'perimeter', but only the first, second, fifth, and fourth will
+     be displayed. The `'diagonal' is stored in this object, but it is
+     not displayed; to access its value, make use of function
+     `take_inference'.
+
+          (%i1) load(inference_result)$
+          (%i2) b: 3$ h: 2$
+          (%i3) inference_result("Rectangle",
+                                  ['base=b,
+                                   'height=h,
+                                   'diagonal=sqrt(b^2+h^2),
+                                   'area=b*h,
+                                   'perimeter=2*(b+h)],
+                                  [1,2,5,4] );
+                                  |   Rectangle
+                                  |
+                                  |    base = 3
+                                  |
+          (%o3)                   |   height = 2
+                                  |
+                                  | perimeter = 10
+                                  |
+                                  |    area = 6
+          (%i4) take_inference('diagonal,%);
+          (%o4)                        sqrt(13)
+
+     See also `take_inference'.
+
+
+ -- Function: inferencep (<obj>)
+     Returns `true' or `false', depending on whether <obj> is an
+     `inference_result' object or not.
+
+
+ -- Function: items_inference (<obj>)
+     Returns a list with the names of the items stored in <obj>, which
+     must be an `inference_result' object.
+
+     Example:
+
+     The `inference_result' object stores two values, named `'pi' and
+     `'e', but only the second is displayed. The `items_inference'
+     function returns the names of all items, no matter they are
+     displayed or not.
+
+          (%i1) load(inference_result)$
+          (%i2) inference_result("Hi", ['pi=%pi,'e=%e],[2]);
+                                      |   Hi
+          (%o2)                       |
+                                      | e = %e
+          (%i3) items_inference(%);
+          (%o3)                        [pi, e]
+
+
+ -- Function: take_inference (<n>, <obj>)
+ -- Function: take_inference (<name>, <obj>)
+ -- Function: take_inference (<list>, <obj>)
+     Returns the <n>-th value stored in <obj> if <n> is a positive
+     integer, or the item named <name> if this is the name of an item.
+     If the first argument is a list of numbers and/or symbols,
+     function `take_inference' returns a list with the corresponding
+     results.
+
+     Example:
+
+     Given an `inference_result' object, function `take_inference' is
+     called in order to extract some information stored in it.
+
+          (%i1) load(inference_result)$
+          (%i2) b: 3$ h: 2$
+          (%i3) sol: inference_result("Rectangle",
+                                      ['base=b,
+                                       'height=h,
+                                       'diagonal=sqrt(b^2+h^2),
+                                       'area=b*h,
+                                       'perimeter=2*(b+h)],
+                                      [1,2,5,4] );
+                                  |   Rectangle
+                                  |
+                                  |    base = 3
+                                  |
+          (%o3)                   |   height = 2
+                                  |
+                                  | perimeter = 10
+                                  |
+                                  |    area = 6
+          (%i4) take_inference('base,sol);
+          (%o4)                           3
+          (%i5) take_inference(5,sol);
+          (%o5)                          10
+          (%i6) take_inference([1,'diagonal],sol);
+          (%o6)                     [3, sqrt(13)]
+          (%i7) take_inference(items_inference(sol),sol);
+          (%o7)                [3, 2, sqrt(13), 6, 10]
+
+     See also `inference_result' and `take_inference'.
+
+
+
+File: maxima.info,  Node: Functions and Variables for stats,  Next: Functions and Variables for special distributions,  Prev: Functions and Variables for inference_result,  Up: Top
+
+65.3 Functions and Variables for stats
+======================================
+
+ -- Option variable: stats_numer
+     Default value: `true'
+
+     If `stats_numer' is `true', inference statistical functions return
+     their results in floating point numbers. If it is `false', results
+     are given in symbolic and rational format.
+
+
+ -- Function: test_mean (<x>)
+ -- Function: test_mean (<x>, <options> ...)
+     This is the mean <t>-test. Argument <x> is a list or a column
+     matrix containing a one dimensional sample. It also performs an
+     asymptotic test based on the Central Limit Theorem if option
+     `'asymptotic' is `true'.
+
+     Options:
+
+        * `'mean', default `0', is the mean value to be checked.
+
+        * `'alternative', default `'twosided', is the alternative
+          hypothesis; valid values are: `'twosided', `'greater' and
+          `'less'.
+
+        * `'dev', default `'unknown', this is the value of the standard
+          deviation when it is known; valid values are: `'unknown' or a
+          positive expression.
+
+        * `'conflevel', default `95/100', confidence level for the
+          confidence interval; it must be an expression which takes a
+          value in (0,1).
+
+        * `'asymptotic', default `false', indicates whether it performs
+          an exact <t>-test or an asymptotic one based on the Central
+          Limit Theorem; valid values are `true' and `false'.
+
+
+     The output of function `test_mean' is an `inference_result' Maxima
+     object showing the following results:
+
+       1. `'mean_estimate': the sample mean.
+
+       2. `'conf_level': confidence level selected by the user.
+
+       3. `'conf_interval': confidence interval for the population mean.
+
+       4. `'method': inference procedure.
+
+       5. `'hypotheses': null and alternative hypotheses to be tested.
+
+       6. `'statistic': value of the sample statistic used for testing
+          the null hypothesis.
+
+       7. `'distribution': distribution of the sample statistic,
+          together with its parameter(s).
+
+       8. `'p_value': p-value of the test.
+
+
+     Examples:
+
+     Performs an exact <t>-test with unknown variance. The null
+     hypothesis is H_0: mean=50 against the one sided alternative H_1:
+     mean<50; according to the results, the p-value is too great, there
+     are no evidence for rejecting H_0.
+
+          (%i1) load("stats")$
+          (%i2) data: [78,64,35,45,45,75,43,74,42,42]$
+          (%i3) test_mean(data,'conflevel=0.9,'alternative='less,'mean=50);
+                    |                 MEAN TEST
+                    |
+                    |            mean_estimate = 54.3
+                    |
+                    |              conf_level = 0.9
+                    |
+                    | conf_interval = [minf, 61.51314273502712]
+                    |
+          (%o3)     |  method = Exact t-test. Unknown variance.
+                    |
+                    | hypotheses = H0: mean = 50 , H1: mean < 50
+                    |
+                    |       statistic = .8244705235071678
+                    |
+                    |       distribution = [student_t, 9]
+                    |
+                    |        p_value = .7845100411786889
+
+     This time Maxima performs an asymptotic test, based on the Central
+     Limit Theorem.  The null hypothesis is H_0: equal(mean, 50)
+     against the two sided alternative H_1: not equal(mean, 50);
+     according to the results, the p-value is very small, H_0 should be
+     rejected in favor of the alternative H_1. Note that, as indicated
+     by the `Method' component, this procedure should be applied to
+     large samples.
+
+          (%i1) load("stats")$
+          (%i2) test_mean([36,118,52,87,35,256,56,178,57,57,89,34,25,98,35,
+                        98,41,45,198,54,79,63,35,45,44,75,42,75,45,45,
+                        45,51,123,54,151],
+                        'asymptotic=true,'mean=50);
+                    |                       MEAN TEST
+                    |
+                    |           mean_estimate = 74.88571428571429
+                    |
+                    |                   conf_level = 0.95
+                    |
+                    | conf_interval = [57.72848600856194, 92.04294256286663]
+                    |
+          (%o2)     |    method = Large sample z-test. Unknown variance.
+                    |
+                    |       hypotheses = H0: mean = 50 , H1: mean # 50
+                    |
+                    |             statistic = 2.842831192874313
+                    |
+                    |             distribution = [normal, 0, 1]
+                    |
+                    |             p_value = .004471474652002261
+
+
+ -- Function: test_means_difference (<x1>, <x2>)
+ -- Function: test_means_difference (<x1>, <x2>, <options> ...)
+     This is the difference of means <t>-test for two samples.
+     Arguments <x1> and <x2> are lists or column matrices containing
+     two independent samples. In case of different unknown variances
+     (see options `'dev1', `'dev2' and `'varequal' bellow), the degrees
+     of freedom are computed by means of the Welch approximation.  It
+     also performs an asymptotic test based on the Central Limit
+     Theorem if option `'asymptotic' is set to `true'.
+
+     Options:
+
+        *        * `'alternative', default `'twosided', is the
+          alternative hypothesis; valid values are: `'twosided',
+          `'greater' and `'less'.
+
+        * `'dev1', default `'unknown', this is the value of the
+          standard deviation of the <x1> sample when it is known; valid
+          values are: `'unknown' or a positive expression.
+
+        * `'dev2', default `'unknown', this is the value of the
+          standard deviation of the <x2> sample when it is known; valid
+          values are: `'unknown' or a positive expression.
+
+        * `'varequal', default `false', whether variances should be
+          considered to be equal or not; this option takes effect only
+          when `'dev1' and/or `'dev2' are  `'unknown'.
+
+        * `'conflevel', default `95/100', confidence level for the
+          confidence interval; it must be an expression which takes a
+          value in (0,1).
+
+        * `'asymptotic', default `false', indicates whether it performs
+          an exact <t>-test or an asymptotic one based on the Central
+          Limit Theorem; valid values are `true' and `false'.
+
+
+     The output of function `test_means_difference' is an
+     `inference_result' Maxima object showing the following results:
+
+       1. `'diff_estimate': the difference of means estimate.
+
+       2. `'conf_level': confidence level selected by the user.
+
+       3. `'conf_interval': confidence interval for the difference of
+          means.
+
+       4. `'method': inference procedure.
+
+       5. `'hypotheses': null and alternative hypotheses to be tested.
+
+       6. `'statistic': value of the sample statistic used for testing
+          the null hypothesis.
+
+       7. `'distribution': distribution of the sample statistic,
+          together with its parameter(s).
+
+       8. `'p_value': p-value of the test.
+
+
+     Examples:
+
+     The equality of means is tested with two small samples <x> and <y>,
+     against the alternative H_1: m_1>m_2, being m_1 and m_2 the
+     populations means; variances are unknown and supposed to be
+     different.
+
+          (%i1) load("stats")$
+          (%i2) x: [20.4,62.5,61.3,44.2,11.1,23.7]$
+          (%i3) y: [1.2,6.9,38.7,20.4,17.2]$
+          (%i4) test_means_difference(x,y,'alternative='greater);
+                      |              DIFFERENCE OF MEANS TEST
+                      |
+                      |         diff_estimate = 20.31999999999999
+                      |
+                      |                 conf_level = 0.95
+                      |
+                      |    conf_interval = [- .04597417812882298, inf]
+                      |
+          (%o4)       |        method = Exact t-test. Welch approx.
+                      |
+                      | hypotheses = H0: mean1 = mean2 , H1: mean1 > mean2
+                      |
+                      |           statistic = 1.838004300728477
+                      |
+                      |    distribution = [student_t, 8.62758740184604]
+                      |
+                      |            p_value = .05032746527991905
+
+     The same test as before, but now variances are supposed to be
+     equal.
+
+          (%i1) load("stats")$
+          (%i2) x: [20.4,62.5,61.3,44.2,11.1,23.7]$
+          (%i3) y: matrix([1.2],[6.9],[38.7],[20.4],[17.2])$
+          (%i4) test_means_difference(x,y,'alternative='greater,
+                                                           'varequal=true);
+                      |              DIFFERENCE OF MEANS TEST
+                      |
+                      |         diff_estimate = 20.31999999999999
+                      |
+                      |                 conf_level = 0.95
+                      |
+                      |     conf_interval = [- .7722627696897568, inf]
+                      |
+          (%o4)       |   method = Exact t-test. Unknown equal variances
+                      |
+                      | hypotheses = H0: mean1 = mean2 , H1: mean1 > mean2
+                      |
+                      |           statistic = 1.765996124515009
+                      |
+                      |           distribution = [student_t, 9]
+                      |
+                      |            p_value = .05560320992529344
+
+
+ -- Function: test_variance (<x>)
+ -- Function: test_variance (<x>, <options>, ...)
+     This is the variance <chi^2>-test. Argument <x> is a list or a
+     column matrix containing a one dimensional sample taken from a
+     normal population.
+
+     Options:
+
+        * `'mean', default `'unknown', is the population's mean, when
+          it is known.
+
+        * `'alternative', default `'twosided', is the alternative
+          hypothesis; valid values are: `'twosided', `'greater' and
+          `'less'.
+
+        * `'variance', default `1', this is the variance value
+          (positive) to be checked.
+
+        * `'conflevel', default `95/100', confidence level for the
+          confidence interval; it must be an expression which takes a
+          value in (0,1).
+
+
+     The output of function `test_variance' is an `inference_result'
+     Maxima object showing the following results:
+
+       1. `'var_estimate': the sample variance.
+
+       2. `'conf_level': confidence level selected by the user.
+
+       3. `'conf_interval': confidence interval for the population
+          variance.
+
+       4. `'method': inference procedure.
+
+       5. `'hypotheses': null and alternative hypotheses to be tested.
+
+       6. `'statistic': value of the sample statistic used for testing
+          the null hypothesis.
+
+       7. `'distribution': distribution of the sample statistic,
+          together with its parameter.
+
+       8. `'p_value': p-value of the test.
+
+
+     Examples:
+
+     It is tested whether the variance of a population with unknown mean
+     is equal to or greater than 200.
+
+          (%i1) load("stats")$
+          (%i2) x: [203,229,215,220,223,233,208,228,209]$
+          (%i3) test_variance(x,'alternative='greater,'variance=200);
+                       |                  VARIANCE TEST
+                       |
+                       |              var_estimate = 110.75
+                       |
+                       |                conf_level = 0.95
+                       |
+                       |     conf_interval = [57.13433376937479, inf]
+                       |
+          (%o3)        | method = Variance Chi-square test. Unknown mean.
+                       |
+                       |    hypotheses = H0: var = 200 , H1: var > 200
+                       |
+                       |                 statistic = 4.43
+                       |
+                       |             distribution = [chi2, 8]
+                       |
+                       |           p_value = .8163948512777689
+
+
+ -- Function: test_variance_ratio (<x1>, <x2>)
+ -- Function: test_variance_ratio (<x1>, <x2>, <options> ...)
+     This is the variance ratio <F>-test for two normal populations.
+     Arguments <x1> and <x2> are lists or column matrices containing
+     two independent samples.
+
+     Options:
+
+        * `'alternative', default `'twosided', is the alternative
+          hypothesis; valid values are: `'twosided', `'greater' and
+          `'less'.
+
+        * `'mean1', default `'unknown', when it is known, this is the
+          mean of the population from which <x1> was taken.
+
+        * `'mean2', default `'unknown', when it is known, this is the
+          mean of the population from which <x2> was taken.
+
+        * `'conflevel', default `95/100', confidence level for the
+          confidence interval of the ratio; it must be an expression
+          which takes a value in (0,1).
+
+
+     The output of function `test_variance_ratio' is an
+     `inference_result' Maxima object showing the following results:
+
+       1. `'ratio_estimate': the sample variance ratio.
+
+       2. `'conf_level': confidence level selected by the user.
+
+       3. `'conf_interval': confidence interval for the variance ratio.
+
+       4. `'method': inference procedure.
+
+       5. `'hypotheses': null and alternative hypotheses to be tested.
+
+       6. `'statistic': value of the sample statistic used for testing
+          the null hypothesis.
+
+       7. `'distribution': distribution of the sample statistic,
+          together with its parameters.
+
+       8. `'p_value': p-value of the test.
+
+
+     Examples:
+
+     The equality of the variances of two normal populations is checked
+     against the alternative that the first is greater than the second.
+
+          (%i1) load("stats")$
+          (%i2) x: [20.4,62.5,61.3,44.2,11.1,23.7]$
+          (%i3) y: [1.2,6.9,38.7,20.4,17.2]$
+          (%i4) test_variance_ratio(x,y,'alternative='greater);
+                        |              VARIANCE RATIO TEST
+                        |
+                        |       ratio_estimate = 2.316933391522034
+                        |
+                        |               conf_level = 0.95
+                        |
+                        |    conf_interval = [.3703504689507268, inf]
+                        |
+          (%o4)         | method = Variance ratio F-test. Unknown means.
+                        |
+                        | hypotheses = H0: var1 = var2 , H1: var1 > var2
+                        |
+                        |         statistic = 2.316933391522034
+                        |
+                        |            distribution = [f, 5, 4]
+                        |
+                        |          p_value = .2179269692254457
+
+
+ -- Function: test_proportion (<x>, <n>)
+ -- Function: test_proportion (<x>, <n>, <options> ...)
+     Inferences on a proportion. Argument <x> is the number of successes
+     in <n> trials in a Bernoulli experiment with unknown probability.
+
+     Options:
+
+        * `'proportion', default `1/2', is the value of the proportion
+          to be checked.
+
+        * `'alternative', default `'twosided', is the alternative
+          hypothesis; valid values are: `'twosided', `'greater' and
+          `'less'.
+
+        * `'conflevel', default `95/100', confidence level for the
+          confidence interval; it must be an expression which takes a
+          value in (0,1).
+
+        * `'asymptotic', default `false', indicates whether it performs
+          an exact test based on the binomial distribution, or an
+          asymptotic one based on the Central Limit Theorem; valid
+          values are `true' and `false'.
+
+        * `'correct', default `true', indicates whether Yates
+          correction is applied or not.
+
+
+     The output of function `test_proportion' is an `inference_result'
+     Maxima object showing the following results:
+
+       1. `'sample_proportion': the sample proportion.
+
+       2. `'conf_level': confidence level selected by the user.
+
+       3. `'conf_interval': Wilson confidence interval for the
+          proportion.
+
+       4. `'method': inference procedure.
+
+       5. `'hypotheses': null and alternative hypotheses to be tested.
+
+       6. `'statistic': value of the sample statistic used for testing
+          the null hypothesis.
+
+       7. `'distribution': distribution of the sample statistic,
+          together with its parameters.
+
+       8. `'p_value': p-value of the test.
+
+
+     Examples:
+
+     Performs an exact test. The null hypothesis is H_0: p=1/2 against
+     the one sided alternative H_1: p<1/2.
+
+          (%i1) load("stats")$
+          (%i2) test_proportion(45, 103, alternative = less);
+                   |            PROPORTION TEST
+                   |
+                   | sample_proportion = .4368932038834951
+                   |
+                   |           conf_level = 0.95
+                   |
+                   | conf_interval = [0, 0.522714149150231]
+                   |
+          (%o2)    |     method = Exact binomial test.
+                   |
+                   | hypotheses = H0: p = 0.5 , H1: p < 0.5
+                   |
+                   |             statistic = 45
+                   |
+                   |  distribution = [binomial, 103, 0.5]
+                   |
+                   |      p_value = .1184509388901454
+
+     A two sided asymptotic test. Confidence level is 99/100.
+
+          (%i1) load("stats")$
+          (%i2) fpprintprec:7$
+          (%i3) test_proportion(45, 103,
+                            conflevel = 99/100, asymptotic=true);
+                |                 PROPORTION TEST
+                |
+                |           sample_proportion = .43689
+                |
+                |                conf_level = 0.99
+                |
+                |        conf_interval = [.31422, .56749]
+                |
+          (%o3) | method = Asympthotic test with Yates correction.
+                |
+                |     hypotheses = H0: p = 0.5 , H1: p # 0.5
+                |
+                |               statistic = .43689
+                |
+                |      distribution = [normal, 0.5, .048872]
+                |
+                |                p_value = .19662
+
+
+ -- Function: test_proportions_difference (<x1>, <n1>, <x2>, <n2>)
+ -- Function: test_proportions_difference (<x1>, <n1>, <x2>, <n2>,
+          <options> ...)
+     Inferences on the difference of two proportions. Argument <x1> is
+     the number of successes in <n1> trials in a Bernoulli experiment
+     in the first population, and <x2> and <n2> are the corresponding
+     values in the second population. Samples are independent and the
+     test is asymptotic.
+
+     Options:
+
+        * `'alternative', default `'twosided', is the alternative
+          hypothesis; valid values are: `'twosided' (`p1 # p2'),
+          `'greater' (`p1 > p2') and `'less' (`p1 < p2').
+
+        * `'conflevel', default `95/100', confidence level for the
+          confidence interval; it must be an expression which takes a
+          value in (0,1).
+
+        * `'correct', default `true', indicates whether Yates
+          correction is applied or not.
+
+
+     The output of function `test_proportions_difference' is an
+     `inference_result' Maxima object showing the following results:
+
+       1. `'proportions': list with the two sample proportions.
+
+       2. `'conf_level': confidence level selected by the user.
+
+       3. `'conf_interval': Confidence interval for the difference of
+          proportions `p1 - p2'.
+
+       4. `'method': inference procedure and warning message in case of
+          any of the samples sizes is less than 10.
+
+       5. `'hypotheses': null and alternative hypotheses to be tested.
+
+       6. `'statistic': value of the sample statistic used for testing
+          the null hypothesis.
+
+       7. `'distribution': distribution of the sample statistic,
+          together with its parameters.
+
+       8. `'p_value': p-value of the test.
+
+
+     Examples:
+
+     A machine produced 10 defective articles in a batch of 250.  After
+     some maintenance work, it produces 4 defective in a batch of 150.
+     In order to know if the machine has improved, we test the null
+     hypothesis `H0:p1=p2', against the alternative `H0:p1>p2', where
+     `p1' and `p2' are the probabilities for one produced article to be
+     defective before and after maintenance. According to the p value,
+     there is not enough evidence to accept the alternative.
+
+          (%i1) load("stats")$
+          (%i2) fpprintprec:7$
+          (%i3) test_proportions_difference(10, 250, 4, 150,
+                                          alternative = greater);
+                |       DIFFERENCE OF PROPORTIONS TEST
+                |
+                |       proportions = [0.04, .02666667]
+                |
+                |              conf_level = 0.95
+                |
+                |      conf_interval = [- .02172761, 1]
+                |
+          (%o3) | method = Asymptotic test. Yates correction.
+                |
+                |   hypotheses = H0: p1 = p2 , H1: p1 > p2
+                |
+                |            statistic = .01333333
+                |
+                |    distribution = [normal, 0, .01898069]
+                |
+                |             p_value = .2411936
+
+     Exact standard deviation of the asymptotic normal distribution
+     when the data are unknown.
+
+          (%i1) load("stats")$
+          (%i2) stats_numer: false$
+          (%i3) sol: test_proportions_difference(x1,n1,x2,n2)$
+          (%i4) last(take_inference('distribution,sol));
+                         1    1                  x2 + x1
+                        (-- + --) (x2 + x1) (1 - -------)
+                         n2   n1                 n2 + n1
+          (%o4)    sqrt(---------------------------------)
+                                     n2 + n1
+
+
+ -- Function: test_sign (<x>)
+ -- Function: test_sign (<x>, <options> ...)
+     This is the non parametric sign test for the median of a
+     continuous population.  Argument <x> is a list or a column matrix
+     containing a one dimensional sample.
+
+     Options:
+
+        * `'alternative', default `'twosided', is the alternative
+          hypothesis; valid values are: `'twosided', `'greater' and
+          `'less'.
+
+        * `'median', default `0', is the median value to be checked.
+
+
+     The output of function `test_sign' is an `inference_result' Maxima
+     object showing the following results:
+
+       1. `'med_estimate': the sample median.
+
+       2. `'method': inference procedure.
+
+       3. `'hypotheses': null and alternative hypotheses to be tested.
+
+       4. `'statistic': value of the sample statistic used for testing
+          the null hypothesis.
+
+       5. `'distribution': distribution of the sample statistic,
+          together with its parameter(s).
+
+       6. `'p_value': p-value of the test.
+
+
+     Examples:
+
+     Checks whether the population from which the sample was taken has
+     median 6, against the alternative H_1: median > 6.
+
+          (%i1) load("stats")$
+          (%i2) x: [2,0.1,7,1.8,4,2.3,5.6,7.4,5.1,6.1,6]$
+          (%i3) test_sign(x,'median=6,'alternative='greater);
+                         |                  SIGN TEST
+                         |
+                         |              med_estimate = 5.1
+                         |
+                         |      method = Non parametric sign test.
+                         |
+          (%o3)          | hypotheses = H0: median = 6 , H1: median > 6
+                         |
+                         |                statistic = 7
+                         |
+                         |      distribution = [binomial, 10, 0.5]
+                         |
+                         |         p_value = .05468749999999989
+
+
+ -- Function: test_signed_rank (<x>)
+ -- Function: test_signed_rank (<x>, <options> ...)
+     This is the Wilcoxon signed rank test to make inferences about the
+     median of a continuous population. Argument <x> is a list or a
+     column matrix containing a one dimensional sample. Performs normal
+     approximation if the sample size is greater than 20, or if there
+     are zeroes or ties.
+
+     See also `pdf_rank_test' and `cdf_rank_test'.
+
+     Options:
+
+        * `'median', default `0', is the median value to be checked.
+
+        * `'alternative', default `'twosided', is the alternative
+          hypothesis; valid values are: `'twosided', `'greater' and
+          `'less'.
+
+
+     The output of function `test_signed_rank' is an `inference_result'
+     Maxima object with the following results:
+
+       1. `'med_estimate': the sample median.
+
+       2. `'method': inference procedure.
+
+       3. `'hypotheses': null and alternative hypotheses to be tested.
+
+       4. `'statistic': value of the sample statistic used for testing
+          the null hypothesis.
+
+       5. `'distribution': distribution of the sample statistic,
+          together with its parameter(s).
+
+       6. `'p_value': p-value of the test.
+
+
+     Examples:
+
+     Checks the null hypothesis H_0: median = 15 against the
+     alternative H_1: median > 15. This is an exact test, since there
+     are no ties.
+
+          (%i1) load("stats")$
+          (%i2) x: [17.1,15.9,13.7,13.4,15.5,17.6]$
+          (%i3) test_signed_rank(x,median=15,alternative=greater);
+                           |             SIGNED RANK TEST
+                           |
+                           |           med_estimate = 15.7
+                           |
+                           |           method = Exact test
+                           |
+          (%o3)            | hypotheses = H0: med = 15 , H1: med > 15
+                           |
+                           |              statistic = 14
+                           |
+                           |     distribution = [signed_rank, 6]
+                           |
+                           |            p_value = 0.28125
+
+     Checks the null hypothesis H_0: equal(median, 2.5) against the
+     alternative H_1: not equal(median, 2.5). This is an approximated
+     test, since there are ties.
+
+          (%i1) load("stats")$
+          (%i2) y:[1.9,2.3,2.6,1.9,1.6,3.3,4.2,4,2.4,2.9,1.5,3,2.9,4.2,3.1]$
+          (%i3) test_signed_rank(y,median=2.5);
+                       |                 SIGNED RANK TEST
+                       |
+                       |                med_estimate = 2.9
+                       |
+                       |          method = Asymptotic test. Ties
+                       |
+          (%o3)        |    hypotheses = H0: med = 2.5 , H1: med # 2.5
+                       |
+                       |                 statistic = 76.5
+                       |
+                       | distribution = [normal, 60.5, 17.58195097251724]
+                       |
+                       |           p_value = .3628097734643669
+
+
+ -- Function: test_rank_sum (<x1>, <x2>)
+ -- Function: test_rank_sum (<x1>, <x2>, <option>)
+     This is the Wilcoxon-Mann-Whitney test for comparing the medians
+     of two continuous populations. The first two arguments <x1> and
+     <x2> are lists or column matrices with the data of two independent
+     samples. Performs normal approximation if any of the sample sizes
+     is greater than 10, or if there are ties.
+
+     Option:
+
+        * `'alternative', default `'twosided', is the alternative
+          hypothesis; valid values are: `'twosided', `'greater' and
+          `'less'.
+
+
+     The output of function `test_rank_sum' is an `inference_result'
+     Maxima object with the following results:
+
+       1. `'method': inference procedure.
+
+       2. `'hypotheses': null and alternative hypotheses to be tested.
+
+       3. `'statistic': value of the sample statistic used for testing
+          the null hypothesis.
+
+       4. `'distribution': distribution of the sample statistic,
+          together with its parameters.
+
+       5. `'p_value': p-value of the test.
+
+
+     Examples:
+
+     Checks whether populations have similar medians. Samples sizes are
+     small and an exact test is made.
+
+          (%i1) load("stats")$
+          (%i2) x:[12,15,17,38,42,10,23,35,28]$
+          (%i3) y:[21,18,25,14,52,65,40,43]$
+          (%i4) test_rank_sum(x,y);
+                        |                 RANK SUM TEST
+                        |
+                        |              method = Exact test
+                        |
+                        | hypotheses = H0: med1 = med2 , H1: med1 # med2
+          (%o4)         |
+                        |                 statistic = 22
+                        |
+                        |        distribution = [rank_sum, 9, 8]
+                        |
+                        |          p_value = .1995886466474702
+
+     Now, with greater samples and ties, the procedure makes normal
+     approximation. The alternative hypothesis is H_1: median1 <
+     median2.
+
+          (%i1) load("stats")$
+          (%i2) x: [39,42,35,13,10,23,15,20,17,27]$
+          (%i3) y: [20,52,66,19,41,32,44,25,14,39,43,35,19,56,27,15]$
+          (%i4) test_rank_sum(x,y,'alternative='less);
+                       |                  RANK SUM TEST
+                       |
+                       |          method = Asymptotic test. Ties
+                       |
+                       |  hypotheses = H0: med1 = med2 , H1: med1 < med2
+          (%o4)        |
+                       |                 statistic = 48.5
+                       |
+                       | distribution = [normal, 79.5, 18.95419580097078]
+                       |
+                       |           p_value = .05096985666598441
+
+
+ -- Function: test_normality (<x>)
+     Shapiro-Wilk test for normality. Argument <x> is a list of
+     numbers, and sample size must be greater than 2 and less or equal
+     than 5000, otherwise, function `test_normality' signals an error
+     message.
+
+     Reference:
+
+     [1] Algorithm AS R94, Applied Statistics (1995), vol.44, no.4,
+     547-551
+
+     The output of function `test_normality' is an `inference_result'
+     Maxima object with the following results:
+
+       1. `'statistic': value of the <W> statistic.
+
+       2. `'p_value': p-value under normal assumption.
+
+
+     Examples:
+
+     Checks for the normality of a population, based on a sample of
+     size 9.
+
+          (%i1) load("stats")$
+          (%i2) x:[12,15,17,38,42,10,23,35,28]$
+          (%i3) test_normality(x);
+                                 |      SHAPIRO - WILK TEST
+                                 |
+          (%o3)                  | statistic = .9251055695162436
+                                 |
+                                 |  p_value = .4361763918860381
+
+
+ -- Function: simple_linear_regression (<x>)
+ -- Function: simple_linear_regression (<x> <option>)
+     Simple linear regression, y_i=a+b x_i+e_i, where e_i are N(0,sigma)
+     independent random variables. Argument <x> must be a two column
+     matrix or a list of pairs.
+
+     Options:
+
+        * `'conflevel', default `95/100', confidence level for the
+          confidence interval; it must be an expression which takes a
+          value in (0,1).
+
+        * `'regressor', default `'x', name of the independent variable.
+
+
+     The output of function `simple_linear_regression' is an
+     `inference_result' Maxima object with the following results:
+
+       1. `'model': the fitted equation. Useful to make new
+          predictions. See examples bellow.
+
+       2. `'means': bivariate mean.
+
+       3. `'variances': variances of both variables.
+
+       4. `'correlation': correlation coefficient.
+
+       5. `'adc': adjusted determination coefficient.
+
+       6. `'a_estimation': estimation of parameter <a>.
+
+       7. `'a_conf_int': confidence interval of parameter <a>.
+
+       8. `'b_estimation': estimation of parameter <b>.
+
+       9. `'b_conf_int': confidence interval of parameter <b>.
+
+      10. `'hypotheses': null and alternative hypotheses about
+          parameter <b>.
+
+      11. `'statistic': value of the sample statistic used for testing
+          the null hypothesis.
+
+      12. `'distribution': distribution of the sample statistic,
+          together with its parameter.
+
+      13. `'p_value': p-value of the test about <b>.
+
+      14. `'v_estimation': unbiased variance estimation, or residual
+          variance.
+
+      15. `'v_conf_int': variance confidence interval.
+
+      16. `'cond_mean_conf_int': confidence interval for the
+          conditioned mean. See examples bellow.
+
+      17. `'new_pred_conf_int': confidence interval for a new
+          prediction. See examples bellow.
+
+      18. `'residuals': list of pairs (prediction, residual), ordered
+          with respect to predictions.  This is useful for goodness of
+          fit analysis. See examples bellow.
+
+
+     Only items 1, 4, 14, 9, 10, 11, 12, and 13 above, in this order,
+     are shown by default. The rest remain hidden until the user makes
+     use of functions `items_inference' and `take_inference'.
+
+     Example:
+
+     Fitting a linear model to a bivariate sample. Input `%i4' plots
+     the sample together with the regression line; input `%i5' computes
+     `y' given `x=113'; the means and the confidence interval for a new
+     prediction when `x=113' are also calculated.
+
+          (%i1) load("stats")$
+          (%i2) s:[[125,140.7], [130,155.1], [135,160.3], [140,167.2],
+                                                          [145,169.8]]$
+          (%i3) z:simple_linear_regression(s,conflevel=0.99);
+                     |               SIMPLE LINEAR REGRESSION
+                     |
+                     |   model = 1.405999999999985 x - 31.18999999999804
+                     |
+                     |           correlation = .9611685255255155
+                     |
+                     |           v_estimation = 13.57966666666665
+                     |
+          (%o3)      | b_conf_int = [.04469633662525263, 2.767303663374718]
+                     |
+                     |          hypotheses = H0: b = 0 ,H1: b # 0
+                     |
+                     |            statistic = 6.032686683658114
+                     |
+                     |            distribution = [student_t, 3]
+                     |
+                     |             p_value = 0.0038059549413203
+          (%i4) plot2d([[discrete, s], take_inference(model,z)],
+                  [x,120,150],
+                  [gnuplot_curve_styles, ["with points","with lines"]] )$
+          (%i5) take_inference(model,z), x=133;
+          (%o5)                         155.808
+          (%i6) take_inference(means,z);
+          (%o6)                     [135.0, 158.62]
+          (%i7) take_inference(new_pred_conf_int,z), x=133;
+          (%o7)              [132.0728595995113, 179.5431404004887]
+
+
+
+File: maxima.info,  Node: Functions and Variables for special distributions,  Prev: Functions and Variables for stats,  Up: Top
+
+65.4 Functions and Variables for special distributions
+======================================================
+
+ -- Function: pdf_signed_rank (<x>, <n>)
+     Probability density function of the exact distribution of the
+     signed rank statistic. Argument <x> is a real number and <n> a
+     positive integer.
+
+     See also `test_signed_rank'.
+
+
+ -- Function: cdf_signed_rank (<x>, <n>)
+     Cumulative density function of the exact distribution of the
+     signed rank statistic. Argument <x> is a real number and <n> a
+     positive integer.
+
+     See also `test_signed_rank'.
+
+
+ -- Function: pdf_rank_sum (<x>, <n>, <m>)
+     Probability density function of the exact distribution of the rank
+     sum statistic. Argument <x> is a real number and <n> and <m> are
+     both positive integers.
+
+     See also `test_rank_sum'.
+
+
+ -- Function: cdf_rank_sum (<x>, <n>, <m>)
+     Cumulative density function of the exact distribution of the rank
+     sum statistic. Argument <x> is a real number and <n> and <m> are
+     both positive integers.
+
+     See also `test_rank_sum'.
+
+
+
+File: maxima.info,  Node: stirling,  Next: stringproc,  Prev: stats,  Up: Top
+
+66 stirling
+***********
+
+* Menu:
+
+* Functions and Variables for stirling::
+
+
+File: maxima.info,  Node: Functions and Variables for stirling,  Prev: stirling,  Up: stirling
+
+66.1 Functions and Variables for stirling
+=========================================
+
+ -- Function: stirling (<z>, <n>)
+ -- Function: stirling (<z>, <n>, <pred>)
+     Replace `gamma(x)' with the O(1/x^(2n-1)) Stirling formula. When
+     <n> isn't a nonnegative integer, signal an error. With the
+     optional third argument `pred', the Stirling formula is applied
+     only when `pred' is true.
+
+     Reference: Abramowitz & Stegun, " Handbook of mathematical
+     functions", 6.1.40.
+
+     Examples:
+
+          (%i1) load (stirling)$
+
+          (%i2) stirling(gamma(%alpha+x)/gamma(x),1);
+                 1/2 - x             x + %alpha - 1/2
+          (%o2) x        (x + %alpha)
+                                             1           1
+                                      --------------- - ---- - %alpha
+                                      12 (x + %alpha)   12 x
+                                    %e
+          (%i3) taylor(%,x,inf,1);
+                              %alpha       2    %alpha
+                    %alpha   x       %alpha  - x       %alpha
+          (%o3)/T/ x       + -------------------------------- + . . .
+                                           2 x
+          (%i4) map('factor,%);
+                                                 %alpha - 1
+                   %alpha   (%alpha - 1) %alpha x
+          (%o4)   x       + -------------------------------
+                                            2
+
+     The function `stirling' knows the difference between the variable
+     'gamma' and the function gamma:
+
+          (%i5) stirling(gamma + gamma(x),0);
+                                              x - 1/2   - x
+          (%o5)    gamma + sqrt(2) sqrt(%pi) x        %e
+          (%i6) stirling(gamma(y) + gamma(x),0);
+                                   y - 1/2   - y
+          (%o6) sqrt(2) sqrt(%pi) y        %e
+                                                        x - 1/2   - x
+                                   + sqrt(2) sqrt(%pi) x        %e
+
+     To apply the Stirling formula only to terms that involve the
+     variable `k', use an optional third argument; for example
+
+          (%i7) makegamma(pochhammer(a,k)/pochhammer(b,k));
+          (%o7) (gamma(b)*gamma(k+a))/(gamma(a)*gamma(k+b))
+          (%i8) stirling(%,1, lambda([s], not(freeof(k,s))));
+          (%o8) (%e^(b-a)*gamma(b)*(k+a)^(k+a-1/2)*(k+b)^(-k-b+1/2))/gamma(a)
+
+     The terms `gamma(a)' and `gamma(b)' are free of `k', so the
+     Stirling formula was not applied to these two terms.
+
+     To use this function write first `load("stirling")'.
+
+
+
+File: maxima.info,  Node: stringproc,  Next: symmetries,  Prev: stirling,  Up: Top
+
+67 stringproc
+*************
+
+* Menu:
+
+* Introduction to string processing::
+* Functions and Variables for input and output::
+* Functions and Variables for characters::
+* Functions and Variables for strings::
+
+
+File: maxima.info,  Node: Introduction to string processing,  Next: Functions and Variables for input and output,  Prev: stringproc,  Up: stringproc
+
+67.1 Introduction to string processing
+======================================
+
+`stringproc.lisp' enlarges Maximas capabilities of working with strings
+and adds some useful functions for file in/output.
+
+   For questions and bugs please mail to van.nek at arcor.de .
+
+   In Maxima a string is easily constructed by typing "text".
+`stringp' tests for strings.
+
+     (%i1) m: "text";
+     (%o1)                         text
+     (%i2) stringp(m);
+     (%o2)                         true
+
+   Characters are represented as strings of length 1.  These are not
+Lisp characters.  Tests can be done with `charp' (respectively `lcharp'
+and conversion from Lisp to Maxima characters with `cunlisp').
+
+     (%i1) c: "e";
+     (%o1)                           e
+     (%i2) [charp(c),lcharp(c)];
+     (%o2)                     [true, false]
+     (%i3) supcase(c);
+     (%o3)                           E
+     (%i4) charp(%);
+     (%o4)                         true
+
+   All functions in `stringproc.lisp' that return characters, return
+Maxima-characters.  Due to the fact, that the introduced characters are
+strings of length 1, you can use a lot of string functions also for
+characters.  As seen, `supcase' is one example.
+
+   It is important to know, that the first character in a Maxima-string
+is at position 1.  This is designed due to the fact that the first
+element in a Maxima-list is at position 1 too.  See definitions of
+`charat' and `charlist' for examples.
+
+   In applications string-functions are often used when working with
+files.  You will find some useful stream- and print-functions in
+`stringproc.lisp'.  The following example shows some of the here
+introduced functions at work.
+
+   Example:
+
+   `openw' returns an output stream to a file, `printf' then allows
+formatted writing to this file. See `printf' for details.
+
+     (%i1) s: openw("E:/file.txt");
+     (%o1)                    #<output stream E:/file.txt>
+     (%i2) for n:0 thru 10 do printf( s, "~d ", fib(n) );
+     (%o2)                                done
+     (%i3) printf( s, "~%~d ~f ~a ~a ~f ~e ~a~%",
+                   42,1.234,sqrt(2),%pi,1.0e-2,1.0e-2,1.0b-2 );
+     (%o3)                                false
+     (%i4) close(s);
+     (%o4)                                true
+
+   After closing the stream you can open it again, this time with input
+direction.  `readline' returns the entire line as one string. The
+`stringproc' package now offers a lot of functions for manipulating
+strings. Tokenizing can be done by `split' or `tokens'.
+
+     (%i5) s: openr("E:/file.txt");
+     (%o5)                     #<input stream E:/file.txt>
+     (%i6) readline(s);
+     (%o6)                     0 1 1 2 3 5 8 13 21 34 55
+     (%i7) line: readline(s);
+     (%o7)               42 1.234 sqrt(2) %pi 0.01 1.0E-2 1.0b-2
+     (%i8) list: tokens(line);
+     (%o8)           [42, 1.234, sqrt(2), %pi, 0.01, 1.0E-2, 1.0b-2]
+     (%i9) map( parse_string, list );
+     (%o9)            [42, 1.234, sqrt(2), %pi, 0.01, 0.01, 1.0b-2]
+     (%i10) float(%);
+     (%o10) [42.0, 1.234, 1.414213562373095, 3.141592653589793, 0.01,
+                                                          0.01, 0.01]
+     (%i11) readline(s);
+     (%o11)                               false
+     (%i12) close(s)$
+
+   `readline' returns `false' when the end of file occurs.
+
+
+File: maxima.info,  Node: Functions and Variables for input and output,  Next: Functions and Variables for characters,  Prev: Introduction to string processing,  Up: stringproc
+
+67.2 Functions and Variables for input and output
+=================================================
+
+Example:
+
+     (%i1) s: openw("E:/file.txt");
+     (%o1)                     #<output stream E:/file.txt>
+     (%i2) control:
+     "~2tAn atom: ~20t~a~%~2tand a list: ~20t~{~r ~}~%~2t\
+     and an integer: ~20t~d~%"$
+     (%i3) printf( s,control, 'true,[1,2,3],42 )$
+     (%o3)                                false
+     (%i4) close(s);
+     (%o4)                                true
+     (%i5) s: openr("E:/file.txt");
+     (%o5)                     #<input stream E:/file.txt>
+     (%i6) while stringp( tmp:readline(s) ) do print(tmp)$
+       An atom:          true
+       and a list:       one two three
+       and an integer:   42
+     (%i7) close(s)$
+
+ -- Function: close (<stream>)
+     Closes <stream> and returns `true' if <stream> had been open.
+
+
+ -- Function: flength (<stream>)
+     Returns the number of elements in <stream>.
+
+
+ -- Function: fposition (<stream>)
+ -- Function: fposition (<stream>, <pos>)
+     Returns the current position in <stream>, if <pos> is not used.
+     If <pos> is used, `fposition' sets the position in <stream>.
+     <pos> has to be a positive number, the first element in <stream>
+     is in position 1.
+
+
+ -- Function: freshline ()
+ -- Function: freshline (<stream>)
+     Writes a new line (to <stream>), if the position is not at the
+     beginning of a line.  See also `newline'.
+
+
+ -- Function: newline ()
+ -- Function: newline (<stream>)
+     Writes a new line (to <stream>).  See `sprint' for an example of
+     using `newline()'.  Note that there are some cases, where
+     `newline()' does not work as expected.
+
+
+ -- Function: opena (<file>)
+     Returns an output stream to <file>.  If an existing file is
+     opened, `opena' appends elements at the end of file.
+
+
+ -- Function: openr (<file>)
+     Returns an input stream to <file>.  If <file> does not exist, it
+     will be created.
+
+
+ -- Function: openw (<file>)
+     Returns an output stream to <file>.  If <file> does not exist, it
+     will be created.  If an existing file is opened, `openw'
+     destructively modifies <file>.
+
+
+ -- Function: printf (<dest>, <string>)
+ -- Function: printf (<dest>, <string>, <expr_1>, ..., <expr_n>)
+     Makes the Common Lisp function FORMAT available in Maxima.  (From
+     gcl.info: "format produces formatted output by outputting the
+     characters of control-string string and observing that a tilde
+     introduces a directive.  The character after the tilde, possibly
+     preceded by prefix parameters and modifiers, specifies what kind
+     of formatting is desired.  Most directives use one or more
+     elements of args to create their output.")
+
+     The following description and the examples may give an idea of
+     using `printf'.  See a Lisp reference for more information.
+
+             ~%       new line
+             ~&       fresh line
+             ~t       tab
+             ~$       monetary
+             ~d       decimal integer
+             ~b       binary integer
+             ~o       octal integer
+             ~x       hexadecimal integer
+             ~br      base-b integer
+             ~r       spell an integer
+             ~p       plural
+             ~f       floating point
+             ~e       scientific notation
+             ~g       ~f or ~e, depending upon magnitude
+             ~h       bigfloat
+             ~a       uses Maxima function string
+             ~s       like ~a, but output enclosed in "double quotes"
+             ~~       ~
+             ~<       justification, ~> terminates
+             ~(       case conversion, ~) terminates
+             ~[       selection, ~] terminates
+             ~{       iteration, ~} terminates
+
+     Note that the selection directive `~[' is zero-indexed.  Also note
+     that the directive ~* is not supported.
+
+          (%i1) printf( false, "~a ~a ~4f ~a ~@r",
+                        "String",sym,bound,sqrt(12),144), bound = 1.234;
+          (%o1)                 String sym 1.23 2*sqrt(3) CXLIV
+          (%i2) printf( false,"~{~a ~}",["one",2,"THREE"] );
+          (%o2)                          one 2 THREE
+          (%i3) printf(true,"~{~{~9,1f ~}~%~}",mat ),
+                    mat = args(matrix([1.1,2,3.33],[4,5,6],[7,8.88,9]))$
+                1.1       2.0       3.3
+                4.0       5.0       6.0
+                7.0       8.9       9.0
+          (%i4) control: "~:(~r~) bird~p ~[is~;are~] singing."$
+          (%i5) printf( false,control, n,n,if n=1 then 0 else 1 ), n=2;
+          (%o5)                    Two birds are singing.
+
+     If <dest> is a stream or `true', then `printf' returns `false'.
+     Otherwise, `printf' returns a string containing the output.
+
+
+ -- Function: readline (<stream>)
+     Returns a string containing the characters from the current
+     position in <stream> up to the end of the line or <false> if the
+     end of the file is encountered.
+
+
+ -- Function: sprint (<expr_1>, ..., <expr_n>)
+     Evaluates and displays its arguments one after the other `on a
+     line' starting at the leftmost position.  The numbers are printed
+     with the '-' right next to the number, and it disregards line
+     length. `newline()', which will be autoloaded from
+     `stringproc.lisp' might be useful, if you whish to place
+     intermediate line breaking.
+
+          (%i1) for n:0 thru 20 do sprint( fib(n) )$
+          0 1 1 2 3 5 8 13 21 34 55 89 144 233 377 610 987 1597 2584 4181 6765
+          (%i2) for n:0 thru 22 do (
+                   sprint(fib(n)), if mod(n,10)=9 then newline() )$
+          0 1 1 2 3 5 8 13 21 34
+          55 89 144 233 377 610 987 1597 2584 4181
+          6765 10946 17711
+
+
+
+File: maxima.info,  Node: Functions and Variables for characters,  Next: Functions and Variables for strings,  Prev: Functions and Variables for input and output,  Up: stringproc
+
+67.3 Functions and Variables for characters
+===========================================
+
+ -- Function: alphacharp (<char>)
+     Returns `true' if <char> is an alphabetic character.
+
+
+ -- Function: alphanumericp (<char>)
+     Returns `true' if <char> is an alphabetic character or a digit.
+
+
+ -- Function: ascii (<int>)
+     Returns the character corresponding to the ASCII number <int>.  (
+     -1 < int < 256 )
+
+          (%i1) for n from 0 thru 255 do (
+             tmp: ascii(n), if alphacharp(tmp) then sprint(tmp),
+                if n=96 then newline() )$
+          A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+          a b c d e f g h i j k l m n o p q r s t u v w x y z
+
+
+ -- Function: cequal (<char_1>, <char_2>)
+     Returns `true' if <char_1> and <char_2> are the same.
+
+
+ -- Function: cequalignore (<char_1>, <char_2>)
+     Like `cequal' but ignores case.
+
+
+ -- Function: cgreaterp (<char_1>, <char_2>)
+     Returns `true' if the ASCII number of <char_1> is greater than the
+     number of <char_2>.
+
+
+ -- Function: cgreaterpignore (<char_1>, <char_2>)
+     Like `cgreaterp' but ignores case.
+
+
+ -- Function: charp (<obj>)
+     Returns `true' if <obj> is a Maxima-character.  See introduction
+     for example.
+
+
+ -- Function: cint (<char>)
+     Returns the ASCII number of <char>.
+
+
+ -- Function: clessp (<char_1>, <char_2>)
+     Returns `true' if the ASCII number of <char_1> is less than the
+     number of <char_2>.
+
+
+ -- Function: clesspignore (<char_1>, <char_2>)
+     Like `clessp' but ignores case.
+
+
+ -- Function: constituent (<char>)
+     Returns `true' if <char> is a graphic character and not the space
+     character.  A graphic character is a character one can see, plus
+     the space character.  (`constituent' is defined by Paul Graham,
+     ANSI Common Lisp, 1996, page 67.)
+
+          (%i1) for n from 0 thru 255 do (
+          tmp: ascii(n), if constituent(tmp) then sprint(tmp) )$
+          ! " #  %  ' ( ) * + , - . / 0 1 2 3 4 5 6 7 8 9 : ; < = > ? @ A B
+          C D E F G H I J K L M N O P Q R S T U V W X Y Z [ \ ] ^ _ ` a b c
+          d e f g h i j k l m n o p q r s t u v w x y z { | } ~
+
+
+ -- Function: cunlisp (<lisp_char>)
+     Converts a Lisp-character into a Maxima-character.  (You won't
+     need it.)
+
+
+ -- Function: digitcharp (<char>)
+     Returns `true' if <char> is a digit.
+
+
+ -- Function: lcharp (<obj>)
+     Returns `true' if <obj> is a Lisp-character.  (You won't need it.)
+
+
+ -- Function: lowercasep (<char>)
+     Returns `true' if <char> is a lowercase character.
+
+
+ -- Variable: newline
+     The newline character.
+
+
+ -- Variable: space
+     The space character.
+
+
+ -- Variable: tab
+     The tab character.
+
+
+ -- Function: uppercasep (<char>)
+     Returns `true' if <char> is an uppercase character.
+
+
+
+File: maxima.info,  Node: Functions and Variables for strings,  Prev: Functions and Variables for characters,  Up: stringproc
+
+67.4 Functions and Variables for strings
+========================================
+
+ -- Function: stringp (<obj>)
+     Returns `true' if <obj> is a string.  See introduction for example.
+
+
+ -- Function: charat (<string>, <n>)
+     Returns the <n>-th character of <string>.  The first character in
+     <string> is returned with <n> = 1.
+
+          (%i1) charat("Lisp",1);
+          (%o1)                           L
+
+
+ -- Function: charlist (<string>)
+     Returns the list of all characters in <string>.
+
+          (%i1) charlist("Lisp");
+          (%o1)                     [L, i, s, p]
+          (%i2) %[1];
+          (%o2)                           L
+
+
+ -- Function: eval_string (<str>)
+     Parse the string <str> as a Maxima expression and evaluate it.
+     The string <str> may or may not have a terminator (dollar sign `$'
+     or semicolon `;').  Only the first expression is parsed and
+     evaluated, if there is more than one.
+
+     Complain if <str> is not a string.
+
+     Examples:
+
+          (%i1) eval_string ("foo: 42; bar: foo^2 + baz");
+          (%o1)                       42
+          (%i2) eval_string ("(foo: 42, bar: foo^2 + baz)");
+          (%o2)                   baz + 1764
+
+     See also `parse_string'.
+
+
+ -- Function: parse_string (<str>)
+     Parse the string <str> as a Maxima expression (do not evaluate it).
+     The string <str> may or may not have a terminator (dollar sign `$'
+     or semicolon `;').  Only the first expression is parsed, if there
+     is more than one.
+
+     Complain if <str> is not a string.
+
+     Examples:
+
+          (%i1) parse_string ("foo: 42; bar: foo^2 + baz");
+          (%o1)                    foo : 42
+          (%i2) parse_string ("(foo: 42, bar: foo^2 + baz)");
+                                             2
+          (%o2)          (foo : 42, bar : foo  + baz)
+
+     See also `eval_string'.
+
+
+ -- Function: scopy (<string>)
+     Returns a copy of <string> as a new string.
+
+
+ -- Function: sdowncase (<string>)
+ -- Function: sdowncase (<string>, <start>)
+ -- Function: sdowncase (<string>, <start>, <end>)
+     Like `supcase', but uppercase characters are converted to
+     lowercase.
+
+
+ -- Function: sequal (<string_1>, <string_2>)
+     Returns `true' if <string_1> and <string_2> are the same length
+     and contain the same characters.
+
+
+ -- Function: sequalignore (<string_1>, <string_2>)
+     Like `sequal' but ignores case.
+
+
+ -- Function: sexplode (<string>)
+     `sexplode' is an alias for function `charlist'.
+
+
+ -- Function: simplode (<list>)
+ -- Function: simplode (<list>, <delim>)
+     `simplode' takes a list of expressions and concatenates them into
+     a string.  If no delimiter <delim> is specified, `simplode' uses
+     no delimiter.  <delim> can be any string.
+
+          (%i1) simplode(["xx[",3,"]:",expand((x+y)^3)]);
+          (%o1)             xx[3]:y^3+3*x*y^2+3*x^2*y+x^3
+          (%i2) simplode( sexplode("stars")," * " );
+          (%o2)                   s * t * a * r * s
+          (%i3) simplode( ["One","more","coffee."]," " );
+          (%o3)                   One more coffee.
+
+
+ -- Function: sinsert (<seq>, <string>, <pos>)
+     Returns a string that is a concatenation of `substring (<string>,
+     1, <pos> - 1)', the string <seq> and `substring (<string>, <pos>)'.
+     Note that the first character in <string> is in position 1.
+
+          (%i1) s: "A submarine."$
+          (%i2) concat( substring(s,1,3),"yellow ",substring(s,3) );
+          (%o2)                  A yellow submarine.
+          (%i3) sinsert("hollow ",s,3);
+          (%o3)                  A hollow submarine.
+
+
+ -- Function: sinvertcase (<string>)
+ -- Function: sinvertcase (<string>, <start>)
+ -- Function: sinvertcase (<string>, <start>, <end>)
+     Returns <string> except that each character from position <start>
+     to <end> is inverted.  If <end> is not given, all characters from
+     <start> to the end of <string> are replaced.
+
+          (%i1) sinvertcase("sInvertCase");
+          (%o1)                      SiNVERTcASE
+
+
+ -- Function: slength (<string>)
+     Returns the number of characters in <string>.
+
+
+ -- Function: smake (<num>, <char>)
+     Returns a new string with a number of <num> characters <char>.
+
+          (%i1) smake(3,"w");
+          (%o1)                          www
+
+
+ -- Function: smismatch (<string_1>, <string_2>)
+ -- Function: smismatch (<string_1>, <string_2>, <test>)
+     Returns the position of the first character of <string_1> at which
+     <string_1> and <string_2> differ or `false'.  Default test
+     function for matching is `sequal'.  If `smismatch' should ignore
+     case, use `sequalignore' as test.
+
+          (%i1) smismatch("seven","seventh");
+          (%o1)                           6
+
+
+ -- Function: split (<string>)
+ -- Function: split (<string>, <delim>)
+ -- Function: split (<string>, <delim>, <multiple>)
+     Returns the list of all tokens in <string>.  Each token is an
+     unparsed string.  `split' uses <delim> as delimiter.  If <delim>
+     is not given, the space character is the default delimiter.
+     <multiple> is a boolean variable with `true' by default.  Multiple
+     delimiters are read as one.  This is useful if tabs are saved as
+     multiple space characters.  If <multiple> is set to `false', each
+     delimiter is noted.
+
+          (%i1) split("1.2   2.3   3.4   4.5");
+          (%o1)                 [1.2, 2.3, 3.4, 4.5]
+          (%i2) split("first;;third;fourth",";",false);
+          (%o2)               [first, , third, fourth]
+
+
+ -- Function: sposition (<char>, <string>)
+     Returns the position of the first character in <string> which
+     matches <char>.  The first character in <string> is in position 1.
+     For matching characters ignoring case see `ssearch'.
+
+
+ -- Function: sremove (<seq>, <string>)
+ -- Function: sremove (<seq>, <string>, <test>)
+ -- Function: sremove (<seq>, <string>, <test>, <start>)
+ -- Function: sremove (<seq>, <string>, <test>, <start>, <end>)
+     Returns a string like <string> but without all substrings matching
+     <seq>.  Default test function for matching is `sequal'.  If
+     `sremove' should ignore case while searching for <seq>, use
+     `sequalignore' as test.  Use <start> and <end> to limit searching.
+     Note that the first character in <string> is in position 1.
+
+          (%i1) sremove("n't","I don't like coffee.");
+          (%o1)                   I do like coffee.
+          (%i2) sremove ("DO ",%,'sequalignore);
+          (%o2)                    I like coffee.
+
+
+ -- Function: sremovefirst (<seq>, <string>)
+ -- Function: sremovefirst (<seq>, <string>, <test>)
+ -- Function: sremovefirst (<seq>, <string>, <test>, <start>)
+ -- Function: sremovefirst (<seq>, <string>, <test>, <start>, <end>)
+     Like `sremove' except that only the first substring that matches
+     `seq' is removed.
+
+
+ -- Function: sreverse (<string>)
+     Returns a string with all the characters of <string> in reverse
+     order.
+
+
+ -- Function: ssearch (<seq>, <string>)
+ -- Function: ssearch (<seq>, <string>, <test>)
+ -- Function: ssearch (<seq>, <string>, <test>, <start>)
+ -- Function: ssearch (<seq>, <string>, <test>, <start>, <end>)
+     Returns the position of the first substring of <string> that
+     matches the string <seq>.  Default test function for matching is
+     `sequal'.  If `ssearch' should ignore case, use `sequalignore' as
+     test.  Use <start> and <end> to limit searching.  Note that the
+     first character in <string> is in position 1.
+
+          (%i1) ssearch("~s","~{~S ~}~%",'sequalignore);
+          (%o1)                                  4
+
+
+ -- Function: ssort (<string>)
+ -- Function: ssort (<string>, <test>)
+     Returns a string that contains all characters from <string> in an
+     order such there are no two successive characters <c> and <d> such
+     that `test (<c>, <d>)' is `false' and `test (<d>, <c>)' is `true'.
+     Default test function for sorting is <clessp>.  The set of test
+     functions is `{clessp, clesspignore, cgreaterp, cgreaterpignore,
+     cequal, cequalignore}'.
+
+          (%i1) ssort("I don't like Mondays.");
+          (%o1)                    '.IMaddeiklnnoosty
+          (%i2) ssort("I don't like Mondays.",'cgreaterpignore);
+          (%o2)                 ytsoonnMlkIiedda.'
+
+
+ -- Function: ssubst (<new>, <old>, <string>)
+ -- Function: ssubst (<new>, <old>, <string>, <test>)
+ -- Function: ssubst (<new>, <old>, <string>, <test>, <start>)
+ -- Function: ssubst (<new>, <old>, <string>, <test>, <start>, <end>)
+     Returns a string like <string> except that all substrings matching
+     <old> are replaced by <new>.  <old> and <new> need not to be of
+     the same length.  Default test function for matching is `sequal'.
+     If `ssubst' should ignore case while searching for old, use
+     `sequalignore' as test.  Use <start> and <end> to limit searching.
+     Note that the first character in <string> is in position 1.
+
+          (%i1) ssubst("like","hate","I hate Thai food. I hate green tea.");
+          (%o1)          I like Thai food. I like green tea.
+          (%i2) ssubst("Indian","thai",%,'sequalignore,8,12);
+          (%o2)         I like Indian food. I like green tea.
+
+
+ -- Function: ssubstfirst (<new>, <old>, <string>)
+ -- Function: ssubstfirst (<new>, <old>, <string>, <test>)
+ -- Function: ssubstfirst (<new>, <old>, <string>, <test>, <start>)
+ -- Function: ssubstfirst (<new>, <old>, <string>, <test>, <start>,
+          <end>)
+     Like `subst' except that only the first substring that matches
+     <old> is replaced.
+
+
+ -- Function: strim (<seq>,<string>)
+     Returns a string like <string>, but with all characters that
+     appear in <seq> removed from both ends.
+
+          (%i1) "/* comment */"$
+          (%i2) strim(" /*",%);
+          (%o2)                        comment
+          (%i3) slength(%);
+          (%o3)                           7
+
+
+ -- Function: striml (<seq>, <string>)
+     Like `strim' except that only the left end of <string> is trimmed.
+
+
+ -- Function: strimr (<seq>, <string>)
+     Like `strim' except that only the right end of string is trimmed.
+
+
+ -- Function: substring (<string>, <start>)
+ -- Function: substring (<string>, <start>, <end>)
+     Returns the substring of <string> beginning at position <start>
+     and ending at position <end>.  The character at position <end> is
+     not included.  If <end> is not given, the substring contains the
+     rest of the string.  Note that the first character in <string> is
+     in position 1.
+
+          (%i1) substring("substring",4);
+          (%o1)                        string
+          (%i2) substring(%,4,6);
+          (%o2)                          in
+
+
+ -- Function: supcase (<string>)
+ -- Function: supcase (<string>, <start>)
+ -- Function: supcase (<string>, <start>, <end>)
+     Returns <string> except that lowercase characters from position
+     <start> to <end> are replaced by the corresponding uppercase ones.
+     If <end> is not given, all lowercase characters from <start> to
+     the end of <string> are replaced.
+
+          (%i1) supcase("english",1,2);
+          (%o1)                        English
+
+
+ -- Function: tokens (<string>)
+ -- Function: tokens (<string>, <test>)
+     Returns a list of tokens, which have been extracted from <string>.
+     The tokens are substrings whose characters satisfy a certain test
+     function.  If test is not given, <constituent> is used as the
+     default test.  `{constituent, alphacharp, digitcharp, lowercasep,
+     uppercasep, charp, characterp, alphanumericp}' is the set of test
+     functions.  (The Lisp-version of `tokens' is written by Paul
+     Graham. ANSI Common Lisp, 1996, page 67.)
+
+          (%i1) tokens("24 October 2005");
+          (%o1)                  [24, October, 2005]
+          (%i2) tokens("05-10-24",'digitcharp);
+          (%o2)                     [05, 10, 24]
+          (%i3) map(parse_string,%);
+          (%o3)                      [5, 10, 24]
+
+
+
+File: maxima.info,  Node: symmetries,  Next: unit,  Prev: stringproc,  Up: Top
+
+68 symmetries
+*************
+
+* Menu:
+
+* Introduction to Symmetries::
+* Functions and Variables for Symmetries::
+
+
+File: maxima.info,  Node: Introduction to Symmetries,  Next: Functions and Variables for Symmetries,  Prev: symmetries,  Up: symmetries
+
+68.1 Introduction to Symmetries
+===============================
+
+`sym' is a package for working with symmetric groups of polynomials.
+
+   It was written for Macsyma-Symbolics by Annick Valibouze
+(`http://www-calfor.lip6.fr/~avb/').  The algorithms are described in
+the following papers:
+
+  1. Fonctions symÃ©triques et changements de bases. Annick Valibouze.
+     EUROCAL'87 (Leipzig, 1987), 323-332, Lecture Notes in Comput. Sci
+     378.  Springer, Berlin, 1989.
+     `http://www.stix.polytechnique.fr/publications/1984-1994.html'
+
+  2. RÃ©solvantes et fonctions symÃ©triques. Annick Valibouze.
+     Proceedings of the ACM-SIGSAM 1989 International Symposium on
+     Symbolic and Algebraic Computation, ISSAC'89 (Portland, Oregon).
+     ACM Press, 390-399, 1989.
+     `http://www-calfor.lip6.fr/~avb/DonneesTelechargeables/MesArticles/issac89ACMValibouze.pdf'
+
+  3. Symbolic computation with symmetric polynomials, an extension to
+     Macsyma.  Annick Valibouze. Computers and Mathematics (MIT, USA,
+     June 13-17, 1989), Springer-Verlag, New York Berlin, 308-320, 1989.
+     `http://www.stix.polytechnique.fr/publications/1984-1994.html'
+
+  4. ThÃ©orie de Galois Constructive. Annick Valibouze. MÃ©moire
+     d'habilitation Ã  diriger les recherches (HDR), UniversitÃ© P. et M.
+     Curie (Paris VI), 1994.
+
+
+File: maxima.info,  Node: Functions and Variables for Symmetries,  Prev: Introduction to Symmetries,  Up: symmetries
+
+68.2 Functions and Variables for Symmetries
+===========================================
+
+68.2.1 Changing bases
+---------------------
+
+ -- Function: comp2pui (<n>, <L>)
+     implements passing from the complete symmetric functions given in
+     the list <L> to the elementary symmetric functions from 0 to <n>.
+     If the list <L> contains fewer than <n+1> elements, it will be
+     completed with formal values of the type <h1>, <h2>, etc. If the
+     first element of the list <L> exists, it specifies the size of the
+     alphabet, otherwise the size is set to <n>.
+
+          (%i1) comp2pui (3, [4, g]);
+                                  2                    2
+          (%o1)    [4, g, 2 h2 - g , 3 h3 - g h2 + g (g  - 2 h2)]
+
+
+ -- Function: ele2pui (<m>, <L>)
+     goes from the elementary symmetric functions to the complete
+     functions.  Similar to `comp2ele' and `comp2pui'.
+
+     Other functions for changing bases: `comp2ele'.
+
+
+ -- Function: ele2comp (<m>, <L>)
+     Goes from the elementary symmetric functions to the compete
+     functions.  Similar to `comp2ele' and `comp2pui'.
+
+     Other functions for changing bases: `comp2ele'.
+
+
+ -- Function: elem (<ele>, <sym>, <lvar>)
+     decomposes the symmetric polynomial <sym>, in the variables
+     contained in the list <lvar>, in terms of the elementary symmetric
+     functions given in the list <ele>.  If the first element of <ele>
+     is given, it will be the size of the alphabet, otherwise the size
+     will be the degree of the polynomial <sym>.  If values are missing
+     in the list <ele>, formal values of the type <e1>, <e2>, etc. will
+     be added.  The polynomial <sym> may be given in three different
+     forms: contracted (`elem' should then be 1, its default value),
+     partitioned (`elem' should be 3), or extended (i.e. the entire
+     polynomial, and `elem' should then be 2).  The function `pui' is
+     used in the same way.
+
+     On an alphabet of size 3 with <e1>, the first elementary symmetric
+     function, with value 7, the symmetric polynomial in 3 variables
+     whose contracted form (which here depends on only two of its
+     variables) is <x^4-2*x*y> decomposes as follows in elementary
+     symmetric functions:
+
+          (%i1) elem ([3, 7], x^4 - 2*x*y, [x, y]);
+          (%o1) 7 (e3 - 7 e2 + 7 (49 - e2)) + 21 e3
+
+                                                   + (- 2 (49 - e2) - 2) e2
+          (%i2) ratsimp (%);
+                                        2
+          (%o2)             28 e3 + 2 e2  - 198 e2 + 2401
+
+     Other functions for changing bases: `comp2ele'.
+
+
+ -- Function: mon2schur (<L>)
+     The list <L> represents the Schur function S_L: we have L = [i_1,
+     i_2, ..., i_q], with i_1 <= i_2 <= ... <= i_q.  The Schur function
+     S_[i_1, i_2, ..., i_q] is the minor of the infinite matrix
+     h_[i-j], i <= 1, j <= 1, consisting of the q first rows and the
+     columns 1 + i_1, 2 + i_2, ..., q + i_q.
+
+     This Schur function can be written in terms of monomials by using
+     `treinat' and `kostka'.  The form returned is a symmetric
+     polynomial in a contracted representation in the variables
+     x_1,x_2,...
+
+          (%i1) mon2schur ([1, 1, 1]);
+          (%o1)                       x1 x2 x3
+          (%i2) mon2schur ([3]);
+                                            2        3
+          (%o2)                x1 x2 x3 + x1  x2 + x1
+          (%i3) mon2schur ([1, 2]);
+                                                2
+          (%o3)                  2 x1 x2 x3 + x1  x2
+
+     which means that for 3 variables this gives:
+
+             2 x1 x2 x3 + x1^2 x2 + x2^2 x1 + x1^2 x3 + x3^2 x1
+              + x2^2 x3 + x3^2 x2
+     Other functions for changing bases: `comp2ele'.
+
+
+ -- Function: multi_elem (<l_elem>, <multi_pc>, <l_var>)
+     decomposes a multi-symmetric polynomial in the multi-contracted
+     form <multi_pc> in the groups of variables contained in the list
+     of lists <l_var> in terms of the elementary symmetric functions
+     contained in <l_elem>.
+
+          (%i1) multi_elem ([[2, e1, e2], [2, f1, f2]], a*x + a^2 + x^3,
+                [[x, y], [a, b]]);
+                                                            3
+          (%o1)         - 2 f2 + f1 (f1 + e1) - 3 e1 e2 + e1
+          (%i2) ratsimp (%);
+                                   2                       3
+          (%o2)         - 2 f2 + f1  + e1 f1 - 3 e1 e2 + e1
+
+     Other functions for changing bases: `comp2ele'.
+
+
+ -- Function: multi_pui
+     is to the function `pui' what the function `multi_elem' is to the
+     function `elem'.
+
+          (%i1) multi_pui ([[2, p1, p2], [2, t1, t2]], a*x + a^2 + x^3,
+                [[x, y], [a, b]]);
+                                                      3
+                                          3 p1 p2   p1
+          (%o1)              t2 + p1 t1 + ------- - ---
+                                             2       2
+
+
+ -- Function: pui (<L>, <sym>, <lvar>)
+     decomposes the symmetric polynomial <sym>, in the variables in the
+     list <lvar>, in terms of the power functions in the list <L>.  If
+     the first element of <L> is given, it will be the size of the
+     alphabet, otherwise the size will be the degree of the polynomial
+     <sym>.  If values are missing in the list <L>, formal values of
+     the type <p1>, <p2> , etc. will be added. The polynomial <sym> may
+     be given in three different forms: contracted (`elem' should then
+     be 1, its default value), partitioned (`elem' should be 3), or
+     extended (i.e. the entire polynomial, and `elem' should then be
+     2). The function `pui' is used in the same way.
+
+          (%i1) pui;
+          (%o1)                           1
+          (%i2) pui ([3, a, b], u*x*y*z, [x, y, z]);
+                                 2
+                             a (a  - b) u   (a b - p3) u
+          (%o2)              ------------ - ------------
+                                  6              3
+          (%i3) ratsimp (%);
+                                                 3
+                                (2 p3 - 3 a b + a ) u
+          (%o3)                 ---------------------
+                                          6
+     Other functions for changing bases: `comp2ele'.
+
+
+ -- Function: pui2comp (<n>, <lpui>)
+     renders the list of the first <n> complete functions (with the
+     length first) in terms of the power functions given in the list
+     <lpui>. If the list <lpui> is empty, the cardinal is <n>,
+     otherwise it is its first element (as in `comp2ele' and
+     `comp2pui').
+
+          (%i1) pui2comp (2, []);
+                                                 2
+                                          p2 + p1
+          (%o1)                   [2, p1, --------]
+                                             2
+          (%i2) pui2comp (3, [2, a1]);
+                                                      2
+                                           a1 (p2 + a1 )
+                                   2  p3 + ------------- + a1 p2
+                            p2 + a1              2
+          (%o2)     [2, a1, --------, --------------------------]
+                               2                  3
+          (%i3) ratsimp (%);
+                                      2                     3
+                               p2 + a1   2 p3 + 3 a1 p2 + a1
+          (%o3)        [2, a1, --------, --------------------]
+                                  2               6
+     Other functions for changing bases: `comp2ele'.
+
+
+ -- Function: pui2ele (<n>, <lpui>)
+     effects the passage from power functions to the elementary
+     symmetric functions.  If the flag `pui2ele' is `girard', it will
+     return the list of elementary symmetric functions from 1 to <n>,
+     and if the flag is `close', it will return the <n>-th elementary
+     symmetric function.
+
+     Other functions for changing bases: `comp2ele'.
+
+
+ -- Function: puireduc (<n>, <lpui>)
+     <lpui> is a list whose first element is an integer <m>.
+     `puireduc' gives the first <n> power functions in terms of the
+     first <m>.
+
+          (%i1) puireduc (3, [2]);
+                                                   2
+                                             p1 (p1  - p2)
+          (%o1)          [2, p1, p2, p1 p2 - -------------]
+                                                   2
+          (%i2) ratsimp (%);
+                                                     3
+                                         3 p1 p2 - p1
+          (%o2)              [2, p1, p2, -------------]
+                                               2
+
+
+ -- Function: schur2comp (<P>, <l_var>)
+     <P> is a polynomial in the variables of the list <l_var>.  Each of
+     these variables represents a complete symmetric function.  In
+     <l_var> the <i>-th complete symmetric function is represented by
+     the concatenation of the letter `h' and the integer <i>: `h<i>'.
+     This function expresses <P> in terms of Schur functions.
+
+          (%i1) schur2comp (h1*h2 - h3, [h1, h2, h3]);
+          (%o1)                         s
+                                         1, 2
+          (%i2) schur2comp (a*h3, [h3]);
+          (%o2)                         s  a
+                                         3
+
+
+68.2.2 Changing representations
+-------------------------------
+
+ -- Function: cont2part (<pc>, <lvar>)
+     returns the partitioned polynomial associated to the contracted
+     form <pc> whose variables are in <lvar>.
+
+          (%i1) pc: 2*a^3*b*x^4*y + x^5;
+                                     3    4      5
+          (%o1)                   2 a  b x  y + x
+          (%i2) cont2part (pc, [x, y]);
+                                             3
+          (%o2)              [[1, 5, 0], [2 a  b, 4, 1]]
+
+
+ -- Function: contract (<psym>, <lvar>)
+     returns a contracted form (i.e. a monomial orbit under the action
+     of the symmetric group) of the polynomial <psym> in the variables
+     contained in the list <lvar>.  The function `explose' performs the
+     inverse operation.  The function `tcontract' tests the symmetry of
+     the polynomial.
+
+          (%i1) psym: explose (2*a^3*b*x^4*y, [x, y, z]);
+                   3      4      3      4      3    4        3    4
+          (%o1) 2 a  b y z  + 2 a  b x z  + 2 a  b y  z + 2 a  b x  z
+
+                                                     3      4      3    4
+                                                + 2 a  b x y  + 2 a  b x  y
+          (%i2) contract (psym, [x, y, z]);
+                                        3    4
+          (%o2)                      2 a  b x  y
+
+
+ -- Function: explose (<pc>, <lvar>)
+     returns the symmetric polynomial associated with the contracted
+     form <pc>. The list <lvar> contains the variables.
+
+          (%i1) explose (a*x + 1, [x, y, z]);
+          (%o1)                  a z + a y + a x + 1
+
+
+ -- Function: part2cont (<ppart>, <lvar>)
+     goes from the partitioned form to the contracted form of a
+     symmetric polynomial.  The contracted form is rendered with the
+     variables in <lvar>.
+
+          (%i1) part2cont ([[2*a^3*b, 4, 1]], [x, y]);
+                                        3    4
+          (%o1)                      2 a  b x  y
+
+
+ -- Function: partpol (<psym>, <lvar>)
+     <psym> is a symmetric polynomial in the variables of the list
+     <lvar>. This function retturns its partitioned representation.
+
+          (%i1) partpol (-a*(x + y) + 3*x*y, [x, y]);
+          (%o1)               [[3, 1, 1], [- a, 1, 0]]
+
+
+ -- Function: tcontract (<pol>, <lvar>)
+     tests if the polynomial <pol> is symmetric in the variables of the
+     list <lvar>.  If so, it returns a contracted representation like
+     the function `contract'.
+
+
+ -- Function: tpartpol (<pol>, <lvar>)
+     tests if the polynomial <pol> is symmetric in the variables of the
+     list <lvar>.  If so, it returns its partitioned representation like
+     the function `partpol'.
+
+
+68.2.3 Groups and orbits
+------------------------
+
+ -- Function: direct ([<p_1>, ..., <p_n>], <y>, <f>, [<lvar_1>, ...,
+          <lvar_n>])
+     calculates the direct image (see M. Giusti, D. Lazard et A.
+     Valibouze, ISSAC 1988, Rome) associated to the function <f>, in
+     the lists of variables <lvar_1>, ..., <lvar_n>, and in the
+     polynomials <p_1>, ..., <p_n> in a variable <y>.  The arity of the
+     function <f> is important for the calulation.  Thus, if the
+     expression for <f> does not depend on some variable, it is useless
+     to include this variable, and not including it will also
+     considerably reduce the amount of computation.
+
+          (%i1) direct ([z^2  - e1* z + e2, z^2  - f1* z + f2],
+                        z, b*v + a*u, [[u, v], [a, b]]);
+                 2
+          (%o1) y  - e1 f1 y
+
+                                           2            2             2   2
+                            - 4 e2 f2 - (e1  - 2 e2) (f1  - 2 f2) + e1  f1
+                          + -----------------------------------------------
+                                                   2
+          (%i2) ratsimp (%);
+                        2                2                   2
+          (%o2)        y  - e1 f1 y + (e1  - 4 e2) f2 + e2 f1
+          (%i3) ratsimp (direct ([z^3-e1*z^2+e2*z-e3,z^2  - f1* z + f2],
+                        z, b*v + a*u, [[u, v], [a, b]]));
+                 6            5         2                        2    2   4
+          (%o3) y  - 2 e1 f1 y  + ((2 e1  - 6 e2) f2 + (2 e2 + e1 ) f1 ) y
+
+                                    3                               3   3
+           + ((9 e3 + 5 e1 e2 - 2 e1 ) f1 f2 + (- 2 e3 - 2 e1 e2) f1 ) y
+
+                   2       2        4    2
+           + ((9 e2  - 6 e1  e2 + e1 ) f2
+
+                              2       2       2                   2    4
+           + (- 9 e1 e3 - 6 e2  + 3 e1  e2) f1  f2 + (2 e1 e3 + e2 ) f1 )
+
+            2          2                      2     3          2
+           y  + (((9 e1  - 27 e2) e3 + 3 e1 e2  - e1  e2) f1 f2
+
+                           2            2    3                5
+           + ((15 e2 - 2 e1 ) e3 - e1 e2 ) f1  f2 - 2 e2 e3 f1 ) y
+
+                     2                   3           3     2   2    3
+           + (- 27 e3  + (18 e1 e2 - 4 e1 ) e3 - 4 e2  + e1  e2 ) f2
+
+                   2      3                   3    2   2
+           + (27 e3  + (e1  - 9 e1 e2) e3 + e2 ) f1  f2
+
+                             2    4        2   6
+           + (e1 e2 e3 - 9 e3 ) f1  f2 + e3  f1
+
+     Finding the polynomial whose roots are the sums a+u where a is a
+     root of z^2 - e_1 z + e_2 and u is a root of z^2 - f_1 z + f_2.
+
+          (%i1) ratsimp (direct ([z^2 - e1* z + e2, z^2 - f1* z + f2],
+                                    z, a + u, [[u], [a]]));
+                 4                    3             2
+          (%o1) y  + (- 2 f1 - 2 e1) y  + (2 f2 + f1  + 3 e1 f1 + 2 e2
+
+               2   2                              2               2
+           + e1 ) y  + ((- 2 f1 - 2 e1) f2 - e1 f1  + (- 2 e2 - e1 ) f1
+
+                            2                     2            2
+           - 2 e1 e2) y + f2  + (e1 f1 - 2 e2 + e1 ) f2 + e2 f1  + e1 e2 f1
+
+               2
+           + e2
+
+     `direct' accepts two flags: `elementaires' and `puissances'
+     (default) which allow decomposing the symmetric polynomials
+     appearing in the calculation into elementary symmetric functions,
+     or power functions, respectively.
+
+     Functions of `sym' used in this function:
+
+     `multi_orbit' (so `orbit'), `pui_direct', `multi_elem' (so
+     `elem'), `multi_pui' (so `pui'), `pui2ele', `ele2pui' (if the flag
+     `direct' is in `puissances').
+
+
+ -- Function: multi_orbit (<P>, [<lvar_1>, <lvar_2>,..., <lvar_p>])
+     <P> is a polynomial in the set of variables contained in the lists
+     <lvar_1>, <lvar_2>, ..., <lvar_p>. This function returns the orbit
+     of the polynomial <P> under the action of the product of the
+     symmetric groups of the sets of variables represented in these <p>
+     lists.
+
+          (%i1) multi_orbit (a*x + b*y, [[x, y], [a, b]]);
+          (%o1)                [b y + a x, a y + b x]
+          (%i2) multi_orbit (x + y + 2*a, [[x, y], [a, b, c]]);
+          (%o2)        [y + x + 2 c, y + x + 2 b, y + x + 2 a]
+     Also see: `orbit' for the action of a single symmetric group.
+
+
+ -- Function: multsym (<ppart_1>, <ppart_2>, <n>)
+     returns the product of the two symmetric polynomials in <n>
+     variables by working only modulo the action of the symmetric group
+     of order <n>. The polynomials are in their partitioned form.
+
+     Given the 2 symmetric polynomials in <x>, <y>:  `3*(x + y) +
+     2*x*y' and `5*(x^2 + y^2)' whose partitioned forms are `[[3, 1],
+     [2, 1, 1]]' and `[[5, 2]]', their product will be
+
+          (%i1) multsym ([[3, 1], [2, 1, 1]], [[5, 2]], 2);
+          (%o1)         [[10, 3, 1], [15, 3, 0], [15, 2, 1]]
+     that is `10*(x^3*y + y^3*x) + 15*(x^2*y + y^2*x) + 15*(x^3 + y^3)'.
+
+     Functions for changing the representations of a symmetric
+     polynomial:
+
+     `contract', `cont2part', `explose', `part2cont', `partpol',
+     `tcontract', `tpartpol'.
+
+
+ -- Function: orbit (<P>, <lvar>)
+     computes the orbit of the polynomial <P> in the variables in the
+     list <lvar> under the action of the symmetric group of the set of
+     variables in the list <lvar>.
+
+          (%i1) orbit (a*x + b*y, [x, y]);
+          (%o1)                [a y + b x, b y + a x]
+          (%i2) orbit (2*x + x^2, [x, y]);
+                                  2         2
+          (%o2)                 [y  + 2 y, x  + 2 x]
+     See also `multi_orbit' for the action of a product of symmetric
+     groups on a polynomial.
+
+
+ -- Function: pui_direct (<orbite>, [<lvar_1>, ..., <lvar_n>], [<d_1>,
+          <d_2>, ..., <d_n>])
+     Let <f> be a polynomial in <n> blocks of variables <lvar_1>, ...,
+     <lvar_n>.  Let <c_i> be the number of variables in <lvar_i>, and
+     <SC> be the product of <n> symmetric groups of degree <c_1>, ...,
+     <c_n>. This group acts naturally on <f>.  The list <orbite> is the
+     orbit, denoted `<SC>(<f>)', of the function <f> under the action
+     of <SC>. (This list may be obtained by the function
+     `multi_orbit'.)  The <di> are integers s.t.  c_1 <= d_1, c_2 <=
+     d_2, ..., c_n <= d_n.
+
+     Let <SD> be the product of the symmetric groups S_[d_1] x S_[d_2]
+     x ... x S_[d_n].  The function `pui_direct' returns the first <n>
+     power functions of `<SD>(<f>)' deduced from the power functions of
+     `<SC>(<f>)', where <n> is the size of `<SD>(<f>)'.
+
+     The result is in multi-contracted form w.r.t. <SD>, i.e. only one
+     element is kept per orbit, under the action of <SD>.
+
+          (%i1) l: [[x, y], [a, b]];
+          (%o1)                   [[x, y], [a, b]]
+          (%i2) pui_direct (multi_orbit (a*x + b*y, l), l, [2, 2]);
+                                                 2  2
+          (%o2)               [a x, 4 a b x y + a  x ]
+          (%i3) pui_direct (multi_orbit (a*x + b*y, l), l, [3, 2]);
+                                       2  2     2    2        3  3
+          (%o3) [2 a x, 4 a b x y + 2 a  x , 3 a  b x  y + 2 a  x ,
+
+              2  2  2  2      3    3        4  4
+          12 a  b  x  y  + 4 a  b x  y + 2 a  x ,
+
+              3  2  3  2      4    4        5  5
+          10 a  b  x  y  + 5 a  b x  y + 2 a  x ,
+
+              3  3  3  3       4  2  4  2      5    5        6  6
+          40 a  b  x  y  + 15 a  b  x  y  + 6 a  b x  y + 2 a  x ]
+          (%i4) pui_direct ([y + x + 2*c, y + x + 2*b, y + x + 2*a],
+                [[x, y], [a, b, c]], [2, 3]);
+                                       2              2
+          (%o4) [3 x + 2 a, 6 x y + 3 x  + 4 a x + 4 a ,
+
+                           2                   3        2       2        3
+                        9 x  y + 12 a x y + 3 x  + 6 a x  + 12 a  x + 8 a ]
+
+
+68.2.4 Partitions
+-----------------
+
+ -- Function: kostka (<part_1>, <part_2>)
+     written by P. Esperet, calculates the Kostka number of the
+     partition <part_1> and <part_2>.
+
+          (%i1) kostka ([3, 3, 3], [2, 2, 2, 1, 1, 1]);
+          (%o1)                           6
+
+
+ -- Function: lgtreillis (<n>, <m>)
+     returns the list of partitions of weight <n> and length <m>.
+
+          (%i1) lgtreillis (4, 2);
+          (%o1)                   [[3, 1], [2, 2]]
+     Also see: `ltreillis', `treillis' and `treinat'.
+
+
+ -- Function: ltreillis (<n>, <m>)
+     returns the list of partitions of weight <n> and length less than
+     or equal to <m>.
+
+          (%i1) ltreillis (4, 2);
+          (%o1)               [[4, 0], [3, 1], [2, 2]]
+     Also see: `lgtreillis', `treillis' and `treinat'.
+
+
+ -- Function: treillis (<n>)
+     returns all partitions of weight <n>.
+
+          (%i1) treillis (4);
+          (%o1)    [[4], [3, 1], [2, 2], [2, 1, 1], [1, 1, 1, 1]]
+
+     See also: `lgtreillis', `ltreillis' and `treinat'.
+
+
+ -- Function: treinat (<part>)
+     retruns the list of partitions inferior to the partition <part>
+     w.r.t.  the natural order.
+
+          (%i1) treinat ([5]);
+          (%o1)                         [[5]]
+          (%i2) treinat ([1, 1, 1, 1, 1]);
+          (%o2) [[5], [4, 1], [3, 2], [3, 1, 1], [2, 2, 1], [2, 1, 1, 1],
+
+                                                           [1, 1, 1, 1, 1]]
+          (%i3) treinat ([3, 2]);
+          (%o3)                 [[5], [4, 1], [3, 2]]
+
+     See also: `lgtreillis', `ltreillis' and `treillis'.
+
+
+68.2.5 Polynomials and their roots
+----------------------------------
+
+ -- Function: ele2polynome (<L>, <z>)
+     returns the polynomial in <z> s.t. the elementary symmetric
+     functions of its roots are in the list `<L> = [<n>, <e_1>, ...,
+     <e_n>]', where <n> is the degree of the polynomial and <e_i> the
+     <i>-th elementary symmetric function.
+
+          (%i1) ele2polynome ([2, e1, e2], z);
+                                    2
+          (%o1)                    z  - e1 z + e2
+          (%i2) polynome2ele (x^7 - 14*x^5 + 56*x^3  - 56*x + 22, x);
+          (%o2)          [7, 0, - 14, 0, 56, 0, - 56, - 22]
+          (%i3) ele2polynome ([7, 0, -14, 0, 56, 0, -56, -22], x);
+                            7       5       3
+          (%o3)            x  - 14 x  + 56 x  - 56 x + 22
+     The inverse: `polynome2ele (<P>, <z>)'.
+
+     Also see: `polynome2ele', `pui2polynome'.
+
+
+ -- Function: polynome2ele (<P>, <x>)
+     gives the list `<l> = [<n>, <e_1>, ..., <e_n>]' where <n> is the
+     degree of the polynomial <P> in the variable <x> and <e_i> is the
+     <i>-the elementary symmetric function of the roots of <P>.
+
+          (%i1) polynome2ele (x^7 - 14*x^5 + 56*x^3 - 56*x + 22, x);
+          (%o1)          [7, 0, - 14, 0, 56, 0, - 56, - 22]
+          (%i2) ele2polynome ([7, 0, -14, 0, 56, 0, -56, -22], x);
+                            7       5       3
+          (%o2)            x  - 14 x  + 56 x  - 56 x + 22
+     The inverse: `ele2polynome (<l>, <x>)'
+
+
+ -- Function: prodrac (<L>, <k>)
+     <L> is a list containing the elementary symmetric functions on a
+     set <A>. `prodrac' returns the polynomial whose roots are the <k>
+     by <k> products of the elements of <A>.
+
+     Also see `somrac'.
+
+
+ -- Function: pui2polynome (<x>, <lpui>)
+     calculates the polynomial in <x> whose power functions of the roots
+     are given in the list <lpui>.
+
+          (%i1) pui;
+          (%o1)                           1
+          (%i2) kill(labels);
+          (%o0)                         done
+          (%i1) polynome2ele (x^3 - 4*x^2 + 5*x - 1, x);
+          (%o1)                     [3, 4, 5, 1]
+          (%i2) ele2pui (3, %);
+          (%o2)                     [3, 4, 6, 7]
+          (%i3) pui2polynome (x, %);
+                                  3      2
+          (%o3)                  x  - 4 x  + 5 x - 1
+     See also: `polynome2ele', `ele2polynome'.
+
+
+ -- Function: somrac (<L>, <k>)
+     The list <L> contains elementary symmetric functions of a
+     polynomial <P> . The function computes the polynomial whose roots
+     are the <k> by <k> distinct sums of the roots of <P>.
+
+     Also see `prodrac'.
+
+
+68.2.6 Resolvents
+-----------------
+
+ -- Function: resolvante (<P>, <x>, <f>, [<x_1>,..., <x_d>])
+     calculates the resolvent of the polynomial <P> in <x> of degree
+     <n> >= <d> by the function <f> expressed in the variables <x_1>,
+     ..., <x_d>.  For efficiency of computation it is important to not
+     include in the list `[<x_1>, ..., <x_d>]' variables which do not
+     appear in the transformation function <f>.
+
+     To increase the efficiency of the computation one may set flags in
+     `resolvante' so as to use appropriate algorithms:
+
+     If the function <f> is unitary:
+        * A polynomial in a single variable,
+
+        *   linear,
+
+        *   alternating,
+
+        *   a sum,
+
+        *   symmetric,
+
+        *   a product,
+
+        * the function of the Cayley resolvent (usable up to degree 5)
+
+               (x1*x2 + x2*x3 + x3*x4 + x4*x5 + x5*x1 -
+                    (x1*x3 + x3*x5 + x5*x2 + x2*x4 + x4*x1))^2
+
+          general,
+     the flag of `resolvante' may be, respectively:
+        *   unitaire,
+
+        *   lineaire,
+
+        *   alternee,
+
+        *   somme,
+
+        *   produit,
+
+        *   cayley,
+
+        *   generale.
+
+          (%i1) resolvante: unitaire$
+          (%i2) resolvante (x^7 - 14*x^5 + 56*x^3 - 56*x + 22, x, x^3 - 1,
+                [x]);
+
+          " resolvante unitaire " [7, 0, 28, 0, 168, 0, 1120, - 154, 7840,
+                                   - 2772, 56448, - 33880,
+
+          413952, - 352352, 3076668, - 3363360, 23114112, - 30494464,
+
+          175230832, - 267412992, 1338886528, - 2292126760]
+            3       6      3       9      6      3
+          [x  - 1, x  - 2 x  + 1, x  - 3 x  + 3 x  - 1,
+
+           12      9      6      3       15      12       9       6      3
+          x   - 4 x  + 6 x  - 4 x  + 1, x   - 5 x   + 10 x  - 10 x  + 5 x
+
+                 18      15       12       9       6      3
+           - 1, x   - 6 x   + 15 x   - 20 x  + 15 x  - 6 x  + 1,
+
+           21      18       15       12       9       6      3
+          x   - 7 x   + 21 x   - 35 x   + 35 x  - 21 x  + 7 x  - 1]
+          [- 7, 1127, - 6139, 431767, - 5472047, 201692519, - 3603982011]
+                 7      6        5         4          3           2
+          (%o2) y  + 7 y  - 539 y  - 1841 y  + 51443 y  + 315133 y
+
+                                                        + 376999 y + 125253
+          (%i3) resolvante: lineaire$
+          (%i4) resolvante (x^4 - 1, x, x1 + 2*x2 + 3*x3, [x1, x2, x3]);
+
+          " resolvante lineaire "
+                 24       20         16            12             8
+          (%o4) y   + 80 y   + 7520 y   + 1107200 y   + 49475840 y
+
+                                                              4
+                                                 + 344489984 y  + 655360000
+          (%i5) resolvante: general$
+          (%i6) resolvante (x^4 - 1, x, x1 + 2*x2 + 3*x3, [x1, x2, x3]);
+
+          " resolvante generale "
+                 24       20         16            12             8
+          (%o6) y   + 80 y   + 7520 y   + 1107200 y   + 49475840 y
+
+                                                              4
+                                                 + 344489984 y  + 655360000
+          (%i7) resolvante (x^4 - 1, x, x1 + 2*x2 + 3*x3, [x1, x2, x3, x4]);
+
+          " resolvante generale "
+                 24       20         16            12             8
+          (%o7) y   + 80 y   + 7520 y   + 1107200 y   + 49475840 y
+
+                                                              4
+                                                 + 344489984 y  + 655360000
+          (%i8) direct ([x^4 - 1], x, x1 + 2*x2 + 3*x3, [[x1, x2, x3]]);
+                 24       20         16            12             8
+          (%o8) y   + 80 y   + 7520 y   + 1107200 y   + 49475840 y
+
+                                                              4
+                                                 + 344489984 y  + 655360000
+          (%i9) resolvante :lineaire$
+          (%i10) resolvante (x^4 - 1, x, x1 + x2 + x3, [x1, x2, x3]);
+
+          " resolvante lineaire "
+                                        4
+          (%o10)                       y  - 1
+          (%i11) resolvante: symetrique$
+          (%i12) resolvante (x^4 - 1, x, x1 + x2 + x3, [x1, x2, x3]);
+
+          " resolvante symetrique "
+                                        4
+          (%o12)                       y  - 1
+          (%i13) resolvante (x^4 + x + 1, x, x1 - x2, [x1, x2]);
+
+          " resolvante symetrique "
+                                     6      2
+          (%o13)                    y  - 4 y  - 1
+          (%i14) resolvante: alternee$
+          (%i15) resolvante (x^4 + x + 1, x, x1 - x2, [x1, x2]);
+
+          " resolvante alternee "
+                      12      8       6        4        2
+          (%o15)     y   + 8 y  + 26 y  - 112 y  + 216 y  + 229
+          (%i16) resolvante: produit$
+          (%i17) resolvante (x^7 - 7*x + 3, x, x1*x2*x3, [x1, x2, x3]);
+
+          " resolvante produit "
+                  35      33         29        28         27        26
+          (%o17) y   - 7 y   - 1029 y   + 135 y   + 7203 y   - 756 y
+
+                   24           23          22            21           20
+           + 1323 y   + 352947 y   - 46305 y   - 2463339 y   + 324135 y
+
+                    19           18             17              15
+           - 30618 y   - 453789 y   - 40246444 y   + 282225202 y
+
+                       14              12             11            10
+           - 44274492 y   + 155098503 y   + 12252303 y   + 2893401 y
+
+                        9            8            7             6
+           - 171532242 y  + 6751269 y  + 2657205 y  - 94517766 y
+
+                      5             3
+           - 3720087 y  + 26040609 y  + 14348907
+          (%i18) resolvante: symetrique$
+          (%i19) resolvante (x^7 - 7*x + 3, x, x1*x2*x3, [x1, x2, x3]);
+
+          " resolvante symetrique "
+                  35      33         29        28         27        26
+          (%o19) y   - 7 y   - 1029 y   + 135 y   + 7203 y   - 756 y
+
+                   24           23          22            21           20
+           + 1323 y   + 352947 y   - 46305 y   - 2463339 y   + 324135 y
+
+                    19           18             17              15
+           - 30618 y   - 453789 y   - 40246444 y   + 282225202 y
+
+                       14              12             11            10
+           - 44274492 y   + 155098503 y   + 12252303 y   + 2893401 y
+
+                        9            8            7             6
+           - 171532242 y  + 6751269 y  + 2657205 y  - 94517766 y
+
+                      5             3
+           - 3720087 y  + 26040609 y  + 14348907
+          (%i20) resolvante: cayley$
+          (%i21) resolvante (x^5 - 4*x^2 + x + 1, x, a, []);
+
+          " resolvante de Cayley "
+                  6       5         4          3            2
+          (%o21) x  - 40 x  + 4080 x  - 92928 x  + 3772160 x  + 37880832 x
+
+                                                                 + 93392896
+
+     For the Cayley resolvent, the 2 last arguments are neutral and the
+     input polynomial must necessarily be of degree 5.
+
+     See also:
+
+     `resolvante_bipartite', `resolvante_produit_sym',
+     `resolvante_unitaire', `resolvante_alternee1', `resolvante_klein',
+     `resolvante_klein3', `resolvante_vierer', `resolvante_diedrale'.
+
+
+ -- Function: resolvante_alternee1 (<P>, <x>)
+     calculates the transformation `<P>(<x>)' of degree <n> by the
+     function product(x_i - x_j, 1 <= i < j <= n - 1).
+
+     See also:
+
+     `resolvante_produit_sym', `resolvante_unitaire', `resolvante' ,
+     `resolvante_klein', `resolvante_klein3', `resolvante_vierer',
+     `resolvante_diedrale', `resolvante_bipartite'.
+
+
+ -- Function: resolvante_bipartite (<P>, <x>)
+     calculates the transformation of `<P>(<x>)' of even degree <n> by
+     the function x_1 x_2 ... x_[n/2] + x_[n/2 + 1] ... x_n.
+
+     See also:
+
+     `resolvante_produit_sym', `resolvante_unitaire', `resolvante' ,
+     `resolvante_klein', `resolvante_klein3', `resolvante_vierer',
+     `resolvante_diedrale', `resolvante_alternee1'.
+
+          (%i1) resolvante_bipartite (x^6 + 108, x);
+                        10        8           6             4
+          (%o1)        y   - 972 y  + 314928 y  - 34012224 y
+
+     See also:
+
+     `resolvante_produit_sym', `resolvante_unitaire', `resolvante',
+     `resolvante_klein', `resolvante_klein3', `resolvante_vierer',
+     `resolvante_diedrale', `resolvante_alternee1'.
+
+
+ -- Function: resolvante_diedrale (<P>, <x>)
+     calculates the transformation of `<P>(<x>)' by the function `<x_1>
+     <x_2> + <x_3> <x_4>'.
+
+          (%i1) resolvante_diedrale (x^5 - 3*x^4 + 1, x);
+                 15       12       11       10        9         8         7
+          (%o1) x   - 21 x   - 81 x   - 21 x   + 207 x  + 1134 x  + 2331 x
+
+                  6         5          4          3          2
+           - 945 x  - 4970 x  - 18333 x  - 29079 x  - 20745 x  - 25326 x
+
+           - 697
+
+     See also:
+
+     `resolvante_produit_sym', `resolvante_unitaire',
+     `resolvante_alternee1', `resolvante_klein', `resolvante_klein3',
+     `resolvante_vierer', `resolvante'.
+
+
+ -- Function: resolvante_klein (<P>, <x>)
+     calculates the transformation of `<P>(<x>)' by the function `<x_1>
+     <x_2> <x_4> + <x_4>'.
+
+     See also:
+
+     `resolvante_produit_sym', `resolvante_unitaire',
+     `resolvante_alternee1', `resolvante', `resolvante_klein3',
+     `resolvante_vierer', `resolvante_diedrale'.
+
+
+ -- Function: resolvante_klein3 (<P>, <x>)
+     calculates the transformation of `<P>(<x>)' by the function `<x_1>
+     <x_2> <x_4> + <x_4>'.
+
+     See also:
+
+     `resolvante_produit_sym', `resolvante_unitaire',
+     `resolvante_alternee1', `resolvante_klein', `resolvante',
+     `resolvante_vierer', `resolvante_diedrale'.
+
+
+ -- Function: resolvante_produit_sym (<P>, <x>)
+     calculates the list of all product resolvents of the polynomial
+     `<P>(<x>)'.
+
+          (%i1) resolvante_produit_sym (x^5 + 3*x^4 + 2*x - 1, x);
+                  5      4             10      8       7       6       5
+          (%o1) [y  + 3 y  + 2 y - 1, y   - 2 y  - 21 y  - 31 y  - 14 y
+
+              4       3      2       10      8       7    6       5       4
+           - y  + 14 y  + 3 y  + 1, y   + 3 y  + 14 y  - y  - 14 y  - 31 y
+
+                 3      2       5      4
+           - 21 y  - 2 y  + 1, y  - 2 y  - 3 y - 1, y - 1]
+          (%i2) resolvante: produit$
+          (%i3) resolvante (x^5 + 3*x^4 + 2*x - 1, x, a*b*c, [a, b, c]);
+
+          " resolvante produit "
+                 10      8       7    6        5       4       3     2
+          (%o3) y   + 3 y  + 14 y  - y  - 14 y  - 31 y  - 21 y  - 2 y  + 1
+
+     See also:
+
+     `resolvante', `resolvante_unitaire', `resolvante_alternee1',
+     `resolvante_klein', `resolvante_klein3', `resolvante_vierer',
+     `resolvante_diedrale'.
+
+
+ -- Function: resolvante_unitaire (<P>, <Q>, <x>)
+     computes the resolvent of the polynomial `<P>(<x>)' by the
+     polynomial `<Q>(<x>)'.
+
+     See also:
+
+     `resolvante_produit_sym', `resolvante', `resolvante_alternee1',
+     `resolvante_klein', `resolvante_klein3', `resolvante_vierer',
+     `resolvante_diedrale'.
+
+
+ -- Function: resolvante_vierer (<P>, <x>)
+     computes the transformation of `<P>(<x>)' by the function `<x_1>
+     <x_2> - <x_3> <x_4>'.
+
+     See also:
+
+     `resolvante_produit_sym', `resolvante_unitaire',
+     `resolvante_alternee1', `resolvante_klein', `resolvante_klein3',
+     `resolvante', `resolvante_diedrale'.
+
+
+68.2.7 Miscellaneous
+--------------------
+
+ -- Function: multinomial (<r>, <part>)
+     where <r> is the weight of the partition <part>.  This function
+     returns the associate multinomial coefficient: if the parts of
+     <part> are <i_1>, <i_2>, ..., <i_k>, the result is `<r>!/(<i_1>!
+     <i_2>! ... <i_k>!)'.
+
+
+ -- Function: permut (<L>)
+     returns the list of permutations of the list <L>.
+
+
+
+File: maxima.info,  Node: unit,  Next: zeilberger,  Prev: symmetries,  Up: Top
+
+69 unit
+*******
+
+* Menu:
+
+* Introduction to Units::
+* Functions and Variables for Units::
+
+
+File: maxima.info,  Node: Introduction to Units,  Next: Functions and Variables for Units,  Prev: unit,  Up: unit
+
+69.1 Introduction to Units
+==========================
+
+The _unit_ package enables the user to convert between arbitrary units
+and work with dimensions in equations. The functioning of this package
+is radically different from the original Maxima units package - whereas
+the original was a basic list of definitions, this package uses
+rulesets to allow the user to chose, on a per dimension basis, what
+unit final answers should be rendered in.  It will separate units
+instead of intermixing them in the display, allowing the user to
+readily identify the units associated with a particular answer.  It
+will allow a user to simplify an expression to its fundamental Base
+Units, as well as providing fine control over simplifying to derived
+units.  Dimensional analysis is possible, and a variety of tools are
+available to manage conversion and simplification options. In addition
+to customizable automatic conversion, _units_ also provides a
+traditional manual conversion option.
+
+   Note - when unit conversions are inexact Maxima will make
+approximations resulting in fractions. This is a consequence of the
+techniques used to simplify units.  The messages warning of this type
+of substitution are disabled by default in the case of units (normally
+they are on) since this situation occurs frequently and the warnings
+clutter the output.  (The existing state of ratprint is restored after
+unit conversions, so user changes to that setting will be preserved
+otherwise.)  If  the user needs this information for units, they can set
+_unitverbose:on_ to reactivate the printing of warnings from the unit
+conversion process.
+
+   _unit_ is included in Maxima in the share/contrib/unit directory. It
+obeys normal Maxima package loading conventions:
+
+     (%i1) load("unit")$
+     *******************************************************************
+     *                       Units version 0.50                        *
+     *          Definitions based on the NIST Reference on             *
+     *              Constants, Units, and Uncertainty                  *
+     *       Conversion factors from various sources including         *
+     *                   NIST and the GNU units package                *
+     *******************************************************************
+
+     Redefining necessary functions...
+     WARNING: DEFUN/DEFMACRO: redefining function TOPLEVEL-MACSYMA-EVAL ...
+     WARNING: DEFUN/DEFMACRO: redefining function MSETCHK ...
+     WARNING: DEFUN/DEFMACRO: redefining function KILL1 ...
+     WARNING: DEFUN/DEFMACRO: redefining function NFORMAT ...
+     Initializing unit arrays...
+     Done.
+
+   The WARNING messages are expected and not a cause for concern - they
+indicate the _unit_ package is redefining functions already defined in
+Maxima proper.  This is necessary in order to properly handle units.
+The user should be aware that if other changes have been made to these
+functions by other packages those changes will be overwritten by this
+loading process.
+
+   The _unit.mac_ file also loads a lisp file _unit-functions.lisp_
+which contains the lisp functions needed for the package.
+
+   Clifford Yapp is the primary author.  He has received valuable
+assistance from Barton Willis of the University of Nebraska at Kearney
+(UNK), Robert Dodier, and other intrepid folk of the Maxima mailing
+list.
+
+   There are probably lots of bugs.  Let me know.  `float' and `numer'
+don't do what is expected.
+
+   TODO : dimension functionality, handling of temperature, showabbr
+and friends.  Show examples with addition of quantities containing
+units.
+
+
+File: maxima.info,  Node: Functions and Variables for Units,  Prev: Introduction to Units,  Up: unit
+
+69.2 Functions and Variables for Units
+======================================
+
+ -- Function: setunits (<list>)
+     By default, the _unit_ package does not use any derived
+     dimensions, but will convert all units to the seven fundamental
+     dimensions using MKS units.
+          (%i2) N;
+                                               kg m
+          (%o2)                                ----
+                                                 2
+                                                s
+          (%i3) dyn;
+                                             1      kg m
+          (%o3)                           (------) (----)
+                                           100000     2
+                                                     s
+          (%i4) g;
+                                              1
+          (%o4)                             (----) (kg)
+                                             1000
+          (%i5) centigram*inch/minutes^2;
+                                            127        kg m
+          (%o5)                       (-------------) (----)
+                                       1800000000000     2
+                                                        s
+
+     In some cases this is the desired behavior.  If the user wishes to
+     use other units, this is achieved with the `setunits' command:
+          (%i6) setunits([centigram,inch,minute]);
+          (%o6)                                done
+          (%i7) N;
+                                      1800000000000   %in cg
+          (%o7)                      (-------------) (------)
+                                           127            2
+                                                      %min
+          (%i8) dyn;
+                                         18000000   %in cg
+          (%o8)                         (--------) (------)
+                                           127          2
+                                                    %min
+          (%i9) g;
+          (%o9)                             (100) (cg)
+          (%i10) centigram*inch/minutes^2;
+                                              %in cg
+          (%o10)                              ------
+                                                  2
+                                              %min
+
+     The setting of units is quite flexible.  For example, if we want to
+     get back to kilograms, meters, and seconds as defaults for those
+     dimensions we can do:
+          (%i11) setunits([kg,m,s]);
+          (%o11)                               done
+          (%i12) centigram*inch/minutes^2;
+                                            127        kg m
+          (%o12)                      (-------------) (----)
+                                       1800000000000     2
+                                                        s
+
+     Derived units are also handled by this command:
+          (%i17) setunits(N);
+          (%o17)                               done
+          (%i18) N;
+          (%o18)                                 N
+          (%i19) dyn;
+                                              1
+          (%o19)                           (------) (N)
+                                            100000
+          (%i20) kg*m/s^2;
+          (%o20)                                 N
+          (%i21) centigram*inch/minutes^2;
+                                              127
+          (%o21)                        (-------------) (N)
+                                         1800000000000
+
+     Notice that the _unit_ package recognized the non MKS combination
+     of mass, length, and inverse time squared as a force, and
+     converted it to Newtons.  This is how Maxima works in general.
+     If, for example, we prefer dyne to Newtons, we simply do the
+     following:
+          (%i22) setunits(dyn);
+          (%o22)                               done
+          (%i23) kg*m/s^2;
+          (%o23)                          (100000) (dyn)
+          (%i24) centigram*inch/minutes^2;
+                                            127
+          (%o24)                         (--------) (dyn)
+                                          18000000
+
+     To discontinue simplifying to any force, we use the uforget
+     command:
+          (%i26) uforget(dyn);
+          (%o26)                               false
+          (%i27) kg*m/s^2;
+                                               kg m
+          (%o27)                               ----
+                                                 2
+                                                s
+          (%i28) centigram*inch/minutes^2;
+                                            127        kg m
+          (%o28)                      (-------------) (----)
+                                       1800000000000     2
+                                                        s
+     This would have worked equally well with `uforget(N)' or
+     `uforget(%force)'.
+
+     See also `uforget'. To use this function write first
+     `load("unit")'.
+
+
+ -- Function: uforget (<list>)
+     By default, the _unit_ package converts all units to the seven
+     fundamental dimensions using MKS units. This behavior can be
+     changed with the `setunits' command. After that, the user can
+     restore the default behavior for a particular dimension by means
+     of the `uforget' command:
+          (%i13) setunits([centigram,inch,minute]);
+          (%o13)                               done
+          (%i14) centigram*inch/minutes^2;
+                                              %in cg
+          (%o14)                              ------
+                                                  2
+                                              %min
+          (%i15) uforget([cg,%in,%min]);
+          (%o15)                      [false, false, false]
+          (%i16) centigram*inch/minutes^2;
+                                            127        kg m
+          (%o16)                      (-------------) (----)
+                                       1800000000000     2
+                                                        s
+
+     `uforget' operates on dimensions, not units, so any unit of a
+     particular dimension will work.  The dimension itself is also a
+     legal argument.
+
+     See also `setunits'. To use this function write first
+     `load("unit")'.
+
+
+ -- Function: convert (<expr>, <list>)
+     When resetting the global environment is overkill, there is the
+     `convert' command, which allows one time conversions.  It can
+     accept either a single argument or a list of units to use in
+     conversion.  When a convert operation is done, the normal global
+     evaluation system is bypassed, in order to avoid the desired
+     result being converted again.  As a consequence, for inexact
+     calculations "rat" warnings will be visible if the global
+     environment controlling this behavior (`ratprint') is true.  This
+     is also useful for spot-checking the accuracy of a global
+     conversion.  Another feature is `convert' will allow a user to do
+     Base Dimension conversions even if the global environment is set to
+     simplify to a Derived Dimension.
+
+          (%i2) kg*m/s^2;
+                                               kg m
+          (%o2)                                ----
+                                                 2
+                                                s
+          (%i3) convert(kg*m/s^2,[g,km,s]);
+                                               g km
+          (%o3)                                ----
+                                                 2
+                                                s
+          (%i4) convert(kg*m/s^2,[g,inch,minute]);
+
+          `rat' replaced 39.37007874015748 by 5000/127 = 39.37007874015748
+                                        18000000000   %in g
+          (%o4)                        (-----------) (-----)
+                                            127           2
+                                                      %min
+          (%i5) convert(kg*m/s^2,[N]);
+          (%o5)                                  N
+          (%i6) convert(kg*m^2/s^2,[N]);
+          (%o6)                                 m N
+          (%i7) setunits([N,J]);
+          (%o7)                                done
+          (%i8) convert(kg*m^2/s^2,[N]);
+          (%o8)                                 m N
+          (%i9) convert(kg*m^2/s^2,[N,inch]);
+
+          `rat' replaced 39.37007874015748 by 5000/127 = 39.37007874015748
+                                           5000
+          (%o9)                           (----) (%in N)
+                                           127
+          (%i10) convert(kg*m^2/s^2,[J]);
+          (%o10)                                 J
+          (%i11) kg*m^2/s^2;
+          (%o11)                                 J
+          (%i12) setunits([g,inch,s]);
+          (%o12)                               done
+          (%i13) kg*m/s^2;
+          (%o13)                                 N
+          (%i14) uforget(N);
+          (%o14)                               false
+          (%i15) kg*m/s^2;
+                                          5000000   %in g
+          (%o15)                         (-------) (-----)
+                                            127       2
+                                                     s
+          (%i16) convert(kg*m/s^2,[g,inch,s]);
+
+          `rat' replaced 39.37007874015748 by 5000/127 = 39.37007874015748
+                                          5000000   %in g
+          (%o16)                         (-------) (-----)
+                                            127       2
+                                                     s
+
+     See also `setunits' and `uforget'. To use this function write
+     first `load("unit")'.
+
+
+ -- Optional variable: usersetunits
+     Default value: none
+
+     If a user wishes to have a default unit behavior other than that
+     described, they can make use of _maxima-init.mac_ and the
+     _usersetunits_ variable.  The _unit_ package will check on startup
+     to see if this variable has been assigned a list.  If it has, it
+     will use setunits on that list and take the units from that list
+     to be defaults.  `uforget' will revert to the behavior defined by
+     usersetunits over its own defaults.  For example, if we have a
+     _maxima-init.mac_ file containing:
+          usersetunits : [N,J];
+     we would see the following behavior:
+          (%i1) load("unit")$
+          *******************************************************************
+          *                       Units version 0.50                        *
+          *          Definitions based on the NIST Reference on             *
+          *              Constants, Units, and Uncertainty                  *
+          *       Conversion factors from various sources including         *
+          *                   NIST and the GNU units package                *
+          *******************************************************************
+
+          Redefining necessary functions...
+          WARNING: DEFUN/DEFMACRO: redefining function
+           TOPLEVEL-MACSYMA-EVAL ...
+          WARNING: DEFUN/DEFMACRO: redefining function MSETCHK ...
+          WARNING: DEFUN/DEFMACRO: redefining function KILL1 ...
+          WARNING: DEFUN/DEFMACRO: redefining function NFORMAT ...
+          Initializing unit arrays...
+          Done.
+          User defaults found...
+          User defaults initialized.
+          (%i2) kg*m/s^2;
+          (%o2)                                  N
+          (%i3) kg*m^2/s^2;
+          (%o3)                                  J
+          (%i4) kg*m^3/s^2;
+          (%o4)                                 J m
+          (%i5) kg*m*km/s^2;
+          (%o5)                             (1000) (J)
+          (%i6) setunits([dyn,eV]);
+          (%o6)                                done
+          (%i7) kg*m/s^2;
+          (%o7)                           (100000) (dyn)
+          (%i8) kg*m^2/s^2;
+          (%o8)                     (6241509596477042688) (eV)
+          (%i9) kg*m^3/s^2;
+          (%o9)                    (6241509596477042688) (eV m)
+          (%i10) kg*m*km/s^2;
+          (%o10)                   (6241509596477042688000) (eV)
+          (%i11) uforget([dyn,eV]);
+          (%o11)                           [false, false]
+          (%i12) kg*m/s^2;
+          (%o12)                                 N
+          (%i13) kg*m^2/s^2;
+          (%o13)                                 J
+          (%i14) kg*m^3/s^2;
+          (%o14)                                J m
+          (%i15) kg*m*km/s^2;
+          (%o15)                            (1000) (J)
+     Without `usersetunits', the initial inputs would have been
+     converted to MKS, and uforget would have resulted in a return to
+     MKS rules.  Instead, the user preferences are respected in both
+     cases.  Notice these can still be overridden if desired.  To
+     completely eliminate this simplification - i.e.  to have the user
+     defaults reset to factory defaults - the `dontusedimension'
+     command can be used.  `uforget' can restore user settings again,
+     but only if `usedimension' frees it for use.  Alternately,
+     `kill(usersetunits)' will completely remove all knowledge of the
+     user defaults from the session.  Here are some examples of how
+     these various options work.
+          (%i2) kg*m/s^2;
+          (%o2)                                  N
+          (%i3) kg*m^2/s^2;
+          (%o3)                                  J
+          (%i4) setunits([dyn,eV]);
+          (%o4)                                done
+          (%i5) kg*m/s^2;
+          (%o5)                           (100000) (dyn)
+          (%i6) kg*m^2/s^2;
+          (%o6)                     (6241509596477042688) (eV)
+          (%i7) uforget([dyn,eV]);
+          (%o7)                          [false, false]
+          (%i8) kg*m/s^2;
+          (%o8)                                  N
+          (%i9) kg*m^2/s^2;
+          (%o9)                                  J
+          (%i10) dontusedimension(N);
+          (%o10)                             [%force]
+          (%i11) dontusedimension(J);
+          (%o11)                         [%energy, %force]
+          (%i12) kg*m/s^2;
+                                               kg m
+          (%o12)                               ----
+                                                 2
+                                                s
+          (%i13) kg*m^2/s^2;
+                                                   2
+                                               kg m
+          (%o13)                               -----
+                                                 2
+                                                s
+          (%i14) setunits([dyn,eV]);
+          (%o14)                               done
+          (%i15) kg*m/s^2;
+                                               kg m
+          (%o15)                               ----
+                                                 2
+                                                s
+          (%i16) kg*m^2/s^2;
+                                                   2
+                                               kg m
+          (%o16)                               -----
+                                                 2
+                                                s
+          (%i17) uforget([dyn,eV]);
+          (%o17)                         [false, false]
+          (%i18) kg*m/s^2;
+                                               kg m
+          (%o18)                               ----
+                                                 2
+                                                s
+          (%i19) kg*m^2/s^2;
+                                                   2
+                                               kg m
+          (%o19)                               -----
+                                                 2
+                                                s
+          (%i20) usedimension(N);
+          Done.  To have Maxima simplify to this dimension, use
+          setunits([unit]) to select a unit.
+          (%o20)                               true
+          (%i21) usedimension(J);
+          Done.  To have Maxima simplify to this dimension, use
+          setunits([unit]) to select a unit.
+          (%o21)                               true
+          (%i22) kg*m/s^2;
+                                               kg m
+          (%o22)                               ----
+                                                 2
+                                                s
+          (%i23) kg*m^2/s^2;
+                                                   2
+                                               kg m
+          (%o23)                               -----
+                                                 2
+                                                s
+          (%i24) setunits([dyn,eV]);
+          (%o24)                               done
+          (%i25) kg*m/s^2;
+          (%o25)                          (100000) (dyn)
+          (%i26) kg*m^2/s^2;
+          (%o26)                    (6241509596477042688) (eV)
+          (%i27) uforget([dyn,eV]);
+          (%o27)                           [false, false]
+          (%i28) kg*m/s^2;
+          (%o28)                                 N
+          (%i29) kg*m^2/s^2;
+          (%o29)                                 J
+          (%i30) kill(usersetunits);
+          (%o30)                               done
+          (%i31) uforget([dyn,eV]);
+          (%o31)                          [false, false]
+          (%i32) kg*m/s^2;
+                                               kg m
+          (%o32)                               ----
+                                                 2
+                                                s
+          (%i33) kg*m^2/s^2;
+                                                   2
+                                               kg m
+          (%o33)                               -----
+                                                 2
+                                                s
+     Unfortunately this wide variety of options is a little confusing
+     at first, but once the user grows used to them they should find
+     they have very full control over their working environment.
+
+
+ -- Function: metricexpandall (<x>)
+     Rebuilds global unit lists automatically creating all desired
+     metric units.  <x> is a numerical argument which is used to
+     specify how many metric prefixes the user wishes defined.  The
+     arguments are as follows, with each higher number defining all
+     lower numbers' units:
+                     0 - none. Only base units
+                     1 - kilo, centi, milli
+          (default)  2 - giga, mega, kilo, hecto, deka, deci, centi, milli,
+                         micro, nano
+                     3 - peta, tera, giga, mega, kilo, hecto, deka, deci,
+                         centi, milli, micro, nano, pico, femto
+                     4 - all
+     Normally, Maxima will not define the full expansion since this
+     results in a very large number of units, but `metricexpandall' can
+     be used to rebuild the list in a more or less complete fashion.
+     The relevant variable in the _unit.mac_ file is <%unitexpand>.
+
+
+ -- Variable: %unitexpand
+     Default value: `2'
+
+     This is the value supplied to `metricexpandall' during the initial
+     loading of _unit_.
+
+
+
+File: maxima.info,  Node: zeilberger,  Next: Glossar,  Prev: unit,  Up: Top
+
+70 zeilberger
+*************
+
+* Menu:
+
+* Introduction to zeilberger::
+* Functions and Variables for zeilberger::
+
+
+File: maxima.info,  Node: Introduction to zeilberger,  Next: Functions and Variables for zeilberger,  Prev: zeilberger,  Up: zeilberger
+
+70.1 Introduction to zeilberger
+===============================
+
+`zeilberger' is a implementation of Zeilberger's algorithm for definite
+hypergeometric summation, and also Gosper's algorithm for indefinite
+hypergeometric summation.
+
+   `zeilberger' makes use of the "filtering" optimization method
+developed by Axel Riese.
+
+   `zeilberger' was developed by Fabrizio Caruso.
+
+   `load (zeilberger)' loads this package.
+
+70.1.0.1 The indefinite summation problem
+.........................................
+
+`zeilberger' implements Gosper's algorithm for indefinite hypergeometric
+summation. Given a hypergeometric term F_k in k we want to find its
+hypergeometric anti-difference, that is, a hypergeometric term f_k such
+that
+
+   F_k = f_(k+1) - f_k.
+
+70.1.0.2 The definite summation problem
+.......................................
+
+`zeilberger' implements Zeilberger's algorithm for definite
+hypergeometric summation. Given a proper hypergeometric term (in n and
+k) F_(n,k) and a positive integer d we want to find a d-th order linear
+recurrence with polynomial coefficients (in n) for F_(n,k) and a
+rational function R in n and k such that
+
+   a_0 F_(n,k) + ... + a_d F_(n+d),k = Delta_k(R(n,k) F_(n,k)),
+
+   where Delta_k is the k-forward difference operator, i.e.,
+Delta_k(t_k) := t_(k+1) - t_k.
+
+70.1.1 Verbosity levels
+-----------------------
+
+There are also verbose versions of the commands which are called by
+adding one of the following prefixes:
+
+`Summary'
+     Just a summary at the end is shown
+
+`Verbose'
+     Some information in the intermidiate steps
+
+`VeryVerbose'
+     More information
+
+`Extra'
+     Even more information including information on the linear system
+     in Zeilberger's algorithm
+
+   For example: `GosperVerbose', `parGosperVeryVerbose',
+`ZeilbergerExtra', `AntiDifferenceSummary'.
+
+
+File: maxima.info,  Node: Functions and Variables for zeilberger,  Prev: Introduction to zeilberger,  Up: zeilberger
+
+70.2 Functions and Variables for zeilberger
+===========================================
+
+ -- Function: AntiDifference (F_k, <k>)
+     Returns the hypergeometric anti-difference of F_k, if it exists.
+     Otherwise `AntiDifference' returns `no_hyp_antidifference'.
+
+
+ -- Function: Gosper (F_k, <k>)
+     Returns the rational certificate R(k) for F_k, that is, a rational
+     function such that F_k = R(k+1) F_(k+1) - R(k) F_k, if it exists.
+     Otherwise, `Gosper' returns `no_hyp_sol'.
+
+
+ -- Function: GosperSum (F_k, <k>, <a>, <b>)
+     Returns the summmation of F_k from <k> = <a> to <k> = <b> if F_k
+     has a hypergeometric anti-difference.  Otherwise, `GosperSum'
+     returns `nongosper_summable'.
+
+     Examples:
+
+          (%i1) load (zeilberger)$
+          (%i2) GosperSum ((-1)^k*k / (4*k^2 - 1), k, 1, n);
+          Dependent equations eliminated:  (1)
+                                     3       n + 1
+                                (n + -) (- 1)
+                                     2               1
+          (%o2)               - ------------------ - -
+                                            2        4
+                                2 (4 (n + 1)  - 1)
+          (%i3) GosperSum (1 / (4*k^2 - 1), k, 1, n);
+                                          3
+                                    - n - -
+                                          2       1
+          (%o3)                  -------------- + -
+                                          2       2
+                                 4 (n + 1)  - 1
+          (%i4) GosperSum (x^k, k, 1, n);
+                                    n + 1
+                                   x          x
+          (%o4)                    ------ - -----
+                                   x - 1    x - 1
+          (%i5) GosperSum ((-1)^k*a! / (k!*(a - k)!), k, 1, n);
+                                          n + 1
+                          a! (n + 1) (- 1)              a!
+          (%o5)       - ------------------------- - ----------
+                        a (- n + a - 1)! (n + 1)!   a (a - 1)!
+          (%i6) GosperSum (k*k!, k, 1, n);
+          Dependent equations eliminated:  (1)
+          (%o6)                     (n + 1)! - 1
+          (%i7) GosperSum ((k + 1)*k! / (k + 1)!, k, 1, n);
+                            (n + 1) (n + 2) (n + 1)!
+          (%o7)             ------------------------ - 1
+                                    (n + 2)!
+          (%i8) GosperSum (1 / ((a - k)!*k!), k, 1, n);
+          (%o8)                  NON_GOSPER_SUMMABLE
+
+
+ -- Function: parGosper (F_(n,k), <k>, <n>, <d>)
+     Attempts to find a <d>-th order recurrence for F_(n,k).
+
+     The algorithm yields a sequence [s_1, s_2, ..., s_m] of solutions.
+     Each solution has the form
+
+     [R(n, k), [a_0, a_1, ..., a_d]].
+
+     `parGosper' returns `[]' if it fails to find a recurrence.
+
+
+ -- Function: Zeilberger (F_(n,k), <k>, <n>)
+     Attempts to compute the indefinite hypergeometric summation of
+     F_(n,k).
+
+     `Zeilberger' first invokes `Gosper', and if that fails to find a
+     solution, then invokes `parGosper' with order 1, 2, 3, ..., up to
+     `MAX_ORD'. If Zeilberger finds a solution before reaching
+     `MAX_ORD', it stops and returns the solution.
+
+     The algorithms yields a sequence [s_1, s_2, ..., s_m] of solutions.
+     Each solution has the form
+
+     [R(n,k), [a_0, a_1, ..., a_d]].
+
+     `Zeilberger' returns `[]' if it fails to find a solution.
+
+     `Zeilberger' invokes `Gosper' only if `Gosper_in_Zeilberger' is
+     `true'.
+
+
+70.3 General global variables
+=============================
+
+ -- Global variable: MAX_ORD
+     Default value: 5
+
+     `MAX_ORD' is the maximum recurrence order attempted by
+     `Zeilberger'.
+
+
+ -- Global variable: simplified_output
+     Default value: `false'
+
+     When `simplified_output' is `true', functions in the `zeilberger'
+     package attempt further simplification of the solution.
+
+
+ -- Global variable: linear_solver
+     Default value: `linsolve'
+
+     `linear_solver' names the solver which is used to solve the system
+     of equations in Zeilberger's algorithm.
+
+
+ -- Global variable: warnings
+     Default value: `true'
+
+     When `warnings' is `true', functions in the `zeilberger' package
+     print warning messages during execution.
+
+
+ -- Global variable: Gosper_in_Zeilberger
+     Default value: `true'
+
+     When `Gosper_in_Zeilberger' is `true', the `Zeilberger' function
+     calls `Gosper' before calling `parGosper'. Otherwise, `Zeilberger'
+     goes immediately to `parGosper'.
+
+
+ -- Global variable: trivial_solutions
+     Default value: `true'
+
+     When `trivial_solutions' is `true', `Zeilberger' returns solutions
+     which have certificate equal to zero, or all coefficients equal to
+     zero.
+
+
+70.4 Variables related to the modular test
+==========================================
+
+ -- Global variable: mod_test
+     Default value: `false'
+
+     When `mod_test' is `true', `parGosper' executes a modular test for
+     discarding systems with no solutions.
+
+
+ -- Global variable: modular_linear_solver
+     Default value: `linsolve'
+
+     `modular_linear_solver' names the linear solver used by the
+     modular test in `parGosper'.
+
+
+ -- Global variable: ev_point
+     Default value: `big_primes[10]'
+
+     `ev_point' is the value at which the variable <n> is evaluated
+     when executing the modular test in `parGosper'.
+
+
+ -- Global variable: mod_big_prime
+     Default value: `big_primes[1]'
+
+     `mod_big_prime' is the modulus used by the modular test in
+     `parGosper'.
+
+
+ -- Global variable: mod_threshold
+     Default value: 4
+
+     `mod_threshold' is the greatest order for which the modular test
+     in `parGosper' is attempted.
+
+
+
+File: maxima.info,  Node: Glossar,  Next: Index der Variablen und Funktionen,  Prev: zeilberger,  Up: Top
+
+71 Glossar
+**********
+
+Das Glossar stellt den deutschen Ãbersetzungen die englischen Begriffe
+gegenÃ¼ber und erlÃ¤utert die Begriffe.
+
+_Ausdruck - expression_
+     Jede beliebige Zeichenfolge, die Maxima als Eingabe versteht und
+     die von        Maxima verarbeitet werden kann.
+
+_Aussage - predicate_
+     AusdrÃ¼cke, die zu den boolschen Werten `true' oder `false'
+     auswerten.
+
+_Auswertung - evaluation_
+     AusdrÃ¼cke werden zunÃ¤chst ausgewertet. Funktionen werden
+     aufgerufen,        die Werte von Variablen werden eingesetzt. Die
+     Auswertung wird von        der Vereinfachung (Simplification)
+     unterschieden und wird vor der        Vereinfachung ausgefÃ¼hrt.
+
+_Begrenzungszeichen - delimiter_
+     Das Zeichen das auf der linken und rechten Seite zum Beispiel eine
+           Liste `[ ... ]' begrenzt.
+
+_Bezeichner - identifier_
+     Der Name einer Variablen oder Funktion.
+
+_Eigenschaft - property_
+
+
+_Expansion - expansion_
+     Mathematische AusdrÃ¼cke werden ausmultipliziert.
+
+_Dateiausgabe - file output_
+
+
+_Dateieingabe - file input_
+
+
+_Fehlersuche - debugging_
+
+
+_Flag - flag_
+     Boolsche Variablen mit den Werten `true' oder `false', die zur
+       Steuerung des Programms vom Nutzer gesetzt werden kÃ¶nnen.
+
+_Konsole Ein- und Ausgabe - console interaction_
+
+
+_Marke - label_
+     Die Eingaben und Ausgaben werden von Maxima in globale Variablen,
+     die als        Marken bezeichnet werden, mit den Namen `%i' und
+     `%o' sowie        `%t' fÃ¼r Zwischenergebnisse abgelegt. Die Marken
+     werden        fortlaufend numeriert.
+
+_Kommandozeile - command line_
+
+
+_Optionsvariable - option variable_
+
+
+_Pipe - pipe_
+     Eine Pipe (englisch fÃ¼r Rohr, RÃ¶hre) bezeichnet einen gepufferten
+     uni-        oder bidirektionalen Datenstrom zwischen zwei
+     Prozessen nach dem âFIFOâ        (First In - First Out)-Prinzip.
+
+_Programmfehler - bug_
+
+
+_Prompt - prompt_
+     Kann auch als Eingabeaufforderung Ã¼bersetzt werden.
+
+_SchlÃ¼sselwort - keyword_
+
+
+_Sitzungsverwaltung - session management_
+
+
+_Stammfunktion - antiderivative_
+
+
+_Standardwert - default value_
+
+
+_Substantivform - noun form_
+     Die Substantivform ist eine nicht ausgewerteter aber dennoch
+     vereinfachter Ausdruck.
+
+_Systemvariable - system variable_
+
+
+_Token - token_
+     Ein Token ist ein StÃ¼ck Text, das die lexikalische Grundeinheit
+     ist,        die von einem Parser behandelt wird.
+
+_Umgebung - enviroment_
+
+
+_Verbform - verb form_
+     Die Verbform wird zunÃ¤chst ausgewertet und erst dann vereinfacht.
+
+_Vereinfachung - simplification_
+     Mathematischen Funktionen, algebraische AusdrÃ¼cke oder Gleichungen
+           werden nach der Auswertung vereinfacht. Ein GroÃteil dieser
+          Vereinfachungen geschieht automatisch. FÃ¼r weitere
+     Vereinfachungen gibt        es spezielle Funktionen und eine
+     Vielzahl von Schaltern, mit denen        gezielt bestimmte
+     Ergebnisse erzielt werden kÃ¶nnen.
+
+_Zeichenkette - string_
+
+
+_Zwischenraumzeichen - whitespace_
+     Zwischenraumzeichen ist eine Bezeichnung fÃ¼r Zeichen in einem
+     Text, die        im Texteditor oder Textverarbeitungsprogramm
+     nicht dargestellt        werden und dennoch (Speicher-)Platz in
+     Anspruch nehmen. Sie dienen        vorrangig dazu, WÃ¶rter oder
+     Zeilen voneinander abzugrenzen.
+
+_Wortart - part of speech_
+     Beim Einlesen eines Ausdrucks prÃ¼ft der Parser, ob die Argumente
+     eines        Operators die korrekte Wortart haben. Maxima kennt
+     die Wortarten        `expr', `clause' und `any'.
+
+
+
+
+Local Variables:
+coding: utf-8
+End:
