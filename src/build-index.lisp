@@ -88,7 +88,6 @@
 
 (defparameter *info-encoding-re* "\\ncoding: ([a-zA-Z0-9-]+)"
   "Regex to extract the encoding string in each master info file.")
-(defparameter *info-default-external-format* :utf-8)
 
 ;;
 ;; Helper functions + macros
@@ -172,11 +171,37 @@ maxima-info and the encoding (external format) of these files."
 	       (read-sequence contents in :start 0 :end nil)
 	       (codes-string contents)))))))
 
+(defun set-external-format (ef)
+  (let ((ef (cond ((null ef) :utf-8)
+		  ((symbolp ef) (symbol-name ef))
+		  (t ef))))
+    #+clisp
+    (intern (string-upcase ef) :charset)
+    #+cmu
+    (stream::find-external-format (intern (string-upcase ef) :keyword))
+    #+sbcl
+    (intern (string-upcase ef) :keyword)
+    #+t
+    ef
+    ))
+
+(defparameter *info-default-external-format*
+  (set-external-format :utf-8))
+
+(defun get-external-format-name (ef)
+    #+cmu
+    (stream::ef-name ef)
+    #+(or sbcl clisp)
+    ef
+    #+t
+    ef
+    )
+
 (defun get-info-file-encoding (maxima-info-contents &optional (info-encoding-re *info-encoding-re*))
   (let (dummy coding)
     (multiple-value-setq (dummy coding) (cl-ppcre:scan-to-strings info-encoding-re maxima-info-contents))
     (if coding
-	(intern (string-upcase (aref coding 0)) :keyword)
+	(set-external-format (aref coding 0))
 	*info-default-external-format*)))
 
 ;;
@@ -341,7 +366,8 @@ before adding new contents."
 	     (let ((xev (eval x)))
 	       (loop for k being the hash-keys of xev
 		  for v = (car (gethash k xev))
-		  do (format out "(setf (gethash ~s ~s) '(~s))~%" k x v))))
+		  for ef = (get-external-format-name v)
+		  do (format out "(setf (gethash ~s ~s) '(#.(set-external-format '~s)))~%" k x ef))))
 	   (dump-hashes (out)
 	     (format out "(in-package :cl-info)~%")
 	     (dump out '*info-deffn-defvr-hashtable*)
