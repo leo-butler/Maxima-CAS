@@ -241,8 +241,8 @@
 			   (not (eql (char source (+ x 2)) #\])))
 		      (if (>= (char-code (char source x))
 			      (char-code (char source (+ 2 x))))
-;;			  (error (intl:gettext "regex: ranges must be in acending order; found: \"~A-~A\"")
-;;				 (char source x) (char source (+ 2 x))))
+			  ;;			  (error (intl:gettext "regex: ranges must be in acending order; found: \"~A-~A\"")
+			  ;;				 (char source x) (char source (+ 2 x))))
 			  (error (format t "regex: ranges must be in acending order; found: \"~A-~A\""
 					 (char source x) (char source (+ 2 x)))))
 		      (do ((j (char-code (char source x)) (1+ j)))
@@ -545,7 +545,7 @@
   "Usage: (let-gs (a b c) body-using-a-b-and/or-c-as-gensym)"
   `(let ,(mapcar #'(lambda(x) `(,x (gensym (concatenate 'string (symbol-name ',x) "-")))) l) ,@body))
 
-(defun compile-regex (re)
+(defun compile-regex-string (re)
   "Rewrites the lambda s-exp from `regex-compile': the regex function
 from the latter is wrapped in a lexical environment containing lexical
 bindings for `*regex-groups*' and `*regex-groupings*'; this
@@ -564,6 +564,17 @@ values of both lexicals if the regex succeeds."
 	 (fn-let   `(lambda ,args ,mlet)))
     (compile nil fn-let)))
 
+(defun compile-regex (re)
+  (cond ((stringp re)
+	 (compile-regex-string re))
+	((functionp re)
+	 (compile nil re))
+	((compiled-function-p re)
+	 re)
+	((and (symbolp re) (boundp re))
+	 (compile-regex (eval re)))
+	(t
+	 nil)))
 
 (defmacro nregex-match-begin (regex-groups)
   `(if ,regex-groups (car (aref ,regex-groups 0))))
@@ -653,13 +664,29 @@ Example:
 	  (let ((code `(nregex-labels ((,begin ,re-begin) (,end ,re-end))
 			 (labels ((,name (string &optional (begin 0) (end (length string)))
 				    (let* ((regex-groups-b (,begin string begin end))
-					   (regex-groups-e  (if regex-groups-b (,end   string (nregex-match-begin regex-groups-b) end))))
+					   (regex-groups-e  (if regex-groups-b (,end string (1+ (nregex-match-begin regex-groups-b)) end))))
 				      (and regex-groups-b
 					   regex-groups-e
-					   (list (nregex-match-begin regex-groups-b) (nregex-match-begin regex-groups-e))))))
+;;					   (list (nregex-match-begin regex-groups-b) (nregex-match-begin regex-groups-e))))))
+					   (list regex-groups-b regex-groups-e)))))
 			   ,@body))))
-	    `(lambda (string &optional (start 0) (end (length string)))
-	       ,code))))
+    `(lambda (string &optional (start 0) (end (length string)))
+       (declare (ignorable start end))
+       ,code))))
+
+(defmacro nregex-or (re-list &body body)
+  "Creates a compiled regex which returns the earliest match amounts all options."
+  (let* ((cre-list (mapcar (lambda(re) (list (gensym "re-") re)) re-list))
+	 (n-list   (mapcar #'car cre-list))
+	 (m-list   (mapcar (lambda(n) `(,(gensym "m-")
+					 (or (nregex-match-begin (funcall #',n string start end)) most-positive-fixnum))) n-list))
+	 (m-min   `(min ,@(mapcar #'car m-list)))
+	 (code    `(nregex-labels ,cre-list
+		     (let ,m-list
+		       ,m-min))))
+    `(lambda (string &optional (start 0) (end (length string)))
+       (declare (ignorable start end))
+       ,code ,@body)))
 
 (defun nregex-all-matches-as-strings (re str &optional (start 0) (end (length str)))
   (nregex-flet-strings-1 regex-match re
