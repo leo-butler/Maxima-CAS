@@ -1,9 +1,9 @@
 MAKEINFOFLAGS = --enable-encoding
+lang = pt
+TEXINFO_TEX=../$(lang)/texinfo.tex
 
-TEXINFO_TEX=../pt/texinfo.tex
-
-langsdir = /pt.utf8
-origlangsdir = ../pt
+langsdir = /$(lang).utf8
+origlangsdir = ../$(lang)
 
 if USE_RECODE
     urecode=true
@@ -18,13 +18,14 @@ thtmlcharset = utf-8
 maxima.texi: $(origlangsdir)/maxima.texi
 	rm -f *.texi
 	cp -p $(origlangsdir)/*.texi .
+	sed -i -e "s|^@documentencoding $(fcharset)|@documentencoding $(tcharset)|ig" *.texi 
 
 maxima-index.lisp: maxima.info
 	$(top_srcdir)/maxima-local --very-quiet --init=/dev/null --batch-string='setup_help_database();print_help_database("$@");'
 
 maxima.html: maxima.texi
 	rm -f maxima*.html 2>/dev/null
-	perl ../texi2html -split_chapter --lang=pt --output=. --css-include=../manual.css --init-file ../texi2html.init maxima.texi 
+	perl ../texi2html -split_chapter --lang=$(lang) --output=. --css-include=../manual.css --init-file ../texi2html.init maxima.texi 
 	for f in maxima*.html; do \
 	    if test x$(urecode) = xtrue ; then \
 	        recode $(fcharset)..$(tcharset) $$f ; \
@@ -41,7 +42,7 @@ maxima.html: maxima.texi
 	done
 
 include $(top_srcdir)/common.mk
-genericdir = $(dochtmldir)/pt.utf8
+genericdir = $(dochtmldir)/$(lang).utf8
 genericdirDATA = \
 contents.hhc index.hhk header.hhp
 
