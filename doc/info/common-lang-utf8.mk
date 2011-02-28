@@ -1,6 +1,7 @@
 maxima_flags =  --very-quiet --init=/dev/null
 
-MAKEINFOFLAGS = --enable-encoding
+MAKEINFOFLAGS = --enable-encoding --document-language=$(lang).utf8
+no_recode = true
 
 TEXINFO_TEX=../$(lang)/texinfo.tex
 

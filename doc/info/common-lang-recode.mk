@@ -1,11 +1,11 @@
-
 all-local: maxima.info maxima-index.lisp maxima.html contents.hhc
 
 maxima.info: maxima.texi
 	@rm -f maxima.info* 2>/dev/null
 	$(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -I $(srcdir) maxima.texi
 	for f in $@ $@-[0-9] $@-[0-9][0-9]; do \
-	    if test -f $$f; then \
+	    if test -f $$f && test "x$(no_recode)" == "x"; then \
+		@echo "Recoding..." ; \
 		if test x$(urecode) = xtrue ; then \
 		    recode $(fcharset)..$(tcharset) $$f ; \
 		else \
@@ -13,6 +13,7 @@ maxima.info: maxima.texi
 		    iconv -f $(fcharset) -t $(tcharset) $$f > foo.$$f ; \
 		    mv -f foo.$$f $$f ; \
 		fi; \
+		@echo "Done." ; \
 	    fi; \
 	done
 
