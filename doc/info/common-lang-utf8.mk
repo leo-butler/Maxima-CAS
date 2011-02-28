@@ -1,3 +1,5 @@
+maxima_flags =  --very-quiet --init=/dev/null
+
 MAKEINFOFLAGS = --enable-encoding
 
 TEXINFO_TEX=../$(lang)/texinfo.tex
@@ -21,7 +23,7 @@ maxima.texi: $(origlangsdir)/maxima.texi
 	sed -i -e "s|^@documentencoding $(fcharset)|@documentencoding $(tcharset)|ig" *.texi 
 
 maxima-index.lisp: maxima.info
-	$(top_srcdir)/maxima-local --very-quiet --init=/dev/null --batch-string='setup_help_database();print_help_database("$@");'
+	$(top_srcdir)/maxima-local $(maxima_flags) --batch-string='setup_help_database();print_help_database("$@");'
 
 maxima.html: maxima.texi
 	rm -f maxima*.html 2>/dev/null
