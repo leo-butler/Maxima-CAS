@@ -161,6 +161,19 @@
 			  (string= s1 s2))))
     ))
 
+;; external-formats
+(defrtest x :func (lambda ()
+		    (flet ((get-set-external-format (answer input)
+			     (eql (get-external-format-name (set-external-format input)) answer)))
+		      (and (get-set-external-format :utf-8 "utf8")
+			   (get-set-external-format :utf-8 "utf-8")
+			   (get-set-external-format :iso-8859-1 "iso88591")
+			   (get-set-external-format :iso-8859-1 "iso8859-1")
+			   (get-set-external-format :iso-8859-1 "iso-88591")
+			   (get-set-external-format :iso-8859-1 "iso-8859-1")
+			   (get-set-external-format :windows-1251 "windows1251")
+			   (get-set-external-format :windows-1251 "windows-1251")))))
+
 :check-report
 (do-tests x #'check)
 (report-summary x)
