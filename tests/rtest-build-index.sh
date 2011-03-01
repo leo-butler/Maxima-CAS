@@ -33,16 +33,26 @@ XTERM=${XTERM:-xterm}
 XTERM_OPTS=${XTERM_OPTS:-"-exec"}
 XTERM_CMD=${XTERM_CMD:-"$XTERM $XTERM_OPTS"}
 LISPS=${LISPS:-"sbcl clisp cmucl"}
-MAXIMA_OPTS=${MAXIMA_OPTS:-"--init=/dev/null"}
+MAXIMA_OPTS=${MAXIMA_OPTS:-"--init=/dev/null --very-quiet"}
 MAXIMA_CMD=${MAXIMA_CMD:-"$PWD/../maxima-local"}
 #MAXIMA_BATCH_STRING=${MAXIMA_BATCH_STRING:-"setup_help_database();print_help_database(\"maxima-index.lisp\");describe(\"expand\");read(\"Quit?\");"}
 MAXIMA_BATCH_STRING=${MAXIMA_BATCH_STRING:-"describe(\"expand\");read(\"Quit\?\");"}
 BATCH_FILE=$(mktemp)
-echo "$MAXIMA_BATCH_STRING" > $BATCH_FILE
+
+RUN_RTEST_BUILD_INDEX=${RUN_RTEST_BUILD_INDEX:-1}
+RTEST_BUILD_INDEX_BS=${RTEST_BUILD_INDEX_BS:-"load(\"rtest-run.lisp\");"}
 vecho $INFO_DIR
 vecho $INFO_SUBDIRS
 vecho "This pid: $$"
 
+echo "$RTEST_BUILD_INDEX_BS" > $BATCH_FILE
+if test "x$RUN_RTEST_BUILD_INDEX" == "x1"; then
+    for lisp in $LISPS; do
+	$MAXIMA_CMD $MAXIMA_OPTS -l $lisp --batch=$BATCH_FILE
+    done
+fi
+
+echo "$MAXIMA_BATCH_STRING" > $BATCH_FILE
 for dir in $INFO_SUBDIRS ; do
     vecho "Testing in $dir"
     for lisp in $LISPS ; do
