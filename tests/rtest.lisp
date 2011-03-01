@@ -34,7 +34,7 @@
 		(typep (second ,results) 'condition)
 		(null (nthcdr 2 ,results)))
 	   (let ((,condition (second ,results)))
-	     (format t "~&Test name: ~a~%" (or (rtest-name (car ,x)) (rtest-number (car ,x))))
+	     (format t "~&Test name: ~a~%" (or (rtest-name ,x) (rtest-number ,x)))
 	     (typecase ,condition
 	       (simple-condition
 		(apply #'format t
@@ -53,7 +53,7 @@
     (dolist (i tests)
       (cond ((and (consp i) (null (cdr i)))
 	     (setf more t (cdr i) t)
-	     (report-error-and-continue i (funcall fn (car i))))
+	     (report-error-and-continue (car i) (funcall fn (car i))))
 	    (t
 	     nil)))
     (if more
