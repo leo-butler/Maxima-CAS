@@ -14,8 +14,9 @@
 ;; Check helper functions/macros
 ;;
 (tagbody
-(defrtest 'x :func #'file-exists-p :inputs '(".") :equality-fn #'(lambda(x y)(and x y)))
-(defrtest 'x :func #'file-exists-p :inputs '("/dev/null") :answer '#P"/dev/null")
+#+clisp (defrtest 'x)
+#-clisp (defrtest 'x :func #'file-exists-p :inputs '(".") :equality-fn #'(lambda(x y)(and x y)))
+(defrtest 'x :func #'file-exists-p :inputs '("/dev/null") :answer (probe-file '#P"/dev/null"))
 
 ;; canonicalize-info-pathnames
 (let* ((default-answer (canonicalize-info-pathnames *maxima-info-default*))
@@ -64,13 +65,23 @@
   )
 
 ;; get-info-file-names
-(let ((files (directory "rtest-build-index/en/maxima.info-*")))
+(defun file= (x y)
+  (string= (pathname-name x) (pathname-name y)))
+(defun file<= (x y)
+  (string<= (pathname-name x) (pathname-name y)))
+(defun file-list= (x y)
+  (not (some #'null (mapcar #'file= x y))))
+(defun sorted-directory (dir)
+  (stable-sort (directory dir) #'file<=))
+
+(let ((files (sorted-directory "rtest-build-index/en/maxima.info-*")))
   (defrtest 'x :func #'(lambda ()
 			 (let* ((maxima-info (probe-file "rtest-build-index/en/maxima.info"))
 				(info-dir (pathname-directory maxima-info))
 				(maxima-info-re *maxima-info-default-re*))
-			   (get-info-file-names maxima-info info-dir maxima-info-re)))
-	    :answer `(,@files)))
+			   (get-info-file-names+external-format maxima-info info-dir maxima-info-re)))
+	    :answer `(,@files)
+	    :equality-fn #'(lambda(x y) (not (some #'null (mapcar #'file= x y))))))
 
 ;; slurp-info-files
 (defrtest 'x :func #'(lambda ()
@@ -82,21 +93,31 @@
 					(s nil (cons c s)))
 				       ((>= k l)
 					(concatenate 'string (map 'string #'code-char s) ending))))
+				(weak-char= (a b)
+				  (or (char= a b)
+				      #+clisp (or (and (char= a #\Return) (char= b #\Newline)) (and (char= b #\Return) (char= a #\Newline)))
+				      ))
+				(weak-string= (x y)
+				  (not (some #'null (mapcar #'weak-char= (coerce x 'list) (coerce y 'list)))))
 				(write-read (ef n)
 				  (let ((write-chars (do* ((k -1    (1+ k))
 							   (c #\Nul (code-char k))
 							   (s ""    (format nil "~3s ~5a ~s~%" k c c))
 							   (str ""  (concatenate 'string str s)))
 							  ((>= k n) str)))
-					(file-name (make-pathname :directory "/tmp/" :name (random-file-name 10 ".txt")))
+					(file-name (make-pathname :directory '(:absolute "tmp") :name (random-file-name 10 ".txt")))
 					(read-chars))
 				    (progn
 				      (with-open-file (out file-name :direction :output :if-exists :overwrite :if-does-not-exist :create :element-type 'character :external-format ef)
 					(format out "~a" write-chars))
 				      (setq read-chars (slurp-info-file file-name ef))
 				      (if (probe-file file-name) (delete-file file-name))
-				      (string= read-chars write-chars)))))
-			 (and (write-read :utf-8 127) (write-read :iso-8859-1 255))))
+				      (weak-string= read-chars write-chars)))))
+			 (let ((utf8 #+clisp 'charset:utf-8
+				     #-clisp ':utf-8)
+			       (iso88591 #+clisp 'charset:iso-8859-1
+					 #-clisp ':iso-8859-1))
+			   (and (write-read utf8 127) (write-read iso88591 255)))))
 	  :answer t)
 
 (let ((*info-section-hashtable*     (make-hash-table :test #'eql :size 600))
@@ -111,7 +132,8 @@
 		    ,@body))))
     ;; get-info-file
     (defrtest 'x :func (lambda-lex-env
-			(equal (directory "rtest-build-index/de.utf8/maxima.info-*") (mapcar #'probe-file (hash-keys (get-info-file :maxima-info maxima-info :over-write nil))))))
+			(file-list= (sorted-directory "rtest-build-index/de.utf8/maxima.info-*")
+				    (stable-sort (mapcar #'probe-file (hash-keys (get-info-file :maxima-info maxima-info :over-write nil))) #'file<=))))
     (defrtest 'x :func (lambda-lex-env
 			(let* ((info-file (get-info-file :maxima-info maxima-info :over-write nil))
 			       (file-name (car (hash-keys info-file)))
@@ -121,7 +143,8 @@
     ;; get-all-info-files
     (defrtest 'x :func (lambda-lex-env
 			(get-all-info-files)
-			(equal (directory "rtest-build-index/*/maxima.info-*") (mapcar #'probe-file (hash-keys *info-files*)))))
+			(file-list= (sorted-directory "rtest-build-index/*/maxima.info-*")
+				    (stable-sort (mapcar #'probe-file (hash-keys *info-files*)) #'file<=))))
     ;; setup-help-database
     (defrtest 'x :func (lambda-lex-env
 			(setup-help-database)
@@ -129,37 +152,70 @@
 				     (with-output-to-string (stream nil :element-type 'character)
 				       (dolist (c e)
 					 (princ c stream)))))
-			  (let ((macro-matches    (mapcar #'(lambda (r) (list (first r) (third r) (fourth r)))
-							  (find-regex-matches "^Ma[ck]ros$" *info-section-hashtable*)))
-				(macro-matches-e '(("Macros" 193000 8636) ("Macros" 135070 9085) ("Makros" 282126 8529)))
-				(expand-matches   (mapcar #'(lambda (r) (list (first r) (third r) (fourth r) (fifth r)))
-							  (find-regex-matches "^expand$" *info-deffn-defvr-hashtable*)))
-				(expand-matches-e `(("expand" 288341 4373 ,(expand-match (#\F #\u #\n #\k #\t #\i #\o #\n #\e #\n #\  #\u #\n #\d #\  #\V #\a #\r #\i
-											      #\a #\b #\l #\e #\n #\  #\f #\LATIN_CAPITAL_LETTER_A_WITH_TILDE
-											      #\VULGAR_FRACTION_ONE_QUARTER #\r #\  #\d #\i #\e #\  #\V #\e #\r #\e #\i #\n
-											      #\f #\a #\c #\h #\u #\n #\g)))
-						    ("expand" 238810 4314 "Functions and Variables for Simplification")
-						    ("expand" 253740 4495 ,(expand-match (#\F #\u #\n #\c #\i #\o #\n #\e #\s #\  #\y #\  #\v #\a #\r #\i #\a #\b #\l
-											      #\e #\s #\  #\p #\a #\r #\a #\  #\s #\i #\m #\p #\l #\i #\f #\i #\c #\a #\c
-											      #\i #\LATIN_CAPITAL_LETTER_A_WITH_TILDE #\SUPERSCRIPT_THREE #\n))))))
-			    ;;(format t "~&~a~%~a~%~a~%~a~%" macro-matches macro-matches-e expand-matches expand-matches-e)
-			    (and (equal macro-matches macro-matches-e)
-				 (equal expand-matches expand-matches-e))))))
+			  (labels ((sort-on-second (list)
+				     (stable-sort list #'(lambda (a b) (<= (cadr a) (cadr b)))))
+				   (get-matches (regex h)
+				     (sort-on-second
+				      (mapcar #'(lambda (r) (list (first r) (third r) (fourth r) (fifth r)))
+					      (find-regex-matches regex h)))))
+			    (let ((macro-matches    (get-matches "^Ma[ck]ros$" *info-section-hashtable*))
+				  (macro-matches-e  (sort-on-second '(("Macros" 193000 8636 nil) ("Macros" 135070 9085 nil) ("Makros" 282126 8529 nil))))
+				  (expand-matches   (get-matches "^expand$" *info-deffn-defvr-hashtable*))
+				  (expand-matches-e (sort-on-second `(("expand" 288341 4373 ,(expand-match (#\F #\u #\n #\k #\t #\i #\o #\n #\e #\n #\  #\u #\n #\d #\  #\V #\a #\r #\i
+														#\a #\b #\l #\e #\n #\  #\f #\LATIN_CAPITAL_LETTER_A_WITH_TILDE
+														#\VULGAR_FRACTION_ONE_QUARTER #\r #\  #\d #\i #\e #\  #\V #\e #\r #\e #\i #\n
+														#\f #\a #\c #\h #\u #\n #\g)))
+								      ("expand" 238810 4314 "Functions and Variables for Simplification")
+								      ("expand" 253740 4495 ,(expand-match (#\F #\u #\n #\c #\i #\o #\n #\e #\s #\  #\y #\  #\v #\a #\r #\i #\a #\b #\l
+														#\e #\s #\  #\p #\a #\r #\a #\  #\s #\i #\m #\p #\l #\i #\f #\i #\c #\a #\c
+														#\i #\LATIN_CAPITAL_LETTER_A_WITH_TILDE #\SUPERSCRIPT_THREE #\n)))))))
+			      ;;(format t "~&~a~%~a~%~a~%~a~%" macro-matches macro-matches-e expand-matches expand-matches-e)
+			      (and (equal macro-matches macro-matches-e)
+				   (equal expand-matches expand-matches-e)))))))
     ;; print-info-hashes
     (defrtest 'x :func (lambda-lex-env
-			(let* ((s-out (make-string-output-stream :element-type 'character))
-			       (*standard-output* s-out)
-			       (s-in)
-			       (s1)
-			       (s2))
-			  (print-info-hashes)
-			  (setq s1 (get-output-stream-string s-out))
-			  (setq s-in (make-string-input-stream s1))
-			  (load s-in)
-			  (print-info-hashes)
-			  (setq s2 (get-output-stream-string s-out))
-			  (string= s1 s2))))
-    ))
+			(labels ((read-write-info-hashes (s)
+				   (let ((*info-deffn-defvr-hashtable* *info-deffn-defvr-hashtable*)
+					 (*info-section-hashtable* *info-section-hashtable*)
+					 s-out-s s-in)
+				     (print-info-hashes)
+				     (setq s-out-s (get-output-stream-string s))
+				     (setq s-in (make-string-input-stream s-out-s))
+				     (load s-in)
+				     (values *info-deffn-defvr-hashtable* *info-section-hashtable*)))
+				 (sort-on-second (list)
+				   (stable-sort list #'(lambda (a b) (<= (cadr a) (cadr b)))))
+				 (copy-eql-to-equal-hashtable (in)
+				   (let ((out (make-hash-table :test #'equal :size (hash-table-size in))))
+				     (loop for k being the hash-keys of in
+					for v = (gethash k in)
+					do (setf (gethash k out) (push v (gethash k out))))
+				     (loop for k being the hash-keys of out
+					do (setf (gethash k out) (sort-on-second (gethash k out))))
+				     out))
+				 (hash-table-equalp (hin1 hin2 &optional (fn #'list))
+				   (let ((h1 (copy-eql-to-equal-hashtable hin1))
+					 (h2 (copy-eql-to-equal-hashtable hin2)))
+				     (let ((d12 (loop for k1 being the hash-keys of h1
+						   for v1 = (gethash k1 h1)
+						   for v2 = (gethash k1 h2)
+						   when (null (equalp v1 v2)) collect (list k1 v1 v2)))
+					   (d21 (loop for k2 being the hash-keys of h2
+						   for v1 = (gethash k2 h1)
+						   for v2 = (gethash k2 h2)
+						   when (null (equalp v1 v2)) collect (list k2 v1 v2))))
+				       (funcall fn d12 d21)))))
+			  (let* ((s-out (make-string-output-stream :element-type 'character))
+				 (*standard-output* s-out)
+				 h11 h21 h12 h22)
+			    (multiple-value-setq (h11 h21) (read-write-info-hashes s-out))
+			    (let ((*info-deffn-defvr-hashtable* h11)
+				  (*info-section-hashtable* h21))
+			      (multiple-value-setq (h12 h22) (read-write-info-hashes s-out)))
+			    (list (hash-table-equalp h11 h12)
+				  (hash-table-equalp h21 h22)))))
+	      :answer '((nil nil) (nil nil)) ;; 
+	      )))
 
 ;; external-formats
 (defrtest x :func (lambda ()
@@ -171,8 +227,8 @@
 			   (get-set-external-format :iso-8859-1 "iso8859-1")
 			   (get-set-external-format :iso-8859-1 "iso-88591")
 			   (get-set-external-format :iso-8859-1 "iso-8859-1")
-			   (get-set-external-format :windows-1251 "windows1251")
-			   (get-set-external-format :windows-1251 "windows-1251")))))
+			   #-cmu (and (get-set-external-format :windows-1251 "windows1251") (get-set-external-format :windows-1251 "windows-1251"))
+			   ))))
 
 :check-report
 (do-tests x #'check)
