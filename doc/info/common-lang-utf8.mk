@@ -8,9 +8,7 @@ TEXINFO_TEX=../$(lang)/texinfo.tex
 langsdir = /$(lang).utf8
 origlangsdir = ../$(lang)
 
-if USE_RECODE
-    urecode=true
-endif
+urecode = true
 
 fcharset = ISO-8859-1
 tcharset = UTF-8
