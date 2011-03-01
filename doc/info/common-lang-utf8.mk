@@ -16,6 +16,9 @@ tcharset = UTF-8
 fhtmlcharset = iso-8859-1
 thtmlcharset = utf-8
 
+all: all-local
+all-local: maxima-index.lisp maxima.html
+
 maxima.texi: $(origlangsdir)/maxima.texi
 	rm -f *.texi
 	cp -p $(origlangsdir)/*.texi .
@@ -41,6 +44,8 @@ maxima.html: maxima.texi
 	    sed -e "s|charset=$(fhtmlcharset)|charset=$(thtmlcharset)|" < $$f > foo.$$f ; \
 	    mv -f foo.$$f $$f ; \
 	done
+
+clean: clean-local
 
 include $(top_srcdir)/common.mk
 genericdir = $(dochtmldir)/$(lang).utf8
