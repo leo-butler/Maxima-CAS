@@ -173,52 +173,61 @@ maxima-info and the encoding (external format) of these files."
 		 (read-sequence contents in :start 0 :end nil))
 	       (codes-string contents)))))))
 
+;;
+;; EXTERNAL FORMAT MACHINERY
+;;
+;; If *info-default-external-format* is bound to nil
+;; then all io is done on byte-streams
+;;
 (declaim (inline set-string-case))
 (defun set-string-case (string)
   #+scl(setf string (if (eq ext:*case-mode* :upper) (string-upcase string) (string-downcase string)))
   #-scl(string-upcase string)
   )
+(defun sanitize-external-format (ef-str)
+  (let (match match-l)
+    (multiple-value-setq (match match-l) (cl-ppcre:scan-to-strings "([a-zA-Z]+)-?([0-9]{1,4})-?(1)?" ef-str))
+    (if match
+	(set-string-case
+	 (concatenate 'string
+		      (aref match-l 0)
+		      "-"
+		      (aref match-l 1)
+		      (if (aref match-l 2) "-1" ""))))))
 (defun set-external-format (ef)
-  (flet ((sanitize-external-format (ef-str)
-	   (let (match match-l)
-	     (multiple-value-setq (match match-l) (cl-ppcre:scan-to-strings "([a-zA-Z]+)-?([0-9]{1,4})-?(1)?" ef-str))
-	     (if match
-		 (set-string-case
-		  (concatenate 'string
-			       (aref match-l 0)
-			       "-"
-			       (aref match-l 1)
-			       (if (aref match-l 2) "-1" "")))))))
-    (let ((ef (cond ((symbolp ef) (sanitize-external-format (symbol-name ef)))
-		    ((stringp ef) (sanitize-external-format ef))
-		    (t nil))))
-      (if ef
-	  #+clisp
-	  (find-symbol ef :charset)
-	  #+cmu
-	  (stream::find-external-format (intern ef :keyword))
-	  #+(or sbcl scl)
-	  (intern ef :keyword)
-	  #-(or clisp cmu sbcl scl)
-	  ef
-	  ))))
+  (let ((ef (cond ((symbolp ef) (sanitize-external-format (symbol-name ef)))
+		  ((stringp ef) (sanitize-external-format ef))
+		  (t nil))))
+    (if ef
+	#+clisp
+	(find-symbol ef :charset)
+	#+cmu
+	(stream::find-external-format (intern ef :keyword))
+	#+(or sbcl scl)
+	(intern ef :keyword)
+	#-(or clisp cmu sbcl scl)
+	ef
+	)))
 
 (defparameter *info-default-external-format*
   (set-external-format :utf-8))
 
 (defun get-external-format-name (ef)
   (flet ((symbol-name-as-keyword (s)
-	   (intern (cl-ppcre:scan-to-strings "[a-zA-Z0-9-]+$" (symbol-name s))
+	   (intern (sanitize-external-format (symbol-name s))
 		   :keyword)))
-    (symbol-name-as-keyword
-     (if ef
-	 #+cmu
-	 (stream::ef-name ef)
-	 #+(or sbcl clisp)
-	 ef
-	 #+t
-	 ef
-	 ))))
+    (cond ((null ef)
+	   ef)
+	  (t
+	   (symbol-name-as-keyword
+	    (if ef
+		#+cmu
+		(stream::ef-name ef)
+		#+(or sbcl clisp)
+		ef
+		#+t
+		ef
+		))))))
 
 (defun get-info-file-encoding (maxima-info-contents &optional (info-encoding-re *info-encoding-re*))
   (if *info-default-external-format*
@@ -408,11 +417,16 @@ before adding new contents."
 		      (car efs))))))
     (cond (file
 	   (setf ef (get-external-format ef))
-	   (with-open-file (out file :direction :output
-				:if-exists :supersede
-				:if-does-not-exist :create
-				:external-format ef)
-	     (with-standard-io-syntax
+	   (macrolet ((with-open-file-tb ((out file ef &rest options) &body body)
+			`(let ((options ',options)
+			       (ef ,ef))
+			   (setf options `(,@options ,@(if ef `(:element-type 'character :external-format ,ef) '(:element-type 'unsigned-byte))))
+			   (with-standard-io-syntax
+			     (with-open-file (,out ,file ,@options)
+			       ,@body)))))
+	     (with-open-file-tb (out file ef :direction :output
+				      :if-exists :supersede
+				      :if-does-not-exist :create)
 	       (dump-hashes out))))
 	  (t
 	   (dump-hashes *standard-output*)))))
