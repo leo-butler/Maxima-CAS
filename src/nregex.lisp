@@ -688,6 +688,24 @@ Example:
        (declare (ignorable start end))
        ,code ,@body)))
 
+(defmacro nregex-or (re-list &body body)
+  "Creates a compiled regex which returns the earliest match amounts all options."
+  (let-gs (e m n f)
+    (let* ((cre-list (mapcar (lambda(re) (list (gensym "re-") re)) re-list))
+	   (n-list   (mapcar #'car cre-list))
+	   (m-list   `(let (,m ,n ,@n-list)
+			(do ((,n ,n-list  (cdr ,n))
+			     (,f (car ,n) (car ,n))
+			     (,e end     (min ,m ,e)))
+			    ((and (null ,f) (null ,n)) ,m)
+			  (setf ,m (or (if ,f (nregex-match-begin (funcall ,f string start ,e)) most-positive-fixnum))))))
+	   (code    `(nregex-labels ,cre-list
+		       ,m-list)))
+      `(lambda (string &optional (start 0) (end (length string)))
+	 (declare (ignorable start end))
+	 (progn ,code ,@body)))))
+
+
 (defun nregex-all-matches-as-strings (re str &optional (start 0) (end (length str)))
   (nregex-flet-strings-1 regex-match re
     (let (match matches regex-groups regex-groupings)
