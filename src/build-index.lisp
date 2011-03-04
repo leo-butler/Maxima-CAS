@@ -418,12 +418,11 @@ before adding new contents."
     (cond (file
 	   (setf ef (get-external-format ef))
 	   (macrolet ((with-open-file-tb ((out file ef &rest options) &body body)
-			`(let ((options ',options)
-			       (ef ,ef))
-			   (setf options `(,@options ,@(if ef `(:element-type 'character :external-format ,ef) '(:element-type 'unsigned-byte))))
-			   (with-standard-io-syntax
-			     (with-open-file (,out ,file ,@options)
-			       ,@body)))))
+			(let* ((opts `(,@(if ef `(:element-type 'character :external-format ,ef) '(:element-type 'unsigned-byte)))))
+			  `(with-standard-io-syntax
+			     (with-open-file (,out ,file ,@`(,@opts ,@options))
+			       ,@body
+			       )))))
 	     (with-open-file-tb (out file ef :direction :output
 				      :if-exists :supersede
 				      :if-does-not-exist :create)
