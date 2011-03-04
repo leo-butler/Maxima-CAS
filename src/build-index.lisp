@@ -92,6 +92,7 @@
 ;;
 ;; Helper functions + macros
 ;;
+(declaim (special maxima:*maxima-infodir* maxima:*maxima-lang-subdir*))
 (defun canonicalize-info-pathnames (p)
   (cond ((null p)
 	 (list (canonicalize-info-pathnames *maxima-info-default*)))
@@ -105,9 +106,9 @@
 	 (setq p (or (probe-file p)
 		     (make-pathname :directory (pathname-directory
 						(concatenate 'string
-							     maxima::*maxima-infodir*
-							     (and maxima::*maxima-lang-subdir*
-								  (concatenate 'string "/" maxima::*maxima-lang-subdir*))
+							     maxima:*maxima-infodir*
+							     (and maxima:*maxima-lang-subdir*
+								  (concatenate 'string "/" maxima:*maxima-lang-subdir*))
 							     "/maxima.info")) ; "/maxima.info" part is not used
 				    :name (pathname-name (pathname p))
 				    :type (pathname-type (pathname p)))))

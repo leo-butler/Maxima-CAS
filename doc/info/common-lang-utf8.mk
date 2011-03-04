@@ -8,7 +8,9 @@ TEXINFO_TEX=../$(lang)/texinfo.tex
 langsdir = /$(lang).utf8
 origlangsdir = ../$(lang)
 
+if USE_RECODE
 urecode = true
+endif
 
 fcharset = ISO-8859-1
 tcharset = UTF-8
@@ -22,7 +24,7 @@ all-local: maxima-index.lisp maxima.html
 maxima.texi: $(origlangsdir)/maxima.texi
 	rm -f *.texi
 	cp -p $(origlangsdir)/*.texi .
-	sed -i -e "s|^@documentencoding $(fcharset)|@documentencoding $(tcharset)|ig" *.texi 
+	sed -i -e "s|^@documentencoding $(fcharset)|@documentencoding $(tcharset)|g" *.texi 
 
 maxima-index.lisp: maxima.info
 	$(top_srcdir)/maxima-local $(maxima_flags) --batch-string='setup_help_database();print_help_database("$@");'

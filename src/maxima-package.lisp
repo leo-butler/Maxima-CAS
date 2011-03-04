@@ -67,6 +67,7 @@
 
 (defpackage :maxima
   (:use :common-lisp :command-line)
+  (:export *maxima-infodir* *maxima-lang-subdir*)
   ;; Gcl has DEFINE-COMPILER-MACRO but it's in the SYSTEM package.  So
   ;; we shadowing import it into our package here.  (Can't just import
   ;; because there's already a DEFINE-COMPILER-MACRO symbol.)
