@@ -2,13 +2,8 @@ COPYING
 README
 INSTALL
 manifest
-pregexp.scm
 pregexp.lisp
 index.tex
 history
-pregexp-test.scm
-tester.scm
+pregexp-test.scm -> pregexp-test.lisp
 tester.lisp
-
-dialects/*.scm
-known-bugs/[s0-9]*
