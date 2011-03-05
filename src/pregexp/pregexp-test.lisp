@@ -1,9 +1,5 @@
-":";exec mzscheme -v -f pregexp.scm -f $0
-
 ;last substantial change 2005-04-24
 ;last change 2008-04-12
-
-(load (if 'nil "tester.scm" "tester.lisp"))
 
 ;keeping the document honest
 
@@ -13,7 +9,7 @@
   (:sub (:or (:seq #\c :any #\r)))
    
   (pregexp-match-positions "brain" "bird")
-  #f
+  nil
    
   (pregexp-match-positions "needle" "hay needle stack")
   ((4 . 10))
@@ -24,7 +20,7 @@
   ((31 . 37))
    
   (pregexp-match "brain" "bird")
-  #f
+  nil
    
   (pregexp-match "needle" "hay needle stack")
   ("needle")
@@ -51,7 +47,7 @@
   "liberty egality fratyrnity"
    
   (pregexp-match-positions "^contact" "first contact")
-  #f
+  nil
    
   (pregexp-match-positions "laugh$" "laugh laugh laugh laugh")
   ((18 . 23))
@@ -76,13 +72,13 @@
   ("_")
    
   (pregexp-match "[[:alpha:]_]" "--:--")
-  #f
+  nil
    
   (pregexp-match "[:alpha:]" "--a--")
   ("a")
    
   (pregexp-match "[:alpha:]" "--_--")
-  #f
+  nil
    
   (pregexp-match-positions "c[ad]*r" "cadaddadddr")
   ((0 . 11))
@@ -94,10 +90,10 @@
   ((0 . 11))
    
   (pregexp-match-positions "c[ad]+r" "cr")
-  #f
+  nil
    
   (pregexp-match-positions "c[ad]?r" "cadaddadddr")
-  #f
+  nil
    
   (pregexp-match-positions "c[ad]?r" "cr")
   ((0 . 2))
@@ -109,10 +105,10 @@
   ("uou")
    
   (pregexp-match "[aeiou]{3}" "evolve")
-  #f
+  nil
    
   (pregexp-match "[aeiou]{2,3}" "evolve")
-  #f
+  nil
    
   (pregexp-match "[aeiou]{2,3}" "zeugma")
   ("eu")
@@ -146,7 +142,7 @@
   ("jan 1, 1970" "jan" "1," "1970")
   
   (pregexp-match date-re "jan 1970")
-  ("jan 1970" "jan" #f "1970")
+  ("jan 1970" "jan" nil "1970")
   
   (pregexp-replace "_(.+?)_"
     "the _nina_, the _pinta_, and the _santa maria_"
@@ -169,7 +165,7 @@
   
   (pregexp-match "([a-z]+) and \\1"
     "billions and millions")
-  #f
+  nil
   
   (pregexp-replace* "(\\S+) \\1"
     "now is the the time for all good men to to come to the aid of of the party"
@@ -237,7 +233,7 @@
   ("call-with-current-continuation constrained")
   
   (pregexp-match "(?>a+)." "aaaa")
-  #f
+  nil
    
   (pregexp-match-positions "grey(?=hound)"
     "i left my grey socks at the greyhound")
@@ -286,7 +282,7 @@
   
   (pregexp-match ip-re1
     "55.155.255.265")
-  #f
+  nil
   
   (pregexp-match ip-re1
     "0.00.000.00")
@@ -308,7 +304,7 @@
   
   (pregexp-match ip-re
     "0.0.0.0")
-  #f
+  nil
   
   )
 
@@ -326,7 +322,7 @@
   
   (pregexp-match ip-re
     "0.0.0.0")
-  #f
+  nil
   
   ;misc
   
@@ -376,7 +372,7 @@
   ((0 . 3) (0 . 2) (1 . 2))
   ;
   (pregexp-match-positions "(a(b))?c" "c")
-  ((0 . 1) #f #f)
+  ((0 . 1) nil nil)
 
   ;PLT bug 7233 from Edi Weitz
   (length (pregexp-match "(a)|(b)" "b"))
