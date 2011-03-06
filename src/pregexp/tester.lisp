@@ -1,6 +1,7 @@
 ;Dec 16, 2000
 ;last change 2008-04-12
 
+(in-package :pregexp)
 
 (set-dispatch-macro-character
   #\# #\F
@@ -41,7 +42,8 @@
        (if (equalp __actual-answer ',expected-answer)
            (princ "OK")
            (progn (setq *failed* (+ *failed* 1))
-             (princ "FAILED!!!")))
+             (princ "FAILED!!!")
+	     (info "~&Expected: ~s~%" ',expected-answer)))
        (terpri))))
 
 (defun bottomline ()

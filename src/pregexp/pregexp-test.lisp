@@ -3,6 +3,8 @@
 
 ;keeping the document honest
 
+(setf *failed* 0)
+
 (test
    
   (pregexp "c.r")
@@ -386,5 +388,12 @@
   (:sub (:or (:seq (:one-of-chars #\a #\-))))
    
   )
+
+(test
+
+ (pregexp-match "(?-xi:a)" "A")
+ nil
+
+ )
 
 (bottomline)

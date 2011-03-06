@@ -1,11 +1,56 @@
 ;Portable regular expressions for Common Lisp
 ;Dorai Sitaram
 
-(defparameter *pregexp-version* 20090325) ;last change
+(eval-when #-gcl(:compile-toplevel :load-toplevel :execute) 
+	   #+gcl(load compile eval)
+	   (defpackage :pregexp
+	     (:use :common-lisp)
+	     (:export
+	      ;; Vars
+	      #:*pregexp-version*
+	      #:*pregexp-comment-char*
+	      #:*pregexp-space-sensitive-p*
+	      ;; Functions
+	      #:pregexp-read-pattern
+	      #:pregexp-read-branch
+	      #:pregexp-read-piece
+	      #:pregexp-read-escaped-number
+	      #:pregexp-read-escaped-char
+	      #:pregexp-read-posix-char-class
+	      #:pregexp-read-cluster-type
+	      #:pregexp-read-subpattern
+	      #:pregexp-wrap-quantifier-if-any
+	      #:pregexp-whitespacep
+	      #:pregexp-read-nums
+	      #:pregexp-read-char-list
+	      #:pregexp-string-match
+	      #:pregexp-char-word?
+	      #:pregexp-at-word-boundary-p
+	      #:pregexp-check-if-in-char-class-p
+	      #:pregexp-make-backref-list
+	      #:pregexp-match-positions-aux
+	      #:pregexp-replace-aux
+	      #:pregexp
+	      #:pregexp-match-positions
+	      #:pregexp-match
+	      #:pregexp-split
+	      #:pregexp-replace
+	      #:pregexp-replace*
+	      #:pregexp-quote
+	      ))
+	   )
 
-(defparameter *pregexp-comment-char* #\;)
+(in-package :pregexp)
 
-(defparameter *pregexp-space-sensitive-p* t)
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defparameter *pregexp-debug* t)
+  (defmacro info (message &rest args)
+    (if *pregexp-debug*
+	`(format *trace-output* ,message ,@args)))
+  (defparameter *pregexp-version* 20090325) ;last change
+  (defparameter *pregexp-comment-char* #\;)
+  (defparameter *pregexp-space-sensitive-p* t)
+  )
 
 (defmacro pregexp-recur (name varvals &rest body)
   `(labels ((,name ,(mapcar #'first varvals) ,@body))
@@ -154,10 +199,8 @@
                 (case c
                   (#\- (setq invp t))
                   (#\i (push (if invp :case-sensitive
-                               :case-insensitive) r)
-                   (setq invp nil))
-                  (#\x (setq *pregexp-space-sensitive-p* invp)
-                   (setq invp nil))
+                               :case-insensitive) r))
+		  (#\x (setq *pregexp-space-sensitive-p* invp))
                   (#\: (return (values (nreverse r) i)))
                   (t (error "pregexp-read-cluster-type")))
                 (setq c (char s i))
@@ -656,3 +699,58 @@
 ;  pregexp-check-if-in-char-class-p
 ;  pregexp-read-nums
   )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Additions: Leo Butler 2011                                      ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+#+gcl (defmacro with-standard-io-syntax (&rest rest) `(progn ,@rest))
+
+(defmacro let-gs (l &body body)
+  "Usage: (let-gs (a b c) body-using-a-b-and/or-c-as-gensym)"
+  `(let ,(mapcar #'(lambda(x) `(,x (gensym (concatenate 'string (symbol-name ',x) "-")))) l) ,@body))
+(declaim (inline compile-regex))
+(defun compile-regex (re)
+  (cond ((stringp re)
+	 (pregexp re))
+	((consp re)
+	 re)
+	((symbolp re)
+	 `(compile-regex ,re))
+	(t
+	 (error "compile-regex re: re must be a string or s-exp."))))
+
+(defmacro pregexp-flet-1 (name re &body body)
+  "Takes a regex `re' (string) and produces a customised flet function
+`name' which executes the regex function determined by `re' and
+`body'."
+  (let ((cre (compile nil `(lambda(string start end)
+			     (pregexp-match-positions ,(compile-regex re) string start end)))))
+	   ;;    (format t "~a~%" cre)
+    `(flet ((,name (string &optional (start 0) (end (length string)))
+	     (funcall ,cre string start end)))
+      ,@body)))
+
+(defmacro pregexp-flet-1 (name re &body body)
+  "Takes a regex `re' (string) and produces a customised flet function
+`name' which executes the regex function determined by `re' and
+`body'."
+  (let ((cre (compile-regex re)))
+    (format t "~a~%" cre)
+    `(flet ((,name (string &optional (start 0) (end (length string)))
+	      (pregexp-match-positions ,cre string start end)))
+       ,@body)))
+
+(defmacro pregexp-flet-1 (name re &body body)
+  "Takes a regex `re' (string) and produces a customised flet function
+`name' which executes the regex function determined by `re' and
+`body'."
+  (let-gs (cre)
+	  `(let ((,cre (compile-regex ,re)))
+	     ;;(format t "~a~%" ,cre)
+	     (flet ((,name (string &optional (start 0) (end (length string)))
+		      (pregexp-match-positions ,cre string start end)))
+	       ,@body))))
+
+;(defmacro all-matches-as-strings (regex string &key (start 0) (end (length string)))
+;)  
+
