@@ -394,6 +394,15 @@
  (pregexp-match "(?-xi:a)" "A")
  nil
 
+ (pregexp-match "()" "a")
+ ("")
+
+ (pregexp-match "([^]])" "a")
+ ("a" "a")
+
+ (pregexp-match "([^]b-z])" "a")
+ ("a" "a")
+
  )
 
 (bottomline)
