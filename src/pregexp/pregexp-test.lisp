@@ -394,8 +394,14 @@
  (pregexp-match "(?-xi:a)" "A")
  nil
 
- (pregexp-match "()" "a")
+ (pregexp-match "" "")
  ("")
+
+ (pregexp-match "" "This matches")
+ ("")
+
+ (pregexp-match "()" "This is a known failure.")
+ ("" "")
 
  (pregexp-match "([^]])" "a")
  ("a" "a")
