@@ -581,14 +581,11 @@ values of both lexicals if the regex succeeds."
 		  (compile-regex (macroexpand-1 re)))
 	     re))
 	(t
-	 ;; this is wrong, since re must be a lexical and
-	 ;; inaccessible when the compiled regex is called
-	 (macrolet ((make-let-over-lambda (re)
-		      `(let (cre)
-			 (lambda (string &optional (start 0) (end (length string)))
-			   (unless cre (setf cre (compile-regex ,re)))
-			   (funcall cre string start end))))
-		    (make-let-over-lambda re))))))
+	 (error "compile-regex re: You have passed compile-regex an
+	 unbound symbol, that is not special. This symbol will be
+	 inaccessible when the compiled regex is called and would
+	 create an error at that point. I've saved you a
+	 headache."))))
 
 (defmacro nregex-match-begin (regex-groups)
   `(if ,regex-groups (car (aref ,regex-groups 0))))
