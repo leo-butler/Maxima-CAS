@@ -564,6 +564,9 @@ values of both lexicals if the regex succeeds."
 	 (fn-let   `(lambda ,args ,mlet)))
     (compile nil fn-let)))
 
+(defun macrop (x)
+  (and (symbolp x) (macro-function x)))
+
 (defun compile-regex (re)
   (cond ((stringp re)
 	 (compile-regex-string re))
@@ -573,13 +576,26 @@ values of both lexicals if the regex succeeds."
 	 re)
 	((and (symbolp re) (boundp re))
 	 (compile-regex (eval re)))
+	((consp re)
+	 (or (and (macrop (car re))
+		  (compile-regex (macroexpand-1 re)))
+	     re))
 	(t
-	 nil)))
+	 ;; this is wrong, since re must be a lexical and
+	 ;; inaccessible when the compiled regex is called
+	 (macrolet ((make-let-over-lambda (re)
+		      `(let (cre)
+			 (lambda (string &optional (start 0) (end (length string)))
+			   (unless cre (setf cre (compile-regex ,re)))
+			   (funcall cre string start end))))
+		    (make-let-over-lambda re))))))
 
 (defmacro nregex-match-begin (regex-groups)
   `(if ,regex-groups (car (aref ,regex-groups 0))))
 (defmacro nregex-match-end   (regex-groups)
   `(if ,regex-groups (cadr (aref ,regex-groups 0))))
+(defmacro nregex-match   (regex-groups)
+  `(if ,regex-groups (aref ,regex-groups 0)))
 
 (defmacro def-regex (fn re)
   "Takes a regex `re' (string) and produces a customised function `fn'."
@@ -623,8 +639,9 @@ and `body'."
   (let ((code (loop for name-re in name-re-list
 		 for name = (car name-re)
 		 for re = (cadr name-re)
+		 for cre = (compile-regex re)
 		 collect `(,name (string &optional (start 0) (end (length string)))
-				 (funcall ,(compile-regex re) string start end)))))
+				 (funcall ,cre string start end)))))
     `(labels ,code
        ,@body)))
 
@@ -674,36 +691,36 @@ Example:
        (declare (ignorable start end))
        ,code))))
 
+(let ((counter 0))
+  (defun ngensym (string)
+    (incf counter)
+    (intern (format nil "~:@(~a~)~a" string counter) :maxima-nregex)))
+     
 (defmacro nregex-or (re-list &body body)
   "Creates a compiled regex which returns the earliest match amounts all options."
-  (let* ((cre-list (mapcar (lambda(re) (list (gensym "re-") re)) re-list))
-	 (n-list   (mapcar #'car cre-list))
-	 (m-list   (mapcar (lambda(n) `(,(gensym "m-")
-					 (or (nregex-match-begin (funcall #',n string start end)) most-positive-fixnum))) n-list))
-	 (m-min   `(min ,@(mapcar #'car m-list)))
-	 (code    `(nregex-labels ,cre-list
-		     (let ,m-list
-		       ,m-min))))
-    `(lambda (string &optional (start 0) (end (length string)))
-       (declare (ignorable start end))
-       ,code ,@body)))
-
-(defmacro nregex-or (re-list &body body)
-  "Creates a compiled regex which returns the earliest match amounts all options."
-  (let-gs (e m n f)
+  (let-gs (e mb me s rg rgs)
     (let* ((cre-list (mapcar (lambda(re) (list (gensym "re-") re)) re-list))
 	   (n-list   (mapcar #'car cre-list))
-	   (m-list   `(let (,m ,n ,@n-list)
-			(do ((,n ,n-list  (cdr ,n))
-			     (,f (car ,n) (car ,n))
-			     (,e end     (min ,m ,e)))
-			    ((and (null ,f) (null ,n)) ,m)
-			  (setf ,m (or (if ,f (nregex-match-begin (funcall ,f string start ,e)) most-positive-fixnum))))))
-	   (code    `(nregex-labels ,cre-list
-		       ,m-list)))
+	   (m-list   (mapcar (lambda(f) `(and (multiple-value-setq (,rg ,rgs) (,f string start end))
+					      (setf ,s (nregex-match-begin ,rg) ,e (nregex-match-end ,rg))
+					      (< ,s ,mb)
+					      (setf ,mb ,s ,me ,e regex-groups ,rg regex-groupings ,rgs)))
+			     n-list))
+	   (code    (macroexpand
+		     `(nregex-labels ,cre-list
+			(let ((,mb most-positive-fixnum)
+			      (,me 0)
+			      ,rg ,rgs
+			      ,e ,s
+			      regex-groups regex-groupings
+			      match-begin match-end)
+			  ,@m-list
+			  (if (>= ,me ,mb) (setf match-end ,me match-begin ,mb))
+			  (values regex-groups regex-groupings)
+			  ,@body)))))
       `(lambda (string &optional (start 0) (end (length string)))
 	 (declare (ignorable start end))
-	 (progn ,code ,@body)))))
+	 ,code))))
 
 
 (defun nregex-all-matches-as-strings (re str &optional (start 0) (end (length str)))
