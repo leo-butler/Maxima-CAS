@@ -32,6 +32,7 @@
 	      #:*regex-debug* #:*regex-groups* #:*regex-groupings*
 	      ;; Functions
 	      #:regex-compile
+	      #:regex
 	      ))
 	   )
 
@@ -42,12 +43,14 @@
 
   (defmacro info (message &rest args)
     (if *regex-debug*
-	`(format *trace-output* ,message ,@args)))
+	`(progn (format *trace-output* ,message ,@args) t)
+	t))
 
 ;;;
 ;;; Declare the global variables for storing the paren index list.
 ;;;
-  (defvar *regex-groups* (make-array 10))
+  (defvar *nregex-default-array-length* 100)
+  (defvar *regex-groups* (make-array *nregex-default-array-length* :initial-element nil))
   (defvar *regex-groupings* 0)
   )
 
@@ -62,6 +65,8 @@
   (let ((findit (cond ((stringp expression)
 		       (regex-compile expression))
 		      ((listp expression)
+		       expression)
+		      ((functionp expression)
 		       expression)))
 	(result nil))
     (if (not (funcall (if (functionp findit)
@@ -236,8 +241,10 @@
 			   (not (eql (char source (+ x 2)) #\])))
 		      (if (>= (char-code (char source x))
 			      (char-code (char source (+ 2 x))))
-			  (error (intl:gettext "regex: ranges must be in acending order; found: \"~A-~A\"")
-				 (char source x) (char source (+ 2 x))))
+			  ;;			  (error (intl:gettext "regex: ranges must be in acending order; found: \"~A-~A\"")
+			  ;;				 (char source x) (char source (+ 2 x))))
+			  (error (format t "regex: ranges must be in acending order; found: \"~A-~A\""
+					 (char source x) (char source (+ 2 x)))))
 		      (do ((j (char-code (char source x)) (1+ j)))
 			  ((> j (char-code (char source (+ 2 x))))
 			   (incf x 2))
@@ -533,3 +540,295 @@
 	(bit-xor result #*1111111110011111111111111111111101111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 t))
     (values result used-length)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defmacro let-gs (l &body body)
+  "Usage: (let-gs (a b c) body-using-a-b-and/or-c-as-gensym)"
+  `(let ,(mapcar #'(lambda(x) `(,x (gensym (concatenate 'string (symbol-name ',x) "-")))) l) ,@body))
+
+(defun compile-regex-string (re)
+  "Rewrites the lambda s-exp from `regex-compile': the regex function
+from the latter is wrapped in a lexical environment containing lexical
+bindings for `*regex-groups*' and `*regex-groupings*'; this
+let-over-lambda is returned as a compiled lambda function that returns the
+values of both lexicals if the regex succeeds."
+  (let* ((cre       (regex-compile re))
+	 (args     '(string &optional (start 0) (end (length string))))
+	 (decl      (caddr cre))
+	 (body      (cdddr cre))
+	 (fn     `#'(lambda ,args ,decl ,@body))
+	 (grps      (1+ (count #\( re)))              ;;*nregex-default-array-length*
+	 (mlet     `(let ((*regex-groups*    (make-array ,grps :initial-element nil))
+			  (*regex-groupings*  0))
+		      (if (funcall ,fn string start end)
+			  (values *regex-groups* *regex-groupings*))))
+	 (fn-let   `(lambda ,args ,mlet)))
+    (compile nil fn-let)))
+
+(defun macrop (x)
+  (and (symbolp x) (macro-function x)))
+
+(defun compile-regex (re)
+  (cond ((stringp re)
+	 (compile-regex-string re))
+	((functionp re)
+	 (compile nil re))
+	((compiled-function-p re)
+	 re)
+	((and (symbolp re) (boundp re))
+	 (compile-regex (eval re)))
+	((consp re)
+	 (or (and (macrop (car re))
+		  (compile-regex (macroexpand-1 re)))
+	     re))
+	(t
+	 (error "compile-regex re: You have passed compile-regex an
+	 unbound symbol, that is not special. This symbol will be
+	 inaccessible when the compiled regex is called and would
+	 create an error at that point. I've saved you a
+	 headache."))))
+
+(defmacro nregex-match-begin (regex-groups)
+  `(if ,regex-groups (car (aref ,regex-groups 0))))
+(defmacro nregex-match-end   (regex-groups)
+  `(if ,regex-groups (cadr (aref ,regex-groups 0))))
+(defmacro nregex-match   (regex-groups)
+  `(if ,regex-groups (aref ,regex-groups 0)))
+
+(defmacro def-regex (fn re)
+  "Takes a regex `re' (string) and produces a customised function `fn'."
+  (let* ((nregex-re-l (gensym)))
+    `(defun ,fn (string &optional (start 0) (end (length string)))
+       (nregex-flet-1 ,nregex-re-l ,re
+	 (values (,nregex-re-l string start end))))))
+
+(defmacro nregex-flet-1 (name re &body body)
+  "Takes a regex `re' (string) and produces a customised flet function
+`name' which executes the regex function determined by `re' and
+`body'."
+  (let-gs (cre)
+	  `(let ((,cre (compile-regex ,re)))
+	     (flet ((,name (string &optional (start 0) (end (length string)))
+		       (funcall ,cre string start end)))
+		,@body))))
+
+(defmacro nregex-flet-strings-1 (name re &body body)
+  "Takes a regex `re' (string) and produces a customised local function `this-regex'."
+  (let-gs (regex-groups l cre)
+	  `(let ((,cre (compile-regex ,re)))
+	     (flet ((,name (string &optional (start 0) (end (length string)))
+		      (let* ((,regex-groups  (remove-if #'null (funcall ,cre string start end)))
+			     (,l             (1- (length ,regex-groups))))
+			(if ,regex-groups
+			    (do* ((i 0    (1+ i))
+				  (rgx  (aref ,regex-groups i)  (aref ,regex-groups i))
+				  (b    (car  rgx)              (car  rgx)            )
+				  (e    (cadr rgx)              (cadr rgx)            )
+				  (m    (subseq string b e)     (subseq string b e)   )
+				  (mat  (list m)                (push m mat)))
+				 ((>= i ,l)
+				  (values (reverse mat) ,regex-groups (length ,regex-groups))))))))
+	       ,@body))))
+
+(defmacro nregex-labels (name-re-list &body body)
+  "Takes a list of names and regexes and produces a customised labels
+function which executes the regex function determined by `re'
+and `body'."
+  (let ((code (loop for name-re in name-re-list
+		 for name = (car name-re)
+		 for re = (cadr name-re)
+		 for cre = (compile-regex re)
+		 collect `(,name (string &optional (start 0) (end (length string)))
+				 (funcall ,cre string start end)))))
+    `(labels ,code
+       ,@body)))
+
+(defmacro nregex-labels-strings (name-re-list &body body)
+  "Creates a labels environment for a list of named regexes."
+  (flet ((nregex-labels-strings-l (name re regex-groups l)
+	   `(,name (string &optional (start 0) (end (length string)))
+		   (let* ((,regex-groups  (remove-if #'null (funcall ,(compile-regex re) string start end)))
+			  (,l             (1- (length ,regex-groups))))
+		     (if ,regex-groups
+			 (do* ((i 0    (1+ i))
+			       (rgx  (aref ,regex-groups i)  (aref ,regex-groups i))
+			       (b    (car  rgx)              (car  rgx)            )
+			       (e    (cadr rgx)              (cadr rgx)            )
+			       (m    (subseq string b e)     (subseq string b e)   )
+			       (mat  (list m)                (push m mat)))
+			      ((>= i ,l)
+			       (values (reverse mat) ,regex-groups (length ,regex-groups)))))))))
+    (let ((code (loop for name-re in name-re-list
+		   for name = (car name-re)
+		   for re = (cadr name-re)
+		   for regex-groups = (gensym "REGEX-GROUPS-")
+		   for l = (gensym "L-")
+		   collect (nregex-labels-strings-l name re regex-groups l))))
+      `(labels ,code
+	 ,@body))))
+
+(defmacro nregex-delimited-block (name re-begin re-end &body body)
+  "Creates a lambda function that scans a string and identifies the
+  beginning and end points of a pair regexes. Within the body of the
+  lambda function, the labels function `name' is available and once
+  applied to a string, regex-groups-b and regex-groups-e are bound to
+  the beginning and ending regex-groups array.
+Example:
+(setq f (nregex-delimited-block info-item \" -- \" \"\\n\\n\" (info-item string)))"
+  (let-gs (begin end)
+	  (let ((code `(nregex-labels ((,begin ,re-begin) (,end ,re-end))
+			 (labels ((,name (string &optional (begin 0) (end (length string)))
+				    (let* ((regex-groups-b (,begin string begin end))
+					   (regex-groups-e  (if regex-groups-b (,end string (1+ (nregex-match-begin regex-groups-b)) end))))
+				      (and regex-groups-b
+					   regex-groups-e
+;;					   (list (nregex-match-begin regex-groups-b) (nregex-match-begin regex-groups-e))))))
+					   (list regex-groups-b regex-groups-e)))))
+			   ,@body))))
+    `(lambda (string &optional (start 0) (end (length string)))
+       (declare (ignorable start end))
+       ,code))))
+
+(let ((counter 0))
+  (defun ngensym (string)
+    (incf counter)
+    (intern (format nil "~:@(~a~)~a" string counter) :maxima-nregex)))
+     
+(defmacro nregex-or (re-list &body body)
+  "Creates a compiled regex which returns the earliest match amounts all options."
+  (let-gs (e mb me s rg rgs)
+    (let* ((cre-list (mapcar (lambda(re) (list (gensym "re-") re)) re-list))
+	   (n-list   (mapcar #'car cre-list))
+	   (m-list   (mapcar (lambda(f) `(and (multiple-value-setq (,rg ,rgs) (,f string start end))
+					      (setf ,s (nregex-match-begin ,rg) ,e (nregex-match-end ,rg))
+					      (< ,s ,mb)
+					      (setf ,mb ,s ,me ,e regex-groups ,rg regex-groupings ,rgs)))
+			     n-list))
+	   (code    (macroexpand
+		     `(nregex-labels ,cre-list
+			(let ((,mb most-positive-fixnum)
+			      (,me 0)
+			      ,rg ,rgs
+			      ,e ,s
+			      regex-groups regex-groupings
+			      match-begin match-end)
+			  ,@m-list
+			  (if (>= ,me ,mb) (setf match-end ,me match-begin ,mb))
+			  (values regex-groups regex-groupings)
+			  ,@body)))))
+      `(lambda (string &optional (start 0) (end (length string)))
+	 (declare (ignorable start end))
+	 ,code))))
+
+
+(defun nregex-all-matches-as-strings (re str &optional (start 0) (end (length str)))
+  (nregex-flet-strings-1 regex-match re
+    (let (match matches regex-groups regex-groupings)
+      (labels ((nregex-all-matches-as-strings-l (start end)
+		 (cond ((multiple-value-setq (match regex-groups regex-groupings) (regex-match str start end))
+			(push (car match) matches)
+			(setq start (cadr (aref regex-groups 0)))
+			(info "match: ~a~%start: ~a~%end: ~a~%" match start end)
+			(nregex-all-matches-as-strings-l start end))
+		       (t matches))))
+	(reverse (nregex-all-matches-as-strings-l start end))))))
+
+(defun nregex-all-matches (re str &optional (start 0) (end (length str)))
+  (nregex-flet-1 regex-match re
+    (let (match matches b e)
+      (labels ((nregex-all-matches-l (start end)
+		 (cond ((setq match (regex-match str start end))
+			(push (setf b (car (aref match 0))) matches)
+			(push (setf e (cadr (aref match 0))) matches)
+			(info "match: ~a~%start: ~a~%end: ~a~%" match b e)
+			(setq end (min end (length str)))
+			(nregex-all-matches-l (1+ e) end))
+		       (t t))))
+	(nregex-all-matches-l start end)
+	(loop for (b e) on (reverse matches) by #'cddr
+	   collect b collect e)))))
+
+(defun nregex-scan-to-strings (re str &key
+			       ((:start start) 0)
+			       ((:end end) (length str))
+			       ((:sharedp sharedp) t))
+  (declare (ignorable sharedp))
+  (nregex-flet-strings-1 regex-match re
+    (let (match regex-groups regex-groupings)
+      (cond ((multiple-value-setq (match regex-groups regex-groupings) (regex-match str start end))
+	     (let ((registers (make-array (1- regex-groupings))))
+	       (loop for r in (cdr match)
+		  for j = 0 then (1+ j)
+		  do (setf (aref registers j) r))
+	       (values (car match) registers)))
+	    (t nil)))))
+
+(defun nregex-scan (re str &key
+		    ((:start start) 0)
+		    ((:end end) (length str))
+		    ((:sharedp sharedp) t))
+  (declare (ignorable sharedp))
+  (nregex-flet-1 regex-match re
+    (let (regex-groups regex-groupings f-match)
+      (cond ((multiple-value-setq (regex-groups regex-groupings) (regex-match str start end))
+	     (info "~a~%~a~%" regex-groups regex-groupings)
+	     (let* ((l (1- regex-groupings))
+		    (b-registers (make-array l))
+		    (e-registers (make-array l)))
+	       (loop for i from 0 to (1- l)
+		  for register = (aref regex-groups (1+ i))
+		  for b = (car register)
+		  for e = (cadr register)
+		  do (setf (aref b-registers i) b
+			   (aref e-registers i) e))
+	       (setq f-match (aref regex-groups 0))
+	       (values (car f-match) (cadr f-match) b-registers e-registers)))
+	    (t nil)))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;  
+(defmacro nregex-do-register-groups (var-list opts-list &optional (declaration nil) (result nil))
+  (info "~a~%" opts-list)
+  (let-gs (match length-match m-r-r e s re str start end sharedp regex-groups)
+	  (let* ((opts-list `(list ,@opts-list))
+		 (bindings))
+	    (setf bindings (loop for var in var-list
+			      for i = 1 then (1+ i)
+			      collect `(,var (safe-elt ,match ,length-match ,i) (safe-elt ,match ,length-match ,i))))
+	    (info "~a~%" bindings)
+	    `(macrolet ((info (a &rest b) (if nil `(format t ,a ,@b))))
+	       (let* ((opts-list ,opts-list)
+		      (,re       (car opts-list))
+		      (,str      (cadr opts-list))
+		      (,end      (length ,str))
+		      (,start     0)
+		      (,sharedp   t)
+		      )
+		 (info "~a~%" opts-list)
+		 (loop for (k v) on (cddr opts-list) by #'cddr
+		    do (cond ((eql k :start)   (setf ,start v))
+			     ((eql k :end)     (setf ,end v))
+			     ((eql k :sharedp) (setf ,sharedp v))))
+		 (info "~a~%" (list ,re ,start ,end ,sharedp))
+		 (info "~a~%" ',bindings)
+		 (let ((,e (min ,end (length ,str))))
+		   (flet ((safe-elt (s l i) (if (and s (< i l)) (elt s i))))
+		     (nregex-flet-strings-1 regex-match ,re
+		       (do* ((,s            ,start               (cadr (aref ,regex-groups 0)))
+			     (,m-r-r        (multiple-value-list (regex-match ,str ,s ,e)) (multiple-value-list (regex-match ,str ,s ,e)))
+			     (,match        (car  ,m-r-r)        (car ,m-r-r))
+			     (,regex-groups (cadr ,m-r-r)        (cadr ,m-r-r))
+			     (,length-match (length ,match)      (length ,match))
+			     ,@bindings)
+			    ((null ,match))
+			 ,declaration
+			 (info "~a~%" ,regex-groups))
+		       ,result))))))))
+
+(defmacro nregex-register-groups-bind (var-list opts-list &optional (declaration nil))
+  (let ((block (gensym)))
+    (setf declaration `(return-from ,block ,declaration))
+    (let ((code `(nregex-do-register-groups ,var-list ,opts-list ,declaration nil)))
+      `(block ,block
+	 ,code))))
+
+;; end of nregex.lisp
