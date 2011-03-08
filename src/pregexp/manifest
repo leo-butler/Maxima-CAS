@@ -1,0 +1,9 @@
+COPYING
+README
+INSTALL
+manifest
+pregexp.lisp
+index.tex
+history
+pregexp-test.scm -> pregexp-test.lisp
+tester.lisp
