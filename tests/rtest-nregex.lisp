@@ -21,10 +21,11 @@
   (let (nregex-name)
     (mapcar #'(lambda(name)
 		(setf nregex-name (intern (concatenate 'string "NREGEX-" (symbol-name name)) :maxima-nregex))
-		(if (functionp nregex-name)
+		(format t "Definining ~a to call ~a~%" name nregex-name)
+		(if (and (functionp nregex-name) (not (macro-function nregex-name)))
 		    (eval `(defun    ,name (&rest args) (apply #',nregex-name args)))))
 	    list)))
-(cl-ppcre-to-nregex '(scan scan-to-strings register-groups-bind do-register-groups all-matches all-matches-as-strings))
+(cl-ppcre-to-nregex '(scan scan-to-strings all-matches all-matches-as-strings)) ;;register-groups-bind do-register-groups
 
 
 (defparameter x (make-instance 'test :tname "nregex" :tpasses 0 :tfails nil :tnumber 0))
@@ -79,8 +80,12 @@
 ;;;;	        (list "Frank" "Zappa" 1292889600))
 ;;;;
 
-(let ((mi (cl-info::slurp-info-file "rtest-build-index/en/maxima.info"))
-      (maxima-info-re "(maxima.info)-([0-9]+)"))
+(let ((mi  (cl-info::slurp-info-file "rtest-build-index/en/maxima.info"))
+      (mi1 (cl-info::slurp-info-file "rtest-build-index/en/maxima.info-1"))
+      (mi2 (cl-info::slurp-info-file "rtest-build-index/en/maxima.info-2"))
+      (mi3 (cl-info::slurp-info-file "rtest-build-index/en/maxima.info-3"))
+      (maxima-info-re "(maxima.info)-([0-9]+)")
+      (info-topics-re "\\n -- ([^ ]+): ([^ ]+)"))
   (defrtest 'x :func #'(lambda(re str)
 			 (let (b e b-r e-r)
 			   (multiple-value-setq (b e b-r e-r) (nregex-scan re str))
@@ -98,6 +103,14 @@
 	    :inputs (list maxima-info-re mi)
 	    :answer '("maxima.info-1" #("maxima.info" "1"))
 	    :equality-fn #'equalp)
+  (simple-defrtest x (all-matches-as-strings maxima-info-re mi)
+		   '("maxima.info-1" "maxima.info-2" "maxima.info-3"))
+
+  (defrtest x :func (lambda(re str)
+		      (let ((m (all-matches re str)))
+			(format t "~a~%" m)
+			t))
+	    :inputs (list info-topics-re mi1))
 )
 
 (do-tests x #'check)
