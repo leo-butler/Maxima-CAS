@@ -148,7 +148,7 @@ maxima-info and the encoding (external format) of these files."
     (if (null (eq ef efr))
 	(setf str-contents (slurp-info-file maxima-info efr)))
     (setf info-file-names
-	  (loop for f in (cl-ppcre:all-matches-as-strings maxima-info-re str-contents)
+	  (loop for f in (all-matches-as-strings maxima-info-re str-contents)
        for fp = (pathname f)
        for fn = (pathname-name fp)
        for ft = (pathname-type fp)
@@ -187,7 +187,7 @@ maxima-info and the encoding (external format) of these files."
   )
 (defun sanitize-external-format (ef-str)
   (let (match match-l)
-    (multiple-value-setq (match match-l) (cl-ppcre:scan-to-strings "([a-zA-Z]+)-?([0-9]{1,4})-?(1)?" ef-str))
+    (multiple-value-setq (match match-l) (scan-to-strings "([a-zA-Z]+)-?([0-9]{1,4})-?(1)?" ef-str))
     (if match
 	(set-string-case
 	 (concatenate 'string
@@ -233,7 +233,7 @@ maxima-info and the encoding (external format) of these files."
 (defun get-info-file-encoding (maxima-info-contents &optional (info-encoding-re *info-encoding-re*))
   (if *info-default-external-format*
       (let (dummy coding)
-	(multiple-value-setq (dummy coding) (cl-ppcre:scan-to-strings info-encoding-re maxima-info-contents))
+	(multiple-value-setq (dummy coding) (scan-to-strings info-encoding-re maxima-info-contents))
 	(if coding
 	    (set-external-format (aref coding 0))
 	    *info-default-external-format*))))
@@ -327,28 +327,28 @@ before adding new contents."
 		     (t
 		      (setf (gethash new-k h) v))))
 	     (get-topics-in-text-block (contents filename k a b l info-node-name)
-		 (cl-ppcre:do-register-groups (topic-type topic-name) (info-topics-start-re contents nil :start a :end b :sharedp t)
+		 (do-register-groups (topic-type topic-name) (info-topics-start-re contents nil :start a :end b :sharedp t)
 		   (safe-setf-hash topic-name k info-topics-s-e (list filename a l info-node-name (topic-types topic-type)))))
 	     )
       (loop for filename in filenames
 	 for contents = (get-info-file-string-contents filename)
-	 for nodes = (cl-ppcre:all-matches info-nodes-re contents)
+	 for nodes = (all-matches info-nodes-re contents)
 	 do
 	 ;;(format t "Reading ~a~%" filename)
 	   (loop for (b end) on nodes by #'cddr
 	      for e = (1- end)
-	      for info-node-name = (cl-ppcre:scan-to-strings info-nodes-name-re contents :start b)
-	      for s = (cl-ppcre:scan info-nodes-start-re contents :start b)
+	      for info-node-name = (scan-to-strings info-nodes-name-re contents :start b)
+	      for s = (scan info-nodes-start-re contents :start b)
 	      for l = (- e s)
 	      for k = info-node-name
 	      for v = (list filename s l)
-	      for topics = (cl-ppcre:all-matches info-topics-re contents :start b :end end)
+	      for topics = (all-matches info-topics-re contents :start b :end end)
 	      do
 		(if topics (setf (gethash k info-nodes-s-e) v))
 		(loop for (bt et) on topics by #'cddr
 		   for l = (- et bt)
 		   do
-		     (cl-ppcre:do-register-groups (topic-type topic-name) (info-topics-re contents nil :start bt :end et :sharedp t)
+		     (do-register-groups (topic-type topic-name) (info-topics-re contents nil :start bt :end et :sharedp t)
 		       (safe-setf-hash topic-name "" info-topics-s-e (list filename bt l info-node-name (topic-types topic-type)))
 		       (get-topics-in-text-block contents filename topic-name bt et l info-node-name)))))
       (and over-write
@@ -454,7 +454,7 @@ are consed with the hash's value and collected in a list. The list is
 sorted (and generally passed to `read-info-text')."
   (let ((regex-matches
 	 (loop for k being the hash-keys of hash
-	    when (cl-ppcre:scan regex-string k) collect (cons k (gethash k hash)))))
+	    when (scan regex-string k) collect (cons k (gethash k hash)))))
     ;;(format t "~a~%" regex-matches)
     (stable-sort regex-matches #'string-lessp :key #'car)))
 

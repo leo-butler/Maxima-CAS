@@ -3,6 +3,7 @@
 (in-package :cl-user)
 
 (pushnew :cl *features*)
+(pushnew :maxima-nregex *features*)
 
 ;; Don't try to optimize so much in ECL.
 ;; Therefore functions can be redefined (essential for share libraries).
@@ -119,6 +120,7 @@
 				     (:file "autoconf-variables")))
 	       (:module info :source-pathname ""
 			:components (
+				     #+cl-ppcre
 				     (:module cl-ppcre :source-pathname "cl-ppcre"
 					      :components ((:file "packages")
 							   (:file "specials")
@@ -146,6 +148,16 @@
 							   #-:use-acl-regexp2-engine
 							   (:file "scanner")
 							   (:file "api")))
+				     #+pregexp
+				     (:module pregexp :source-pathname "pregexp"
+					      :components ((:file "pregexp")
+							   (:file "cl-ppcre-interface")))
+				     #-(pregexp cl-ppcre)
+				     (:module maxima-nregex :source-pathname "nregex"
+					      :components ((:file "nregex")
+							   (:file "cl-ppcre-interface")))
+				     (:module cl-ppcre-adapter :source-pathname "prerexp"
+					      :components ((:file "api")))
 				     (:module cl-info-intl :source-pathname ""
 					      :components
 					      (;; Some versions of CMUCL already

@@ -568,12 +568,12 @@ values of both lexicals if the regex succeeds."
   (and (symbolp x) (macro-function x)))
 
 (defun compile-regex (re)
-  (cond ((stringp re)
+  (cond ((compiled-function-p re)
+	 re)
+	((stringp re)
 	 (compile-regex-string re))
 	((functionp re)
 	 (compile nil re))
-	((compiled-function-p re)
-	 re)
 	((and (symbolp re) (boundp re))
 	 (compile-regex (eval re)))
 	((consp re)
@@ -605,11 +605,11 @@ values of both lexicals if the regex succeeds."
   "Takes a regex `re' (string) and produces a customised flet function
 `name' which executes the regex function determined by `re' and
 `body'."
-  (let-gs (cre)
-	  `(let ((,cre (compile-regex ,re)))
-	     (flet ((,name (string &optional (start 0) (end (length string)))
-		       (funcall ,cre string start end)))
-		,@body))))
+  (let-gs (cre cref)
+    `(let ((,cre (compile-regex ,re)))
+       (flet ((,name (string &optional (start 0) (end (length string)))
+		 (funcall ,cre string start end)))
+	  ,@body))))
 
 (defmacro nregex-flet-strings-1 (name re &body body)
   "Takes a regex `re' (string) and produces a customised local function `this-regex'."
@@ -746,44 +746,6 @@ Example:
 	(nregex-all-matches-l start end)
 	(loop for (b e) on (reverse matches) by #'cddr
 	   collect b collect e)))))
-
-(defun nregex-scan-to-strings (re str &key
-			       ((:start start) 0)
-			       ((:end end) (length str))
-			       ((:sharedp sharedp) t))
-  (declare (ignorable sharedp))
-  (nregex-flet-strings-1 regex-match re
-    (let (match regex-groups regex-groupings)
-      (cond ((multiple-value-setq (match regex-groups regex-groupings) (regex-match str start end))
-	     (let ((registers (make-array (1- regex-groupings))))
-	       (loop for r in (cdr match)
-		  for j = 0 then (1+ j)
-		  do (setf (aref registers j) r))
-	       (values (car match) registers)))
-	    (t nil)))))
-
-(defun nregex-scan (re str &key
-		    ((:start start) 0)
-		    ((:end end) (length str))
-		    ((:sharedp sharedp) t))
-  (declare (ignorable sharedp))
-  (nregex-flet-1 regex-match re
-    (let (regex-groups regex-groupings f-match)
-      (cond ((multiple-value-setq (regex-groups regex-groupings) (regex-match str start end))
-	     (info "~a~%~a~%" regex-groups regex-groupings)
-	     (let* ((l (1- regex-groupings))
-		    (b-registers (make-array l))
-		    (e-registers (make-array l)))
-	       (loop for i from 0 to (1- l)
-		  for register = (aref regex-groups (1+ i))
-		  for b = (car register)
-		  for e = (cadr register)
-		  do (setf (aref b-registers i) b
-			   (aref e-registers i) e))
-	       (setq f-match (aref regex-groups 0))
-	       (values (car f-match) (cadr f-match) b-registers e-registers)))
-	    (t nil)))))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;  
 (defmacro nregex-do-register-groups (var-list opts-list &optional (declaration nil) (result nil))

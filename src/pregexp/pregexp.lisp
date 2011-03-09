@@ -706,3 +706,15 @@
 ;  pregexp-read-nums
   )
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(defun compile-regex (re)
+  (cond ((stringp re)
+	 (pregexp re))
+	((consp re)
+	 re)
+	((and (symbolp re) (boundp re))
+	 `(pregexp-compile-regex ,re))
+	(t
+	 (error "compile-regex re: re must be a string or s-exp."))))
