@@ -1,6 +1,10 @@
 (in-package :cl-info)
 
-(defvar *maxima-info-index-list* '("maxima-index.lisp"))
+;; These are defined in build-index.lisp
+(defvar *info-deffn-defvr-hashtable*)
+(defvar *info-section-hashtable*)
+(defvar *info-files*)
+
 (defvar *info-case-fold-search* t
   "If t, info searches are done case insensitively.")
 (defvar *info-special-chars* '(#\. #\? #\+ #\* #\[ #\] #\{ #\} #\| #\^)
