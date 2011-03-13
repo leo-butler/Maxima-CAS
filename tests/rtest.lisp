@@ -9,6 +9,8 @@
   #-gcl(:use #:cl)
   #+gcl(:use #:cl #:pcl)
   (:export #:defrtest
+	   #:simple-defrtest
+	   #:do-and-report-tests
 	   #:do-tests
 	   #:reset
 	   #:report-summary
@@ -187,3 +189,19 @@
 		   ,y
 		   )))
       `(funcall ,dfrt ,@opts))))
+
+(defmacro simple-defrtest (x in-form answer-form)
+  `(defrtest ,x :func #'(lambda() (equalp ,in-form ,answer-form))))
+
+(defmacro do-and-report-tests (&rest forms)
+  "Takes a list of pairs of forms, defines an rtest for each pair,
+runs the tests and reports the results."
+  (let ((tests (loop for (in out) on forms by #'cddr
+		  collect `(simple-defrtest x ,in ',out))))
+    `(progn
+       (defparameter x (make-instance 'test :tname "API"))
+       ,@tests
+       (do-tests x #'check)
+       (report-summary x)
+       (reset x))))
+
