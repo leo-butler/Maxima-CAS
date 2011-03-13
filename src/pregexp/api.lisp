@@ -53,26 +53,26 @@
 		  ,match-end   ,m-e
 		  ,reg-starts  ,r-s
 		  ,reg-ends    ,r-e)
-	    (or ,@result-form t))
+	    ,@(or result-form '(t)))
 	 (progn
 	   ,@body)))))
 
 (defmacro do-scans-to-strings ((match register regex string 
 				      &optional result-form &key (start 0) (end (length string)))
 			       &body body)
-  (let-gs (m-s m-e r-s r-e)
+  (let-gs (m-s m-e r-s r-e str i regi)
     (let* ((l-r (1- (count-registers regex)))
 	   (set-match-string+register
-	    `((setf ,match (if ,m-s (subseq ,string ,m-s ,m-e)))
-	      (loop for i from 0 to ,l-r
-		 for regi = (if (< i (length ,r-s))
-				(subseq ,string (aref ,r-s i) (aref ,r-e i)))
-		 do (setf (aref ,register i) regi)))))
+	    `((setf ,match (if ,m-s (subseq ,str ,m-s ,m-e)))
+	      (loop for ,i from 0 to ,l-r
+		 for ,regi = (if (< ,i (length ,r-s))
+				(subseq ,str (aref ,r-s ,i) (aref ,r-e ,i)))
+		 do (setf (aref ,register ,i) ,regi)))))
       (setf body         (append set-match-string+register body)
 	    result-form  (append set-match-string+register result-form))
-      `(let (,match
+      `(let (,match (,str ,string)
 	     (,register (make-array (1+ ,l-r) :element-type 'string :initial-element "")))
-	 (do-scans (,m-s ,m-e ,r-s ,r-e ,regex ,string ,result-form :start ,start :end ,end)
+	 (do-scans (,m-s ,m-e ,r-s ,r-e ,regex ,str ,result-form :start ,start :end ,end)
 	   ,@body)))))
 
 (defmacro do-matches ((match-start match-end regex string
