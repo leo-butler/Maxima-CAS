@@ -434,7 +434,6 @@ nforma.lisp \
 nisimp.lisp \
 nparse.lisp \
 nrat4.lisp \
-nregex.lisp \
 nset.lisp \
 nummod.lisp \
 numeric.lisp \
