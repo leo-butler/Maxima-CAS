@@ -5,6 +5,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; convenience
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(in-package :pregexp)
 
 (declaim (inline create-scanner parse-string))
 (defun parse-string (string)
@@ -15,16 +16,21 @@
   `(caar ,match))
 (defmacro match-end (match)
   `(cdar ,match))
+(defvar *default-register-number* 10)
+(defun count-registers (regex)
+  (if (stringp regex)
+      (length (remove-if-not (lambda(x) (char= x #\()) (coerce regex 'list)))
+      *default-register-number*))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; pregexp scan and scan-to-strings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(in-package :pregexp)
 
-(defun pregexp-scan (re str &key (start 0) (end (length str)))
-  (let* ((matches (pregexp-match-positions re str start end))
-	 (b (match-begin matches))
-	 (e (match-end matches))
+(defun scan (re str &key (start 0) (end (length str)))
+  (setf str (subseq str start end))
+  (let* ((matches (pregexp-match-positions re str))
+	 (b (if matches (+ start (match-begin matches))))
+	 (e (if matches (+ start (match-end matches))))
 	 (l (if matches (- (length matches) 1) 0))
 	 (mb (make-array l :element-type 'fixnum))
 	 (me (make-array l :element-type 'fixnum)))
@@ -32,10 +38,12 @@
 	 (m (cdr matches) (cdr m)))
 	((null m)
 	 (values b e mb me))
-      (setf (aref mb i) (match-begin m) (aref me i) (match-end m)))))
+      (setf (aref mb i) (+ start (match-begin m))
+	    (aref me i) (+ start (match-end m))))))
 
-(defun pregexp-scan-to-strings (re str &key (start 0) (end (length str)))
-  (let* ((matches (pregexp-match re str start end))
+(defun scan-to-strings (re str &key (start 0) (end (length str)))
+  (setf str (subseq str start end))
+  (let* ((matches (pregexp-match re str))
 	 (b (car matches))
 	 (l (if matches (- (length matches) 1) 0))
 	 (ms (make-array l :element-type 'string :initial-element "")))
@@ -49,9 +57,8 @@
 ;; cl-ppcre api layer
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar *scan*            (symbol-function 'pregexp-scan))
-(defvar *scan-to-strings* (symbol-function 'pregexp-scan-to-strings))
+(defvar *scan*            (symbol-function 'scan))
+(defvar *scan-to-strings* (symbol-function 'scan-to-strings))
 (defvar *create-scanner*  (symbol-function 'compile-regex))
-(defvar *default-register-number* 10)
 
 ;; end of cl-ppcre-interface.lisp 

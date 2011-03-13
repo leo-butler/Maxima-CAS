@@ -11,11 +11,6 @@
 #+maxima-nregex
 (in-package :maxima-nregex)
 
-(defun count-registers (regex)
-  (if (stringp regex)
-      (length (remove-if-not (lambda(x) (char= x #\()) (coerce regex 'list)))
-      *default-register-number*))
-
 (defmacro let-gs (l &body body)
   "Usage: (let-gs (a b c) body-using-a-b-and/or-c-as-gensym)"
   `(let ,(mapcar #'(lambda(x) `(,x (gensym (concatenate 'string (symbol-name ',x) "-")))) l) ,@body))
@@ -37,8 +32,9 @@
 		     ,@body))))))
 
 (defmacro do-scans ((match-start match-end reg-starts reg-ends regex string 
-				 &optional result-form &key (start 0) (end (length string)))
+				 &optional result-form &key (start 0) (end (length string)) (sharedp t))
 		    &body body)
+  (declare (ignorable sharedp))
   (let-gs (rgx str s e m-s m-e r-s r-e fn)
     `(let ((,rgx (compile-regex ,regex))
 	   (,str ,string)
@@ -92,6 +88,23 @@
   (let-gs (register)
     `(do-scans-to-strings (,match ,register ,regex ,string ,result-form :start ,start :end ,end)
        ,@body)))
+
+(defmacro do-register-groups  (var-list
+			       (regex string &optional result-form &key (start 0) (end (length string)) sharedp)
+			       &body body)
+  (declare (ignorable sharedp))
+  (let-gs (match-start match-end register-start register-end s)
+	  (let* ((l (count-registers regex))
+		 (bindings (loop for v in `(,@var-list)
+			      for i = 0 then (1+ i)
+			      collect `(setf ,v (if (and (< ,i ,l) (< ,i (length ,register-start)) (aref ,register-start ,i))
+						    (subseq ,s (aref ,register-start ,i) (aref ,register-end ,i))))))
+		 )
+	    `(let* (,@var-list
+		    (,s ,string))
+	       (do-scans (,match-start ,match-end ,register-start ,register-end ,regex ,s ,result-form :start ,start :end ,end :sharedp ,sharedp)
+		 ,@bindings
+		 ,@body)))))
 
 (defun all-matches (regex string &key (start 0) (end (length string)))
   (let ((matches '()))
