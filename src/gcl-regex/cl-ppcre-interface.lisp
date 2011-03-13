@@ -17,10 +17,12 @@
 ;; (defmacro match-end (match)
 ;;   `(cdar ,match))
 ;; (defvar *default-register-number* 10)
-;; (defun count-registers (regex)
-;;   (if (stringp regex)
-;;       (length (remove-if-not (lambda(x) (char= x #\()) (coerce regex 'list)))
-;;       *default-register-number*))
+(defun count-registers (regex)
+  (if (stringp regex)
+      (length (remove-if-not (lambda(x) (char= x #\()) (coerce regex 'list)))
+      *default-register-number*))
+(defun compile-regex (re)
+  (translate-newlines re))
 (defparameter *newline-as-char-list*
   '(
     #+windows
