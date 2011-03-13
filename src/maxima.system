@@ -3,7 +3,9 @@
 (in-package :cl-user)
 
 (pushnew :cl *features*)
-(pushnew :maxima-nregex *features*)
+;;#+gcl(pushnew :pregexp  *features*)
+;;#-gcl(pushnew :cl-ppcre *features*)
+(pushnew :pregexp *features*)
 
 ;; Don't try to optimize so much in ECL.
 ;; Therefore functions can be redefined (essential for share libraries).
@@ -109,7 +111,6 @@
 				     (:file "numerical/f2cl-package")
 				     (:file "numerical/slatec")
 				     (:file "command-line")
-				     (:file "nregex")
 				     #+gcl-working-proclaims
 				     (:file "sys-proclaim")))
 	       (:module package :source-pathname ""
@@ -152,11 +153,12 @@
 				     (:module pregexp :source-pathname "pregexp"
 					      :components ((:file "pregexp")
 							   (:file "cl-ppcre-interface")))
-				     #-(pregexp cl-ppcre)
+				     #-(or pregexp cl-ppcre)
 				     (:module maxima-nregex :source-pathname "nregex"
 					      :components ((:file "nregex")
 							   (:file "cl-ppcre-interface")))
-				     (:module cl-ppcre-adapter :source-pathname "prerexp"
+				     #+pregexp
+				     (:module cl-ppcre-adapter :source-pathname "pregexp"
 					      :components ((:file "api")))
 				     (:module cl-info-intl :source-pathname ""
 					      :components
@@ -166,8 +168,8 @@
 					       ;; it.
 					       #+#.(cl:if (cl:and (cl:member :cmu cl:*features*) (cl:find-package '#:intl))  '(or) '(and))
 						   (:file "intl")
-						   (:file "build-index")
-						   (:file "cl-info"))))); :depends-on (cl-ppcre))))))
+						   (:file "cl-info")
+						   (:file "build-index"))))); :depends-on (cl-ppcre))))))
 	       (:module sloop :source-pathname ""
 			:components ((:file "sloop")))
                (:module declarations :source-pathname ""
