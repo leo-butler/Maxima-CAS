@@ -10,6 +10,10 @@
 	      #:*pregexp-version*
 	      #:*pregexp-comment-char*
 	      #:*pregexp-space-sensitive-p*
+	      #:*pregexp-meta-chars*
+	      #:*scan*
+	      #:*scan-to-strings*
+	      #:*create-scanner* 
 	      ;; Functions
 	      #:pregexp-read-pattern
 	      #:pregexp-read-branch
@@ -37,12 +41,26 @@
 	      #:pregexp-replace
 	      #:pregexp-replace*
 	      #:pregexp-quote
+	      ;; Functions in cl-ppcre-interface.lisp
+	      #:pregexp-scan
+	      #:pregexp-scan-to-strings
+	      #:count-registers
+	      ;; Functions in api.lisp
+	      #:register-groups-bind
+	      #:do-scans
+	      #:do-scans-to-strings
+	      #:do-matches
+	      #:do-matches-as-strings
+	      #:all-matches
+	      #:all-matches-as-strings
+	      #:do-register-groups
 	      ))
 	   )
 
 (in-package :pregexp)
 
-(eval-when (:compile-toplevel :load-toplevel :execute)
+(eval-when  #-gcl(:compile-toplevel :load-toplevel :execute) 
+	    #+gcl(load compile eval)
   (defparameter *pregexp-debug* t)
   (defmacro info (message &rest args)
     (if *pregexp-debug*
@@ -50,10 +68,16 @@
   (defparameter *pregexp-version* 20090325) ;last change
   (defparameter *pregexp-comment-char* #\;)
   (defparameter *pregexp-space-sensitive-p* t)
+  (defparameter *pregexp-meta-chars* '(#\\ #\. #\? #\* #\+ #\| #\^ #\$
+				       #\[ #\] #\{ #\} #\( #\)))
+  (defparameter *pregexp-trace-recur* nil)
   )
 
 (defmacro pregexp-recur (name varvals &rest body)
-  `(labels ((,name ,(mapcar #'first varvals) ,@body))
+  `(labels ((,name ,(mapcar #'first varvals)
+	      (progn
+		(if *pregexp-trace-recur* (format t "~{~s~^,  ~}~%~%" '("name:" ,name "vars:" ,@varvals)))
+		,@body)))
      (,name ,@(mapcar #'second varvals))))
 
 (defun pregexp-read-pattern (s i n)
@@ -205,8 +229,10 @@
                   (#\i (push (if invp :case-sensitive
                                :case-insensitive) r))
 		  (#\x (setq *pregexp-space-sensitive-p* invp))
-		  (#\s (warn "s (single-line mode) not implemented.~%"))
-		  (#\m (warn "m (multi-line mode) not implemented.~%"))
+		  (#\s (push (if invp :single-line-mode-off
+				 :single-line-mode-on) r))
+		  (#\m (push (if invp :multi-line-mode-off
+				 :multi-line-mode-on) r))
                   (#\: (return (values (nreverse r) i)))
                   (t (error "pregexp-read-cluster-type")))
                 (setq c (char s i))
@@ -324,6 +350,30 @@
                   (nreverse r))
             i)))
 
+(defun pregexp-filter-line-modes (re &optional s m)
+  (cond ((null re)
+	 re)
+	((consp re)
+	 (case (car re)
+	   (:multi-line-mode-on
+	    (cons :multi-line-mode-on (pregexp-filter-line-modes (cdr re) s t)))
+	   (:multi-line-mode-off
+	    (cons :multi-line-mode-off (pregexp-filter-line-modes (cdr re) s nil)))
+	   (:single-line-mode-on
+	    (cons :single-line-mode-on (pregexp-filter-line-modes (cdr re) t m)))
+	   (:single-line-mode-off
+	    (cons :single-line-mode-off (pregexp-filter-line-modes (cdr re) nil m)))
+	   (otherwise
+	    (cons (pregexp-filter-line-modes (car re) s m) (pregexp-filter-line-modes (cdr re) s m)))))
+	((and m (eq re :bos))
+	 :bol)
+	((and m (eq re :eos))
+	 :eol)
+	((and s (eq re :any))
+	 :all)
+	(t
+	 re)))
+
 (defun pregexp-string-match (s1 s i n sk fk)
   (let ((n1 (length s1)))
     (if (> n1 n) (funcall fk)
@@ -352,6 +402,7 @@
 
 (defun pregexp-check-if-in-char-class-p (c char-class) ;check thoroughly
   (case char-class
+    (:all t)
     (:any (not (char= c #\newline)))
     (:alnum (or (alpha-char-p c) (digit-char-p c)))
     (:alpha (alpha-char-p c))
@@ -373,6 +424,19 @@
     (:xdigit (or (digit-char-p c)
                  (member c '(#\a #\b #\c #\d #\e #\f) :test #'char-equal)))
     (t (error "pregexp-check-if-in-char-class-p"))))
+
+(defun pregexp-bol (s start n i)
+  (cond ((= i start) t)
+	((and (> i 0) (<= i n))
+	 (char= (char s (1- i)) #\newline))
+	(t nil)))
+
+(defun pregexp-eol (s start n i)
+  (declare (ignorable start))
+  (cond ((>= i n) t)
+	((< i n)
+	 (char= (char s i) #\newline))
+	(t nil)))
 
 (defun pregexp-make-backref-list (re)
   (if (consp re)
@@ -397,9 +461,13 @@
       (pregexp-recur
         match-loop ((re re) (i i) (sk #'identity) (fk (lambda () nil)))
         (cond ((eq re :bos)
-               (if (= i start) (funcall sk i) (funcall fk)))
+	       (if (= i start) (funcall sk i) (funcall fk)))
+	      ((eq re :bol)
+               (if (pregexp-bol s start n i) (funcall sk i) (funcall fk)))
               ((eq re :eos)
                (if (>= i n) (funcall sk i) (funcall fk)))
+	      ((eq re :eol)
+	       (if (pregexp-eol s start n i) (funcall sk i) (funcall fk)))
               ((eq re :empty) (funcall sk i))
               ((eq re :wbdry)
                (if (pregexp-at-word-boundary-p s i n)
@@ -490,8 +558,8 @@
                    (let ((n-actual n) (sn-actual sn))
                      (setq n i sn i)
                      (let ((found-it-p
-                             (match-loop `(:seq (:between nil 0 nil :any)
-                                                ,(second re) :eos)
+			    (match-loop `(:seq (:between nil 0 nil :all)
+					       ,(second re) :eos)
                                          0
                                          #'identity
                                          (lambda () nil))))
@@ -501,8 +569,8 @@
                    (let ((n-actual n) (sn-actual sn))
                      (setq n i sn i)
                      (let ((found-it-p
-                             (match-loop `(:seq (:between nil 0 nil :any)
-                                                ,(second re) :eos)
+			    (match-loop `(:seq (:between nil 0 nil :all)
+					       ,(second re) :eos)
                                          0
                                          #'identity
                                          (lambda () nil))))
@@ -525,6 +593,9 @@
                                 (lambda ()
                                   (setq case-sensitive-p old-case-sensitive-p)
                                   (funcall fk)))))
+                 ((:single-line-mode-on :single-line-mode-off :multi-line-mode-on :multi-line-mode-off)
+		  (cond ((>= i n) (funcall fk))
+			(t (match-loop (second re) i sk fk))))
                  (:between
                    (let* ((non-greedy-p (second re))
                           (p (third re))
@@ -592,7 +663,8 @@
 
 (defun pregexp (s)
   (setq *pregexp-space-sensitive-p* t) ;in case it got corrupted
-  (list :sub (pregexp-read-pattern s 0 (length s))))
+  (pregexp-filter-line-modes
+   (list :sub (pregexp-read-pattern s 0 (length s)))))
 
 (defun pregexp-match-positions (pat str &optional start end)
   (when (stringp pat) (setq pat (pregexp pat)))
@@ -676,8 +748,9 @@
         (setq i (cdar pp))))))
 
 (defun pregexp-quote (s)
-  (let ((i (- (length s) 1)) (r '()))
+  (let ((i (length s)) (r '()))
     (loop
+      (decf i)
       (when (< i 0) (return (concatenate 'string r)))
       (let ((c (char s i)))
         (push c r)
@@ -715,6 +788,10 @@
 	((consp re)
 	 re)
 	((and (symbolp re) (boundp re))
-	 `(pregexp-compile-regex ,re))
+	 `(compile-regex ,re))
 	(t
 	 (error "compile-regex re: re must be a string or s-exp."))))
+
+
+;;(trace   compile-regex  pregexp-quote  pregexp-replace*  pregexp-replace  pregexp-split  pregexp-match  pregexp-match-positions  pregexp  pregexp-replace-aux  pregexp-match-positions-aux  pregexp-make-backref-list  pregexp-eos  pregexp-bos  pregexp-check-if-in-char-class-p  pregexp-at-word-boundary-p  pregexp-char-word?  pregexp-string-match  pregexp-read-char-list  pregexp-read-nums  pregexp-whitespacep  pregexp-wrap-quantifier-if-any  pregexp-read-subpattern  pregexp-read-cluster-type  pregexp-read-posix-char-class  pregexp-read-escaped-char  pregexp-read-escaped-number  pregexp-read-piece  pregexp-read-branch  pregexp-read-pattern)
+;;(untrace compile-regex  pregexp-quote  pregexp-replace*  pregexp-replace  pregexp-split  pregexp-match  pregexp-match-positions  pregexp  pregexp-replace-aux  pregexp-match-positions-aux  pregexp-make-backref-list  pregexp-eos  pregexp-bos  pregexp-check-if-in-char-class-p  pregexp-at-word-boundary-p  pregexp-char-word?  pregexp-string-match  pregexp-read-char-list  pregexp-read-nums  pregexp-whitespacep  pregexp-wrap-quantifier-if-any  pregexp-read-subpattern  pregexp-read-cluster-type  pregexp-read-posix-char-class  pregexp-read-escaped-char  pregexp-read-escaped-number  pregexp-read-piece  pregexp-read-branch  pregexp-read-pattern)
