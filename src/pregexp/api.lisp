@@ -10,6 +10,8 @@
 (in-package :pregexp)
 #+maxima-nregex
 (in-package :maxima-nregex)
+#+gcl-regex
+(in-package :gcl-regex)
 
 (defmacro let-gs (l &body body)
   "Usage: (let-gs (a b c) body-using-a-b-and/or-c-as-gensym)"
@@ -55,7 +57,7 @@
 	       ,match-end   ,m-e
 	       ,reg-starts  ,r-s
 	       ,reg-ends    ,r-e)
-	 ,@result-form))))
+	 (or ,@result-form t)))))
 
 (defmacro do-scans-to-strings ((match register regex string 
 				      &optional result-form &key (start 0) (end (length string)))
