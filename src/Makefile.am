@@ -201,14 +201,18 @@ include sbcl-depends.mk
 endif
 
 if GCL
-EXECUTEGCL = $(GCL_NAME) -batch -eval
+EXECUTEGCL = binary-gcl/gcl-bs -batch -eval
 all-local: sharefiles.mk  binary-gcl/maxima
 install-exec-local: install-gcl
 uninstall-hook: uninstall-gcl
 clean: clean-gcl
 distclean: clean-gcl
 
-sys-proclaim:
+binary-gcl/gcl-bs:
+	test -d binary-gcl || mkdir binary-gcl
+	/bin/sh ./gcl-bs.sh $(GCL_NAME) "$@" 16
+
+sys-proclaim: binary-gcl/gcl-bs
 	rm -rf binary-gcl
 	test -d binary-gcl || mkdir binary-gcl
 	test -d binary-gcl/numerical || mkdir binary-gcl/numerical
@@ -217,7 +221,7 @@ sys-proclaim:
 
 gcl:binary-gcl/maxima
 
-binary-gcl/maxima:
+binary-gcl/maxima: binary-gcl/gcl-bs 
 if GCL_ALT_LINK
 	test -d binary-gcl || mkdir binary-gcl
 	test -d binary-gcl/numerical || mkdir binary-gcl/numerical
@@ -630,7 +634,10 @@ numerical/slatec/zunik.lisp \
 numerical/slatec/zunk1.lisp \
 numerical/slatec/zunk2.lisp \
 numerical/slatec/zuoik.lisp \
-numerical/slatec/zwrsk.lisp
+numerical/slatec/zwrsk.lisp \
+pregexp/pregexp.lisp \
+pregexp/cl-ppcre-interface.lisp \
+pregexp/api.lisp
 
 
 genericdirDATA = $(real_lisp_sources) autoconf-variables.lisp
