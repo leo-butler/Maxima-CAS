@@ -3,6 +3,7 @@
 
 ;keeping the document honest
 
+(in-package :pregexp)
 (setf *failed* 0)
 
 (test
@@ -409,6 +410,112 @@
  (pregexp-match "([^]b-z])" "a")
  ("a" "a")
 
+ ;; test that single-line-mode nests correctly
+ (pregexp-match "(?s:.+f(.+))" (format nil "a~%afc~%b"))
+ ("a
+afc
+b"
+  "c
+b")
+
+ (pregexp-match "(?s:.+f(?-s:.+))" (format nil "a~%af~%b"))
+ nil
+
+ (pregexp-match "(?s:.+f(.*))" (format nil "a~%af~%b"))
+ ("a
+af
+b"
+  "
+b")
+
+ (pregexp-match "(?sm:^ -- )(.+?): ([^\\s]+)((?sm:.+?))(?=(?-ms:\\n\\n -- ||^[0-9]|$))" (format nil "##~% -- Function: foo (x,y)~% foo does ~% this~%~% -- "))
+ (" -- Function: foo (x,y)
+ foo does 
+ this"
+  "Function" "foo" " (x,y)
+ foo does 
+ this")
+
+ (pregexp-match "(?sm:^ -- )(.+?): ([^\\s]+)((?sm:.+?))(?=(?-ms:\\n\\n -- ||^[0-9]|$))" (format nil "##~% -- Function: foo (x,y)~% foo does ~% this~%~% "))
+ (" -- Function: foo (x,y)
+ foo does 
+ this
+
+ "
+  "Function" "foo" " (x,y)
+ foo does 
+ this
+
+ ")
+
+ (pregexp-match "(?sm:^ -- )(.+?): ([^\\s]+)((?sm:.+?))(?=(?-ms:\\n\\n -- ||^[0-9]|$))" (format nil "##~% -- Function: foo (x,y)~% foo does ~% this~%~%  ~%~% -- "))
+ (" -- Function: foo (x,y)
+ foo does 
+ this
+
+ "
+  "Function" "foo" " (x,y)
+ foo does 
+ this
+
+ ")
+
+ ;; multi-line-mode
+ (pregexp-match "(?m:.+^.+$)" (format nil "a~%af~%b"))
+ nil
+
+ (pregexp-match "a\\n(?m:^.+$)" (format nil "a~%af~%b"))
+ ("a
+af")
+
+ (pregexp-match "(?m:a\\n(^.+$))" (format nil "a~%maf~%b"))
+ ("a
+maf"
+"maf")
+
+ (pregexp-match "(?ms:.+^.+$)" (format nil "a~%af~%b"))
+ ("a
+af
+b")
+
+ (pregexp-match "(?ms:(.+)^(.+)$)" (format nil "a~%af~%b"))
+ ("a
+af
+b"
+  "a
+af
+" "b")
+
+ ;; from perlretut
+ (let ((s (format nil "There once was a girl~%Who programmed in Perl~%")))
+   (flet ((p-match (re)
+	    (or (pregexp-match re s) 'fail)))
+     (mapcar #'p-match
+	     '("(?:^Who)"         ; doesn't match, "Who)" not at start of string
+	       "(?s:^Who)"        ; doesn't match, "Who)" not at start of string
+	       "(?m:^Who)"        ; matches, "Who)" at start of second line
+	       "(?sm:^Who)"       ; matches, "Who)" at start of second line
+	       "(?:girl.Who)"     ; doesn't match, "." doesn't match "\n"
+	       "(?s:girl.Who)"    ; matches, "." matches "\n"
+	       "(?m:girl.Who)"    ; doesn't match, "." doesn't match "\n"
+	       "(?sm:girl.Who)")) ; matches, "." matches "\n"
+     ))
+ (FAIL
+  FAIL
+  ("Who")
+  ("Who")
+  FAIL
+  ("girl
+Who")
+  FAIL
+  ("girl
+Who"))
+
+ ;; faulty regexp-quote
+ (pregexp-quote (coerce (loop for i from 0 upto 127 collect (code-char i)) 'string))
+ " 	
+ !\"#\\$%&'\\(\\)\\*\\+,-\\./0123456789:;<=>\\?@ABCDEFGHIJKLMNOPQRSTUVWXYZ\\[\\\\\\]\\^_`abcdefghijklmnopqrstuvwxyz\\{\\|\\}~"
+ 
  )
 
 (bottomline)
