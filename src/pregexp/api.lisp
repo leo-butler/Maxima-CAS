@@ -36,28 +36,26 @@
 (defmacro do-scans ((match-start match-end reg-starts reg-ends regex string 
 				 &optional result-form &key (start 0) (end (length string)) (sharedp t))
 		    &body body)
-  (declare (ignorable sharedp))
-  (let-gs (rgx str s e m-s m-e r-s r-e fn)
+  ;; declaration* statement* => result*
+  (let-gs (rgx str s e m-s m-e r-s r-e)
     `(let ((,rgx (compile-regex ,regex))
 	   (,str ,string)
 	   (,e   ,end)
-	   ,match-start ,match-end ,reg-starts ,reg-ends
-	   ,m-s ,m-e ,r-s ,r-e)
-       (labels ((,fn (,s)
-		  (multiple-value-setq (,match-start ,match-end ,reg-starts ,reg-ends) (funcall *scan* ,rgx ,str :start ,s :end ,e))
-		  (and ,match-start
-		       (setf ,m-s ,match-start
-			     ,m-e ,match-end  
-			     ,r-s ,reg-starts 
-			     ,r-e ,reg-ends)
-		       (progn ,@body t)
-		       (funcall #',fn (1+ ,match-start)))))
-	 (funcall #',fn ,start)
-	 (setf ,match-start ,m-s
-	       ,match-end   ,m-e
-	       ,reg-starts  ,r-s
-	       ,reg-ends    ,r-e)
-	 (or ,@result-form t)))))
+	   ,match-start ,match-end ,reg-starts ,reg-ends)
+       (do ((,s ,start (1+ (or ,match-start ,end)))
+	    (,m-s ,match-start ,match-start)
+	    (,m-e ,match-end   ,match-end  )
+	    (,r-s ,reg-starts  ,reg-starts )
+	    (,r-e ,reg-ends    ,reg-ends   ))
+	   ((or (> ,s ,e)
+		(null (multiple-value-setq (,match-start ,match-end ,reg-starts ,reg-ends) (funcall *scan* ,rgx ,str :start ,s :end ,e))))
+	    (setf ,match-start ,m-s
+		  ,match-end   ,m-e
+		  ,reg-starts  ,r-s
+		  ,reg-ends    ,r-e)
+	    (or ,@result-form t))
+	 (progn
+	   ,@body)))))
 
 (defmacro do-scans-to-strings ((match register regex string 
 				      &optional result-form &key (start 0) (end (length string)))
