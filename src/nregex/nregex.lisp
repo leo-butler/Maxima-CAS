@@ -30,9 +30,23 @@
 	     (:export
 	      ;; Vars
 	      #:*regex-debug* #:*regex-groups* #:*regex-groupings*
+	      #:*scan* #:*scan-to-strings* #:*create-scanner* 
 	      ;; Functions
 	      #:regex-compile
 	      #:regex
+	      #:compile-regex
+	      ;; Functions in cl-ppcre-interface.lisp
+	      #:nregex-scan
+	      #:nregex-scan-to-strings
+	      ;; Functions in api.lisp
+	      #:register-groups-bind
+	      #:do-scans
+	      #:do-scans-to-strings
+	      #:do-matches
+	      #:do-matches-as-strings
+	      #:all-matches
+	      #:all-matches-as-strings
+	      #:do-register-groups
 	      ))
 	   )
 
