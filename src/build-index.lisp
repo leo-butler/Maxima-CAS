@@ -89,6 +89,17 @@
 (defparameter *info-encoding-re* "\\ncoding: ([a-zA-Z0-9-]+)"
   "Regex to extract the encoding string in each master info file.")
 
+(defparameter *info-debug-bi* t)
+(defmacro -info (debug &rest args)
+  (cond (debug
+	 (let ((names+args (loop for a in (reverse args)
+			      when (symbolp a) collect `(format t "~&~a: " ',a)
+			      collect `(format t "~a" ,a))))
+	   `(progn ,@names+args)))
+	(t nil)))
+(defmacro info (&rest args)
+  `(-info *info-debug-bi* ,@args))
+
 ;;
 ;; Helper functions + macros
 ;;
@@ -156,22 +167,40 @@ maxima-info and the encoding (external format) of these files."
        when (file-exists-p file) collect file))
     (values info-file-names efr)))
 
+(declaim (inline g+read-sequence))
+#+gcl
+(defun g+read-sequence (s in &key (start 0) end)
+  (setf end (or end (length s)))
+  (dotimes (i (- end start))
+    (setf (aref s i) (read-byte in))))
+#-gcl
+(defun g+read-sequence (s in &key (start 0) (end (length s)))
+  (read-sequence s in :start start :end end))
+#+gcl
+(defmacro with-g-standard-io-syntax (&body body)
+  `(progn ,@body))
+#-gcl
+(defmacro with-g-standard-io-syntax (&body body)
+  `(with-standard-io-syntax
+     ,@body))
+
+
 (defun slurp-info-file (filename &optional ef)
   (cond (ef
 	 (let ((fs))
 	   (with-open-file (in filename :direction :input :element-type 'character :external-format ef)
 	     (setq fs (file-length in))
-	     (let ((contents (make-array fs :element-type 'character :initial-element #\Null)))
-	       (with-standard-io-syntax
-		 (read-sequence contents in :start 0 :end nil))
+	     (let ((contents (make-array fs :element-type 'character :initial-element ""))) ;;#+gcl #\^@ #-gcl #\Null)))
+	       (with-g-standard-io-syntax
+		 (g+read-sequence contents in :start 0 :end nil))
 	       (coerce contents 'string)))))
 	(t
 	 (let ((fs))
 	   (with-open-file (in filename :direction :input :element-type 'unsigned-byte)
 	     (setq fs (file-length in))
 	     (let ((contents (make-array fs :element-type 'unsigned-byte)))
-	       (with-standard-io-syntax
-		 (read-sequence contents in :start 0 :end nil))
+	       (with-g-standard-io-syntax
+		 (g+read-sequence contents in :start 0 :end nil))
 	       (codes-string contents)))))))
 
 ;;
@@ -211,7 +240,8 @@ maxima-info and the encoding (external format) of these files."
 	)))
 
 (defparameter *info-default-external-format*
-  (set-external-format :utf-8))
+  (set-external-format #+gcl nil
+		       #-gcl :utf-8))
 
 (defun get-external-format-name (ef)
   (flet ((symbol-name-as-keyword (s)
@@ -227,6 +257,8 @@ maxima-info and the encoding (external format) of these files."
 		#+(or sbcl clisp)
 		ef
 		#+t
+		ef
+		#+gcl
 		ef
 		))))))
 
@@ -337,19 +369,21 @@ before adding new contents."
 	 ;;(format t "Reading ~a~%" filename)
 	   (loop for (b end) on nodes by #'cddr
 	      for e = (1- end)
-	      for info-node-name = (scan-to-strings info-nodes-name-re contents :start b)
-	      for s = (scan info-nodes-start-re contents :start b)
+	      for info-node-name = (scan-to-strings info-nodes-name-re contents :start b :end e)
+	      for s = (scan info-nodes-start-re contents :start b :end e)
 	      for l = (- e s)
 	      for k = info-node-name
 	      for v = (list filename s l)
 	      for topics = (all-matches info-topics-re contents :start b :end end)
 	      do
 		(if topics (setf (gethash k info-nodes-s-e) v))
+		(info b e s k v topics)
 		(loop for (bt et) on topics by #'cddr
 		   for l = (- et bt)
 		   do
 		     (do-register-groups (topic-type topic-name) (info-topics-re contents nil :start bt :end et :sharedp t)
 		       (safe-setf-hash topic-name "" info-topics-s-e (list filename bt l info-node-name (topic-types topic-type)))
+		       (info topic-type topic-name)
 		       (get-topics-in-text-block contents filename topic-name bt et l info-node-name)))))
       (and over-write
 	   (setf-hash *info-section-hashtable* info-nodes-s-e)
