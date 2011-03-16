@@ -90,29 +90,64 @@
 	   #:all-matches-as-strings
 	   #:do-register-groups
 	   ))
+#+gcl
+(defpackage :gcl-extensions
+  (:use :common-lisp)
+  (:export #:read-sequence
+	   #:with-standard-io-syntax))
+#+gcl
+(defpackage :gcl-regex
+  (:use :common-lisp)
+  (:import-from :gcl-extensions
+		#:read-sequence
+		#:with-standard-io-syntax)
+  (:export
+   ;; Vars
+   #:*scan*
+   #:*scan-to-strings*
+   #:*create-scanner* 
+   ;; Functions
+   #:scan
+   #:scan-to-strings
+   #:count-registers
+   ;; Functions in api.lisp
+   #:register-groups-bind
+   #:do-scans
+   #:do-scans-to-strings
+   #:do-matches
+   #:do-matches-as-strings
+   #:all-matches
+   #:all-matches-as-strings
+   #:do-register-groups
+   ))
 
 (defpackage :cl-info
   (:use :common-lisp
-	#+cl-ppcre :cl-ppcre
-	#+pregexp  :pregexp)
+	#+cl-ppcre  :cl-ppcre
+	#+pregexp   :pregexp
+	#+gcl-regex :gcl-regex
+	#+maxima-nregex :maxima-nregex)
   (:export #:setup-help-database
 	   #:print-info-hashes
 	   #:info
 	   #:info-exact
 	   #:*prompt-prefix*
 	   #:*prompt-suffix*)
-  (:import-from #+cl-ppcre :cl-ppcre
-		#+pregexp  :pregexp
+  (:import-from #+cl-ppcre  :cl-ppcre
+		#+pregexp   :pregexp
+		#+gcl-regex :gcl-regex
+		#+maxima-nregex :maxima-nregex
 		#:scan
 		#:scan-to-strings
 		#:register-groups-bind
 		#:do-scans
-		#:do-scans-to-strings
-		#:do-matches
-		#:do-matches-as-strings
 		#:all-matches
-		#:all-matches-as-strings
-		#:do-register-groups))
+		#:do-register-groups)
+  #+gcl
+  (:import-from :gcl-extensions
+		#:read-sequence
+		#:with-standard-io-syntax)
+  )
 
 (defpackage :command-line
   (:use :common-lisp)

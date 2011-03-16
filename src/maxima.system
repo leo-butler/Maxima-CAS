@@ -3,9 +3,8 @@
 (in-package :cl-user)
 
 (pushnew :cl *features*)
-;;#+gcl(pushnew :pregexp  *features*)
-;;#-gcl(pushnew :cl-ppcre *features*)
-(pushnew :pregexp *features*)
+#+gcl(pushnew :gcl-regex  *features*)
+#-gcl(pushnew :cl-ppcre   *features*)
 
 ;; Don't try to optimize so much in ECL.
 ;; Therefore functions can be redefined (essential for share libraries).
@@ -119,6 +118,9 @@
 				     (:file "maxima-package")
 				     #+ecl (:file "ecl-port")
 				     (:file "autoconf-variables")))
+	       #+gcl
+	       (:module gcl-extensions :source-pathname "gcl-regex"
+			:components (:file "gcl-extensions"))
 	       (:module info :source-pathname ""
 			:components (
 				     #+cl-ppcre
@@ -153,11 +155,15 @@
 				     (:module pregexp :source-pathname "pregexp"
 					      :components ((:file "pregexp")
 							   (:file "cl-ppcre-interface")))
-				     #-(or pregexp cl-ppcre)
+				     #+maxima-nregex
 				     (:module maxima-nregex :source-pathname "nregex"
 					      :components ((:file "nregex")
 							   (:file "cl-ppcre-interface")))
-				     #+pregexp
+				     #+gcl-regex
+				     (:module gcl-regex :source-pathname "gcl-regex"
+					      :components ((:file "gcl-regex")
+							   (:file "cl-ppcre-interface")))
+				     #-cl-ppcre
 				     (:module cl-ppcre-adapter :source-pathname "pregexp"
 					      :components ((:file "api")))
 				     (:module cl-info-intl :source-pathname ""
