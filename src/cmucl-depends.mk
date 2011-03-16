@@ -18,8 +18,8 @@ binary-cmucl/maxima.core : cl-ppcre/repetition-closures.lisp
 binary-cmucl/maxima.core : cl-ppcre/scanner.lisp
 binary-cmucl/maxima.core : cl-ppcre/api.lisp
 binary-cmucl/maxima.core : intl.lisp
-binary-cmucl/maxima.core : build-index.lisp
 binary-cmucl/maxima.core : cl-info.lisp
+binary-cmucl/maxima.core : build-index.lisp
 binary-cmucl/maxima.core : sloop.lisp
 binary-cmucl/maxima.core : lmdcls.lisp
 binary-cmucl/maxima.core : letmac.lisp
