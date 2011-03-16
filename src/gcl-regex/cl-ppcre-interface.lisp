@@ -16,13 +16,11 @@
 ;;   `(caar ,match))
 ;; (defmacro match-end (match)
 ;;   `(cdar ,match))
-;; (defvar *default-register-number* 10)
+(defvar *default-register-number* 10)
 (defun count-registers (regex)
   (if (stringp regex)
       (length (remove-if-not (lambda(x) (char= x #\()) (coerce regex 'list)))
       *default-register-number*))
-(defun compile-regex (re)
-  (translate-newlines re))
 (defparameter *newline-as-char-list*
   '(
     #+windows
@@ -33,28 +31,53 @@
     #\Newline
     )
   )
+(defparameter *space-class-list* `(#\  #\Tab ,@*newline-as-char-list*))
+(defparameter *complemented-space-class-list* (append '(#\^) *space-class-list*))
+(defparameter *dot-class-list* `(#\^ ,@*newline-as-char-list*))
+(defparameter *space-class* (coerce *space-class-list* 'string))
 (defparameter *newline* (coerce *newline-as-char-list* 'string))
-(defun translate-newlines (s)
-  (declare (special *newline*))
-  (let ((s (if (consp s) s (coerce s 'list)))
-	r)
-    (labels ((t-n (str)
-	       ;;(format t "~a~%" str)
-	       (cond ((null str)
-		      str)
-		     ((and (char= (car str) #\\) (char= (cadr str) #\n))
-		      (append *newline-as-char-list* (t-n (cddr str))))
-		     (t
-		      (cons (car str) (t-n (cdr str)))))))
-      (setf r (t-n s))
-      (coerce r 'string))))
+(defun translate-special-chars (s)
+  (declare (special *newlineas-char-list* *space-class-list*))
+  (let ((s (if (consp s) s (coerce s 'list))))
+    (macrolet ((setf-append (a b) `(let ((c (append '(#\]) (reverse ,b) '(#\[))))
+				     (setf ,a (if ,a (append c ,a) c)))))
+      (labels ((t-n (str acc)
+		 ;;(format t "~a ~a~%" str acc)
+		 (let ((c (car str)))
+		   (case c
+		     (#\\
+		      (let ((next (cadr str)))
+			(case next
+			  (#\n
+			   (setf-append acc *newline-as-char-list*))
+			  (#\s
+			   (setf-append acc *space-class-list*))
+			  (#\S
+			   (setf-append acc *complemented-space-class-list*))
+			  (#\\
+			   (push #\\ acc))
+			  (otherwise
+			   (push next acc))))
+		      (t-n (cddr str) acc))
+		     (#\.
+		      (setf-append acc *dot-class-list*)
+		      (t-n (cdr str) acc))
+		     ((nil)
+		      (return-from t-n acc))
+		     (otherwise
+		      (push c acc)
+		      (t-n (cdr str) acc))))))
+	(coerce (reverse (t-n s nil)) 'string)))))
+(defun compile-regex (re)
+  (translate-special-chars re))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; pregexp scan and scan-to-strings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun scan (re str &key (start 0) (end (length str)))
-  (setf re (translate-newlines re))
+  ;;(format *terminal-io* "~&~s" re)
+  (setf re (translate-special-chars re))
   (flet ((length-matches ()
 	   (do ((i 0 (1+ i)))
 	       ((eq -1 (system:match-beginning i))
@@ -73,7 +96,7 @@
 		(aref me i) (+ start (system:match-end (1+ i)))))))))
 
 (defun scan-to-strings (re str &key (start 0) (end (length str)))
-  (setf re (translate-newlines re))
+  (setf re (translate-special-chars re))
   (let (b e mb me)
     (multiple-value-setq (b e mb me) (scan re str :start start :end end))
     (if (null b) (return-from scan-to-strings nil))
