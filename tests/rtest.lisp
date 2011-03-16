@@ -143,7 +143,7 @@
   (let ((fails (if ignore-deliberate-fails
 		   (loop for k in (test-fails x) unless (eql (cadr k) 'deliberate-fail) collect k)
 		   (test-fails x))))
-    (format t "~&~:[Fails:  ~a~%~;~]" (eq fails nil) fails))
+    (format t "~&~:[Fails:  ~s~%~;~]" (eq fails nil) fails))
   t)
 
 (defmethod check ((x rtest) &optional (do-report nil))
