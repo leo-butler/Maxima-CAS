@@ -164,7 +164,7 @@
 					      :components ((:file "gcl-regex")
 							   (:file "cl-ppcre-interface")))
 				     #-cl-ppcre
-				     (:module cl-ppcre-adapter :source-pathname "pregexp"
+				     (:module cl-ppcre-adapter :source-pathname "gcl-regex"
 					      :components ((:file "api")))
 				     (:module cl-info-intl :source-pathname ""
 					      :components

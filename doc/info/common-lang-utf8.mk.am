@@ -18,6 +18,9 @@ tcharset = UTF-8
 fhtmlcharset = iso-8859-1
 thtmlcharset = utf-8
 
+MAXIMA_SET_ENV_VARS = $(shell $(AWK) -v v=$(V) -v l=$(lang) 'BEGIN{if(length(l)==2){ l=l "_" toupper(l) }; print v "=" l ".$(tcharset)"; }')
+MAXIMA_ENV_VARS = $(foreach V,LC_ALL LANG LANGUAGE LC_MESSAGES,$(MAXIMA_SET_ENV_VARS))
+
 all: all-local
 all-local: maxima-index.lisp maxima.html
 
@@ -27,7 +30,7 @@ maxima.texi: $(origlangsdir)/maxima.texi
 	sed -i -e "s|^@documentencoding $(fcharset)|@documentencoding $(tcharset)|g" *.texi 
 
 maxima-index.lisp: maxima.info
-	$(top_srcdir)/maxima-local $(maxima_flags) --batch-string='setup_help_database();print_help_database("$@");'
+	$(MAXIMA_ENV_VARS) $(top_srcdir)/maxima-local $(maxima_flags) --batch-string='setup_help_database();print_help_database("$@");'
 
 maxima.html: maxima.texi
 	rm -f maxima*.html 2>/dev/null

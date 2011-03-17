@@ -46,7 +46,9 @@
 						 *info-nodes-start-header-re*
 						 "([0-9]+\\.[0-9]+)"))
 (defvar *info-nodes-name-re* "Node: ([^,]+)")
-(defvar *info-nodes-end-re* "|$")
+(defvar *info-nodes-end-re* (coerce '( #+gcl #\^_ #-gcl #\Us
+				      #\| #\$ #\|
+				      #+gcl #\^@ #-gcl #\Null ) 'string)) ;; |$|Null
 (defvar *info-nodes-hash-size* 200)
 
 ;;
@@ -58,7 +60,6 @@
 (defvar *info-topics-start-re* "\\n\\n -- ([^:]+): (\\S+)")
 (defvar *info-topics-name-re*     "\\n -- ([^:]+): (\\S+)")
 
-(defvar *info-external-format-name-re* "([a-zA-Z]+)-?([0-9]+[02-9])-?(1)?")
 (defvar *info-topics-hash-size* 2000)
 
 
@@ -78,9 +79,6 @@
 (defvar *info-files* (make-hash-table :test #'equal)
   "Hash table of info files: key=filename, value=dotted list, whose
   car is the symbol 'string and cdr is the file's contents.")
-
-(defvar *info-encoding-re* "\\ncoding: ([a-zA-Z0-9-]+)"
-  "Regex to extract the encoding string in each master info file.")
 
 (defvar *info-debug-bi* nil)
 (defmacro -info (&rest args)
@@ -129,11 +127,6 @@
       #-clisp (probe-file f) #+clisp (ext:probe-pathname f)
       (error () nil)))
 
-(defun codes-string (code-vec)
-  (declare (type vector code-vec))
-  (declare (optimize (speed 3) (safety 0)))
-  (map 'string #'code-char code-vec))
-
 (defmacro setf-hash (to from &optional (delete-first nil))
   (let* ((k (gensym))
 	 (v (gensym))
@@ -144,108 +137,12 @@
        (maphash #'(lambda (,k ,v) (setf (gethash ,k ,to) ,v)) ,from)
        t)))
 
-(defun get-info-file-names+external-format (maxima-info info-dir maxima-info-re &optional ef (info-encoding-re *info-encoding-re*))
-  "Returns a list of info file pathnames in the master info file
-maxima-info and the encoding (external format) of these files."
-  (let* ((str-contents (slurp-info-file maxima-info ef))
-	 (efr (get-info-file-encoding str-contents info-encoding-re))
-	 info-file-names)
-    (if (null (eq ef efr))
-	(setf str-contents (slurp-info-file maxima-info efr)))
-    (setf info-file-names
-	  (loop for f in (all-matches-as-strings maxima-info-re str-contents)
-       for fp = (pathname f)
-       for fn = (pathname-name fp)
-       for ft = (pathname-type fp)
-       for file = (make-pathname :directory info-dir :name fn :type ft)
-       when (file-exists-p file) collect file))
-    (values info-file-names efr)))
-
-
-(defun slurp-info-file (filename &optional ef)
-  (cond (ef
-	 (let ((fs))
-	   (with-open-file (in filename :direction :input :element-type 'character :external-format ef)
-	     (setq fs (file-length in))
-	     (let ((contents (make-array fs :element-type 'character :initial-element #+gcl #\^@ #-gcl #\Null)))
-	       (with-standard-io-syntax
-		 (read-sequence contents in :start 0 :end nil))
-	       (coerce contents 'string)))))
-	(t
-	 (let ((fs))
-	   (with-open-file (in filename :direction :input :element-type 'unsigned-byte)
-	     (setq fs (file-length in))
-	     (let ((contents (make-array fs :element-type 'unsigned-byte)))
-	       (with-standard-io-syntax
-		 (read-sequence contents in :start 0 :end nil))
-	       (codes-string contents)))))))
-
-;;
-;; EXTERNAL FORMAT MACHINERY
-;;
-;; If *info-default-external-format* is bound to nil
-;; then all io is done on byte-streams
-;;
-(declaim (inline set-string-case))
-(defun set-string-case (string)
-  #+scl(setf string (if (eq ext:*case-mode* :upper) (string-upcase string) (string-downcase string)))
-  #-scl(string-upcase string)
-  )
-(defun sanitize-external-format (ef-str &optional (info-external-format-name-re *info-external-format-name-re*))
-  (let (match match-l)
-    (multiple-value-setq (match match-l) (scan-to-strings info-external-format-name-re ef-str))
-    (if match
-	(set-string-case
-	 (concatenate 'string
-		      (aref match-l 0)
-		      "-"
-		      (aref match-l 1)
-		      (if (aref match-l 2) "-1" ""))))))
-(defun set-external-format (ef)
-  (let ((ef (cond ((symbolp ef) (sanitize-external-format (symbol-name ef)))
-		  ((stringp ef) (sanitize-external-format ef))
-		  (t nil))))
-    (if ef
-	#+clisp
-	(find-symbol ef :charset)
-	#+cmu
-	(stream::find-external-format (intern ef :keyword))
-	#+(or sbcl scl)
-	(intern ef :keyword)
-	#-(or clisp cmu sbcl scl)
-	ef
-	)))
-
-(defvar *info-default-external-format*
-  (set-external-format #+gcl nil
-		       #-gcl :iso-8859-1))
-
-(defun get-external-format-name (ef)
-  (flet ((symbol-name-as-keyword (s)
-	   (intern (sanitize-external-format (symbol-name s))
-		   :keyword)))
-    (cond ((null ef)
-	   ef)
-	  (t
-	   (symbol-name-as-keyword
-	    (if ef
-		#+cmu
-		(stream::ef-name ef)
-		#+(or sbcl clisp)
-		ef
-		#+t
-		ef
-		#+gcl
-		ef
-		))))))
-
-(defun get-info-file-encoding (maxima-info-contents &optional (info-encoding-re *info-encoding-re*))
-  (if *info-default-external-format*
-      (let (dummy coding)
-	(multiple-value-setq (dummy coding) (scan-to-strings info-encoding-re maxima-info-contents))
-	(if coding
-	    (set-external-format (aref coding 0))
-	    *info-default-external-format*))))
+(defun slurp-info-file (filename)
+  (with-open-file (in filename :direction :input :element-type 'character)
+    (let ((contents (make-array (file-length in) :initial-element #+gcl #\^@ #-gcl #\Null)))
+      (with-standard-io-syntax
+	(read-sequence contents in :start 0 :end nil))
+      (coerce contents 'string))))
 
 ;;
 ;; Core functions
@@ -258,13 +155,11 @@ maxima-info and the encoding (external format) of these files."
 `over-write' is true, then all keys are removed from `*info-files*'
 before adding new contents."
   (let ((info-files (make-hash-table :test #'equal))
-	ef filenames
-	(info-dir (pathname-directory maxima-info)))
-    (multiple-value-setq (filenames ef) (get-info-file-names+external-format maxima-info info-dir maxima-info-re))
+	(filenames (remove-if #'null (mapcar #'canonicalize-info-pathnames (all-matches-as-strings maxima-info-re (slurp-info-file maxima-info))))))
     (loop for filename in filenames
-       for str-contents = (slurp-info-file filename ef)
+       for str-contents = (slurp-info-file filename)
        for k = (namestring filename)
-       for v = `(,ef . ,str-contents)
+       for v = `(nil . ,str-contents)
        do (setf (gethash k info-files) v))
     (if over-write
 	(setf-hash *info-files* info-files))
@@ -297,11 +192,10 @@ before adding new contents."
   (setq end (if length (+ start length) end))
   (setq filename (if (pathnamep filename) (namestring filename) filename))
   (let* ((slurp (null (cdr (gethash filename info-files))))
-	 (ef (or (car (gethash filename info-files)) *info-default-external-format*))
 	 (str-contents (if slurp
-			   (slurp-info-file filename ef)
+			   (slurp-info-file filename)
 			   (cdr (gethash filename info-files)))))
-    (if slurp (setf (gethash filename info-files) `(,ef . ,str-contents)))
+    (if slurp (setf (gethash filename info-files) `(nil . ,str-contents)))
     (subseq str-contents start end)))
   
 (defun hash-keys (h)
@@ -425,7 +319,7 @@ before adding new contents."
 ;; Utilities to dump info hashes.
 ;;
 
-(defun print-info-hashes (&optional (file nil) (ef *info-default-external-format*))
+(defun print-info-hashes (&optional (file nil))
   (labels ((print-hash-table (h &optional (out *standard-output*))
 	     (format out "~s" (loop for k being the hash-keys of h
 				 for v being the hash-values of h
@@ -441,30 +335,18 @@ before adding new contents."
 	     (let ((xev (eval x)))
 	       (loop for k being the hash-keys of xev
 		  for v = (car (gethash k xev))
-		  for ef = (get-external-format-name v)
-		  do (format out "(setf (gethash ~s ~s) '(#.(set-external-format '~s)))~%" k x ef))))
+		  do (format out "(setf (gethash ~s ~s) '())~%" k x))))
 	   (dump-hashes (out)
 	     (format out "(in-package :cl-info)~%")
 	     (dump out '*info-deffn-defvr-hashtable*)
 	     (dump out '*info-section-hashtable*)
-	     (dump-info-files out '*info-files*))
-	   (get-external-format (ef)
-	     (let ((efs (remove-duplicates (loop for v being the hash-values of *info-files* collect (car v)))))
-	       (cond ((> 1 (length efs))
-		      (warn (intl:gettext "Info files have multiple external formats. Info database may be corrupted."))
-		      (car efs))
-		     ((null efs)
-		      ef)
-		     (t
-		      (car efs))))))
+	     (dump-info-files out '*info-files*)))
     (cond (file
-	   (setf ef (or (get-external-format ef) (set-external-format *info-default-external-format*)))
 	   (with-standard-io-syntax
 	     (with-open-file (out file :direction :output
 				  :if-exists :supersede
 				  :if-does-not-exist :create
 				  :element-type 'character
-				  #-gcl :external-format #-gcl ef
 				  )
 	       (dump-hashes out)))
 	   (pushnew file *maxima-info-index-list*))

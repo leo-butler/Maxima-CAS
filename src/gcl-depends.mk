@@ -7,7 +7,7 @@ binary-gcl/maxima : autoconf-variables.lisp
 binary-gcl/maxima : gcl-regex/gcl-extensions.lisp
 binary-gcl/maxima : gcl-regex/gcl-regex.lisp
 binary-gcl/maxima : gcl-regex/cl-ppcre-interface.lisp
-binary-gcl/maxima : pregexp/api.lisp
+binary-gcl/maxima : gcl-regex/api.lisp
 binary-gcl/maxima : intl.lisp
 binary-gcl/maxima : cl-info.lisp
 binary-gcl/maxima : build-index.lisp
