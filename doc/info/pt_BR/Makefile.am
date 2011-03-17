@@ -1,6 +1,5 @@
 lang = pt_BR
 
-info_TEXINFOS = maxima.texi
 maxima_TEXINFOS = \
 Affine.texi \
 Arrays.texi \

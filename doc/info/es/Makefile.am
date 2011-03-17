@@ -1,8 +1,5 @@
-MAKEINFOFLAGS = --enable-encoding
+lang = es
 
-langsdir = /es
-
-info_TEXINFOS = maxima.texi
 maxima_TEXINFOS = \
 Affine.es.texi           Equations.es.texi     Lists.es.texi          Rules.es.texi \
 Arrays.es.texi           Expressions.es.texi   Logarithms.es.texi     Runtime.es.texi \
@@ -25,39 +22,5 @@ romberg.texi        minpack.texi                   stirling.texi       cobyla.te
 simplex.texi        simplifications.texi           solve_rec.texi      stats.texi \
 stringproc.texi     unit.texi                      zeilberger.texi     dynamics.texi \
 lbfgs.texi          drawdf.texi
-
-
-all-local: maxima-index.lisp maxima.html contents.hhc
-
-maxima-index.lisp: maxima.info
-	$(top_srcdir)/maxima-local --very-quiet --init=/dev/null --batch-string='setup_help_database();print_help_database("$@");'
-
-maxima.html: maxima.texi $(maxima_TEXINFOS)
-	perl ../texi2html -split_chapter --lang=es --output=. --css-include=../manual.css --init-file ../texi2html.init maxima.texi 
-
-contents.hhc: maxima.html
-	perl ../create_index
-
-include $(top_srcdir)/common.mk
-genericdir = $(dochtmldir)/es
-genericdirDATA = \
-contents.hhc index.hhk header.hhp maxima.hhp
-
-htmlname = maxima
-htmlinstdir = $(dochtmldir)/es
-include $(top_srcdir)/common-html.mk
-
-clean-local: clean-info clean-html
-
-clean-info:
-	rm -f maxima.info*
-	rm -f maxima-index.lisp
-
-clean-html:
-	rm -f maxima.html maxima_*.html
-	rm -f contents.hhc
-	rm -f index.hhk
-
-EXTRA_DIST = maxima-index.lisp $(genericdirDATA)
 
 include ../common-lang.mk
