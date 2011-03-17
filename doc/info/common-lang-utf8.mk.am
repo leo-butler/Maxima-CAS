@@ -34,7 +34,7 @@ maxima-index.lisp: maxima.info
 
 maxima.html: maxima.texi
 	rm -f maxima*.html 2>/dev/null
-	perl ../texi2html -split_chapter --lang=$(lang) --output=. --css-include=../manual.css --init-file ../texi2html.init maxima.texi 
+	perl ../texi2html -split_chapter --lang=$(lang:pt_BR=pt) --output=. --css-include=../manual.css --init-file ../texi2html.init maxima.texi 
 	for f in maxima*.html; do \
 	    if test x$(urecode) = xtrue ; then \
 	        recode $(fcharset)..$(tcharset) $$f ; \
