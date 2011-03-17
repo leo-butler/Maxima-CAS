@@ -40,8 +40,6 @@ clean-html:
 
 EXTRA_DIST = maxima-index.lisp $(genericdirDATA)
 
-include ../common-lang.mk
-
 install-info-am: $(INFO_DEPS) maxima-index.lisp
 	test -z "$(infodir)$(langsdir)" || mkdir -p -- "$(DESTDIR)$(infodir)$(langsdir)"
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
