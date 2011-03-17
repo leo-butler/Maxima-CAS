@@ -2,18 +2,20 @@
 ;; Copyright Leo Butler (l.butler@ed.ac.uk) 2011
 ;; Released under the terms of GPLv3+
 
-;; (eval-when (compile load eval)
-;;   (defpackage :gcl-extensions
-;;     (:use :common-lisp)
-;;     (:export #:read-sequence
-;; 	     #:with-standard-io-syntax
-;; 	     )))
+(eval-when (load eval)
+  (defpackage :gcl-extensions
+    (:use :common-lisp)
+    (:export #:read-sequence
+	     #:with-standard-io-syntax
+	     )))
+
+(in-package :gcl-extensions)
 
 (declaim (inline read-sequence))
 (defun read-sequence (s in &key (start 0) end)
   (setf end (or end (length s)))
   (dotimes (i (- end start))
-    (setf (aref s i) (read-byte in))))
+    (setf (aref s i) (read-char in))))
 
 (defmacro with-standard-io-syntax (&body body)
   (let ((l '((*package*                    (find-package :cl-info))

@@ -61,4 +61,3 @@ clean-html:
 EXTRA_DIST = maxima-index.lisp $(genericdirDATA)
 
 include ../common-lang.mk
-

@@ -109,7 +109,7 @@
 	((pathnamep p)
 	 p)
 	((stringp p)
-	 (setq p (or (probe-file p)
+	 (setq p (or (file-exists-p p)
 		     (make-pathname :directory (pathname-directory
 						(concatenate 'string
 							     maxima:*maxima-infodir*
@@ -124,7 +124,7 @@
 
 (defun file-exists-p (f)
   (handler-case
-      #-clisp (probe-file f) #+clisp (ext:probe-pathname f)
+      #-clisp (probe-file f) #+clisp (common-lisp-user::probe-pathname f)
       (error () nil)))
 
 (defmacro setf-hash (to from &optional (delete-first nil))

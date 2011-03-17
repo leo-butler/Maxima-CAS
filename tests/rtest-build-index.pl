@@ -24,7 +24,7 @@ our $maxima_cmd||="$ENV{PWD}/../maxima-local";
 our $maxima_batch_string||='describe("expand");system("printenv;locale;");read("quit?");';
 our $run_rtest_build_index||=1;
 our $rtest_build_index_bs||='load("rtest-run.lisp");';
-our @locale=grep {/^LC_|LOCALE|^LANG$/ } keys %ENV;
+our @locale=grep {/^LC_|LOCALE|LANG/ } keys %ENV;
 our $default_locale=setlocale(LC_CTYPE);
 
 if ($run_rtest_build_index =~ /^(1|true)$/oi) {
@@ -78,6 +78,7 @@ sub set_encoding($)
    foreach (@locale) { $encoding{$_}=$locale; }
    $encoding{'LC_ALL'}=$locale;
    $encoding{'LANG'}=$locale;
+   $encoding{'LANGUAGE'}=$locale;
    return %encoding;
 }
 sub vprint(@)

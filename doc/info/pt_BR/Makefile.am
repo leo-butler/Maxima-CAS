@@ -1,6 +1,4 @@
-MAKEINFOFLAGS = --enable-encoding
-
-langsdir = /pt_BR
+lang = pt_BR
 
 info_TEXINFOS = maxima.texi
 maxima_TEXINFOS = \
@@ -78,38 +76,4 @@ Trigonometric.texi \
 unit.texi \
 zeilberger.texi
 
-all-local: maxima-index.lisp maxima.html contents.hhc
-
-maxima-index.lisp: maxima.info
-	$(top_srcdir)/maxima-local --very-quiet --init=/dev/null --batch-string='setup_help_database();print_help_database("$@");'
-
-maxima.html: maxima.texi $(maxima_TEXINFOS)
-	perl ../texi2html -split_chapter --lang=pt --output=. --css-include=../manual.css --init-file ../texi2html.init maxima.texi 
-
-contents.hhc: maxima.html
-	perl ../create_index
-
-include $(top_srcdir)/common.mk
-genericdir = $(dochtmldir)/pt_BR
-genericdirDATA = \
-contents.hhc index.hhk header.hhp maxima.hhp
-
-htmlname = maxima
-htmlinstdir = $(dochtmldir)/pt_BR
-include $(top_srcdir)/common-html.mk
-
-clean-local: clean-info clean-html
-
-clean-info:
-	rm -f maxima.info*
-	rm -f maxima-index.lisp
-
-clean-html:
-	rm -f maxima.html maxima_*.html
-	rm -f contents.hhc
-	rm -f index.hhk
-
-EXTRA_DIST = maxima-index.lisp $(genericdirDATA)
-
 include ../common-lang.mk
-
