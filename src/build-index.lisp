@@ -124,7 +124,7 @@
 
 (defun file-exists-p (f)
   (handler-case
-      #-clisp (probe-file f) #+clisp (common-lisp-user::probe-pathname f)
+      (probe-file f)
       (error () nil)))
 
 (defmacro setf-hash (to from &optional (delete-first nil))
@@ -148,23 +148,32 @@
 ;; Core functions
 ;;
 (defun get-info-file (&key
-		       ((:over-write over-write) t)
-		       ((:maxima-info maxima-info) nil)
-		       ((:maxima-info-re maxima-info-re) *maxima-info-default-re*))
+		      ((:over-write over-write) t)
+		      ((:maxima-info maxima-info) nil)
+		      ((:maxima-info-re maxima-info-re) *maxima-info-default-re*))
   "Slurps a main info file and extracts the sub info file names. If
 `over-write' is true, then all keys are removed from `*info-files*'
 before adding new contents."
-  (let ((info-files (make-hash-table :test #'equal))
-	(filenames (remove-if #'null (mapcar #'canonicalize-info-pathnames (all-matches-as-strings maxima-info-re (slurp-info-file maxima-info))))))
-    (loop for filename in filenames
-       for str-contents = (slurp-info-file filename)
-       for k = (namestring filename)
-       for v = `(nil . ,str-contents)
-       do (setf (gethash k info-files) v))
-    (if over-write
-	(setf-hash *info-files* info-files))
-    info-files
-    ))
+  (flet ((get-info-file-names ()
+	   (let ((info-dir (pathname-directory maxima-info))
+		 (str-contents (slurp-info-file maxima-info)))
+	     (loop for f in (all-matches-as-strings maxima-info-re str-contents)
+		for fp = (pathname f)
+		for fn = (pathname-name fp)
+		for ft = (pathname-type fp)
+		for file = (make-pathname :directory info-dir :name fn :type ft)
+		when (file-exists-p file) collect file))))
+    (let ((info-files (make-hash-table :test #'equal))
+	  (filenames (get-info-file-names)))
+	  (loop for filename in filenames
+	     for str-contents = (slurp-info-file filename)
+	     for k = (namestring filename)
+	     for v = `(nil . ,str-contents)
+	     do (setf (gethash k info-files) v))
+	  (if over-write
+	      (setf-hash *info-files* info-files))
+	  info-files
+	  )))
 
 (defun periodically-extend (l n)
   (let ((k (if (= 1 (length l)) (1- n) (floor (/ n (length l)))))

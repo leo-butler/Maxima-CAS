@@ -14,8 +14,7 @@
 ;; Check helper functions/macros
 ;;
 (tagbody
-#+clisp (defrtest 'x)
-#-clisp (defrtest 'x :func #'file-exists-p :inputs '(".") :equality-fn #'(lambda(x y)(and x y)))
+(defrtest 'x :func #'file-exists-p :inputs '("rtest.lisp") :equality-fn #'(lambda(x y)(and x y)))
 (defrtest 'x :func #'file-exists-p :inputs '("/dev/null") :answer (probe-file '#P"/dev/null"))
 
 ;; canonicalize-info-pathnames
@@ -54,6 +53,7 @@
 
 
 ;; setf-hash
+#-gcl
 (let ((h1 (make-hash-table :test #'eql))
       (h2 (make-hash-table :test #'eql)))
   (loop for i from 0 to 9
@@ -77,9 +77,10 @@
 (let ((files (sorted-directory "rtest-build-index/en/maxima.info-*")))
   (defrtest 'x :func #'(lambda ()
 			 (let* ((maxima-info (probe-file "rtest-build-index/en/maxima.info"))
-				(info-dir (pathname-directory maxima-info))
-				(maxima-info-re *maxima-info-default-re*))
-			   (get-info-file-names+external-format maxima-info info-dir maxima-info-re)))
+				(maxima-info-re *maxima-info-default-re*)
+				(ffiles (stable-sort (mapcar #'file-exists-p (hash-keys (get-info-file :over-write nil :maxima-info maxima-info :maxima-info-re maxima-info-re))) #'file<=)))
+			   ;;(format t "~s~%" (list files ffiles))
+			   ffiles))
 	    :answer `(,@files)
 	    :equality-fn #'(lambda(x y) (not (some #'null (mapcar #'file= x y))))))
 
@@ -99,25 +100,24 @@
 				      ))
 				(weak-string= (x y)
 				  (not (some #'null (mapcar #'weak-char= (coerce x 'list) (coerce y 'list)))))
-				(write-read (ef n)
+				(nc ()
+				  #+gcl #\^@
+				  #-gcl #\Nul)
+				(write-read (n)
 				  (let ((write-chars (do* ((k -1    (1+ k))
-							   (c #\Nul (code-char k))
-							   (s ""    (format nil "~3s ~5a ~s~%" k c c))
+							   (c (nc)  (code-char k))
+							   (s ""    (format nil "~s~a~s" k c c))
 							   (str ""  (concatenate 'string str s)))
 							  ((>= k n) str)))
 					(file-name (make-pathname :directory '(:absolute "tmp") :name (random-file-name 10 ".txt")))
 					(read-chars))
 				    (progn
-				      (with-open-file (out file-name :direction :output :if-exists :overwrite :if-does-not-exist :create :element-type 'character :external-format ef)
+				      (with-open-file (out file-name :direction :output :if-exists :overwrite :if-does-not-exist :create :element-type 'character)
 					(format out "~a" write-chars))
-				      (setq read-chars (slurp-info-file file-name ef))
+				      (setq read-chars (slurp-info-file file-name))
 				      (if (probe-file file-name) (delete-file file-name))
 				      (weak-string= read-chars write-chars)))))
-			 (let ((utf8 #+clisp 'charset:utf-8
-				     #-clisp ':utf-8)
-			       (iso88591 #+clisp 'charset:iso-8859-1
-					 #-clisp ':iso-8859-1))
-			   (and (write-read utf8 127) (write-read iso88591 255)))))
+			 (and (write-read 127) (write-read 255))))
 	  :answer t)
 
 (let ((*info-section-hashtable*     (make-hash-table :test #'eql :size 600))
@@ -159,16 +159,18 @@
 				      (mapcar #'(lambda (r) (list (first r) (third r) (fourth r) (fifth r)))
 					      (find-regex-matches regex h)))))
 			    (let ((macro-matches    (get-matches "^Ma[ck]ros$" *info-section-hashtable*))
-				  (macro-matches-e  (sort-on-second '(("Macros" 193000 8636 nil) ("Macros" 135070 9085 nil) ("Makros" 282126 8529 nil))))
+				  (macro-matches-e  (sort-on-second '(("Macros" 193000 8637 nil) ("Macros" 134021 9015 nil) ("Makros" 282126 8530 nil))))
 				  (expand-matches   (get-matches "^expand$" *info-deffn-defvr-hashtable*))
 				  (expand-matches-e (sort-on-second `(("expand" 288341 4373 ,(expand-match (#\F #\u #\n #\k #\t #\i #\o #\n #\e #\n #\  #\u #\n #\d #\  #\V #\a #\r #\i
-														#\a #\b #\l #\e #\n #\  #\f #\LATIN_CAPITAL_LETTER_A_WITH_TILDE
-														#\VULGAR_FRACTION_ONE_QUARTER #\r #\  #\d #\i #\e #\  #\V #\e #\r #\e #\i #\n
+														#\a #\b #\l #\e #\n #\  #\f
+														#+gcl #\\303
+														#-gcl #\LATIN_CAPITAL_LETTER_A_WITH_TILDE
+														#+gcl #\\274
+														#-gcl #\VULGAR_FRACTION_ONE_QUARTER
+														#\r #\  #\d #\i #\e #\  #\V #\e #\r #\e #\i #\n
 														#\f #\a #\c #\h #\u #\n #\g)))
 								      ("expand" 238810 4314 "Functions and Variables for Simplification")
-								      ("expand" 253740 4495 ,(expand-match (#\F #\u #\n #\c #\i #\o #\n #\e #\s #\  #\y #\  #\v #\a #\r #\i #\a #\b #\l
-														#\e #\s #\  #\p #\a #\r #\a #\  #\s #\i #\m #\p #\l #\i #\f #\i #\c #\a #\c
-														#\i #\LATIN_CAPITAL_LETTER_A_WITH_TILDE #\SUPERSCRIPT_THREE #\n)))))))
+								      ("expand" 251691 4459 "Funciones y variables para simplificación")))))
 			      ;;(format t "~&~a~%~a~%~a~%~a~%" macro-matches macro-matches-e expand-matches expand-matches-e)
 			      (and (equal macro-matches macro-matches-e)
 				   (equal expand-matches expand-matches-e)))))))
@@ -216,19 +218,6 @@
 				  (hash-table-equalp h21 h22)))))
 	      :answer '((nil nil) (nil nil)) ;; 
 	      )))
-
-;; external-formats
-(defrtest x :func (lambda ()
-		    (flet ((get-set-external-format (answer input)
-			     (eql (get-external-format-name (set-external-format input)) answer)))
-		      (and (get-set-external-format :utf-8 "utf8")
-			   (get-set-external-format :utf-8 "utf-8")
-			   (get-set-external-format :iso-8859-1 "iso88591")
-			   (get-set-external-format :iso-8859-1 "iso8859-1")
-			   (get-set-external-format :iso-8859-1 "iso-88591")
-			   (get-set-external-format :iso-8859-1 "iso-8859-1")
-			   #-cmu (and (get-set-external-format :windows-1251 "windows1251") (get-set-external-format :windows-1251 "windows-1251"))
-			   ))))
 
 :check-report
 (do-tests x #'check)

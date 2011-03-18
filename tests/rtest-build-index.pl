@@ -27,6 +27,7 @@ our $rtest_build_index_bs||='load("rtest-run.lisp");';
 our @locale=grep {/^LC_|LOCALE|LANG/ } keys %ENV;
 our $default_locale=setlocale(LC_CTYPE);
 
+vprint "pid: $pid";
 if ($run_rtest_build_index =~ /^(1|true)$/oi) {
    for my $lisp (@lisps) {
       msystem("$maxima_cmd $maxima_opts -l $lisp --batch-string='$rtest_build_index_bs'");
