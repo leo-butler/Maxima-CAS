@@ -47,8 +47,9 @@
 						 "([0-9]+\\.[0-9]+)"))
 (defvar *info-nodes-name-re* "Node: ([^,]+)")
 (defvar *info-nodes-end-re* (coerce '( #+gcl #\^_ #-gcl #\Us
-				      #\| #\$ #\|
-				      #+gcl #\^@ #-gcl #\Null ) 'string)) ;; |$|Null
+				      #\| #\$
+				      #-gcl #\|
+				      #-gcl #\Null ) 'string)) ;; |$|Null
 (defvar *info-nodes-hash-size* 200)
 
 ;;
