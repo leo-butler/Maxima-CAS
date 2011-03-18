@@ -154,7 +154,7 @@
   "Slurps a main info file and extracts the sub info file names. If
 `over-write' is true, then all keys are removed from `*info-files*'
 before adding new contents."
-  (flet ((get-info-file-names ()
+  (flet ((get-info-file-pathnames ()
 	   (let ((info-dir (pathname-directory maxima-info))
 		 (str-contents (slurp-info-file maxima-info)))
 	     (loop for f in (all-matches-as-strings maxima-info-re str-contents)
@@ -164,7 +164,7 @@ before adding new contents."
 		for file = (make-pathname :directory info-dir :name fn :type ft)
 		when (file-exists-p file) collect file))))
     (let ((info-files (make-hash-table :test #'equal))
-	  (filenames (get-info-file-names)))
+	  (filenames (get-info-file-pathnames)))
 	  (loop for filename in filenames
 	     for str-contents = (slurp-info-file filename)
 	     for k = (namestring filename)
