@@ -60,6 +60,9 @@
 ;;
 (defvar *info-topics-start-re* "\\n\\n -- ([^:]+): (\\S+)")
 (defvar *info-topics-name-re*     "\\n -- ([^:]+): (\\S+)")
+(defvar *info-topics-end-re* (concatenate 'string
+					  *info-nodes-end-re*
+					  "|\\n\\n[0-9]|\\n\\n --"))
 
 (defvar *info-topics-hash-size* 2000)
 
@@ -222,6 +225,7 @@ before adding new contents."
 			 ((:info-nodes-hash-size info-nodes-hash-size) *info-nodes-hash-size*)
 			 ((:info-topics-start-re info-topics-start-re) *info-topics-start-re*)
 			 ((:info-topics-name-re info-topics-name-re) *info-topics-name-re*)
+			 ((:info-topics-end-re info-topics-end-re) *info-topics-end-re*)
 			 ((:info-topics-hash-size info-topics-hash-size) *info-topics-hash-size*))
   "Creates the hash table `*info-section-hashtable*'."
   (let ((filenames (hash-keys info-files))
@@ -249,7 +253,7 @@ before adding new contents."
       (macrolet ((begin-topic (topics)
 		   `(if ,topics (car ,topics) -3))
 		 (end-topic (topics e)
-		   `(if (caddr ,topics) (caddr ,topics) ,e))
+		   `(if (cadr ,topics) (cadr ,topics) ,e))
 		 (get-node-begin-end ()
 		   `(let (nodes e s)
 		     (do-scans (b m-e r-s r-e info-nodes-start-re contents
@@ -260,6 +264,15 @@ before adding new contents."
 		       (push b nodes)
 		       (push e nodes)
 		       (push s nodes))))
+		 (get-topics-begin-end ()
+		   `(let (topics)
+		      (+info info-topics-start-re b e s)
+		      (do-scans (m-s m-e unused-a unused-b info-topics-start-re contents
+				    (reverse topics) :start b :end e)
+			(and m-e
+			     (setf m-e (scan info-topics-end-re contents :start m-e :end e))
+			     (push m-s topics)
+			     (push m-e topics)))))
 		 )
       (loop for filename in filenames
 	 for contents = (get-info-file-string-contents filename)
@@ -271,7 +284,7 @@ before adding new contents."
 	      for l = (- e s)
 	      for k = info-node-name
 	      for v = (list filename s l)
-	      for topics = (all-matches info-topics-start-re contents :start b :end e)
+	      for topics = (get-topics-begin-end)
 	      when topics do
 		(setf (gethash k info-nodes-s-e) v)
 		(+info b e s k v topics)
@@ -302,6 +315,7 @@ before adding new contents."
 			    ((:info-nodes-end-re info-nodes-end-re) *info-nodes-end-re*)
 			    ((:info-nodes-hash-size info-nodes-hash-size) *info-nodes-hash-size*)
 			    ((:info-topics-start-re info-topics-start-re) *info-topics-start-re*)
+			    ((:info-topics-end-re info-topics-end-re) *info-topics-end-re*)
 			    ((:info-topics-name-re info-topics-name-re) *info-topics-name-re*)
 			    ((:info-topics-hash-size info-topics-hash-size) *info-topics-hash-size*))
   (if (null maxima-info-list)
@@ -322,6 +336,7 @@ before adding new contents."
 		    :info-nodes-hash-size info-nodes-hash-size
 		    :info-topics-start-re info-topics-start-re
 		    :info-topics-name-re info-topics-name-re 
+		    :info-topics-end-re info-topics-end-re 
 		    :info-topics-hash-size info-topics-hash-size)
   )
 
