@@ -25,25 +25,27 @@
   '((noop "") (all "a" "al" "all") (none "n" "no" "non" "none")))
 
 (defun parse-user-choice (nitems)
-  (loop
-   with line = (read-line) and nth and pos = 0
-   while (multiple-value-setq (nth pos)
-	   (parse-integer line :start pos :junk-allowed t))
-   if (or (minusp nth) (>= nth nitems))
-   do (format *debug-io* (intl:gettext "~&Discarding invalid number ~d.") nth)
-   else collect nth into list
-   finally
-   (let ((keyword
-	  (car (rassoc
-		(string-right-trim
-		 '(#\space #\tab #\newline #\;) (subseq line pos))
-		+select-by-keyword-alist+
-		:test #'(lambda (item list)
-			  (member item list :test #'string-equal))))))
-     (unless keyword
-       (setq keyword 'noop)
-       (format *debug-io* (intl:gettext "~&Ignoring trailing garbage in input.")))
-     (return (cons keyword list)))))
+  (let ((line (read-line))
+	keyword nth list)
+    (flet ((safe-push (i)
+	     (cond ((>= i nitems)
+		    (format *debug-io* (intl:gettext "~&Discarding invalid number ~d.") nth))
+		   (t
+		    (push i list)))))
+      (do-register-groups (b s e) ("(([0-9]+)-([0-9]+)|([0-9]+))(,|;| )?" line)
+	(cond (s
+	       (loop for i from (parse-integer s) to (parse-integer e) do (safe-push i)))
+	      (b
+	       (safe-push (parse-integer b)))))
+      (setq keyword (or
+		     (car (rassoc
+			   (string-right-trim
+			    '(#\space #\tab #\newline #\;) (subseq line 0))
+			   +select-by-keyword-alist+
+			   :test #'(lambda (item list)
+				     (member item list :test #'string-equal))))
+		     'noop))
+      (cons keyword (reverse list)))))
 
 (defun select-info-items (selection items)
   (case (pop selection)
