@@ -6,7 +6,7 @@
 (do-scans (a b c d "(a+)([a-z])" "a while ago in 200bc, ac unicorn "
 	     (list a b c d))
   nil)
-(22 24 #(22 23) #(23 24))
+(nil nil nil nil)
 
 (let (e)
   (do-scans (a b c d "(a+)([a-z])" "a while ago in 200bc, ac unicorn "
@@ -14,21 +14,28 @@
     (push (list a b c d) e)))
 ((22 24 #(22 23) #(23 24)) (8 10 #(8 9) #(9 10)))
 
+
+(let (nl)
+  (do-scans (ms me rs re "([0-9]+-[0-9]+|[0-9]+)(,|;| )?" "1,2,3-6,7" (reverse nl))
+    (push (list ms me rs re) nl)))
+((0 2 #(0 1) #(1 2)) (2 4 #(2 3) #(3 4)) (4 8 #(4 7) #(7 8))
+ (8 9 #(8) #(9)))
+
 (let (e)
   (do-scans-to-strings (mm rr "(a+)([a-z])" "a while ago in 200bc, ac unicorn "
 			   (reverse e))
     (push (list mm rr) e)))
-(("ag" #("a" "c")) ("ac" #("a" "c")))
+(("ag" #("a" "g")) ("ac" #("a" "c")))
 
 (do-scans-to-strings (mm rr "(a+)([a-z])" "a while ago in 200bc, ac unicorn "
-			 (list mm rr))
+			 nil)
   (format t "~a~%" (list mm rr)))
-("ac" #("a" "c"))
+nil
 
 (do-matches (a b "(a+)([a-z])" "a while ago in 200bc, ac unicorn "
 	       (list a b))
   (format t "~a~%" (list a b)))
-(22 24)
+(nil nil)
 
 (let (c)
   (do-matches (a b "(a+)([a-z])" "a while ago in 200bc, ac unicorn "

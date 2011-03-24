@@ -38,25 +38,20 @@
 		    &body body)
   ;; declaration* statement* => result*
   (declare (ignorable sharedp))
-  (let-gs (rgx str s e m-s m-e r-s r-e)
+  (let-gs (rgx str s e)
     `(let* ((,rgx (compile-regex ,regex))
 	    (,str ,string)
 	    (,e   (or ,end (length ,str)))
+	    (,s ,start)
 	    ,match-start ,match-end ,reg-starts ,reg-ends)
-       (do ((,s ,start (1+ (or ,match-start ,e)))
-       	    (,m-s ,match-start ,match-start)
-       	    (,m-e ,match-end   ,match-end  )
-       	    (,r-s ,reg-starts  ,reg-starts )
-       	    (,r-e ,reg-ends    ,reg-ends   ))
-       	   ((or (> ,s ,e)
-       		(null (multiple-value-setq (,match-start ,match-end ,reg-starts ,reg-ends) (funcall *scan* ,rgx ,str :start ,s :end ,e))))
-       	    (setf ,match-start ,m-s
-       		  ,match-end   ,m-e
-       		  ,reg-starts  ,r-s
-       		  ,reg-ends    ,r-e)
-       	    ,(or result-form t))
-       	 (progn
-       	   ,@body)))))
+       (declare (ignorable ,match-start ,match-end ,reg-starts ,reg-ends))
+       (block nil
+	 (loop (multiple-value-bind
+		     (,match-start ,match-end ,reg-starts ,reg-ends)
+		   (funcall *scan* ,rgx ,str :start ,s :end ,e)
+		 (unless ,match-start (return ,result-form))
+		 (locally ,@body)
+		 (setq ,s (if ,match-end (if (= ,match-start ,match-end) (1+ ,match-end) ,match-end) (1+ ,e)))))))))
 
 (defmacro do-scans-to-strings ((match register regex string 
 				      &optional result-form &key (start 0) end)
@@ -69,12 +64,12 @@
 		 for ,regi = (if (< ,i (length ,r-s))
 				(subseq ,str (aref ,r-s ,i) (aref ,r-e ,i)))
 		 do (setf (aref ,register ,i) ,regi)))))
-      (setf body         (append set-match-string+register body)
-	    result-form `(progn ,@set-match-string+register ,result-form))
-      `(let (,match (,str ,string)
-	     (,register (make-array (1+ ,l-r) :element-type 'string :initial-element "")))
+      (setf body         (append set-match-string+register body))
+      `(let ((,str ,string))
 	 (do-scans (,m-s ,m-e ,r-s ,r-e ,regex ,str ,result-form :start ,start :end ,end)
-	   ,@body)))))
+	   (let (,match
+		 (,register (make-array (1+ ,l-r) :element-type 'string :initial-element #\^@)))
+	     ,@body))))))
 
 (defmacro do-matches ((match-start match-end regex string
 				   &optional result-form &key (start 0) (end (length string)))
