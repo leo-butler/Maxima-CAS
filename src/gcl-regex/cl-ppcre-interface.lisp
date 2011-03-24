@@ -34,6 +34,7 @@
 (defparameter *space-class-list* `(#\  #\Tab ,@*newline-as-char-list*))
 (defparameter *complemented-space-class-list* (append '(#\^) *space-class-list*))
 (defparameter *dot-class-list* `(#\^ ,@*newline-as-char-list*))
+(defparameter *digit-class-list* '(#\0 #\- #\9))
 (defparameter *space-class* (coerce *space-class-list* 'string))
 (defparameter *newline* (coerce *newline-as-char-list* 'string))
 (defun translate-special-chars (s)
@@ -48,6 +49,8 @@
 		     (#\\
 		      (let ((next (cadr str)))
 			(case next
+			  (#\d
+			   (setf-append acc *digit-class-list*))
 			  (#\n
 			   (setf-append acc *newline-as-char-list*))
 			  (#\s
@@ -102,7 +105,7 @@
     (if (null b) (return-from scan-to-strings nil))
     (let* ((m (subseq str b e))
 	   (l (length mb))
-	   (match-strings (make-array l :element-type 'string :initial-element "")))
+	   (match-strings (make-array l :element-type 'string :initial-element #\^@)))
       (dotimes (i l
 		(values m match-strings))
 	(setf (aref match-strings i) (subseq str (aref mb i) (aref me i)))))))
