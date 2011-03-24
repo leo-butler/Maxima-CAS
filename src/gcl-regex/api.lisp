@@ -86,7 +86,7 @@
        ,@body)))
 
 (defmacro do-register-groups  (var-list
-			       (regex string &optional result-form &key (start 0) (end (length string)) (sharedp t))
+			       (regex string &optional result-form &key (start 0) end (sharedp t))
 			       &body body)
   (declare (ignorable sharedp))
   (let-gs (match-start match-end register-start register-end s)
