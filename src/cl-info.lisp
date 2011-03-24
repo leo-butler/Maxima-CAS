@@ -113,7 +113,7 @@ escaped. The list of special characters is `*info-special-char*'."
         (loop for i from 0 for item in tem do
           (when (> nitems 1)
             (let ((heading-title (nth 3 (cdr item))))
-              (format t "~% ~d: ~a~@[  (~a)~]"
+              (format t "~&~d:~4,2T~a~@[~30,5T(~a)~]"
                       i
                       (car item)
                       heading-title))))
