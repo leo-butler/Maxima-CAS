@@ -25,7 +25,7 @@
 	  (let* ((l (count-registers regex))
 		 (bindings (loop for v in `(,@var-list)
 			      for i = 0 then (1+ i)
-			      collect `(setf ,v (if (< ,i ,l) (aref ,registers ,i))))))
+			      when v collect `(setf ,v (if (< ,i ,l) (aref ,registers ,i))))))
 	    `(let* (,@var-list ,match ,registers)
 	       (multiple-value-setq (,match ,registers) (funcall *scan-to-strings* ,regex ,string :start ,start :end ,end))
 	       (if ,match
@@ -93,8 +93,8 @@
 	  (let* ((l (count-registers regex))
 		 (bindings (loop for v in `(,@var-list)
 			      for i = 0 then (1+ i)
-			      collect `(setf ,v (if (and (< ,i ,l) (< ,i (length ,register-start)) (aref ,register-start ,i))
-						    (subseq ,s (aref ,register-start ,i) (aref ,register-end ,i))))))
+			      when v collect `(setf ,v (if (and (< ,i ,l) (< ,i (length ,register-start)) (aref ,register-start ,i))
+							   (subseq ,s (aref ,register-start ,i) (aref ,register-end ,i))))))
 		 )
 	    `(let* (,@var-list
 		    (,s ,string))

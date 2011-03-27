@@ -17,7 +17,7 @@
   (format t "~&~a~a~a"
 	  *prompt-prefix*
 	  (if (zerop prompt-count)
-	      (intl:gettext "Enter space-separated numbers, `all' or `none': ")
+	      (intl:gettext "Enter space-separated numbers, a range `M-N', `all' or `none': ")
 	      (intl:gettext "Still waiting: "))
 	  *prompt-suffix*))
 
@@ -32,7 +32,7 @@
 		    (format *debug-io* (intl:gettext "~&Discarding invalid number ~d.") nth))
 		   (t
 		    (push i list)))))
-      (do-register-groups (b s e) ("(([0-9]+)-([0-9]+)|([0-9]+))(,|;| )?" line)
+      (do-register-groups (b s e) ("((\\d+)-(\\d+)|(\\d+))" line)
 	(cond (s
 	       (loop for i from (parse-integer s) to (parse-integer e) do (safe-push i)))
 	      (b
@@ -166,3 +166,11 @@ escaped. The list of special characters is `*info-special-char*'."
 	       (t
 		(setup-help-database))))
 	(t t)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun annotate (key &optional (doc-string "") (stream *standard-output*))
+  (with-open-file (strm stream :direction :output :if-exists :append)
+    (format strm "~& -- User Documentation: ~a~%" key)
+    (format strm "~&~
+	    
+;; end of cl-info.lisp
