@@ -99,6 +99,11 @@
   #-(or clisp cmu scl sbcl gcl allegro openmcl abcl lispworks ecl)
   "binary-unknownlisp")
 
+;; for cl-fad
+#+:allegro (require :osi)
+#+:sbcl (require :sb-executable)
+#+:sbcl (require :sb-posix)
+
 (mk:defsystem "maxima"
   :source-extension "lisp"  
   :binary-pathname (maxima-binary-pathname)
@@ -169,6 +174,14 @@
 						   (:file "intl")
 						   (:file "cl-info")
 						   (:file "build-index"))))); :depends-on (cl-ppcre))))))
+	       (:module cl-fad :source-pathname "cl-fad"
+			:components ((:file "packages")
+				     #+:cormanlisp (:file "corman" :depends-on ("packages"))
+				     #+:openmcl (:file "openmcl" :depends-on ("packages"))
+				     (:file "fad" :depends-on ("packages"
+							       #+:cormanlisp "corman"
+							       #+:openmcl "openmcl"))))
+			;;:depends-on (#+sbcl :sb-posix #+allegro :osi))
 	       (:module sloop :source-pathname ""
 			:components ((:file "sloop")))
                (:module declarations :source-pathname ""

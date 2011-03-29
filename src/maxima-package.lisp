@@ -94,6 +94,26 @@
 		#:with-standard-io-syntax)
   )
 
+;; from cl-fad/packages.lisp
+(defpackage :cl-fad
+  (:nicknames :fad)
+  (:use :cl)
+  #+:allegro
+  (:shadow :copy-file
+           :delete-directory-and-files)
+  #+:abcl
+  (:shadow :list-directory)
+  (:export :copy-file
+           :copy-stream
+           :delete-directory-and-files
+           :directory-exists-p
+           :directory-pathname-p
+           :file-exists-p
+           :list-directory
+           :pathname-as-directory
+           :pathname-as-file
+           :walk-directory))
+
 (defpackage :command-line
   (:use :common-lisp)
   (:nicknames :cmdline)

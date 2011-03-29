@@ -20,6 +20,8 @@ binary-sbcl/maxima.core : cl-ppcre/api.lisp
 binary-sbcl/maxima.core : intl.lisp
 binary-sbcl/maxima.core : cl-info.lisp
 binary-sbcl/maxima.core : build-index.lisp
+binary-sbcl/maxima.core : cl-fad/packages.lisp
+binary-sbcl/maxima.core : cl-fad/fad.lisp
 binary-sbcl/maxima.core : sloop.lisp
 binary-sbcl/maxima.core : lmdcls.lisp
 binary-sbcl/maxima.core : letmac.lisp
