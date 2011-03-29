@@ -39,57 +39,6 @@
            :ppcre-syntax-error-pos
            :register-groups-bind
            :do-register-groups))
-
-#+pregexp
-(defpackage :pregexp
-  (:use :common-lisp)
-  (:export #:*pregexp-version*
-	   #:*pregexp-comment-char*
-	   #:*pregexp-space-sensitive-p*
-	   #:*scan*
-	   #:*scan-to-strings*
-	   #:*create-scanner* 
-	   ;; Functions
-	   #:pregexp-read-pattern
-	   #:pregexp-read-branch
-	   #:pregexp-read-piece
-	   #:pregexp-read-escaped-number
-	   #:pregexp-read-escaped-char
-	   #:pregexp-read-posix-char-class
-	   #:pregexp-read-cluster-type
-	   #:pregexp-read-subpattern
-	   #:pregexp-wrap-quantifier-if-any
-	   #:pregexp-whitespacep
-	   #:pregexp-read-nums
-	   #:pregexp-read-char-list
-	   #:pregexp-string-match
-	   #:pregexp-char-word?
-	   #:pregexp-at-word-boundary-p
-	   #:pregexp-check-if-in-char-class-p
-	   #:pregexp-make-backref-list
-	   #:pregexp-match-positions-aux
-	   #:pregexp-replace-aux
-	   #:pregexp
-	   #:pregexp-match-positions
-	   #:pregexp-match
-	   #:pregexp-split
-	   #:pregexp-replace
-	   #:pregexp-replace*
-	   #:pregexp-quote
-	   ;; Functions in cl-ppcre-interface.lisp
-	   #:count-registers
-	   #:scan
-	   #:scan-to-strings
-	   ;; Functions in api.lisp
-	   #:register-groups-bind
-	   #:do-scans
-	   #:do-scans-to-strings
-	   #:do-matches
-	   #:do-matches-as-strings
-	   #:all-matches
-	   #:all-matches-as-strings
-	   #:do-register-groups
-	   ))
 #+gcl
 (defpackage :gcl-extensions
   (:use :common-lisp)
@@ -124,9 +73,7 @@
 (defpackage :cl-info
   (:use :common-lisp
 	#+cl-ppcre  :cl-ppcre
-	#+pregexp   :pregexp
-	#+gcl-regex :gcl-regex
-	#+maxima-nregex :maxima-nregex)
+	#+gcl-regex :gcl-regex)
   (:export #:setup-help-database
 	   #:print-info-hashes
 	   #:info
@@ -134,9 +81,7 @@
 	   #:*prompt-prefix*
 	   #:*prompt-suffix*)
   (:import-from #+cl-ppcre  :cl-ppcre
-		#+pregexp   :pregexp
 		#+gcl-regex :gcl-regex
-		#+maxima-nregex :maxima-nregex
 		#:scan
 		#:scan-to-strings
 		#:register-groups-bind

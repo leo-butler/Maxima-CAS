@@ -3,6 +3,7 @@
 (in-package :cl-user)
 
 (pushnew :cl *features*)
+#+gclcvs(pushnew :gcl *features*)
 #+gcl(pushnew :gcl-regex  *features*)
 #-gcl(pushnew :cl-ppcre   *features*)
 
@@ -151,21 +152,13 @@
 							   #-:use-acl-regexp2-engine
 							   (:file "scanner")
 							   (:file "api")))
-				     #+pregexp
-				     (:module pregexp :source-pathname "pregexp"
-					      :components ((:file "pregexp")
-							   (:file "cl-ppcre-interface")))
-				     #+maxima-nregex
-				     (:module maxima-nregex :source-pathname "nregex"
-					      :components ((:file "nregex")
-							   (:file "cl-ppcre-interface")))
 				     #+gcl-regex
 				     (:module gcl-regex :source-pathname "gcl-regex"
-					      :components ((:file "gcl-regex")
-							   (:file "cl-ppcre-interface")))
-				     #-cl-ppcre
-				     (:module cl-ppcre-adapter :source-pathname "gcl-regex"
-					      :components ((:file "api")))
+					      :components (
+							   (:file "gcl-regex")
+							   (:file "cl-ppcre-interface")
+							   (:module cl-ppcre-adapter :source-pathname ""
+								    :components ((:file "api")))))
 				     (:module cl-info-intl :source-pathname ""
 					      :components
 					      (;; Some versions of CMUCL already
