@@ -27,7 +27,7 @@
 ;;; NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 ;;; SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-(in-package #:cl-fad-test)
+(in-package :cl-fad-test)
 
 (defparameter *tmp-dir*
               #+(or :win32 :mswindows :windows) "c:\\tmp\\"

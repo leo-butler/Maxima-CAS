@@ -166,11 +166,5 @@ escaped. The list of special characters is `*info-special-char*'."
 	       (t
 		(setup-help-database))))
 	(t t)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun annotate (key &optional (doc-string "") (stream *standard-output*))
-  (with-open-file (strm stream :direction :output :if-exists :append)
-    (format strm "~& -- User Documentation: ~a~%" key)
-    (format strm "~&~
 	    
 ;; end of cl-info.lisp

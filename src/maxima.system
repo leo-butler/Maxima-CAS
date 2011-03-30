@@ -124,46 +124,57 @@
 				     (:file "maxima-package")
 				     #+ecl (:file "ecl-port")
 				     (:file "autoconf-variables")))
+	       #+cl-ppcre
+	       (:module cl-ppcre :source-pathname "cl-ppcre"
+			:components ((:file "packages")
+				     (:file "specials")
+				     (:file "util")
+				     (:file "errors")
+				     (:file "charset")
+				     (:file "charmap")
+				     (:file "chartest")
+				     #-:use-acl-regexp2-engine
+				     (:file "lexer")
+				     #-:use-acl-regexp2-engine
+				     (:file "parser")
+				     #-:use-acl-regexp2-engine
+				     (:file "regex-class")
+				     #-:use-acl-regexp2-engine
+				     (:file "regex-class-util")
+				     #-:use-acl-regexp2-engine
+				     (:file "convert")
+				     #-:use-acl-regexp2-engine
+				     (:file "optimize")
+				     #-:use-acl-regexp2-engine
+				     (:file "closures")
+				     #-:use-acl-regexp2-engine
+				     (:file "repetition-closures")
+				     #-:use-acl-regexp2-engine
+				     (:file "scanner")
+				     (:file "api")))
+	       (:module cl-fad :source-pathname "cl-fad"
+			:depends-on (#+gcl gcl-extensions)
+			:components ((:file "packages")
+				     #+:cormanlisp (:file "corman" :depends-on ("packages"))
+				     #+:openmcl (:file "openmcl" :depends-on ("packages"))
+				     (:file "fad" :depends-on ("packages"
+							       #+:cormanlisp "corman"
+							       #+:openmcl "openmcl"))))
 	       #+gcl
 	       (:module gcl-extensions :source-pathname "gcl-regex"
+			:depends-on (cl-fad)
 			:components (:file "gcl-extensions"))
-	       (:module info :source-pathname ""
+	       #+gcl-regex
+	       (:module gcl-regex :source-pathname "gcl-regex"
+			:depends-on (gcl-extensions)
 			:components (
-				     #+cl-ppcre
-				     (:module cl-ppcre :source-pathname "cl-ppcre"
-					      :components ((:file "packages")
-							   (:file "specials")
-							   (:file "util")
-							   (:file "errors")
-							   (:file "charset")
-							   (:file "charmap")
-							   (:file "chartest")
-							   #-:use-acl-regexp2-engine
-							   (:file "lexer")
-							   #-:use-acl-regexp2-engine
-							   (:file "parser")
-							   #-:use-acl-regexp2-engine
-							   (:file "regex-class")
-							   #-:use-acl-regexp2-engine
-							   (:file "regex-class-util")
-							   #-:use-acl-regexp2-engine
-							   (:file "convert")
-							   #-:use-acl-regexp2-engine
-							   (:file "optimize")
-							   #-:use-acl-regexp2-engine
-							   (:file "closures")
-							   #-:use-acl-regexp2-engine
-							   (:file "repetition-closures")
-							   #-:use-acl-regexp2-engine
-							   (:file "scanner")
-							   (:file "api")))
-				     #+gcl-regex
-				     (:module gcl-regex :source-pathname "gcl-regex"
-					      :components (
-							   (:file "gcl-regex")
-							   (:file "cl-ppcre-interface")
-							   (:module cl-ppcre-adapter :source-pathname ""
-								    :components ((:file "api")))))
+				     (:file "gcl-regex")
+				     (:file "cl-ppcre-interface")
+				     (:module cl-ppcre-adapter :source-pathname ""
+					      :components ((:file "api")))))
+	       (:module info :source-pathname ""
+			:depends-on (#+cl-ppcre cl-ppcre #+gcl-regex gcl-regex)
+			:components (
 				     (:module cl-info-intl :source-pathname ""
 					      :components
 					      (;; Some versions of CMUCL already
@@ -173,15 +184,7 @@
 					       #+#.(cl:if (cl:and (cl:member :cmu cl:*features*) (cl:find-package '#:intl))  '(or) '(and))
 						   (:file "intl")
 						   (:file "cl-info")
-						   (:file "build-index"))))); :depends-on (cl-ppcre))))))
-	       (:module cl-fad :source-pathname "cl-fad"
-			:components ((:file "packages")
-				     #+:cormanlisp (:file "corman" :depends-on ("packages"))
-				     #+:openmcl (:file "openmcl" :depends-on ("packages"))
-				     (:file "fad" :depends-on ("packages"
-							       #+:cormanlisp "corman"
-							       #+:openmcl "openmcl"))))
-			;;:depends-on (#+sbcl :sb-posix #+allegro :osi))
+						   (:file "build-index")))))
 	       (:module sloop :source-pathname ""
 			:components ((:file "sloop")))
                (:module declarations :source-pathname ""

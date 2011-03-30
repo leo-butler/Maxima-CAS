@@ -52,6 +52,7 @@ form."
       (error "Can't reliably convert wild pathnames."))
     (cond ((not (directory-pathname-p pathspec))
            (make-pathname :directory (append (or (pathname-directory pathname)
+						 #-gcl
                                                  (list :relative))
                                              (list (file-namestring pathname)))
                           :name nil
@@ -64,11 +65,16 @@ form."
 the directory named by the non-wild pathname designator DIRNAME."
   (when (wild-pathname-p dirname)
     (error "Can only make wildcard directories from non-wildcard directories."))
+  #-:gcl
   (make-pathname :name #-:cormanlisp :wild #+:cormanlisp "*"
                  :type #-(or :clisp :cormanlisp) :wild
                        #+:clisp nil
                        #+:cormanlisp "*"
-                 :defaults (pathname-as-directory dirname)))
+                 :defaults (pathname-as-directory dirname))
+  #+:gcl
+  (make-pathname :defaults (pathname-as-directory dirname))
+  )
+  
 
 #+:clisp
 (defun clisp-subdirectories-wildcard (wildcard)
@@ -96,13 +102,14 @@ directory form - see PATHNAME-AS-DIRECTORY."
   (let ((wildcard (directory-wildcard dirname)))
     #+:abcl (system::list-directory dirname)
     #+(or :sbcl :cmu :scl :lispworks) (directory wildcard)
+    #+:gcl (mapcar #'(lambda(f) (or (probe-file f) (gcl-extensions:probe-directory f))) (directory wildcard))
     #+(or :openmcl :digitool) (directory wildcard :directories t)
     #+:allegro (directory wildcard :directories-are-files nil)
     #+:clisp (nconc (directory wildcard :if-does-not-exist :keep)
                     (directory (clisp-subdirectories-wildcard wildcard)))
     #+:cormanlisp (nconc (directory wildcard)
                          (cl::directory-subdirs dirname)))
-  #-(or :sbcl :cmu :scl :lispworks :openmcl :allegro :clisp :cormanlisp :ecl :abcl :digitool)
+  #-(or :sbcl :cmu :scl :lispworks :openmcl :allegro :clisp :cormanlisp :ecl :abcl :digitool :gcl)
   (error "LIST-DIRECTORY not implemented"))
 
 (defun pathname-as-file (pathspec)
@@ -125,6 +132,8 @@ exists and returns its truename if this is the case, NIL otherwise.
 The truename is returned in `canonical' form, i.e. the truename of a
 directory is returned as if by PATHNAME-AS-DIRECTORY."
   #+(or :sbcl :lispworks :openmcl :ecl :digitool) (probe-file pathspec)
+  #+gcl (or (probe-file pathspec)
+	    (gcl-extensions:probe-directory pathspec))
   #+:allegro (or (excl:probe-directory (pathname-as-directory pathspec))
                  (probe-file pathspec))
   #+(or :cmu :scl :abcl) (or (probe-file (pathname-as-directory pathspec))
@@ -138,7 +147,7 @@ directory is returned as if by PATHNAME-AS-DIRECTORY."
                      directory-form)))
                (ignore-errors
                  (probe-file (pathname-as-file pathspec))))
-  #-(or :sbcl :cmu :scl :lispworks :openmcl :allegro :clisp :cormanlisp :ecl :abcl :digitool)
+  #-(or :sbcl :cmu :scl :lispworks :openmcl :allegro :clisp :cormanlisp :ecl :abcl :digitool :gcl)
   (error "FILE-EXISTS-P not implemented"))
 
 (defun directory-exists-p (pathspec)
@@ -218,7 +227,8 @@ checked for compatibility of their types."
   (let ((buf (make-array *stream-buffer-size*
                          :element-type (stream-element-type from))))
     (loop
-       (let ((pos #-(or :clisp :cmu) (read-sequence buf from)
+       (let ((pos #-(or :clisp :cmu :gcl) (read-sequence buf from)
+		  #+gcl (gcl-extensions:read-sequence buf from :start 0 :end (1- *stream-buffer-size*))
                   #+:clisp (ext:read-byte-sequence buf from :no-hang nil)
                   #+:cmu (sys:read-n-bytes from buf 0 *stream-buffer-size* nil)))
          (when (zerop pos) (return))
@@ -231,8 +241,8 @@ to the file designated by the non-wild pathname designator TO.  If
 OVERWRITE is true overwrites the file designtated by TO if it exists."
   #+:allegro (excl.osi:copy-file from to :overwrite overwrite)
   #-:allegro
-  (let ((element-type #-:cormanlisp '(unsigned-byte 8)
-                      #+:cormanlisp 'unsigned-byte))
+  (let ((element-type #-(or :gcl :cormanlisp) '(unsigned-byte 8)
+                      #+(or :gcl :cormanlisp) 'unsigned-byte))
     (with-open-file (in from :element-type element-type)
       (with-open-file (out to :element-type element-type
                               :direction :output
@@ -275,6 +285,11 @@ DIRNAME does not exist."
                                       #+:openmcl (cl-fad-ccl:delete-directory file)
                                       #+:cormanlisp (win32:delete-directory file)
                                       #+:ecl (si:rmdir file)
+				      #+:gcl (let ((file-list (list-directory file)))
+					       (loop for f in file-list
+						  if (directory-pathname-p f) do (delete-directory-and-files f :if-does-not-exist if-does-not-exist)
+						  else do (delete-file f))
+					       (delete-file file))
                                       #+(or :abcl :digitool) (delete-file file))
                                      (t (delete-file file))))
                              :directories t

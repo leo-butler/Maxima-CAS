@@ -17,11 +17,11 @@ binary-clisp/maxima.mem : cl-ppcre/closures.lisp
 binary-clisp/maxima.mem : cl-ppcre/repetition-closures.lisp
 binary-clisp/maxima.mem : cl-ppcre/scanner.lisp
 binary-clisp/maxima.mem : cl-ppcre/api.lisp
+binary-clisp/maxima.mem : cl-fad/packages.lisp
+binary-clisp/maxima.mem : cl-fad/fad.lisp
 binary-clisp/maxima.mem : intl.lisp
 binary-clisp/maxima.mem : cl-info.lisp
 binary-clisp/maxima.mem : build-index.lisp
-binary-clisp/maxima.mem : cl-fad/packages.lisp
-binary-clisp/maxima.mem : cl-fad/fad.lisp
 binary-clisp/maxima.mem : sloop.lisp
 binary-clisp/maxima.mem : lmdcls.lisp
 binary-clisp/maxima.mem : letmac.lisp
