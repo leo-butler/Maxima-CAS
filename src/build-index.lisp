@@ -126,11 +126,6 @@
 	(t
 	 nil)))
 
-(defun file-exists-p (f)
-  (handler-case
-      (probe-file f)
-      (error () nil)))
-
 (defmacro setf-hash (to from &optional (delete-first nil))
   (let* ((k (gensym))
 	 (v (gensym))

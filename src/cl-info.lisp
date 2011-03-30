@@ -111,7 +111,8 @@ escaped. The list of special characters is `*info-special-char*'."
     (setf tem (inexact-topic-match x))
     (when tem
       (let ((nitems (length tem)))
-
+	(when (> nitems 1)
+	  (format t "~&#~4T~a~30T~a" (intl:gettext "Topic") (intl:gettext "Description")))
         (loop for i from 0 for item in tem do
           (when (> nitems 1)
             (let ((heading-title (nth 3 (cdr item))))
@@ -156,15 +157,18 @@ escaped. The list of special characters is `*info-special-char*'."
   (declare (special *maxima-info-index-list*))
   (cond ((or (null *info-section-hashtable*) (null *info-deffn-defvr-hashtable*) (null *info-files*)
 	     (eq 0 (hash-table-count *info-section-hashtable*)) (eq 0 (hash-table-count *info-deffn-defvr-hashtable*)) (eq 0 (hash-table-count *info-files*)))
-	 (cond (*maxima-info-index-list*
-		(loop for m in *maxima-info-index-list*
-		   for maxima-info-index = (canonicalize-info-pathnames m)
-		   do
-		     (if (file-exists-p maxima-info-index)
-			 (load maxima-info-index)
-			 (setup-help-database))))
-	       (t
-		(setup-help-database))))
-	(t t)))
+	 (flet ((setup-help-database ()
+		  (format t "~&~a" (intl:gettext "Generating the help database, this may take a few seconds..."))
+		  (setup-help-database)
+		  (format t "~a~%" (intl:gettext "Done."))))
+	   (cond (*maxima-info-index-list*
+		  (loop for m in *maxima-info-index-list*
+		     for maxima-info-index = (canonicalize-info-pathnames m)
+		     do
+		       (if (file-exists-p maxima-info-index)
+			   (load maxima-info-index)
+			   (setup-help-database))))
+		 (t
+		  (setup-help-database)))))))
 	    
 ;; end of cl-info.lisp

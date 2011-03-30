@@ -173,7 +173,7 @@
 				     (:module cl-ppcre-adapter :source-pathname ""
 					      :components ((:file "api")))))
 	       (:module info :source-pathname ""
-			:depends-on (#+cl-ppcre cl-ppcre #+gcl-regex gcl-regex)
+			:depends-on (cl-fad #+cl-ppcre cl-ppcre #+gcl-regex gcl-regex)
 			:components (
 				     (:module cl-info-intl :source-pathname ""
 					      :components

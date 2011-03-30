@@ -43,7 +43,11 @@
 (defpackage :gcl-extensions
   (:use :common-lisp)
   (:export #:read-sequence
-	   #:with-standard-io-syntax))
+	   #:with-standard-io-syntax
+	   #:wild-pathname-p
+	   #:probe-directory
+	   #:read-byte-sequence
+	   #:read-char-sequence))
 #+gcl
 (defpackage :gcl-regex
   (:use :common-lisp)
@@ -70,30 +74,6 @@
    #:do-register-groups
    ))
 
-(defpackage :cl-info
-  (:use :common-lisp
-	#+cl-ppcre  :cl-ppcre
-	#+gcl-regex :gcl-regex)
-  (:export #:setup-help-database
-	   #:print-info-hashes
-	   #:info
-	   #:info-exact
-	   #:*prompt-prefix*
-	   #:*prompt-suffix*)
-  (:import-from #+cl-ppcre  :cl-ppcre
-		#+gcl-regex :gcl-regex
-		#:scan
-		#:scan-to-strings
-		#:register-groups-bind
-		#:do-scans
-		#:all-matches
-		#:do-register-groups)
-  #+gcl
-  (:import-from :gcl-extensions
-		#:read-sequence
-		#:with-standard-io-syntax)
-  )
-
 ;; from cl-fad/packages.lisp
 (defpackage :cl-fad
   (:nicknames :fad)
@@ -113,6 +93,32 @@
            :pathname-as-directory
            :pathname-as-file
            :walk-directory))
+
+(defpackage :cl-info
+  (:use :common-lisp
+	#+cl-ppcre  :cl-ppcre
+	#+gcl-regex :gcl-regex)
+  (:export #:setup-help-database
+	   #:print-info-hashes
+	   #:info
+	   #:info-exact
+	   #:*prompt-prefix*
+	   #:*prompt-suffix*)
+  (:import-from #+cl-ppcre  :cl-ppcre
+		#+gcl-regex :gcl-regex
+		#:scan
+		#:scan-to-strings
+		#:register-groups-bind
+		#:do-scans
+		#:all-matches
+		#:do-register-groups)
+  (:import-from :cl-fad
+		#:file-exists-p)
+  #+gcl
+  (:import-from :gcl-extensions
+		#:read-sequence
+		#:with-standard-io-syntax)
+  )
 
 (defpackage :command-line
   (:use :common-lisp)

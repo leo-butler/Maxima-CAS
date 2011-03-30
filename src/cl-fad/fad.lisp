@@ -281,7 +281,7 @@ DIRNAME does not exist."
                                                  (error "~@<Error deleting ~S: ~A~@:>"
                                                         file (unix:get-unix-error-msg errno))))
                                       #+:sbcl (sb-posix:rmdir file)
-                                      #+:clisp (ext:delete-dir file)
+                                      #+:clisp (ext:delete-directory file)
                                       #+:openmcl (cl-fad-ccl:delete-directory file)
                                       #+:cormanlisp (win32:delete-directory file)
                                       #+:ecl (si:rmdir file)

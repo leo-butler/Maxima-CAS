@@ -42,13 +42,12 @@
     `(let* ((,rgx (compile-regex ,regex))
 	    (,str ,string)
 	    (,e   (or ,end (length ,str)))
-	    (,s ,start)
-	    ,match-start ,match-end ,reg-starts ,reg-ends)
-       (declare (ignorable ,match-start ,match-end ,reg-starts ,reg-ends))
+	    (,s ,start))
        (block nil
 	 (loop (multiple-value-bind
 		     (,match-start ,match-end ,reg-starts ,reg-ends)
 		   (funcall *scan* ,rgx ,str :start ,s :end ,e)
+		 (declare (ignorable ,match-start ,match-end ,reg-starts ,reg-ends))
 		 (unless ,match-start (return ,result-form))
 		 (locally ,@body)
 		 (setq ,s (if ,match-end (if (= ,match-start ,match-end) (1+ ,match-end) ,match-end) (1+ ,e)))))))))
