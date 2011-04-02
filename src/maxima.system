@@ -124,34 +124,6 @@
 				     (:file "maxima-package")
 				     #+ecl (:file "ecl-port")
 				     (:file "autoconf-variables")))
-	       #+cl-ppcre
-	       (:module cl-ppcre :source-pathname "cl-ppcre"
-			:components ((:file "packages")
-				     (:file "specials")
-				     (:file "util")
-				     (:file "errors")
-				     (:file "charset")
-				     (:file "charmap")
-				     (:file "chartest")
-				     #-:use-acl-regexp2-engine
-				     (:file "lexer")
-				     #-:use-acl-regexp2-engine
-				     (:file "parser")
-				     #-:use-acl-regexp2-engine
-				     (:file "regex-class")
-				     #-:use-acl-regexp2-engine
-				     (:file "regex-class-util")
-				     #-:use-acl-regexp2-engine
-				     (:file "convert")
-				     #-:use-acl-regexp2-engine
-				     (:file "optimize")
-				     #-:use-acl-regexp2-engine
-				     (:file "closures")
-				     #-:use-acl-regexp2-engine
-				     (:file "repetition-closures")
-				     #-:use-acl-regexp2-engine
-				     (:file "scanner")
-				     (:file "api")))
 	       (:module cl-fad :source-pathname "cl-fad"
 			:depends-on (#+gcl gcl-extensions)
 			:components ((:file "packages")
@@ -164,16 +136,51 @@
 	       (:module gcl-extensions :source-pathname "gcl-regex"
 			:depends-on (cl-fad)
 			:components (:file "gcl-extensions"))
+	       #+gcl
+	       (:module gcl-extensions :source-pathname "gcl-regex"
+			:components (:file "gcl-extensions"))
 	       #+gcl-regex
-	       (:module gcl-regex :source-pathname "gcl-regex"
+	       (:module regex :source-pathname ""
 			:depends-on (gcl-extensions)
-			:components (
-				     (:file "gcl-regex")
-				     (:file "cl-ppcre-interface")
-				     (:module cl-ppcre-adapter :source-pathname ""
-					      :components ((:file "api")))))
+			:components
+			((:module :gcl-regex :source-pathname "gcl-regex"
+				  :components (
+					       (:file "gcl-regex")
+					       (:file "cl-ppcre-interface")
+					       (:module cl-ppcre-adapter :source-pathname ""
+							:components ((:file "api")))))))
+	       #+cl-ppcre
+	       (:module regex :source-pathname ""
+			:components
+			((:module cl-ppcre :source-pathname "cl-ppcre"
+				 :components ((:file "packages")
+					      (:file "specials")
+					      (:file "util")
+					      (:file "errors")
+					      (:file "charset")
+					      (:file "charmap")
+					      (:file "chartest")
+					      #-:use-acl-regexp2-engine
+					      (:file "lexer")
+					      #-:use-acl-regexp2-engine
+					      (:file "parser")
+					      #-:use-acl-regexp2-engine
+					      (:file "regex-class")
+					      #-:use-acl-regexp2-engine
+					      (:file "regex-class-util")
+					      #-:use-acl-regexp2-engine
+					      (:file "convert")
+					      #-:use-acl-regexp2-engine
+					      (:file "optimize")
+					      #-:use-acl-regexp2-engine
+					      (:file "closures")
+					      #-:use-acl-regexp2-engine
+					      (:file "repetition-closures")
+					      #-:use-acl-regexp2-engine
+					      (:file "scanner")
+					      (:file "api")))))
 	       (:module info :source-pathname ""
-			:depends-on (cl-fad #+cl-ppcre cl-ppcre #+gcl-regex gcl-regex)
+			:depends-on (cl-fad regex)
 			:components (
 				     (:module cl-info-intl :source-pathname ""
 					      :components
@@ -185,59 +192,62 @@
 						   (:file "intl")
 						   (:file "cl-info")
 						   (:file "build-index")))))
+	       (:module etags :source-pathname "cl-ppcre"
+			:depends-on (cl-fad regex)
+			:components (:file "etags"))
 	       (:module sloop :source-pathname ""
 			:components ((:file "sloop")))
-               (:module declarations :source-pathname ""
-                        :components ((:file "lmdcls"))) 
-               (:module destructuring-let :source-pathname ""
-                        :components ((:file "letmac")))
-               (:module compatibility-macros1 :source-pathname ""
-                        :components ((:file "generr")
+	       (:module declarations :source-pathname ""
+			:components ((:file "lmdcls"))) 
+	       (:module destructuring-let :source-pathname ""
+			:components ((:file "letmac")))
+	       (:module compatibility-macros1 :source-pathname ""
+			:components ((:file "generr")
 				     (:file "clmacs")))
-               (:module compatibility-macros :source-pathname ""
-                        :components ((:file "commac"))) 
-               (:module prerequisites :source-pathname ""
-                        :components ((:file "mormac") 
-                                     (:file "compat")))
+	       (:module compatibility-macros :source-pathname ""
+			:components ((:file "commac"))) 
+	       (:module prerequisites :source-pathname ""
+			:components ((:file "mormac") 
+				     (:file "compat")))
 	       (:module command-line :source-pathname ""
 			:depends-on (getopt)
 			:components ((:file "command-line")))
 	       (:module getopt :source-pathname ""
 			:components ((:file "getopt")))
-               (:module fundamental-macros :source-pathname ""
-                        :components ((:file "defopt") 
-                                     (:file "defcal") 
-                                     (:file "maxmac")))
-               (:module utility-macros :source-pathname ""
-                        :components ((:file "mopers") 
-                                     (:file "mforma")))
-               (:module other-macros :source-pathname ""
-                        :components ((:file "mrgmac") 
-                                     (:file "rzmac")    
-                                     (:file "strmac") 
-                                     (:file "displm")))
-               (:module rat-macros :source-pathname ""
-                        :components ((:file "ratmac") 
-                                     (:file "mhayat")))
-               #+gcl (:file "optimize") ; jfa check this
-               (:module utilities :source-pathname ""
+	       (:module fundamental-macros :source-pathname ""
+			:components ((:file "defopt") 
+				     (:file "defcal") 
+				     (:file "maxmac")))
+	       (:module utility-macros :source-pathname ""
+			:components ((:file "mopers") 
+				     (:file "mforma")))
+	       (:module other-macros :source-pathname ""
+			:components ((:file "mrgmac") 
+				     (:file "rzmac")    
+				     (:file "strmac") 
+				     (:file "displm")))
+	       (:module rat-macros :source-pathname ""
+			:components ((:file "ratmac") 
+				     (:file "mhayat")))
+	       #+gcl (:file "optimize") ; jfa check this
+	       (:module utilities :source-pathname ""
 			:depends-on (utility-macros)
-                        :components ((:file "opers")
-                                     (:file "utils") 
-                                     (:file "sumcon") 
-                                     (:file "sublis") 
-                                     (:file "merror") 
-                                     (:file "mformt") 
-                                     (:file "mutils") 
-                                     (:file "outmis") 
-                                     (:file "ar")))
-               (:module commands :source-pathname ""
-                        :components ((:file "comm")
-                                     (:file "comm2")))
-               (:module evaluator :source-pathname ""
-                        :components ((:file "mlisp") 
-                                     (:file "mmacro") 
-                                     (:file "buildq")))
+			:components ((:file "opers")
+				     (:file "utils") 
+				     (:file "sumcon") 
+				     (:file "sublis") 
+				     (:file "merror") 
+				     (:file "mformt") 
+				     (:file "mutils") 
+				     (:file "outmis") 
+				     (:file "ar")))
+	       (:module commands :source-pathname ""
+			:components ((:file "comm")
+				     (:file "comm2")))
+	       (:module evaluator :source-pathname ""
+			:components ((:file "mlisp") 
+				     (:file "mmacro") 
+				     (:file "buildq")))
 	       ;; The free version of Allegro has a heap limit.  Let's
 	       ;; not compile these routines so that we can at least
 	       ;; get the rest of maxima built.

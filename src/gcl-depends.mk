@@ -7,12 +7,14 @@ binary-gcl/maxima : autoconf-variables.lisp
 binary-gcl/maxima : gcl-regex/gcl-extensions.lisp
 binary-gcl/maxima : cl-fad/packages.lisp
 binary-gcl/maxima : cl-fad/fad.lisp
+binary-gcl/maxima : gcl-regex/gcl-extensions.lisp
 binary-gcl/maxima : gcl-regex/gcl-regex.lisp
 binary-gcl/maxima : gcl-regex/cl-ppcre-interface.lisp
 binary-gcl/maxima : gcl-regex/api.lisp
 binary-gcl/maxima : intl.lisp
 binary-gcl/maxima : cl-info.lisp
 binary-gcl/maxima : build-index.lisp
+binary-gcl/maxima : cl-ppcre/etags.lisp
 binary-gcl/maxima : sloop.lisp
 binary-gcl/maxima : lmdcls.lisp
 binary-gcl/maxima : letmac.lisp

@@ -48,7 +48,7 @@
 	   #:probe-directory
 	   #:read-byte-sequence
 	   #:read-char-sequence))
-#+gcl
+#+gcl-regex
 (defpackage :gcl-regex
   (:use :common-lisp)
   (:import-from :gcl-extensions
@@ -62,17 +62,32 @@
    ;; Functions
    #:scan
    #:scan-to-strings
-   #:count-registers
-   ;; Functions in api.lisp
    #:register-groups-bind
    #:do-scans
-   #:do-scans-to-strings
    #:do-matches
    #:do-matches-as-strings
    #:all-matches
    #:all-matches-as-strings
    #:do-register-groups
+   #:split
    ))
+
+(defpackage :regex
+  (:use :common-lisp)
+  (:import-from #+cl-ppcre  :cl-ppcre
+		#+gcl-regex :gcl-regex
+		;; Functions
+		#:scan
+		#:scan-to-strings
+		;; Functions in api.lisp
+		#:register-groups-bind
+		#:do-scans
+		#:do-matches
+		#:all-matches
+		#:all-matches-as-strings
+		#:do-register-groups
+		#:split
+		))
 
 ;; from cl-fad/packages.lisp
 (defpackage :cl-fad
@@ -88,32 +103,52 @@
            :delete-directory-and-files
            :directory-exists-p
            :directory-pathname-p
+           :file-pathname-p
            :file-exists-p
            :list-directory
            :pathname-as-directory
            :pathname-as-file
-           :walk-directory))
+           :walk-directory
+	   :slurp))
+
+(defpackage :etags
+  (:use :cl :cl-fad :regex)
+  (:export #:etags-create-tags
+	   #:etags-create-tags-recursive)
+  (:import-from :regex
+		#:do-scans
+		#:all-matches
+		#:scan
+		#:do-register-groups
+		#:split
+		)
+  (:import-from :cl-fad
+		#:file-exists-p
+		#:walk-directory
+		#:file-pathname-p
+		#:directory-pathname-p
+		#:slurp
+		))
 
 (defpackage :cl-info
-  (:use :common-lisp
-	#+cl-ppcre  :cl-ppcre
-	#+gcl-regex :gcl-regex)
+  (:use :common-lisp :regex)
   (:export #:setup-help-database
 	   #:print-info-hashes
 	   #:info
 	   #:info-exact
 	   #:*prompt-prefix*
 	   #:*prompt-suffix*)
-  (:import-from #+cl-ppcre  :cl-ppcre
-		#+gcl-regex :gcl-regex
+  (:import-from :regex
 		#:scan
 		#:scan-to-strings
 		#:register-groups-bind
 		#:do-scans
 		#:all-matches
+		#:all-matches-as-strings
 		#:do-register-groups)
   (:import-from :cl-fad
-		#:file-exists-p)
+		#:file-exists-p
+		#:slurp)
   #+gcl
   (:import-from :gcl-extensions
 		#:read-sequence

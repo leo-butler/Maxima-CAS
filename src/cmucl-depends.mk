@@ -1,5 +1,7 @@
 binary-cmucl/maxima.core : maxima-package.lisp
 binary-cmucl/maxima.core : autoconf-variables.lisp
+binary-cmucl/maxima.core : cl-fad/packages.lisp
+binary-cmucl/maxima.core : cl-fad/fad.lisp
 binary-cmucl/maxima.core : cl-ppcre/packages.lisp
 binary-cmucl/maxima.core : cl-ppcre/specials.lisp
 binary-cmucl/maxima.core : cl-ppcre/util.lisp
@@ -17,11 +19,10 @@ binary-cmucl/maxima.core : cl-ppcre/closures.lisp
 binary-cmucl/maxima.core : cl-ppcre/repetition-closures.lisp
 binary-cmucl/maxima.core : cl-ppcre/scanner.lisp
 binary-cmucl/maxima.core : cl-ppcre/api.lisp
-binary-cmucl/maxima.core : cl-fad/packages.lisp
-binary-cmucl/maxima.core : cl-fad/fad.lisp
 binary-cmucl/maxima.core : intl.lisp
 binary-cmucl/maxima.core : cl-info.lisp
 binary-cmucl/maxima.core : build-index.lisp
+binary-cmucl/maxima.core : cl-ppcre/etags.lisp
 binary-cmucl/maxima.core : sloop.lisp
 binary-cmucl/maxima.core : lmdcls.lisp
 binary-cmucl/maxima.core : letmac.lisp
