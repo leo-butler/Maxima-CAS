@@ -1,0 +1,19 @@
+;; -*- mode: lisp -*-
+;; Copyright Leo Butler (l.butler@ed.ac.uk) 2011
+;; Released under the terms of GPLv3+
+
+;; ETAGS file for ELisp files
+;;  -each regexp is an CL-PPCRE regexp
+;;  -each regexp begins at beginning of line
+;;  -regexps may extend over several lines
+;;  -no comments or whitespace in a regexp is allowed
+;;  -rubout-character marks the end of a regexp
+;;
+;; beginning of regexps
+
+[ \t]*\(def(un|mfun|macro|var|parameter|advice|package)\s+(\S+)
+2
+[ \t]*\(define-(\S+)\s+(\S+)
+2
+;;
+;; end of etags-maxima-lisp.tags
