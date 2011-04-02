@@ -44,6 +44,12 @@ directory designated by PATHSPEC does actually exist."
     (not (component-present-p (pathname-type pathspec)))
     pathspec))
 
+(defun file-pathname-p (pathspec)
+  "Returns NIL if PATHSPEC \(a pathname designator) does not designate
+a file, PATHSPEC otherwise.  It is irrelevant whether file or
+directory designated by PATHSPEC does actually exist."
+  (not (directory-pathname-p pathspec)))
+
 (defun pathname-as-directory (pathspec)
   "Converts the non-wild pathname designator PATHSPEC to directory
 form."
@@ -86,31 +92,39 @@ sub-directories are returned by DIRECTORY."
                  :type nil
                  :defaults wildcard))
 
-(defun list-directory (dirname)
+(defvar *sort-directories* nil "If T, LIST-DIRECTORY will sort directory listing alphabetically.")
+
+(defun list-directory (dirname &optional (sort *sort-directories*))
   "Returns a fresh list of pathnames corresponding to the truenames of
 all files within the directory named by the non-wild pathname
 designator DIRNAME.  The pathnames of sub-directories are returned in
 directory form - see PATHNAME-AS-DIRECTORY."
   (when (wild-pathname-p dirname)
     (error "Can only list concrete directory names."))
-  #+:ecl 
-  (let ((dir (pathname-as-directory dirname)))
-    (concatenate 'list
-                 (directory (merge-pathnames (pathname "*/") dir))
-                 (directory (merge-pathnames (pathname "*.*") dir))))
-  #-:ecl 
-  (let ((wildcard (directory-wildcard dirname)))
-    #+:abcl (system::list-directory dirname)
-    #+(or :sbcl :cmu :scl :lispworks) (directory wildcard)
-    #+:gcl (mapcar #'(lambda(f) (or (probe-file f) (gcl-extensions:probe-directory f))) (directory wildcard))
-    #+(or :openmcl :digitool) (directory wildcard :directories t)
-    #+:allegro (directory wildcard :directories-are-files nil)
-    #+:clisp (nconc (directory wildcard :if-does-not-exist :keep)
-                    (directory (clisp-subdirectories-wildcard wildcard)))
-    #+:cormanlisp (nconc (directory wildcard)
-                         (cl::directory-subdirs dirname)))
-  #-(or :sbcl :cmu :scl :lispworks :openmcl :allegro :clisp :cormanlisp :ecl :abcl :digitool :gcl)
-  (error "LIST-DIRECTORY not implemented"))
+  (labels ((file<= (x y)
+	     (string<= (namestring x) (namestring y)))
+	   (sort-files (files)
+	     (sort files #'file<=))
+	   (ls ()
+	     #+:ecl 
+	     (let ((dir (pathname-as-directory dirname)))
+	       (concatenate 'list
+			    (directory (merge-pathnames (pathname "*/") dir))
+			    (directory (merge-pathnames (pathname "*.*") dir))))
+	     #-:ecl 
+	     (let ((wildcard (directory-wildcard dirname)))
+	       #+:abcl (system::list-directory dirname)
+	       #+(or :sbcl :cmu :scl :lispworks) (directory wildcard)
+	       #+:gcl (mapcar #'(lambda(f) (or (probe-file f) (gcl-extensions:probe-directory f))) (directory wildcard))
+	       #+(or :openmcl :digitool) (directory wildcard :directories t)
+	       #+:allegro (directory wildcard :directories-are-files nil)
+	       #+:clisp (nconc (directory wildcard :if-does-not-exist :keep)
+			       (directory (clisp-subdirectories-wildcard wildcard)))
+	       #+:cormanlisp (nconc (directory wildcard)
+				    (cl::directory-subdirs dirname)))
+	     #-(or :sbcl :cmu :scl :lispworks :openmcl :allegro :clisp :cormanlisp :ecl :abcl :digitool :gcl)
+	     (error "LIST-DIRECTORY not implemented")))
+    (if sort (sort-files (ls)) (ls))))
 
 (defun pathname-as-file (pathspec)
   "Converts the non-wild pathname designator PATHSPEC to file form."
@@ -224,16 +238,29 @@ checked for compatibility of their types."
   (when checkp
     (unless (subtypep (stream-element-type to) (stream-element-type from))
       (error "Incompatible streams ~A and ~A." from to)))
-  (let ((buf (make-array *stream-buffer-size*
-                         :element-type (stream-element-type from))))
+  (let* ((set (stream-element-type from))
+	 (buf (make-array *stream-buffer-size* :element-type set)))
     (loop
-       (let ((pos #-(or :clisp :cmu :gcl) (read-sequence buf from)
+       (let ((pos #-(or :cmu :gcl) (read-sequence buf from)
 		  #+gcl (gcl-extensions:read-sequence buf from :start 0 :end (1- *stream-buffer-size*))
-                  #+:clisp (ext:read-byte-sequence buf from :no-hang nil)
                   #+:cmu (sys:read-n-bytes from buf 0 *stream-buffer-size* nil)))
          (when (zerop pos) (return))
          (write-sequence buf to :end pos))))
   (values))
+
+(defmacro slurp (file &rest options)
+  "READS the contents of FILE and returns this as a string."
+  `(with-open-file (from ,file :direction :input ,@options)
+     (let ((set (stream-element-type from)))
+       (cond
+	 ((or (eq set 'character) (eq set 'string-char))
+	  (with-output-to-string (to nil)
+	    (copy-stream from to t)))
+	 (t
+	  (let* ((fs (file-length from))
+		 (to (make-array fs :element-type 'unsigned-byte :initial-element 0))
+		 (read (read-sequence to from :start 0 :end fs)))
+	    (values (map 'string #'code-char to) read fs)))))))
 
 (defun copy-file (from to &key overwrite)
   "Copies the file designated by the non-wild pathname designator FROM

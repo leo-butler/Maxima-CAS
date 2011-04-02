@@ -22,5 +22,6 @@
 	      #:all-matches
 	      #:all-matches-as-strings
 	      #:do-register-groups
+	      #:split
 	      ))
 	   )

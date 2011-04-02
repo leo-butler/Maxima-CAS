@@ -136,13 +136,6 @@
        (maphash #'(lambda (,k ,v) (setf (gethash ,k ,to) ,v)) ,from)
        t)))
 
-(defun slurp-info-file (filename)
-  (with-open-file (in filename :direction :input :element-type 'character)
-    (let ((contents (make-array (file-length in) :initial-element #+gcl #\^@ #-gcl #\Null)))
-      (with-standard-io-syntax
-	(read-sequence contents in :start 0 :end nil))
-      (coerce contents 'string))))
-
 ;;
 ;; Core functions
 ;;
@@ -155,7 +148,7 @@
 before adding new contents."
   (flet ((get-info-file-pathnames ()
 	   (let ((info-dir (pathname-directory maxima-info))
-		 (str-contents (slurp-info-file maxima-info)))
+		 (str-contents (slurp maxima-info)))
 	     (loop for f in (all-matches-as-strings maxima-info-re str-contents)
 		for fp = (pathname f)
 		for fn = (pathname-name fp)
@@ -165,7 +158,7 @@ before adding new contents."
     (let ((info-files (make-hash-table :test #'equal))
 	  (filenames (get-info-file-pathnames)))
 	  (loop for filename in filenames
-	     for str-contents = (slurp-info-file filename)
+	     for str-contents = (slurp filename)
 	     for k = (namestring filename)
 	     for v = `(nil . ,str-contents)
 	     do (setf (gethash k info-files) v))
@@ -201,7 +194,7 @@ before adding new contents."
   (setq filename (if (pathnamep filename) (namestring filename) filename))
   (let* ((slurp (null (cdr (gethash filename info-files))))
 	 (str-contents (if slurp
-			   (slurp-info-file filename)
+			   (slurp filename)
 			   (cdr (gethash filename info-files)))))
     (if slurp (setf (gethash filename info-files) `(nil . ,str-contents)))
     (subseq str-contents start end)))

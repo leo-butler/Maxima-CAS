@@ -27,27 +27,34 @@
 ;;; NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 ;;; SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-(in-package :common-lisp-user)
+(eval-when #-gcl (:load-toplevel :execute)
+	   #+gcl (load eval)
+	   (in-package :common-lisp-user)
 
-(defpackage :cl-fad
-  (:nicknames :fad)
-  (:use :cl)
-  #+:allegro
-  (:shadow :copy-file
-           :delete-directory-and-files)
-  #+:abcl
-  (:shadow :list-directory)
-  (:export :copy-file
-           :copy-stream
-           :delete-directory-and-files
-           :directory-exists-p
-           :directory-pathname-p
-           :file-exists-p
-           :list-directory
-           :pathname-as-directory
-           :pathname-as-file
-           :walk-directory))
+	   (defpackage :cl-fad
+	     (:nicknames :fad)
+	     (:use :cl)
+	     #+:allegro
+	     (:shadow :copy-file
+		      :delete-directory-and-files)
+	     #+:abcl
+	     (:shadow :list-directory)
+	     (:export #:copy-file
+		      #:copy-stream
+		      #:delete-directory-and-files
+		      #:directory-exists-p
+		      #:directory-pathname-p
+		      #:file-pathname-p
+		      #:file-exists-p
+		      #:list-directory
+		      #:pathname-as-directory
+		      #:pathname-as-file
+		      #:walk-directory
+		      #:slurp))
 
-(defpackage :cl-fad-test
-  (:use :cl :cl-fad)
-  (:export :test))
+	   (defpackage :cl-fad-test
+	     (:use :cl :cl-fad)
+	     (:export :test))
+	   )
+
+;; end of packages.lisp

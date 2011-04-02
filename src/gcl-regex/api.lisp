@@ -25,7 +25,7 @@
 	  (let* ((l (count-registers regex))
 		 (bindings (loop for v in `(,@var-list)
 			      for i = 0 then (1+ i)
-			      when v collect `(setf ,v (if (< ,i ,l) (aref ,registers ,i))))))
+			      when v collect `(setf ,v (if (and (< ,i ,l) (< ,i (length ,registers))) (aref ,registers ,i))))))
 	    `(let* (,@var-list ,match ,registers)
 	       (multiple-value-setq (,match ,registers) (funcall *scan-to-strings* ,regex ,string :start ,start :end ,end))
 	       (if ,match
@@ -44,13 +44,16 @@
 	    (,e   (or ,end (length ,str)))
 	    (,s ,start))
        (block nil
-	 (loop (multiple-value-bind
-		     (,match-start ,match-end ,reg-starts ,reg-ends)
-		   (funcall *scan* ,rgx ,str :start ,s :end ,e)
-		 (declare (ignorable ,match-start ,match-end ,reg-starts ,reg-ends))
-		 (unless ,match-start (return ,result-form))
-		 (locally ,@body)
-		 (setq ,s (if ,match-end (if (= ,match-start ,match-end) (1+ ,match-end) ,match-end) (1+ ,e)))))))))
+	 (loop
+	    if (<= ,s ,e) do
+	      (multiple-value-bind
+		    (,match-start ,match-end ,reg-starts ,reg-ends)
+		  (funcall *scan* ,rgx ,str :start ,s :end ,e)
+		(declare (ignorable ,match-start ,match-end ,reg-starts ,reg-ends))
+		(unless ,match-start (return ,result-form))
+		(locally ,@body)
+		(setq ,s (if ,match-end (if (= ,match-start ,match-end) (1+ ,match-end) ,match-end) (1+ ,e))))
+	    else do (return ,result-form))))))
 
 (defmacro do-scans-to-strings ((match register regex string 
 				      &optional result-form &key (start 0) end)
@@ -116,5 +119,18 @@
 			      :start start :end end)
       (push m matches))))
 
-
+(defun split (regex string &key (start 0) (end (length string))
+	      (limit nil) (with-registers-p nil) (omit-unmatched-p nil) (sharedp t))
+  (declare (ignorable sharedp))
+  ;; simplest case
+  (let ((collector '())
+	(b0 0)
+	(l (length string)))
+    (loop for (b e) on (all-matches regex string :start start :end end) by #'cddr
+       do
+	 (push (subseq string b0 b) collector)
+	 (setf b0 e))
+    (if (< b0 l) (push (subseq string b0 l) collector))
+    (reverse collector)))
+  
 ;; end of api.lisp 

@@ -24,11 +24,11 @@
 (defparameter *newline-as-char-list*
   '(
     #+windows
-    #\Page#\Return
+    #\Return#\Newline  ;; CR=13, LF=10
     #+macintosh
-    #\Return
+    #\Return           ;; CR
     #+unix
-    #\Newline
+    #\Newline          ;; LF
     )
   )
 (defparameter *space-class-list* `(#\  #\Tab ,@*newline-as-char-list*))
@@ -37,11 +37,32 @@
 (defparameter *digit-class-list* '(#\0 #\- #\9))
 (defparameter *space-class* (coerce *space-class-list* 'string))
 (defparameter *newline* (coerce *newline-as-char-list* 'string))
+
+(defun hexadecimal-digit-p (c)
+  (and c (or (and (char>= c #\0) (char<= c #\9))
+	     (and (char>= c #\A) (char<= c #\F))
+	     (and (char>= c #\a) (char<= c #\f)))))
+(defun octal-digit-p (c)
+  (and c (char>= c #\0) (char<= c #\7)))
+(defun binary-digit-p (c)
+  (and c (or (char= c #\0) (char= c #\1))))
+(defun digitp (c)
+  (and c (char>= c #\0) (char<= c #\9)))
+
 (defun translate-special-chars (s)
   (declare (special *newlineas-char-list* *space-class-list*))
   (let ((s (if (consp s) s (coerce s 'list))))
     (macrolet ((setf-append (a b) `(let ((c (append '(#\]) (reverse ,b) '(#\[))))
-				     (setf ,a (if ,a (append c ,a) c)))))
+				     (setf ,a (if ,a (append c ,a) c))))
+	       (parse-nal ()
+		 `(lambda (str acc)
+		    (do* ((str str       (cdr str))
+			  (c   (car str) (car str))
+			  (x   (list c)  (if (funcall digitp-fn c) (push c x) x)))
+			 ((not (funcall digitp-fn c))
+			  (progn
+			    (push (code-char (parse-integer (coerce (reverse x) 'string) :radix radix)) acc)
+			    (values str acc)))))))
       (labels ((t-n (str acc)
 		 ;;(format t "~a ~a~%" str acc)
 		 (let ((c (car str)))
@@ -57,20 +78,56 @@
 			   (setf-append acc *space-class-list*))
 			  (#\S
 			   (setf-append acc *complemented-space-class-list*))
-			  (#\\
-			   (push #\\ acc))
-			  (otherwise
-			   (push next acc))))
-		      (t-n (cddr str) acc))
-		     (#\.
-		      (setf-append acc *dot-class-list*)
-		      (t-n (cdr str) acc))
-		     ((nil)
-		      (return-from t-n acc))
-		     (otherwise
-		      (push c acc)
-		      (t-n (cdr str) acc))))))
-	(coerce (reverse (t-n s nil)) 'string)))))
+			  (#\t
+			   (push #\Tab acc))
+			  (#\r
+			   (push #\Return acc))
+			  (#\f
+			   (push #\Page acc))
+			  (#\0
+			   (multiple-value-bind (digitp-fn radix)
+			       (case (caddr str)
+				 ((#\x #\X)
+				  (setf str (cdddr str))
+				  (values 'hexadecimal-digit-p 16))
+				 ((#\b #\B)
+				  (setf str (cdddr str))
+				  (values 'binary-digit-p 2))
+				 ((#\o #\q #\O #\Q)
+				  (setf str (cdddr str))
+				  (values 'octal-digit-p 8))
+				 ((#\0 #\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9)
+				  (setf str (cddr str))
+				  (values 'octal-digit-p 8))
+				 ((#\d #\D)
+				  (setf str (cdddr str))
+				  (values 'digitp 10))
+				 (otherwise
+				  (let ((errmsg (format nil (intl:gettext "Malformed escaped digit ~a.") str)))
+				    (error errmsg))))
+			     (multiple-value-setq (str acc) (funcall (parse-nal) str acc))
+			     (return-from t-n (t-n str acc))))
+			((#\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9)
+			 (let ((digitp-fn 'octal-digit-p)
+			       (radix 8))
+			   (setf str (cdr str))
+			   (multiple-value-setq (str acc) (funcall (parse-nal) str acc))
+			   (return-from t-n (t-n str acc))))
+			(#\\
+			 (push #\\ acc))
+			(otherwise
+			 (push #\\ acc)
+			 (push next acc))))
+		     (t-n (cddr str) acc))
+		   (#\.
+		    (setf-append acc *dot-class-list*)
+		    (t-n (cdr str) acc))
+		   ((nil)
+		    (return-from t-n acc))
+		   (otherwise
+		    (push c acc)
+		    (t-n (cdr str) acc))))))
+      (coerce (reverse (t-n s nil)) 'string)))))
 (defun compile-regex (re)
   (translate-special-chars re))
 
