@@ -1,4 +1,4 @@
-@c version 1.55
+@c version 1.58
 @menu
 * Introducci@'on a draw::
 * Funciones y variables para draw::
@@ -22,9 +22,9 @@ Tres son las funciones principales a utilizar a nivel de Maxima:
 S@'{@dotless{i}}gase este enlace para ver ejemplos m@'as elaborados
 de este paquete:
 
-@url{http://www.telefonica.net/web2/biomates/maxima/gpdraw}
+@url{http://riotorto.users.sourceforge.net/gnuplot}
 
-Se necesita tener instalado Gnuplot 4.2 para ejecutar este paquete.
+Se necesita tener instalado Gnuplot 4.2 o superior para ejecutar este paquete.
 
 
 
@@ -495,7 +495,7 @@ See also @code{enhanced3d}, @code{colorbox} and @code{cbrange}.
 
 
 @defvr {Opci@'on gr@'afica} color
-Valor por defecto: @code{black}
+Valor por defecto: @code{blue}
 
 @code{color} especifica el color para dibujar l@'{@dotless{i}}neas,
 puntos, bordes de pol@'{@dotless{i}}gonos y etiquetas.
@@ -1203,7 +1203,7 @@ La documentaci@'on de gnuplot es una importante fuente de informaci@'on sobre te
 
 
 @defvr {Opci@'on gr@'afica} font_size
-Valor por defecto: 12
+Valor por defecto: 10
 
 Esta opci@'on permite seleccionar el tama@~no de la fuente a utilizar por el
 terminal. S@'olo se puede utilizar un tipo de fuente y tama@~no por
@@ -1713,10 +1713,14 @@ Ejemplo:
 @defvr {Opci@'on gr@'afica} palette
 Valor por defecto: @code{color}
 
-@code{palette} indica c@'omo transformar los valores reales de una
-matriz pasada al objeto @code{image} en componentes crom@'aticas.
+@code{palette} indica c@'omo transformar niveles de gris en componentes crom@'aticas.
+Trabaja conjuntamente con la opci@'on @code{enhanced3d} en gr@'aficos 3D, la cual asocia cada punto
+de una superficie con un n@'umero real o nivel de gris. Tambi@'en trabaja con im@'agenes grises.
+Con @code{palette}, estos niveles se transforman en colores.
 
-@code{palette} es un vector de longitud tres con sus componentes tomando
+Hay dos formas de definir estas transformaciones.
+
+En primer lugar, @code{palette} puede ser un vector de longitud tres con sus componentes tomando
 valores enteros en el rango desde -36 a +36; cada valor es un 
 @'{@dotless{i}}ndice para seleccionar una f@'ormula que transforma los niveles
 num@'ericos en las componentes crom@'aticas rojo, verde y azul:
@@ -1737,14 +1741,32 @@ num@'ericos en las componentes crom@'aticas rojo, verde y azul:
 @end example
 los n@'umeros negativos se interpretan como colores invertidos
 de las componentes crom@'aticas.
-
 @code{palette = gray} y @code{palette = color} son atajos para
 @code{palette = [3,3,3]} y @code{palette = [7,5,15]}, respectivamente.
+
+En segundo lugar, @code{palette} puede ser una paleta de colores definida
+por el usuario. En este caso, el formato para crear una paleta de longitud
+@code{n} es @code{palette=[color_1, color_2, ..., color_n]}, 
+donde @code{color_i} es un color correctamente definido (v@'ease la opci@'on
+@code{color}), de tal manera que @code{color_1} se asigna al valor m@'as bajo
+del nivel y @code{color_n} al m@'as alto. El resto de colores se interpolan.
 
 Puesto que @'esta es una opci@'on global, su posici@'on dentro de la
 descripci@'on de la escena no reviste importancia.
 
 Ejemplos:
+
+Trabaja conjuntamente con la opci@'on @code{enhanced3d} en gr@'aficos 3D.
+
+@example
+(%i1) load(draw)$
+(%i2) draw3d(
+        enhanced3d = [z-x+2*y,x,y,z],
+        palette = [32, -8, 17],
+        explicit(20*exp(-x^2-y^2)-10,x,-3,3,y,-3,3))$
+@end example
+
+Tambi@'en trabaja con im@'agenes grises.
 
 @example
 (%i1) load(draw)$
@@ -1759,7 +1781,19 @@ Ejemplos:
              image(im,0,0,30,30))$
 @end example
 
-V@'ease tambi@'en @code{colorbox}.
+@code{palette} puede ser una paleta de colores definida
+por el usuario. En este ejemplo, valores bajos de @code{x}
+se colorean en rojo y altos en amarillo.
+
+@example
+(%i1) load(draw)$
+(%i2) draw3d(
+         palette = [red, blue, yellow],
+         enhanced3d = x,
+         explicit(x^2+y^2,x,-1,1,y,-1,1)) $
+@end example
+
+V@'ease tambi@'en @code{colorbox} y @code{enhanced3d}.
 @end defvr
 
 

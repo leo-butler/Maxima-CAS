@@ -1,6 +1,6 @@
 # -*-mode: tcl; fill-column: 75; tab-width: 8; coding: iso-latin-1-unix -*-
 #
-#       $Id: Plotconf.tcl,v 1.23 2009/06/06 09:43:57 villate Exp $
+#       $Id: Plotconf.tcl,v 1.26 2011/03/15 01:16:10 villate Exp $
 #
 ###### plotconf.tcl ######
 ############################################################
@@ -50,13 +50,22 @@ proc makeFrame { w type } {
     set dismiss [concat $dismiss "; clearLocal $win "]
     set mb [frame $w.menubar]
     pack $mb -fill x
-    button $mb.close -text [mc "Close"] -command $dismiss -font $buttonFont
-    button $mb.config -text [mc "Config"] -command "doConfig$type $win" -font $buttonFont
-    button $mb.replot -text [mc "Replot"] -command "replot$type $win" -font $buttonFont
-    button $mb.zoom -text [mc "Zoom"] -command "showZoom $w" -font $buttonFont
-    button $mb.save -text [mc "Save"] -command "mkPrintDialog .dial -canvas $c -buttonfont $buttonFont " -font $buttonFont
-    button $mb.help -text [mc "Help"] -command "doHelp$type $win" -font $buttonFont
-    pack $mb.close $mb.config $mb.replot $mb.zoom $mb.save -side left
+    button $mb.close -image ::img::close -text [mc "Close"] \
+        -command $dismiss -relief flat -width 30 -height 30
+    button $mb.config -image ::img::config -text [mc "Config"] \
+        -command "doConfig$type $win" -relief flat -width 30 -height 30
+    button $mb.replot -image ::img::replot -text [mc "Replot"] \
+        -command "replot$type $win" -relief flat -width 30 -height 30
+    button $mb.save  -image ::img::save -text [mc "Save"] \
+        -command "mkPrintDialog .dial -canvas $c -buttonfont $buttonFont " \
+        -relief flat -width 30 -height 30
+    button $mb.zoomin -image ::img::zoom-in -text [mc "Zoom in"] \
+        -command "doZoom $win 1" -relief flat -width 30 -height 30
+    button $mb.zoomout -image ::img::zoom-out -text [mc "Zoom out"] \
+        -command "doZoom $win -1" -relief flat -width 30 -height 30
+    button $mb.help -image ::img::help -text [mc "Help"] \
+        -command "doHelp$type $win" -relief flat -width 30 -height 30
+    pack $mb.close $mb.config $mb.replot $mb.save $mb.zoomin $mb.zoomout -side left
     pack $mb.help -side right
     scrollbar $w.hscroll -orient horiz -command "$c xview"
     scrollbar $w.vscroll -command "$c yview"
@@ -184,21 +193,12 @@ proc showPosition { win x y } {
     }
 }
 
-proc showZoom  { win } {
-    #  global c position
-    makeLocal $win c
-    $win.position config -text [mc "Click to Zoom\nShift+Click Unzoom"]
-
-    bind $c <1> "doZoom $win %x %y 1"
-    bind $c  <Shift-1> "doZoom $win %x %y -1"
-}
-
-proc doZoom { win x y direction } {
+proc doZoom { win direction } {
     set zf [oget $win zoomfactor]
     if { $direction < 0 } {
 	set zf 	"[expr {1/[lindex $zf 0]}] [expr {1/[lindex $zf 1]}]"
     }
-    eval doZoomXY $win $x $y $zf
+    eval doZoomXY $win $zf
 }
 
 
@@ -217,7 +217,7 @@ proc doZoom { win x y direction } {
 #----------------------------------------------------------------
 #
 
-proc doZoomXY { win x y facx facy } {
+proc doZoomXY { win facx facy } {
     if { [catch {
 	makeLocal $win c transform
     } ] } {
@@ -225,8 +225,8 @@ proc doZoomXY { win x y facx facy } {
 	return
     }
 
-    set x [$c canvasx $x]
-    set y [$c canvasy $y]
+    set x [$c canvasx [expr {[oget $win oldCwidth]/2.0}]]
+    set y [$c canvasy [expr {[oget $win oldCheight]/2.0}]]
 
     $c scale all $x $y $facx $facy
 
@@ -281,8 +281,7 @@ proc reConfigure { c width height  } {
     }
     set oldx [$c canvasx [expr {$oldCwidth/2.0}]]
     set oldy [$c canvasy [expr {$oldCheight/2.0}]]
-    doZoomXY $w [expr {$oldCwidth/2.0}] [expr {$oldCheight/2.0}] \
-	[expr {1.0*$width/$oldCwidth}] [expr {1.0*$height/$oldCheight}]
+    doZoomXY $w [expr {1.0*$width/$oldCwidth}] [expr {1.0*$height/$oldCheight}]
 
     scrollPointTo $c $oldx $oldy [expr {$width/2.0}] [expr {$height/2.0}]
     # update

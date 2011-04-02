@@ -1,6 +1,6 @@
 # -*-mode: tcl; fill-column: 75; tab-width: 8; coding: iso-latin-1-unix -*-
 #
-#       $Id: RunMaxima.tcl,v 1.32 2010/04/11 18:50:31 villate Exp $
+#       $Id: RunMaxima.tcl,v 1.36 2011/03/20 23:15:48 villate Exp $
 #
 proc textWindowWidth { w } {
     set font [$w cget -font]
@@ -8,6 +8,11 @@ proc textWindowWidth { w } {
     return [expr round(floor([winfo width $w]*20.0/$w20))]
 }
 
+proc textWindowHeight { w } {
+    set font [$w cget -font]
+    set h1 [font metrics [$w cget -font] -displayof $w -linespace]
+    return [expr round([winfo height $w]/$h1)]
+}
 
 proc resizeMaxima { win width height } {
     linkLocal $win pid
@@ -17,11 +22,11 @@ proc resizeMaxima { win width height } {
     }
 }
 
-proc packBoth {fr browser} {
-    pack forget $fr $browser
-    pack $fr -expand 1 -fill both -side top
-    pack $browser -side bottom -expand 1 -fill both
-}
+# proc packBoth {fr browser} {
+#     pack forget $fr $browser
+#     pack $fr -expand 1 -fill both -side top
+#     pack $browser -side bottom -expand 1 -fill both
+# }
 
 proc CMeval { w } {
     linkLocal $w inputs
@@ -184,9 +189,6 @@ proc closeMaxima { win } {
 }
 
 
-
-
-
 #
 #-----------------------------------------------------------------
 #
@@ -232,11 +234,11 @@ proc maximaFilter { win sock } {
 	set it $res
     }
     # puts "it=<$it>"
-    if { [regexp -indices "\{plot\[d23]\[fd]" $it inds] } {
+    if { [regexp -indices "\{(plotdf|plot2d|plot3d|scene)" $it inds] } {
 	set plotPending [string range $it [lindex $inds 0] end]
 	set it ""
 	if { [regexp {\(\(C|%i\)[0-9]+\) $} $it ff] } {
-	    regexp "\{plot\[d23]\[df].*\}" $ff it
+	    regexp "\{(plotdf|plot2d|plot3d|scene).*\}" $ff it
 	    #	set it $ff
 	}
     }
@@ -504,9 +506,9 @@ proc doShowPlot { w data } {
     global maxima_default
 
     #puts data=$data
-    set name [plotWindowName $w]
     set command [lindex [lindex $data 0] 0]
-    if { "$command" == "plotdf" } {
+    set name [plotWindowName $w $command]
+    if { "$command" == "plotdf" || $command == "scene" } {
 	set command [lindex $data 0]
     } else {
 	lappend command -data [lindex $data 0]

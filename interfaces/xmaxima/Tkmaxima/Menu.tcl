@@ -1,7 +1,19 @@
 # -*-mode: tcl; fill-column: 75; tab-width: 8; coding: iso-latin-1-unix -*-
 #
-#       $Id: Menu.tcl,v 1.33 2010/04/12 17:49:34 l_butler Exp $
+#       $Id: Menu.tcl,v 1.37 2011/03/22 01:23:04 villate Exp $
 #
+
+proc zoomConsole {f} {
+    global maxima_default maxima_priv
+    set ffamily [lindex $maxima_default(ConsoleFont) 0]
+    set fsize [lindex $maxima_default(ConsoleFont) 1]
+    set fsize [expr round($fsize*pow(1.2,$f))]
+    font configure ConsoleFont -family $ffamily -size $fsize
+    set text $maxima_priv(cConsoleText)
+    resizeSubPlotWindows $text [winfo width $text] [winfo height $text]
+    resizeMaxima $text [winfo width $text] [winfo height $text]
+    set maxima_default(ConsoleFont) [list $ffamily $fsize]
+}
 
 proc pMAXSaveTexToFile {text} {
     set file [tide_savefile [M [mc "Save to a file"]] "" *.out]
@@ -15,6 +27,38 @@ proc pMAXSaveTexToFile {text} {
     }
 }
 
+proc vMAXAddBrowserMenu {win} {
+    global maxima_priv maxima_default
+    global tcl_platform env
+
+    if {[winfo exists .browser.menu]} {destroy .browser.menu}
+    set bm .browser.menu
+    menu $bm
+    .browser configure -menu .browser.menu
+    foreach m {file edit options help} {
+        $bm add cascade -label [string totitle $m] -underline 0 \
+            -menu [menu $bm.$m -tearoff 0]
+    }
+    $bm.file add command -label [mc Reload] -underline 0 \
+	-command "OpenMathOpenUrl \[oget \[omPanel $win\] location\] -reload 1 \
+		      -commandpanel \[omPanel $win\]"
+    $bm.file add command -label [mc Interrupt] -underline 0 \
+        -command "omDoInterrupt \[oget \[omPanel $win\] textwin\]"
+    $bm.file add command -label [mc Abort] -underline 0 \
+	-command "omDoAbort \[oget \[omPanel $win\] textwin\]"
+    $bm.file add command -label [mc Stop] -underline 1 \
+	-command "omDoStop \[oget \[omPanel $win\] textwin\]"
+    $bm.file add command -label [mc Forget] -underline 0 \
+        -command  "forgetCurrent \[omPanel $win\]"
+    $bm.file add command -label [mc Save] -underline 0\
+	-command "pMAXSaveTexToFile \[oget \[omPanel $win\] textwin\]"
+    $bm.file add separator
+    $bm.file add command -label [mc {Close}] -underline 0 \
+        -command "destroy $win"
+    $bm.options add command -label [mc {Fonts}] -underline 0 \
+        -command {fontDialog .fontdialog}
+
+}
 
 proc vMAXAddSystemMenu {fr text} {
     global maxima_priv maxima_default
@@ -22,12 +66,12 @@ proc vMAXAddSystemMenu {fr text} {
 
     set win $fr.textcommands
 
-    # Build a system menubutton
+    # Build a menubar
     if {[winfo exists .menu]} {destroy .menu}
     menu .menu
     . configure -menu .menu
 
-    # Add a File menubutton
+    # Add a File menu
     set m [menu .menu.file -tearoff 0]
     .menu add cascade -label [mc "File"] -menu $m -underline 0
 
@@ -158,16 +202,6 @@ proc vMAXAddSystemMenu {fr text} {
     set m [menu .menu.options -tearoff 0]
     .menu add cascade -label [mc "Options"] -menu $m -underline 0
 
-    $m add command -underline 0 -label [mc "Toggle Browser Visibility"] \
-	-command {
-	    #mike FIXME: hard coding
-	    if { [catch { pack info .browser }] } {
-		packBoth .maxima .browser
-	    } else {
-		pack forget .browser
-	    }
-	}
-
     $m add separator
     set pm [menu $m.plot]
     $m add cascade -label [mc "Plot Windows"] -menu $pm
@@ -177,10 +211,10 @@ proc vMAXAddSystemMenu {fr text} {
 	    -value $elt -command [list SetPlotFormat $text ]
     }
 
-    $m add separator
-    $m add command -underline 0 \
-	-label [mc "Preferences"] \
-	-command {fontDialog .preferences}
+    # $m add separator
+    # $m add command -underline 0 \
+    #     -label [mc "Preferences"] \
+    #     -command {fontDialog .preferences}
     if {[info commands console] == "console" } {
 	$m add sep
 	$m add command -underline 0 -label [mc "Show Tcl Console"] \
@@ -305,8 +339,18 @@ proc vMAXAddSystemMenu {fr text} {
     rename vMAXAddSystemMenu ""
     # vMAXSystemMenuHandlers $text $event
 
-    # Backwards compatability
+    # Backwards compatibility
     return $win
+}
+
+proc vMAXAddSystemBar {} {
+    set tb [frame .toolbar -borderwidth 1]
+    pack $tb -side top -fill x
+    button $tb.zoomin -image ::img::zoom-in -text [mc "Zoom in"] \
+        -command "zoomConsole 1" -relief flat -width 30 -height 30
+    button $tb.zoomout -image ::img::zoom-out -text [mc "Zoom out"] \
+        -command "zoomConsole -1" -relief flat -width 30 -height 30
+    pack $tb.zoomin $tb.zoomout -side left
 }
 
 proc SetPlotFormat { text } {

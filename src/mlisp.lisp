@@ -697,7 +697,7 @@ wrapper for this."
 ;;     ALSO, THIS MAKES `KILL' KILL DEFSTRUCTS.
 ;; (4) @ EVALUATES LHS AND QUOTES RHS
 ;; (5) $STRUCTURES INFOLIST
-;; (6) LBP = 190, RBP = 191 (HIGHER PRECEDENCE, LEFT-ASSOCIATIVE)
+;; (6) LBP = 200, RBP = 201 (HIGHER PRECEDENCE, LEFT-ASSOCIATIVE)
 ;; (7) A@B => A@B WHEN B IS NOT BOUND TO SOMETHING OTHER THAN ITSELF
 ;; (8) DISALLOW @ APPLIED TO EXPRESSIONS W/ OPERATOR NOT DECLARED BY DEFSTRUCT
 ;; (9) MAKE RECORD AND LIST ASSIGNMENT FUNCTIONS LISP FUNCTIONS (STRIP OFF $ FROM NAME)
@@ -772,14 +772,20 @@ wrapper for this."
     (if (eq e b) L e)))
 
 (defun $@-function (in fn)
-  (if (not (listp in))(list '(%@) in fn) ;noun form
-    (let* ((index  
-	    (if (integerp fn) fn ;;; allow foo@3, also
-	      (position fn (get (caar in) 'defstruct-template))))) ;field->integer
-    (if (null index) (merror (intl:gettext "@: no such field: ~M @ ~M") in fn))
-    (if  (< 0 index (length in))
-	(elt in index) (merror (intl:gettext "@: no such field: ~M @ ~M") in fn))
-   )))
+  (cond
+    ((not (listp in))
+     (list '(%@) in fn)) ;; noun form
+    ((get (caar in) 'defstruct-template)
+     (let*
+       ((index
+         (if (integerp fn) fn ;; allow foo@3
+             (position fn (get (caar in) 'defstruct-template))))) ;; field->integer
+       (if (null index) (merror (intl:gettext "@: no such field: ~M @ ~M") in fn))
+       (if  (< 0 index (length in))
+         (elt in index)
+         (merror (intl:gettext "@: no such field: ~M @ ~M") in fn))))
+    (t
+      (list '($@) in fn))))
 
 (defun dimension-defstruct (form result)
   (let
@@ -847,7 +853,7 @@ wrapper for this."
 
           `(,(car recordname) ,@(mapcar #'meval (cdr recordname))))))))
 
-;; Following property assignments comprise the Lisp code equivalent to infix("@", 190, 191)
+;; Following property assignments comprise the Lisp code equivalent to infix("@", 200, 201)
 
 (defprop $@ %@ verb) 
 (defprop $@ "@" op) 
@@ -858,8 +864,8 @@ wrapper for this."
 (defprop $@ dimension-infix dimension) 
 (defprop $@ (#\@) dissym) 
 (defprop $@ msize-infix grind) 
-(defprop $@ 190 lbp) 
-(defprop $@ 191 rbp) 
+(defprop $@ 200 lbp) 
+(defprop $@ 201 rbp) 
 (defprop $@ parse-infix led) 
 (defprop %@ dimension-infix dimension) 
 (defprop %@ (#\@) dissym) 
@@ -1126,8 +1132,8 @@ wrapper for this."
 		   $parsewindow $ttyintnum) :test #'eq)
 	 (if (not (fixnump y)) (mseterr x y))
          (if (eq x '$linel)
-             (cond ((not (and (> y 0)       ; at least one char per line
-                              (< y 10001))) ; arbitrary chosen big value
+             (cond ((not (and (> y 0)         ; at least one char per line
+                              (< y 1000001))) ; arbitrary chosen big value
                     (mseterr x y))
                    (t
                     (setq linel y))))
@@ -1140,8 +1146,8 @@ wrapper for this."
 	((eq x 'modulus)
 	 (cond ((null y))
 	       ((integerp y)
-		(if (or (not (primep y)) (member y '(1 0 -1)))
-		    (mtell (intl:gettext "warning: assigning ~:M, a non-prime, to 'modulus'") y)))
+	        (if (or (not (primep y)) (member y '(1 0 -1)))
+	            (mtell (intl:gettext "warning: assigning ~:M, a non-prime, to 'modulus'~&") y)))
 	       (t (mseterr x y))))
 	((eq x '$setcheck)
 	 (if (not (or (member y '($all t nil) :test #'eq) ($listp y))) (mseterr x y)))

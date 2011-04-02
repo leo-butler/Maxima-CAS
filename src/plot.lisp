@@ -708,11 +708,20 @@ sin(y)*(10.0+6*cos(x)),
          (let* (($ratprint nil)
                 ($numer t)
                 (*nounsflag* t)
-                (result (maybe-realpart (mapply ',expr (list ,@gensym-args) t))))
-           ;; Just always try to convert the result to a float, which
-           ;; handles things like $%pi.  See also BUG #2880115
-           ;; http://sourceforge.net/tracker/?func=detail&atid=104933&aid=2880115&group_id=4933
-           (,float-fun result)))
+		(errorsw t)
+		(errcatch t))
+	   (declare (special errcatch))
+	   ;; Just always try to convert the result to a float,
+	   ;; which handles things like $%pi.  See also BUG
+	   ;; #2880115
+	   ;; http://sourceforge.net/tracker/?func=detail&atid=104933&aid=2880115&group_id=4933
+	   ;;
+	   ;; Should we use HANDLER-CASE like we do above in
+	   ;; %coerce-float-fun?  Seems not necessary for what we want
+	   ;; to do.
+	   (catch 'errorsw
+	     (,float-fun
+	      (maybe-realpart (mapply ',expr (list ,@gensym-args) t))))))
       'function)))
 
 ;; Same as above, but call APPLY instead of MAPPLY.
@@ -970,7 +979,7 @@ sin(y)*(10.0+6*cos(x)),
            ;; 100*flonum-epsilon is ok.
            (let ((diff (- (abs quad)
                           (* eps (- quad-b (min f-a f-a1 f-b f-b1 f-c)))))
-                 (delta (* 100 flonum-epsilon)))
+                 (delta (* 150 flonum-epsilon)))
              (<= diff delta))))
         (t
          ;; Something is not a number, so assume it's not smooth enough.

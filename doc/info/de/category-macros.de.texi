@@ -5,6 +5,7 @@
 @c Original    : category-macros.texi revision 1.4
 @c Translation : Dr. Dieter Kaiser
 @c Date        : 15.10.2010
+@c Revision    : 27.03.2011
 @c 
 @c This file is part of Maxima -- GPL CAS based on DOE-MACSYMA
 @c -----------------------------------------------------------------------------
@@ -42,6 +43,16 @@
 @code{\nodename\}
 @end ifnothtml
 @end macro
+
+@macro mxref {nodename, text}
+@ifhtml
+@code{@ref{\nodename\, \text\}}
+@end ifhtml
+@ifnothtml
+@code{\text\}
+@end ifnothtml
+@end macro
+
 
 @macro mrefdot {nodename}
 @ifhtml
@@ -93,7 +104,9 @@
              an-ge-ge-ben
              an-ge-ge-ben-er
              an-ge-wen-det
+             Ar-gu-ment
              Ar-gu-men-ten
+             a-rith-me-ti-schen
              auf-ge-ru-fen
              Aus-drucks
              aus-ge-wer-tet
@@ -105,27 +118,39 @@
              Dol-lar-zei-chen
              Ei-gen-schafts-lis-te
              ein-ge-schlos-sen
+             E-le-men-te
              ent-hal-ten
              Er-geb-nis
+             Ex-po-nen-tial-funk-tion
+             Fra-ge-zei-chen
              Funk-tion
              ge-kenn-zeich-net
              ge-ne-riert
              ge-spei-chert
              Glei-chung
+             Glei-chung-en
+             Gleit-kom-ma-zah-len
              Glo-ba-le
              Gnuplot
              Gra-fik-for-mat
              Gra-fik-kom-man-dos
+             Grenz-wer-te
+             Hilfs-pro-gram-me
              In-for-ma-tio-nen
              In-te-gra-tions-in-ter-valls
              Iso-li-nien
              ka-no-ni-scher
              Kon-stan-te
              Ko-or-di-na-ten-sys-tem
+             letz-te
+             ma-the-ma-ti-sche
              Maxima
              Mgnuplot
+             Mus-ter-er-ken-nungs-ver-fah-ren
              O-pe-ra-tor 
-             O-pe-ra-to-ren  
+             O-pe-ra-to-ren
+             Op-tions-va-ri-ablen
+             Re-gel-pa-ket
              Rei-hen-ent-wick-lung
              Ska-lar-pro-dukt    
              Sei-ten-ef-fek-te
@@ -134,6 +159,7 @@
              Trans-po-nier-ung
              un-ge-ra-de
              ver-ar-bei-tet
+             Ver-ar-bei-tung
              ver-ein-fach-en
              Ver-ein-fach-ung
              ver-ein-facht
@@ -144,6 +170,7 @@
              wei-ter-hin
              wer-ten
              wer-tet
+             Wink-el-funk-tio-nen
              wxMaxima
              Xmaxima
              Zei-chen

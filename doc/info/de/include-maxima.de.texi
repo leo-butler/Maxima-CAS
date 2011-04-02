@@ -5,6 +5,7 @@
 @c Original    : include-maxima.texi.in revision 1.12
 @c Translation : Dr. Dieter Kaiser
 @c Date        : 15.10.2010
+@c Revision    : 27.03.2011
 @c 
 @c This file contains the contents, a detailed node listing and inclucdes
 @c all files for the documentation.
@@ -22,7 +23,6 @@
 @c (texinfo-multiple-files-update "maxima.texi" t t)
 
 @c texinfo-multiple-files-update will delete the detailed node listing!
-
 
 @c %**start of header
 @synindex vr fn
@@ -58,48 +58,30 @@ END-INFO-DIR-ENTRY
 @page
 @vskip 0pt plus 1filll
 
-@c Maxima is a computer algebra system, implemented in Lisp.
-
-@c Maxima is derived from the Macsyma system,
-@c developed at MIT in the years 1968 through 1982 as part of Project MAC.
-@c MIT turned over a copy of the Macsyma source code to the Department of Energy
-@c in 1982; that version is now known as DOE Macsyma.
-@c A copy of DOE Macsyma was maintained by Professor William F. Schelter
-@c of the University of Texas from 1982 until his death in 2001.
-@c In 1998, Schelter obtained permission from the Department of Energy
-@c to release the DOE Macsyma source code under the GNU Public License,
-@c and in 2000 he initiated the Maxima project at SourceForge to maintain
-@c and develop DOE Macsyma, now called Maxima.
-
-Maxima ist ein Computer Algebra System, das in Lisp programmiert ist.
+Maxima ist ein Computeralgebrasystem, das in Lisp programmiert ist.
 
 Maxima basiert auf Macsyma, das am MIT (Massachusetts Institute of Technology) 
-in den Jahren 1968 bis 1982 als Teil des Projektes MAC entwickelt wurde. Das 
+in den Jahren 1968 bis 1982 als Teil des Projektes MAC entwickelt wurde.  Das 
 Department of Energy (DOE) erhielt im Jahr 1982 den Quellcode vom MIT; diese 
-Version ist als DOE Macsyma bekannt. Professor William F. Schelter von der 
+Version ist als DOE Macsyma bekannt.  Professor William F. Schelter von der 
 University of Texas hat von 1982 bis zu seinem Tod im Jahr 2001 eine Kopie 
-von DOE Macsyma gepflegt. Im Jahr 1998 erhielt Schelter vom Department of Energy 
-die Erlaubnis, den Quellcode von DOE Macsyma unter der GNU Public Lizenz zu 
-ver@"offentlichen. Im Jahr 2000 initiierte Schelter das Maxima Projekt bei 
+von DOE Macsyma gepflegt.  Im Jahr 1998 erhielt Schelter vom Department of
+Energy die Erlaubnis, den Quellcode von DOE Macsyma unter der GNU Public Lizenz
+zu ver@"offentlichen.  Im Jahr 2000 initiierte Schelter das Maxima Projekt bei
 SourceForge, um DOE Macsyma, heute Maxima genannt, weiter zu entwickeln.
 @sp 2
 
 Dieses Dokument ist eine @"Ubersetzung des englischen Maxima Manuals in 
-die deutsche Sprache. Das Manual ist noch nicht vollst@"andig @"ubersetzt. 
+die deutsche Sprache.  Das Manual ist noch nicht vollst@"andig @"ubersetzt.
 Damit keine Inhalte fehlen, sind die nicht @"ubersetzten Teile in der englischen 
-Sprache eingef@"ugt. Bis auf wenige Ausnahmen sind die Kapitel 1 bis 13, 18 und 
-19 vollst@"andig und Teile der Kapitel 15, 16 und 25 @"ubersetzt.
+Sprache eingef@"ugt.  Dieses Manual ist nicht nur eine @"Ubersetzung, sondern
+auch der Versuch, die Inhalte neu zu organisieren und zu @"uberarbeiten.  Ziel
+ist, ein besser lesbares und @"ubersichtlicheres Manual zu erhalten.  Diese 
+Arbeit soll auch in das englische Original einflie@ss{}en.  Die jeweils aktuelle
+Version des Manuals ist unter 
+@url{http://crategus.users.sourceforge.net/maxima.html} verf@"ugbar.
 
-Dieses Manual ist nicht nur eine @"Ubersetzung, sondern auch der Versuch, die
-Inhalte neu zu organisieren und zu @"uberarbeiten. Ziel ist ein besser lesbares
-und @"ubersichtlicheres Manual zu erhalten. Diese Arbeit soll auch in das 
-englische Original einflie@ss{}en.
-
-Die Arbeit an dem Manual ist noch nicht abgeschlossen. Die jeweils aktuelle 
-Version ist unter @url{http://crategus.users.sourceforge.net/maxima.html} 
-verf@"ugbar.
-
-Dr. Dieter Kaiser, 12.12.2010
+Dr. Dieter Kaiser, 14.02.2011
 @end titlepage
 
 @summarycontents
@@ -109,47 +91,30 @@ Dr. Dieter Kaiser, 12.12.2010
 @node Top, Einf@"uhrung in Maxima, (dir), (dir)
 @top
 
-@c Maxima is a computer algebra system, implemented in Lisp.
-
-@c Maxima is derived from the Macsyma system,
-@c developed at MIT in the years 1968 through 1982 as part of Project MAC.
-@c MIT turned over a copy of the Macsyma source code to the Department of Energy
-@c in 1982; that version is now known as DOE Macsyma.
-@c A copy of DOE Macsyma was maintained by Professor William F. Schelter
-@c of the University of Texas from 1982 until his death in 2001.
-@c In 1998, Schelter obtained permission from the Department of Energy
-@c to release the DOE Macsyma source code under the GNU Public License,
-@c and in 2000 he initiated the Maxima project at SourceForge to maintain
-@c and develop DOE Macsyma, now called Maxima.
-
-Maxima ist ein Computer Algebra System, das in Lisp programmiert ist.
+Maxima ist ein Computeralgebrasystem, das in Lisp programmiert ist.
 
 Maxima basiert auf Macsyma, das am MIT (Massachusetts Institute of Technology) 
-in den Jahren 1968 bis 1982 als Teil des Projektes MAC entwickelt wurde. Das 
+in den Jahren 1968 bis 1982 als Teil des Projektes MAC entwickelt wurde.  Das 
 Department of Energy (DOE) erhielt im Jahr 1982 den Quellcode vom MIT; diese 
-Version ist als DOE Macsyma bekannt. Professor William F. Schelter von der 
+Version ist als DOE Macsyma bekannt.  Professor William F. Schelter von der 
 University of Texas hat von 1982 bis zu seinem Tod im Jahr 2001 eine Kopie 
-von DOE Macsyma gepflegt. Im Jahr 1998 erhielt Schelter vom Department of Energy 
-die Erlaubnis, den Quellcode von DOE Macsyma unter der GNU Public Lizenz zu 
-ver@"offentlichen. Im Jahr 2000 initiierte Schelter das Maxima Projekt bei 
+von DOE Macsyma gepflegt.  Im Jahr 1998 erhielt Schelter vom Department of
+Energy die Erlaubnis, den Quellcode von DOE Macsyma unter der GNU Public Lizenz
+zu ver@"offentlichen.  Im Jahr 2000 initiierte Schelter das Maxima Projekt bei
 SourceForge, um DOE Macsyma, heute Maxima genannt, weiter zu entwickeln.
 @sp 2
 
 Dieses Dokument ist eine @"Ubersetzung des englischen Maxima Manuals in 
-die deutsche Sprache. Das Manual ist noch nicht vollst@"andig @"ubersetzt. 
+die deutsche Sprache.  Das Manual ist noch nicht vollst@"andig @"ubersetzt.
 Damit keine Inhalte fehlen, sind die nicht @"ubersetzten Teile in der englischen 
-Sprache eingef@"ugt.
+Sprache eingef@"ugt.  Dieses Manual ist nicht nur eine @"Ubersetzung, sondern
+auch der Versuch, die Inhalte neu zu organisieren und zu @"uberarbeiten.  Ziel
+ist, ein besser lesbares und @"ubersichtlicheres Manual zu erhalten.  Diese 
+Arbeit soll auch in das englische Original einflie@ss{}en.  Die jeweils aktuelle
+Version des Manuals ist unter
+@url{http://crategus.users.sourceforge.net/maxima.html} verf@"ugbar.
 
-Dieses Manual ist nicht nur eine @"Ubersetzung, sondern auch der Versuch, die
-Inhalte neu zu organisieren und zu @"uberarbeiten. Ziel ist ein besser lesbares
-und @"ubersichtlicheres Manual zu erhalten. Diese Arbeit soll auch in das 
-englische Original einflie@ss{}en.
-
-Die Arbeit an dem Manual ist noch nicht abgeschlossen. Die jeweils aktuelle 
-Version ist unter @url{http://crategus.users.sourceforge.net/maxima.html} 
-verf@"ugbar.
-
-Dr. Dieter Kaiser, 29.12.2010
+Dr. Dieter Kaiser, 14.02.2011
 @sp 2
 @end ifnottex
 
@@ -162,49 +127,53 @@ Dr. Dieter Kaiser, 29.12.2010
 * Einf@"uhrung in Maxima::      Erste Beispiele mit Maxima.
 * Programmfehler::              Programmfehler finden und berichten.
 * Hilfe::                       Hilfe in einer Maxima-Sitzung erhalten.
-* Kommandozeile::               Syntax der Kommandozeile.
-* Datentypen und -strukturen::  Ganze, rationale und Gleitkommazahlen, Konstante,
-                                Zeichenketten, Arrays, Listen ...
+* Kommandozeile::               Eingaben und Ausgaben der Konsole.
+* Datentypen und -strukturen::  Ganze, rationale und Gleitkommazahlen,
+                                Konstante, Zeichenketten, Listen und Arrays.
 * Ausdr@"ucke::                 Ausdr@"ucke in Maxima.
 * Operatoren::                  Operatoren in Maxima.
 * Auswertung::                  Auswertung von Ausdr@"ucken.
 * Vereinfachung::               Vereinfachung von Ausdr@"ucken.
 * Mathematische Funktionen::    Mathematische Funktionen in Maxima.
-* Maximas Datenbank::           Deklarationen, Kontexte, Fakten, Eigenschaften.
+* Maximas Datenbank::           Deklarationen, Kontexte, Fakten und
+                                Eigenschaften.
 * Grafische Darstellung::       2D and 3D grafische Ausgabe.
-* Eingabe und Ausgabe::         Lesen und schreiben von Dateien mit Maxima.
+* Eingabe und Ausgabe::         Lesen und Schreiben von Dateien mit Maxima.
 @sp 1
 
 Spezifische Gebiete der Mathematik
 
-* Mengen::                      Mengen.
-* Summen Produkte und Reihen::  Summen, Produkte, Tayolorreihen, Poisson Reihen.
+* Mengen::                      (Englisch) Methoden f@"ur Mengen.
+* Summen Produkte und Reihen::  Summen, Produkte, Taylorreihen und
+                                Poissonreihen.
 * Analysis::                    Grenzwerte, Differentiation, Integration,
                                 Differentialgleichungen.
-* Polynome::                    Standard forms for polynomials, and
+* Polynome::                    (Englisch) Standard forms for polynomials, and
                                 functions operating on them.
 * Gleichungen::                 L@"osen von Gleichungen.
 * Lineare Algebra::             Matrizen und Vektoren.
-* Tensoren::                    Methoden der Tensorrechnung.
-* Spezielle Funktionen::        Spezielle Mathematische Funktionen.
+* Tensoren::                    (Englisch) Methoden der Tensorrechnung.
+* Spezielle Funktionen::        (Englisch) Spezielle Mathematische Funktionen.
 * Zahlentheorie::               Funktionen der Zahlentheorie.
-* Fouriertransformationen::     Fouriertransformationen und -reihen.
+* Fouriertransformationen::     (Englisch) Fouriertransformationen und
+                                Fourierreihen.
 @sp 1
 
 Fortgeschrittene M@"oglichkeiten und Programmierung
 
-* Regeln und Muster::           User defined pattern matching and
-                                simplification rules.
-* Funktionsdefinitionen::       Definition von Funktionen.
+* Muster und Regeln::           Nutzerdefinierte Muster und Regeln
+                                f@"ur die Vereinfachung.
+* Funktionsdefinitionen::       Definition von Maxima-Funktionen.
 * Laufzeitumgebung::            Anpassung der Maxima-Umgebung.
-* Programmierung::              Maxima Programme.
-* @"Ubersetzer::                Maxima Programme @"ubersetzen und komplieren.
+* Programmierung::              Maxima-Programme schreiben.
+* @"Ubersetzer::                Maxima-Programme @"ubersetzen und komplieren.
 * Fehlersuche::                 Fehlersuche in Programmen.
 * Verschiedenes::               Sonstige Funktionen und Variablen.
 @sp 1
  
-Zus@"atzliche Packete
+Zus@"atzliche Pakete (Englisch)
 
+* abs_integrate::               Integrals for the functions abs, signum, @dots{}
 * affine::                      
 * asympa::                      Asymptotic analysis package
 * augmented_lagrangian::        augmented_lagrangian package.
@@ -278,14 +247,11 @@ Kommandozeile
 * Funktionen und Variablen der Ausgabe::
 
 Datentypen und -strukturen
-* Einf@"uhrung in Maxima Zahlen::
+* Zahlen::
 * Zeichenketten::
-* Funktionen und Variablen f@"ur Zahlen::
-* Funktionen und Variablen f@"ur Zeichenketten::
 * Funktionen und Variablen f@"ur Konstante::
-* Funktionen und Variablen f@"ur Arrays::
-* Einf@"uhrung in Listen::
-* Funktionen und Variablen f@"ur Listen::
+* Listen::
+* Arrays::
 
 Ausdr@"ucke
 * Einf@"uhrung in Ausdr@"ucke::
@@ -302,6 +268,7 @@ Operatoren
 * Nutzerdefinierte Operatoren::
 
 Auswertung
+* Einf@"uhrung in die Auswertung::
 * Funktionen und Variablen f@"ur die Auswertung::
 
 Vereinfachung
@@ -312,8 +279,7 @@ Mathematische Funktionen
 * Funktionen f@"ur Zahlen::
 * Funktionen f@"ur komplexe Zahlen::
 * Funktionen der Kombinatorik::
-* Algebraische Funktionen::
-* Exponential- und Logarithmusfunktion::
+* Wurzel-@comma{} Exponential- und Logarithmusfunktion::
 * Winkelfunktionen::
 * Einf@"uhrung in Winkelfunktionen::
 * Funktionen und Variablen f@"ur Winkelfunktionen::
@@ -341,6 +307,7 @@ Eingabe und Ausgabe
 * Dateien::
 * Funktionen und Variablen f@"ur die Eingabe und Ausgabe::
 * Funktionen und Variablen f@"ur die Tex-Ausgabe::
+* Funktionen und Variablen f@"ur die Fortran-Ausgabe::
 
 Mengen
 * Introduction to Sets::
@@ -385,16 +352,14 @@ Zahlentheorie
 * Funktionen und Variablen der Zahlentheorie::
 
 Spezielle Funktionen
-* Einf@"uhrung f@"ur spezielle Funktionen:: 
-* Besselfunktionen::
-* Airyfunktionen::
-* Struvefunktionen::
+* Einf@"uhrung f@"ur spezielle Funktionen::
+* Besselfunktionen und verwandte Funktionen::
 * Gammafunktionen und verwandte Funktionen::
 * Exponentielle Integrale::
 * Fehlerfunktionen::
 * Elliptische Funktionen und Integrale::
 * Hypergeometrische Funktionen::
-* Funktionen und Variablen f@"ur spezielle Funktionen::  
+* Funktionen und Variablen f@"ur spezielle Funktionen::
 
 Fouriertransformationen
 * Introduction to fast Fourier transform::     
@@ -407,9 +372,9 @@ Laufzeitumgebung
 * Interrupts::
 * Funktionen und Variablen der Laufzeitumgebung::
 
-Regeln und Muster
-* Introduction to Rules and Patterns::
-* Functions and Variables for Rules and Patterns::
+Muster und Regeln
+* Einf@"uhrung in Muster und Regeln::
+* Funktionen und Variablen f@"ur Muster und Regeln::
 
 Funktionsdefinitionen
 * Einf@"uhrung in Funktionsdefinitionen::
@@ -435,6 +400,10 @@ Verschiedenes
 * Einf@"uhrung in Verschiedenes::
 * Share-Pakete::
 * Funktionen und Variablen f@"ur Verschiedenes::
+
+abs_integrate
+* Introduction to abs_integrate::
+* Functions and Variables for abs_integrate::
 
 affine
 * Introduction to Affine::
@@ -640,7 +609,9 @@ Glossar
 @node Datentypen und -strukturen, Ausdr@"ucke, Kommandozeile, Top
 @chapter Datentypen und -strukturen
 @include DataTypes.de.texi
+@include Constants.de.texi
 @include Lists.de.texi
+@include Arrays.de.texi
 
 @node Ausdr@"ucke, Operatoren, Datentypen und -strukturen, Top
 @chapter Ausdr@"ucke
@@ -724,15 +695,15 @@ Glossar
 @c @chapter Number Theory
 @c @include Number.texi
 
-@node Laufzeitumgebung, Regeln und Muster, Fouriertransformationen, Top
+@node Laufzeitumgebung, Muster und Regeln, Fouriertransformationen, Top
 @chapter Laufzeitumgebung
 @include Runtime.de.texi
 
-@node Regeln und Muster, Funktionsdefinitionen, Laufzeitumgebung, Top
-@chapter Regeln und Muster
+@node Muster und Regeln, Funktionsdefinitionen, Laufzeitumgebung, Top
+@chapter Muster und Regeln
 @include Rules.de.texi
 
-@node Funktionsdefinitionen, Programmierung, Regeln und Muster, Top
+@node Funktionsdefinitionen, Programmierung, Muster und Regeln, Top
 @chapter Funktionsdefinitionen
 @include Function.de.texi
 
@@ -748,13 +719,17 @@ Glossar
 @chapter Fehlersuche
 @include Debugging.de.texi
 
-@node Verschiedenes, affine, Fehlersuche, Top
+@node Verschiedenes, abs_integrate, Fehlersuche, Top
 @chapter Verschiedenes
 @include Miscellaneous.de.texi
 
 @c --- LOAD ADDITIONAL PACKAGES ------------------------------------------------
 
-@node affine, asympa, Verschiedenes, Top
+@node abs_integrate, affine, Verschiedenes, Top
+@chapter abs_integrate
+@include abs_integrate.de.texi
+
+@node affine, asympa, abs_integrate, Top
 @chapter affine
 @include affine.de.texi
 
@@ -929,5 +904,5 @@ Glossar
 @node Index der Variablen und Funktionen, , Glossar, Top
 @include Indices.de.texi
 
-@c end includes
+@c --- End of file include-maxima.de.texi --------------------------------------
 

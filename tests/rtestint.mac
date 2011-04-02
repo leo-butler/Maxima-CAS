@@ -981,8 +981,11 @@ ratsimp(integrate(1/(sin(x-3)^2+1),x,3,11));
 (atan(sqrt(2)*sin(8)/cos(8))+3*%pi)/sqrt(2);
 
 /* defint log(sqrt(q^2-1)+1) asks about YX - ID: 924868 */
-ratsimp(integrate( log(sqrt(q^2-1)+1),q,0,1));
--((4*asinh(1)+(2-sqrt(2))*%i*%pi+(-2^(3/2)))/2^(3/2));
+integrate( log(sqrt(q^2-1)+1),q,0,1);
+'integrate( log(sqrt(q^2-1)+1),q,0,1);
+/*  should be 
+ *  ((4*asinh(1)+(2-sqrt(2))*%i*%pi+(-2^(3/2)))/2^(3/2));
+ */
 
 /* Bug 1748168 */
 integrate(1/(2+cos(x)),x,-%pi/2,%pi/2);
@@ -1044,7 +1047,7 @@ integrate(1/cosh(x/a)^2,x,-inf,inf);
 
 /* [ 1860487 ] MONSTERTRIG endless recursion */
 integrate (x*(cos(2*x) + sin(x)), x);
-(2*x*sin(2*x)+cos(2*x)+4*sin(x)-4*x*cos(x))/4;
+(2*x*sin(2*x)+cos(2*x))/4+sin(x)-x*cos(x);
 
 /* [ 1631094 ] integrate(sin(n*x)*x, x) => linear time when n is an integer */
 integrate(sin(1000000000*x)*x, x);
@@ -1340,3 +1343,15 @@ integrate(x^2*exp(x)/(1+exp(x))^2, x, minf, inf);
 /* integrate(abs(sin(x)),x,0,2*%pi) wrong result - ID: 3165872 */
 integrate(abs(sin(x)),x,0,2*%pi);
 'integrate(abs(sin(x)),x,0,2*%pi);
+
+/* integrate(sin(2x)atan(sin(x)),x) - ID: 3199708 */
+integrate(sin(2*x)*atan(sin(x)),x,0,%pi/2);
+%pi/2 - 1;
+
+/* wrong integration answer - ID: 2989983 */
+integrate(cos(w+T)/(1+1/2*cos(T))^2,T,0,2*%pi);
+-8*%pi*cos(w)/3^(3/2);
+
+/* wrong sign for integral of e^(-1/x^2) - ID: 3211937 */
+integrate(%e^(-1/x^2),x,0,1);
+%e^-1*(sqrt(%pi)*%e*erf(1)+1)-sqrt(%pi);
