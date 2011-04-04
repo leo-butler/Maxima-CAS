@@ -36,6 +36,9 @@
 					 #+gcl '(".") #-gcl '(:relative)
 					 :name "TAGS" :type nil)
   "Default TAGS file pathname.")
+(defvar *etags-default-directory* #P"./" "Default directory to tag.")
+(defvar *etags-file-regex-maxima-list*	'("\\.ma[cx]$" "\\.de[m1-9]?$") "List of regexps for Maxima file endings.")
+(defvar *etags-file-regex-lisp-list*	'("\\.li?sp$" "\\.l$") "List of regexps for Lisp file endings.")
 (defvar *etags-regex-lisp-list*
   '("[ \\t]*\\(def(un|mfun|macro|var|parameter|advice|package)\\s+(\\S+)" 2
     "[ \\t]*\\(define-(\\S+)\\s+(\\S+)" 2
@@ -65,7 +68,7 @@
 
 (defmacro etags-ensure-list (x)
   "Ensure X is a list."
-  `(unless (consp ,x) (setq ,x (list ,x))))
+  `(unless (consp ,x) (setf ,x (list ,x))))
 
 (defun etags-load-regexps (file-list)
   "Reads in a list of CL-PPCRE regexps in the files in `FILE-LIST'. Each
@@ -116,6 +119,7 @@ result is saved in `*etags-regex-list*'."
 `REGEX-LIST'. The default value of `REGEX-LIST' is stored in
 `*etags-regex-list*'."
   (declare (ignorable verbose))
+  (unless file (return-from etags-search-for-tags nil))
   (setq file (expand-file-name file)
 	regex-list (or regex-list *etags-regex-list*))
   (flet ((slurp-file (f)
@@ -160,12 +164,12 @@ result is saved in `*etags-regex-list*'."
     (setf append-or-supersede :supersede))
    (otherwise
     (error (intl:gettext "ETAGS-CREATE-TAGS: option APPEND-OR-SUPERSEDE must be one of :append or :supersede."))))
- (with-open-file (tags-buffer TAGS :direction :output :if-exists append-or-supersede)
+ (with-open-file (tags-buffer TAGS :direction :output :if-exists append-or-supersede :if-does-not-exist :create)
    (dolist (file file-list)
      (princ (etags-search-for-tags file regex-list verbose) tags-buffer))))
 
 (defun etags-collect-files (file-regex-list &optional
-			    (directory-list '(#p"./"))
+			    (directory-list *etags-default-directory*)
 			    (file-list nil)
 			    (recursion-depth most-positive-fixnum)
 			    )
@@ -179,7 +183,6 @@ result is saved in `*etags-regex-list*'."
 	       (and (directory-pathname-p d) (not (scan re (namestring d)))))
 	     (file-pathname-p (f)
 	       (and (file-pathname-p f) (some (lambda(rgx) (scan rgx (namestring f))) file-regex-list))))
-	(unless directory-list (setf directory-list '(#p"./"))) ;; gcl ??
 	(etags-ensure-list directory-list)
 	(etags-ensure-list file-regex-list)
 	(labels ((collect-files (directory rd)
@@ -195,9 +198,53 @@ result is saved in `*etags-regex-list*'."
 	    (collect-files directory recursion-depth))
 	  file-list)))))
 
-(defun etags-create-tags-recursive (&key file-regex-list directory-list regex-list TAGS verbose recursion-depth append-or-supersede)
-  (etags-create-tags
-   (etags-collect-files file-regex-list directory-list '() recursion-depth)
-   regex-list TAGS append-or-supersede verbose))
+(defun etags-create-tags-recursive (&key
+				    (file-regex-list		 *etags-file-regex-maxima-list*)
+				    (directory-list		 *etags-default-directory*)
+				    (regex-list			 *etags-regex-maxima-list*)
+				    (TAGS			 *etags-tags-file*)
+				    (verbose			 nil)
+				    (recursion-depth		 most-positive-fixnum)
+				    (append-or-supersede	 :supersede)
+				    )
+  (etags-ensure-list file-regex-list)
+  (etags-ensure-list directory-list)  
+  (macrolet ((assert-list-of-strings (x)
+	       `(assert (and (consp ,x) (notany #'null (mapcar #'stringp ,x)))
+			(,x)
+			"~S must be a string or list of strings, got ~S." ',x ,x))
+	     (assert-regex-list (x)
+	       `(assert (and (consp ,x) (null (loop :for re :in ,x :by #'cddr
+						 :for register :in (cdr ,x) :by #'cddr
+						 :when (not (stringp re)) :collect re
+						 :when (not (typep register 'fixnum)) :collect register)))
+			(,x)
+			"~S must be a list of alternating strings (regexps) and fixnums (capture registers), got ~S." ',x ,x))
+	     (assert-list-of-directories (x)
+	       `(assert (and (consp ,x) (notany #'null (ignore-errors (mapcar #'directory-pathname-p ,x))))
+			(,x)
+			"~S must be a directory-pathname-p or list of same, got ~S." ',x ,x))
+	     (assert-file-pathname-p (x)
+	       `(assert (file-pathname-p ,x)
+			(,x)
+			"~S must be a file-pathname-p ~S." ',x ,x))
+	     (assert-fixnump (x)
+	       `(assert (typep ,x 'fixnum)
+			(,x)
+			"~S must be a fixnum, got ~S." ',x ,x))
+	     (assert-append-or-supersede (x)
+	       `(assert (or (eq :append ,x) (eq :supersede ,x) (eq nil ,x) (eq t ,x))
+			(,x)
+			"~S must be :append, nil or :supersede, t. Got ~S." ',x ,x))
+	     )
+    (assert-list-of-strings	 file-regex-list)
+    (assert-regex-list		 regex-list)
+    (assert-list-of-directories  directory-list)
+    (assert-file-pathname-p	 TAGS)
+    (assert-fixnump		 recursion-depth)
+    (assert-append-or-supersede	 append-or-supersede)
+    (etags-create-tags
+     (etags-collect-files file-regex-list directory-list '() recursion-depth)
+     regex-list TAGS append-or-supersede verbose)))
 
 ;; end of etags.el 
