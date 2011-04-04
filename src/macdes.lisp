@@ -178,64 +178,35 @@
   (cl-info:print-info-hashes file)
   '$done)
 
-(defun $etags (&rest args-list)
+(defmfun $etags (&rest args-list)
   ;; most of this function is validation code
   ;; probably we could add a macro to do this
-  (macrolet ((keys+validate (&rest l)
-	       (let ((r '(list)))
-		 (loop :for mk :in l
-		    :do
-		    (multiple-value-bind (mkey key validate-fn msg-string no-map-over binder) (values-list mk)
-		      (declare (ignorable mkey key validate-fn msg-string no-map-over binder))
-		      (setf validate-fn (or validate-fn #'stringp)
-			    msg-string (or msg-string "list of strings"))
-		      (push
-		       `(list
-			 ',mkey
-			 ',key
-			 #'(lambda (v)
-			     (ignore-errors
-				 (funcall ,(if no-map-over validate-fn #'(lambda(x) (and x (not (some validate-fn x))))) v)))
-			 #'(lambda(value)
-			     (error (intl:gettext (format nil "ETAGS: key ~(~a~) should be ~a, passed ~a. Halt." ,(subseq (symbol-name mkey) 1) ,msg-string value))))
-			 ,(or binder #'(lambda(mk k v) (declare (ignorable mk)) (list k v)))
-			 )
-		       r)))
-		 (reverse r))))
-    (flet ((t-or-f (x) (or (eq x nil) (eq x t)))
-	   (a-bind (mk k v) (declare (ignorable mk k v)) (list k (if v :append :supersede)))
-	   (regex-test (l) (loop :for (re n) :on l :by #'cddr :unless (and (stringp re) (fixnump n)) :do (return-from regex-test nil)) t))
-      (let* ((opts-list (keys+validate
-                         ($file_regex_list     :file-regex-list										 )
-                         ($directory_list      :directory-list										 )
-                         ($regex_list          :regex-list          #'regex-test	"list of regex and registers"	 t               )
-                         ($tags                :tags                #'stringp		"a string"			 t		 )
-                         ($recursion_depth     :recursion-depth     #'fixnump		"an integer"			 t		 )
-                         ($verbose             :verbose             #'t-or-f		"true or false"			 t		 )
-                         ($append              :append-or-supersede #'t-or-f		"true or false"			 t       #'a-bind)
-			 )))
-	(labels ((get-lisp-list (l)
-		   (if ($listp l) (cdr l) l))
-		 (make-arg (a)
-		   (setf a (get-lisp-list a))
-		   (let ((key (car a))
-			 (v   (cadr a)))
-		     (loop :for opt :in opts-list
-			:if (eq key (car opt))
-			:do
-			(multiple-value-bind (mk k validate-fn error-fn binder) (values-list opt)
-			  (declare (ignorable mk k binder))
-			  (unless (funcall validate-fn v) (funcall error-fn v))
-			  (setf v (get-lisp-list v))
-			  (return-from make-arg (funcall binder mk k v))))
-		     (warn (intl:gettext (format nil "ETAGS did not recognize the option ~a. Skipping." key)))
-		     nil))
-		 (make-args-list ()
-		   (loop :for arg :in args-list
-		      :for k-v = (make-arg arg)
-		      :when k-v :collect (car k-v)
-		      :when k-v :collect (cadr k-v))))
-	  (format t "~s~%" (make-args-list))
-	  (apply #'etags:etags-create-tags-recursive (make-args-list))))
-	  ;;(format t "~{~,,15,s=>~40T~s~^~%~}~%" (make-args-list))))
-      )))
+  (let* ((opts-list '(
+		      ($file_regex_list     :file-regex-list		)
+		      ($directory_list      :directory-list		)
+		      ($regex_list          :regex-list			)
+		      ($tags                :tags			)
+		      ($recursion_depth     :recursion-depth		)
+		      ($verbose             :verbose			)
+		      ($append              :append-or-supersede	))))
+      (labels ((sanitize	(l)	(if (consp l) (cdr l) l))
+	       (get-lisp-key	(mkey)
+		 (or (cadr (assoc mkey opts-list)) (warn (intl:gettext (format nil "Option ~(~S~) is unknown and is being skipped." (subseq (symbol-name mkey) 1))))))
+	       (make-lisp-key-value (item)
+		 (destructuring-bind (mlist-or-mequal-simp mkey mvalue) item
+		   (unless (find mlist-or-mequal-simp '((mlist simp) (mequal simp)) :test #'equalp)
+		     (error (intl:gettext (format nil "Unknown option ~s passed to etags." item))))
+		   (let ((key (get-lisp-key mkey)))
+		     (if key
+			 (list key (sanitize mvalue))
+			 nil))))
+	       (translate-maxima-key-values-to-lisp ()
+		 (loop :for arg :in args-list
+		    :for k-v = (make-lisp-key-value arg)
+		    :when k-v :collect (car k-v)
+		    :when k-v :collect (cadr k-v))))
+	;;(format t "~s~%" (translate-maxima-key-values-to-lisp))
+	(apply #'etags:etags-create-tags-recursive (translate-maxima-key-values-to-lisp))))
+    )
+
+;; end of macdes.lisp

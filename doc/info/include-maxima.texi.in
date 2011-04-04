@@ -151,6 +151,7 @@ Additional packages
 * draw::                        A Maxima-Gnuplot interface.
 * drawdf::                      Direction fields with Gnuplot.
 * dynamics::                    Graphics for dynamical systems and fractals.
+* etags::                       A TAGS utility
 * ezunits::                     Dimensional quantities.
 * f90::                         Maxima to fortran translator.
 * finance::                     Financial package.
@@ -860,11 +861,15 @@ zeilberger
 @chapter drawdf
 @include drawdf.texi
 
-@node dynamics, ezunits, drawdf, Top
+@node dynamics, etags, drawdf, Top
 @chapter dynamics
 @include dynamics.texi
 
-@node ezunits, f90, dynamics, Top
+@node etags, ezunits, dynamics, Top
+@chapter etags
+@include etags.texi
+
+@node ezunits, f90, etags, Top
 @chapter ezunits
 @include ezunits.texi
 

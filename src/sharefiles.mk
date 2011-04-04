@@ -230,7 +230,6 @@ contrib/ezunits/ezunits.mac \
 contrib/ezunits/physical_constants.mac \
 contrib/ezunits/rtestezunits.mac \
 contrib/f90.lisp \
-contrib/finance/finance.es.texi \
 contrib/finance/finance.mac \
 contrib/finance/finance.texi \
 contrib/floatproperties.lisp \
@@ -401,6 +400,7 @@ contrib/namespaces/rtest_namespaces.mac \
 contrib/noninteractive/asksign1.lisp \
 contrib/noninteractive/noninteractive.lisp \
 contrib/noninteractive/noninteractive.mac \
+contrib/noninteractive/rtest_noninteractive.mac \
 contrib/nset/announce-1.2.txt \
 contrib/nset/changes_1.0_to_1.2.txt \
 contrib/nset/README \
@@ -638,12 +638,14 @@ draw/grcommon.lisp \
 draw/implicit3d.lisp \
 draw/picture.lisp \
 draw/rtest_draw.mac \
+draw/vtk.lisp \
 draw/wbd.lisp \
 draw/worldmap.mac \
 dynamics/complex_dynamics.lisp \
 dynamics/dynamics.mac \
 dynamics/plotdf.lisp \
 dynamics/rtest_dynamics.mac \
+dynamics/visualization.lisp \
 hypergeometric/abramowitz_id.mac \
 hypergeometric/hypergeometric.lisp \
 hypergeometric/hypergeometric_mac.mac \

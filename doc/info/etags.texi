@@ -1,0 +1,138 @@
+@menu
+* Introduction to etags::       
+* Functions and Variables for etags::       
+@end menu
+
+@node Introduction to etags, Functions and Variables for etags, etags, etags
+@section Introduction to etags
+
+A @emph{TAGS} file is a structured database holding information about
+source-code, see
+@indicateurl{https://secure.wikimedia.org/wikipedia/en/wiki/Ctags}. The
+source code editors @emph{Emacs}, @emph{VI} and others, have in-built
+facilities to use TAGS files.
+
+@node Functions and Variables for etags,  , Introduction to etags, etags
+@section Functions and Variables for etags
+
+All global variables in Lisp special variables interned in the
+@code{etags} package. Although the user can change them using the
+special syntax @code{:lisp (setf etags::*foo*)} @xref{Keyword Commands},
+it is preferable to pass options to the @code{etags} command.
+
+@defvr {Global variable} *etags-regex-maxima-list*
+
+@var{*etags-regex-maxima-list*} is the default list of regular
+expressions to tag Maxima source code. It is a @emph{Lisp} special
+variable in the @code{etags} package. There should be no reason to
+change this variable.
+
+@opencatbox
+@category{etags} @category{Global variables}
+@closecatbox
+
+@end defvr
+
+@defvr {Global variable} *etags-regex-lisp-list*
+
+@var{*etags-regex-lisp-list*} is the default list of regular
+expressions to tag Lisp source code. It is a @emph{Lisp} special
+variable in the @code{etags} package. There should be no reason to
+change this variable.
+
+@opencatbox
+@category{etags} @category{Global variables}
+@closecatbox
+
+@end defvr
+
+@defvr {Global variable} *etags-max-recursion-depth*
+
+@var{*etags-max-recursion-depth*} is the maximum depth of
+subdirectories to tag. It is used to prevent infinite loops.
+
+@opencatbox
+@category{etags} @category{Global variables}
+@closecatbox
+
+@end defvr
+
+@defvr {Global variable} *etags-tags-file*
+
+@var{*etags-tags-file*} is the default name of the TAGS file. It is
+@verb{"TAGS"}.
+
+@opencatbox
+@category{etags} @category{Global variables}
+@closecatbox
+
+@end defvr
+
+@defvr {Global variable} *etags-default-directory*
+
+@var{*etags-default-directory*} is the default directory to tag. It is
+the current working directory.
+
+@opencatbox
+@category{etags} @category{Global variables}
+@closecatbox
+
+@end defvr
+
+
+
+@deffn {Function} etags ()
+@deffnx {Function} etags (@var{key_1} = @var{value_1},  ..., @var{key_n} = @var{value_n}))
+@deffnx {Function} etags ([@var{key_1}, @var{value_1}], ..., [@var{key_n}, @var{value_n}])
+
+Without any arguments, @code{etags} tags Maxima source files in the
+current directory and all subdirectories. Optional argument(s) can alter
+this behaviour. They can be passed as a key-value pair @var{key} =
+@var{value} or [ @var{key} , @var{value} ], and these forms can be used
+together.
+
+The accepted options and their default values are:
+
+@table @code
+
+@item file_regex_list
+This is a list of regular expressions. A file, to be tagged, must match
+at least one of these regular expressions. Default: @code{[
+"\.ma[cx]$", "\.de[m0-9]" ]}. Stored in:
+@var{*etags-file-regex-list*}.
+
+@item directory_list
+List of directories to be tagged. Default: Maxima's current directory.
+Stored in: @var{*etags-default-directory*}.
+
+@item regex_list
+List of alternating sequences of regular expressions and the number of
+the capture register. The list @code{[ "([a-zA-Z_]+)\s*\(\S*\)\s*:?:=" , 1 ]},
+for example, will find all Maxima function and macro definitions,
+with the function/macro name containing only alphabetic and @samp{_}
+characters. Default: see @var{*etags-regex-maxima-list*}.
+
+@item tags
+The name of the TAGS output file. Default: @verb{"TAGS"}. Stored in:
+@var{*etags-tags-file*}.
+
+@item recursion_depth
+The maximum depth of a sub-directory to be tagged. If 0 (or less), then
+only the current directory is tagged. Default: 25. Stored in:
+@var{*etags-max-recursion-depth*}.
+
+@item verbose
+If @code{true}, print additional information during tagging. Default:
+@code{false}.
+
+@item append
+If @code{true}, output is appended to the TAGS file; otherwise, the TAGS
+file is overwritten. Default: @code{false}.
+
+@end table
+
+@opencatbox
+@category{etags} @category{Operators}
+@closecatbox
+
+@end deffn
