@@ -48,15 +48,15 @@
   use in constructing the TAGS file. At the moment, GCL does not allow
   cloisters (non-capturing registers).")
 (defparameter *etags-regex-maxima-list*
-  (let* ((name        "([a-zA-Z_%]+)")        ;; capture the function name
-	 (open-paren  "\\(")               ;; both function and array functions
-	 (close-paren "\\)")               ;; this is lazy, but faster
-	 (open-brack  "\\[")
-	 (close-brack "\\]")
-	 (no-paren    "[^\\)]*")
-	 (no-brack    "[^]]*")
+  (let* ((name        "([a-zA-Z_%]+)")  ;; capture the function name
+	 (open-paren  "\\(")		;; capture function defs like
+	 (close-paren "\\)")		;; f(..) :=
+	 (open-brack  "\\[")		;; f[..] := and
+	 (close-brack "\\]")		;; f[..](..) :=
+	 (no-paren    "[^\\)\\(]*")
+	 (no-brack    "[^][\\)\\(]*")
 	 (space      "\\s*")
-	 (args       (concatenate 'string "(" open-paren no-paren close-paren "|" open-brack no-brack close-brack ")"))
+	 (args       (concatenate 'string "(" open-paren no-paren close-paren "|" open-brack no-brack close-brack "|" open-brack no-brack close-brack space open-paren no-paren close-paren ")"))
 	 (regex      (concatenate 'string "[ \\t]*" name space args space ":?:=")))
     (list
      regex 1
@@ -88,15 +88,25 @@ result is saved in `*etags-regex-list*'."
 (defun expand-file-name (file)
   (cond ((stringp file)
 	 (if (char= (char file 0) #\~)
-	     (setq file (concatenate 'string (maxima::maxima-getenv "HOME") (subseq file 1)))
-	     file))
+	     (let ((tilde-expansion
+		    (if (> (length file) 1)
+			(case (char file 1)
+			  (#\/ (cons (maxima::maxima-getenv "HOME")   1))
+			  (#\+ (cons (maxima::maxima-getenv "PWD")    2))
+			  (#\- (cons (maxima::maxima-getenv "OLDPWD") 2))
+			  (otherwise
+			   (warn (intl:gettext "EXPAND-FILE-NAME: file name with lead ~, unrecognised second character. Treating as literal."))
+			   nil))
+			(cons (maxima::maxima-getenv "HOME") 1))))
+	       (if (car tilde-expansion)
+		   (setq file (concatenate 'string (car tilde-expansion) (subseq file (cdr tilde-expansion))))))))
 	((pathnamep file)
 	 (expand-file-name (namestring file)))
 	(t (error "EXPAND-FILE-NAME FILE: arg must be a string or pathname. Given: ~s" file)))
   (if (directory-pathname-p file)
       (pathname-as-directory file)
       (pathname-as-file file)
-  ))
+      ))
 
 (defun file-name-nondirectory (file)
   (let ((path (expand-file-name file)))
@@ -194,7 +204,7 @@ result is saved in `*etags-regex-list*'."
 		     (dolist (d sub-dirs)
 		       (collect-files d rd)))))
 	  ;;(format t "~a~%" (list directory-list recursion-depth))
-	  (dolist (directory directory-list)
+	  (dolist (directory (mapcar #'expand-file-name directory-list))
 	    (collect-files directory recursion-depth))
 	  file-list)))))
 
