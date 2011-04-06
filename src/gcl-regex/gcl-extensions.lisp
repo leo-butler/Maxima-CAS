@@ -21,8 +21,8 @@
 stream."
      (setf end (or end (length s)))
      (dotimes (i start)
-       (read-byte in nil 0))
-     (loop for i from start to end
+       (,read-fn in nil nil))
+     (loop for i from start to (1- end)
 	for r = (,read-fn in nil nil)
 	if r do
 	  (setf (aref s i) r)

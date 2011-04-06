@@ -228,7 +228,7 @@ signaled if the directory DIRNAME does not exist."
          (error "IF-DOES-NOT-EXIST must be one of :ERROR or :IGNORE."))))
     (values)))
 
-(defvar *stream-buffer-size* 8192)
+(defvar *stream-buffer-size* (expt 2 16))
 
 (defun copy-stream (from to &optional (checkp t))
   "Copies into TO \(a stream) from FROM \(also a stream) until the end
@@ -242,7 +242,7 @@ checked for compatibility of their types."
 	 (buf (make-array *stream-buffer-size* :element-type set)))
     (loop
        (let ((pos #-(or :cmu :gcl) (read-sequence buf from)
-		  #+gcl (gcl-extensions:read-sequence buf from :start 0 :end (1- *stream-buffer-size*))
+		  #+gcl (gcl-extensions:read-sequence buf from :start 0 :end *stream-buffer-size*)
                   #+:cmu (sys:read-n-bytes from buf 0 *stream-buffer-size* nil)))
          (when (zerop pos) (return))
          (write-sequence buf to :end pos))))
