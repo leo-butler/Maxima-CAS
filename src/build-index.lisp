@@ -364,7 +364,8 @@ before adding new contents."
 	       (dump-hashes out)))
 	   (pushnew file *maxima-info-index-list*))
 	  (t
-	   (dump-hashes *standard-output*)))))
+	   (with-standard-io-syntax
+	     (dump-hashes *standard-output*))))))
 
 ;;
 ;; PATCHED VERSIONS OF FNS IN cl-info.lisp
