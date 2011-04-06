@@ -21,31 +21,35 @@ our $lisps||="sbcl:clisp:cmucl";
 our @lisps=split(/:/,$lisps);
 our $maxima_opts||='--init=/dev/null --very-quiet';
 our $maxima_cmd||="$ENV{PWD}/../maxima-local";
-our $maxima_batch_string||='describe("expand");system("printenv;locale;");read("quit?");';
+our $maxima_batch_string||='build_info();describe("expand");print_help_database("maxima-index.lisp");system("printenv;locale;");read("quit?");';
 our $run_rtest_build_index||=1;
 our $rtest_build_index_bs||='load("rtest-run.lisp");';
 our @locale=grep {/^LC_|LOCALE|LANG/ } keys %ENV;
 our $default_locale=setlocale(LC_CTYPE);
+our $shellbin||='/bin/bash';
 
 vprint "pid: $pid";
 if ($run_rtest_build_index =~ /^(1|true)$/oi) {
    for my $lisp (@lisps) {
-      msystem("$maxima_cmd $maxima_opts -l $lisp --batch-string='$rtest_build_index_bs'");
+      vprint "Running LISP $lisp...\n";
+      msystem("$maxima_cmd $maxima_opts --lisp=$lisp --batch-string='$rtest_build_index_bs'");
+      vprint "End of run for $lisp.\n";
    }
 }
 for my $dir (@info_subdirs) {
    my %locale_settings=set_encoding($dir);
    vprint "Testing in $dir";
    for my $lisp (@lisps) {
-      open my $shell, "|/bin/bash";
+      open my $shell, '|' . $shellbin;
       print $shell "cd $dir;";
       vprint "Setting LC_ALL=$locale_settings{'LC_ALL'}.\n";
       foreach my $e (keys %locale_settings) {
 	 my $v=$locale_settings{$e};
 	 print $shell "export $e=$v;";
       }
-      vprint "$xterm_cmd $maxima_cmd $maxima_opts -l $lisp --batch-string='$maxima_batch_string';";
-      print $shell "$xterm_cmd $maxima_cmd $maxima_opts -l $lisp --batch-string='$maxima_batch_string'";
+      my $cmd="$xterm_cmd $maxima_cmd $maxima_opts --lisp=$lisp --batch-string='$maxima_batch_string'";
+      vprint $cmd;
+      print $shell $cmd;
    }
 }
 
