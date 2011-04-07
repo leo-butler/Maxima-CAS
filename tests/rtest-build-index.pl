@@ -57,7 +57,18 @@ sub find_info_subdirs(@)
 {
    my ($infodir,$maxima_info,$info_subdirs)=@_;
    if ($info_subdirs) {
-      return split(/:/,$info_subdirs);
+      my @info_subdirs=split(/:/,$info_subdirs);
+      my %infodirs;
+      foreach my $info_subdir (@info_subdirs) {
+	 my $wanted=sub {
+	    if(m[$info_subdir$]s) { $infodirs{$info_subdir}=${File::Find::name} };
+	    };
+	 &File::Find::find({no_chdir => 1, wanted => $wanted}, $ENV{PWD});
+	 unless ($infodirs{$info_subdir}) {
+	    &File::Find::find({no_chdir => 1, wanted => $wanted}, $infodir);
+	 }
+      }
+      return values %infodirs;
    }
    my %infodirs;
    my $wanted=sub {
@@ -66,6 +77,7 @@ sub find_info_subdirs(@)
    &File::Find::find({wanted => $wanted}, $infodir);
    return keys %infodirs;
 }
+
 sub set_encoding($)
 {
    my $dir=shift;
